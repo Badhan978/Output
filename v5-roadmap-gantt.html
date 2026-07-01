@@ -47,6 +47,9 @@
   .bar.lite{color:#0b0d10}
   .tag{font-size:10px;color:var(--sub);margin-left:6px;font-weight:400}
   .bar.fab{background:repeating-linear-gradient(45deg,#c9c2f0 0 9px,#e6e1ff 9px 18px);color:#1a1330}
+  .bar.koma{background:repeating-linear-gradient(45deg,#3a4150 0 9px,#4a5263 9px 18px);color:#e8ebf0}
+  .gate{position:absolute;top:0;bottom:0;width:2px;background:#37c26b;z-index:6}
+  .gate::after{content:attr(data-l);position:absolute;top:1px;left:4px;font-size:9.5px;color:#37c26b;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -65,6 +68,8 @@
     <span><i class="sw" style="background:var(--client)"></i>Client化(Dashboard/UIUX)</span>
     <span><i class="sw" style="background:var(--prep)"></i>整備</span>
     <span><i class="sw" style="background:var(--fable)"></i>Fable差分検証(横断)</span>
+    <span><i class="sw" style="background:#4a5263"></i>小太郎 自走実験(別レーン)</span>
+    <span><i class="sw" style="background:#37c26b"></i>事業ゲート</span>
   </div>
 
   <div class="gantt">
@@ -87,6 +92,14 @@
     <div class="row"><div class="lblcol">v5 vs Fable 差分ゲート<span class="tag">各施策の完了時</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar fab" style="left:0%;width:100%">同一input → 実測ループで採点 → moat線更新（毎コンポーネント）</div></div></div>
     <div class="row"><div class="lblcol">(A) 素Fable vs v5<span class="tag">moat線引き</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar fab" style="left:0%;width:45.45%">CEO/Planner/Analyzer で同一input比較</div></div></div>
     <div class="row"><div class="lblcol">(B) v5内部モデル入替<span class="tag">model-policy更新</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar fab" style="left:9.09%;width:45.45%">Opus4.8→Fable でコンポ別に判定</div></div></div>
+
+    <!-- ===== 事業ゲート (6/30決定) ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:#37c26b"></i>事業ゲート<span class="tag" style="color:var(--sub)">6/30決定</span></div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row" style="min-height:32px"><div class="lblcol">マイルストーン</div><div class="track"><div class="grid"></div><div class="today"></div><div class="gate" data-l="7月末 仮説検証完了(約30)" style="left:40%"></div><div class="gate" data-l="9月末→ 80%出力/100万imp保証" style="left:95%"></div></div></div>
+
+    <!-- ===== 小太郎 自走実験 (別レーン) ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:#4a5263"></i>小太郎 自走実験<span class="tag" style="color:var(--sub)">別レーン・サブ</span></div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">3日1回・全自動<span class="tag">追加開発なし</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar koma" style="left:0%;width:100%">戦略立案→生成→予約まで自動 / toBセルフホストの早期プロト</div></div></div>
 
     <!-- ===== 共通基盤: 実測ループ / View予測PDCA ===== -->
     <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--loop)"></i>実測ループ / View予測PDCA</div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
@@ -144,7 +157,8 @@
 
   <div class="note" style="border-left-color:var(--client);margin-top:22px">
     <b>依存の要点:</b> ①「実測ledger MVP」と「要素別データ供給(A3 P2)」が全ての土台 → これが立つと「因果分類の自動化」「CEO P1/P2」「Planner P3/P4」が動く。②「市場データ取得機能」→「枠組み生成→市場学習(H2)」。③ アフィ導線と Client化は View が立ち始める中盤以降。④ Dashboard/UIUX は8月中旬〜9月で仕上げ。<br>
-    <b>未確定:</b> バーの長さ・依存は計画ドラフト。要調整点があれば動かします。
+    <b>未確定:</b> バーの長さ・依存は計画ドラフト。要調整点があれば動かします。<br>
+    <b>リソース(6/30):</b> エンジニア+1採用(7月上旬目標) を前提の容量。owner = 駿冴(シナリオ+運用) / Badhan(テーマ+設計) / +1(実装)。7月末の仮説検証完了ゲートはこの増員に条件づく。
   </div>
 
   <div class="note" style="border-left-color:var(--fable);margin-top:14px">
