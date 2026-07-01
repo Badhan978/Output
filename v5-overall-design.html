@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V5 全体設計 — 分析まとめ + アーキ + シーケンス</title>
+<style>
+  :root{
+    --bg:#0f1115;--panel:#171a21;--panel2:#1d2129;--ink:#e8ebf0;--sub:#9aa4b2;--line:#2a2f3a;
+    --pb:#f0b429;--v5:#4a9eff;--good:#37c26b;--bad:#ff6b6b;--anly:#b07cff;--affi:#ff5d8f;--fable:#d7cffb;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;font-size:15px;line-height:1.7}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 22px 120px}
+  header.hero{padding:52px 22px 26px;max-width:1060px;margin:0 auto}
+  .hero h1{font-size:29px;margin:0 0 8px}
+  .hero .meta{color:var(--sub);font-size:12.5px}
+  .lead{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--pb);
+    border-radius:10px;padding:16px 20px}
+  .lead b{color:#fff}
+  nav.toc{position:sticky;top:0;background:rgba(15,17,21,.93);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);z-index:10;padding:10px 22px}
+  nav.toc .inner{max-width:1060px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;font-size:13px}
+  nav.toc a{color:var(--sub);text-decoration:none;padding:5px 11px;border-radius:20px;border:1px solid var(--line)}
+  nav.toc a:hover{color:#fff;border-color:var(--sub)}
+  section{margin-top:42px;scroll-margin-top:58px}
+  h2.sec{font-size:22px;margin:0 0 4px;padding-left:12px;border-left:5px solid var(--pb)}
+  .sec-sub{color:var(--sub);font-size:13px;margin:0 0 16px;padding-left:17px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:16px}
+  h3{font-size:15px;margin:2px 0 12px;color:#fff}
+  h3 .k{color:var(--sub);font-weight:400;font-size:13px;margin-left:6px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.03em}
+  td.id{font-weight:700;color:#fff;white-space:nowrap}
+  .tag{font-size:11px;padding:1px 7px;border-radius:5px;background:var(--panel2);color:var(--sub);white-space:nowrap}
+  .add{color:var(--good);font-weight:700}
+  .fix{color:var(--pb);font-weight:700}
+  ul.tight{margin:6px 0 0;padding-left:20px}ul.tight li{margin:5px 0}
+  .roots{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .root{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .root .n{font-size:12px;color:var(--sub)}.root .h{font-weight:700;color:#fff;margin:2px 0 4px}
+  pre.mermaid{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin-top:14px;
+    text-align:center;overflow-x:auto}
+  .crit{background:rgba(55,194,107,.08);border:1px solid rgba(55,194,107,.3);border-radius:8px;padding:12px 15px;margin-top:12px;font-size:13.5px}
+  .links a{color:var(--v5);text-decoration:none;border-bottom:1px dotted var(--v5)}
+  .foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--sub);font-size:12px}
+  @media(max-width:640px){.roots{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>V5 全体設計</h1>
+  <div class="meta">分析まとめ + 2層アーキ + 直すべきリスト + Phase 0-3 シーケンス · 2026-07-01</div>
+  <div class="lead"><b>1行:</b> 伸びるacc/伸びないaccの差分は「エージェントの質」でなく「<b>Playbookの作り込み度</b>」。だから <b>構造(中弛み)と静的な母集団は Playbook で縛り</b>、v5 は <b>動的テーマ選定＋市場データ＋実測学習</b> に特化する。View 自走化 ＝ この責務分割を仕組みにすること。</div>
+</header>
+
+<nav class="toc"><div class="inner">
+  <a href="#summary">分析まとめ</a>
+  <a href="#arch">2層アーキ</a>
+  <a href="#fixlist">直すべきリスト</a>
+  <a href="#seq">シーケンス</a>
+  <a href="#cross">横断</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ===== 1. 分析まとめ ===== -->
+<section id="summary">
+  <h2 class="sec">1. 分析まとめ</h2>
+  <p class="sec-sub">この検討の到達点。すべての症状は2根に帰り、江戸の勝ちは「代償構造」で説明できる。</p>
+
+  <div class="card">
+    <h3>共通の2根</h3>
+    <div class="roots">
+      <div class="root"><div class="n">根 1</div><div class="h">View/Imp 目的関数の不在</div>誰も「View で選び、View で採点」していない。CEOは制約充足、Plannerはformat/technicalゲートのみ。</div>
+      <div class="root"><div class="n">根 2</div><div class="h">実測ループの不在（オーナー不在）</div>予測(CEO推測view / Planner predicted_kpis)と実測がjoinされず「なぜ外したか」が生成側に返らない。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>なぜ江戸だけ勝つか <span class="k">＝ 題材とPlaybookがエージェントの欠陥を肩代わり（代償構造）</span></h3>
+    <table>
+      <tr><th>江戸が内蔵している優位</th><th>代償している欠陥</th><th>証拠</th></tr>
+      <tr><td class="id">3選型Playbook構造<br><span class="tag">昇順エスカレーション</span></td><td>情報密度の谷（中弛み）</td><td>同じ江戸でも<b>比較型は死ぬ</b>(605〜3,352)＝効いてるのは「江戸」でなく「3選タブー構造」</td></tr>
+      <tr><td class="id">性/闇タブー題材</td><td>無難テーマ／視聴動機不在／母集団最大化</td><td>庶民個人受難主語 median 113,950 vs 機構主語 24,644（4.6倍）</td></tr>
+      <tr><td class="id">題材由来の逆説Hook＋勝ちformula確立</td><td>弱Hook／学習不在(survivorship)</td><td>0223/0226/0268 はヒット率5-6/6・3/3。他accはデモグラ未取得で深掘り不能</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>母集団をどこで担保するか <span class="k">供給ドリブン vs 需要ドリブンで分かれる</span></h3>
+    <pre class="mermaid">
+flowchart TD
+    S["母集団の担保先"] --> Q1{"ジャンルは供給ドリブン?<br/>= 勝ち題材が静的"}
+    Q1 -->|"Yes: エンタメ(江戸/歴史)"| A["Playbookにカテゴリ制約で凍結<br/>例: 性30%以上"]
+    Q1 -->|"No: 需要ドリブン(LH等)"| B["恒常ニーズ枠=Playbook<br/>今の具体トピック=v5"]
+    B --> B1["Playbook: 恒常的に広いニーズに張れ<br/>お金/時短/健康/不安"]
+    B --> B2["v5: その中で今どのトピックが<br/>時事で立つかを市場データで被せる"]
+    </pre>
+    <div class="crit"><b>副産物（効く）:</b> 構造をPlaybookで固定すると、投稿の伸びの<b>自由変数がテーマ1個</b>になる → 伸び/滑りの<b>誤帰属が構造的に消え</b>、学習ループが「シナリオ要素」でなく「テーマ→結果」の<b>軽い形</b>になる（要素別リテンションデータの重い前提が外れる）。<br><b>moat:</b> 「知ってること」でなく「一番速く回し続けてCVラベルまで貯めること」。</div>
+  </div>
+</section>
+
+<!-- ===== 2. 2層アーキ ===== -->
+<section id="arch">
+  <h2 class="sec">2. 全体設計 — 2層アーキ</h2>
+  <p class="sec-sub">Layer P が固定変数（天井）を縛り、Layer v5 が自由変数と学習（天井の中の最大化）を担う。</p>
+
+  <div class="card">
+    <pre class="mermaid">
+flowchart TD
+    subgraph LP["Layer P — Playbook工場（天井を決める）"]
+      MKT["市場データ分析<br/>外部の伸び投稿→一般化ルール"] --> PB["Playbook（PF×ジャンル別）<br/>中弛み構造 + 母集団の静的枠を凍結<br/>= 江戸レベルまで"]
+    end
+    subgraph LV["Layer v5 — 自由変数の最適化 + 学習"]
+      CEO["CEO<br/>週次テーマ選定(自由変数)<br/>+ アカウント戦略3層"]
+      PL["Planner<br/>制約準拠シナリオ生成<br/>+ 生成時担保(TTS/品質ゲート)"]
+      A3["Agent3（ループのオーナー）<br/>view予測⇄実測⇄ズレ理由⇄学習<br/>+ Playbook劣化検知"]
+    end
+    PB --> PL
+    MKT -. 需要ドリブンの時事 .-> CEO
+    CEO --> PL
+    PL --> POST["投稿 + アフィ導線の器(Logo/CTA)"]
+    POST --> A3
+    A3 -->|"for_agent1: テーマ軸の当たり/誤差"| CEO
+    A3 -->|"for_agent2: 勝ち筋カード"| PL
+    A3 -.->|"劣化検知→改訂トリガー"| PB
+    </pre>
+    <ul class="tight">
+      <li><b>Layer P（最大レバレッジ）</b>：アカウントの伸びの<b>天井を決める</b>。市場データ分析を燃料にジャンル別Playbookを江戸レベルへ。</li>
+      <li><b>CEO</b>：Playbookが開けた自由変数（テーマ/ターゲット/ニッチ度/時事）を、市場の今とAgent3のFBで最適化。</li>
+      <li><b>Planner</b>：構造はPlaybook準拠。加えてPlaybookに吸収されない<b>TTS読み安全・内容品質ゲート</b>を担保。</li>
+      <li><b>Agent3</b>：実測ループのオーナー。予測⇄実測のズレと理由を返し、Playback劣化も監視。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 3. 直すべきリスト ===== -->
+<section id="fixlist">
+  <h2 class="sec">3. 直すべきリスト</h2>
+  <p class="sec-sub">Badhan の6項目 ＋ 追加/修正（<span class="add">追加</span>／<span class="fix">修正</span>）。</p>
+
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>直すもの</th><th>層</th><th>要点</th></tr>
+      <tr><td class="id">1</td><td>Playbookの構造/制約を江戸レベルに</td><td class="tag">Layer P</td><td>中弛み5点セット＋母集団の静的枠を凍結。<b>天井を決める最大レバレッジ</b></td></tr>
+      <tr><td class="id">2</td><td>CEOのアカウント戦略＋テーマ決めの精度</td><td class="tag">v5/CEO</td><td>精度上げの主対象は<b>週次テーマ(Layer3)</b>。設計/フェーズ(Layer1/2)は準静的</td></tr>
+      <tr><td class="id">3</td><td>市場データ分析の精度</td><td class="tag">Layer P + CEO</td><td><span class="fix">修正:</span> 2箇所に効く=①Playbook生成時(静的枠づくり)＋②需要ドリブンの週次テーマ(時事)</td></tr>
+      <tr><td class="id">4</td><td>アフィコンテンツの接続</td><td class="tag">横断</td><td><span class="fix">修正:</span> 器(Logo/CTA枠のABテスト)＝今／どの商材が刺さる最適化＝CVループで別Phase</td></tr>
+      <tr><td class="id">5</td><td>投稿前のview予測（予測→実測ズレ→理由分析&学習）</td><td class="tag">v5/Agent3</td><td>実測ループの中核。Agent3がオーナー。テーマ→結果で軽く回す</td></tr>
+      <tr><td class="id">6</td><td>外部に見せるダッシュボード化</td><td class="tag">横断</td><td><span class="fix">修正:</span> <b>仕様は先に決め</b>、実装は最後(8月中旬〜)</td></tr>
+      <tr><td class="id">7</td><td><span class="add">追加</span> Plannerの残余：TTS読み安全＋内容品質ゲート</td><td class="tag">v5/Planner</td><td>Playbookに吸収されない生成時の担保。置き場を明示（Playbookルール or v5生成時）</td></tr>
+      <tr><td class="id">8</td><td><span class="add">追加</span> Playbook劣化検知</td><td class="tag">v5/Agent3</td><td>良いPlaybookも陳腐化。「準拠なのに伸び減衰→改訂」の例外監視</td></tr>
+      <tr><td class="id">9</td><td><span class="add">追加</span> 情報フロー契約（payloadスキーマ）</td><td class="tag">横断/前提</td><td>テーマ選定intent＋Agent3出力＋2パケット。<b>実測ループ(#5)の前提</b></td></tr>
+    </table>
+    <div class="crit"><b>設計軸:</b> 供給/需要ドリブンで「Playbookとv5の分担比率」が動く。エンタメ＝Playbookがほぼ全部・v5は軽い／LH＝v5(テーマ+市場データ)が重い。固定ワークストリームでなく可変の分担として設計する。</div>
+  </div>
+</section>
+
+<!-- ===== 4. シーケンス ===== -->
+<section id="seq">
+  <h2 class="sec">4. 実行シーケンス（Phase 0-3）</h2>
+  <p class="sec-sub">情報フロー契約を先頭に。#1と#2は並行（ただし#2の精度は#1に軟依存）。</p>
+
+  <div class="card">
+    <pre class="mermaid">
+flowchart LR
+    P0["Phase 0（先頭・短い）<br/>情報フロー契約を固定<br/>テーマ選定intent + Agent3出力 + 2パケット"]
+    P0 --> P1
+    subgraph P1["Phase 1（並行・主）"]
+      A["Track A<br/>Playbook工場 + 市場データ分析<br/>= 天井を上げる"]
+      B["Track B<br/>view予測 + 実測ループ(Agent3)<br/>+ Agent3分析精度 + Planner残余"]
+    end
+    A -. "#2の精度はAに軟依存" .-> B
+    P1 --> P2["Phase 2<br/>アフィ器接続 + 試験運用<br/>供給1+需要1 acc / 投稿2週+観測 / 完成基準で判定"]
+    P2 --> P3["Phase 3<br/>ダッシュボード実装(仕様は既決)<br/>→ Client-touchable"]
+    </pre>
+    <ul class="tight">
+      <li><b>Phase 0:</b> 契約は「その間に」でなく<b>#2の前提</b>。ズレの理由を分析するにはCEOの予測+選定意図を構造化データで渡す必要（作話防止）。</li>
+      <li><b>Phase 1:</b> A(天井)とB(学習)は同時開始。ただしPlaybookが締まるほどBの当たり判定がクリーンになる<b>軟依存</b>。横断でFable差分＋ダッシュ仕様先決め。</li>
+      <li><b>Phase 2 試験運用の完成基準（先に明示）:</b> ①ループが自己改善している ②予測⇄実測の誤差が縮む ③Playbookが伸びを担保できている。全accでなく供給1+需要1のsubset、遅延viewの尾まで見る。</li>
+      <li><b>Phase 3:</b> ダッシュは仕様(予測⇄実測誤差/テーマ別ヒット率/Playbook健全性/アフィ導線数)を先に決めてあるので実装のみ。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 5. 横断 ===== -->
+<section id="cross">
+  <h2 class="sec">5. 横断（常設）</h2>
+  <div class="card">
+    <ul class="tight">
+      <li><b>Fable差分検証 / moat線引き:</b> 各コンポーネントで「素Fable vs v5」を同一inputで比較（採点器は実測ループを流用）。Fable単体で並ぶ＝コモディティ、v5が勝つ＝moat。model入替(Opus→Fable)もコンポ別に判定。</li>
+      <li><b>ダッシュボード仕様の先決め:</b> ループが吐くべきデータを先に定義（実装は最後でもデータ設計は先）。</li>
+      <li><b>スコープ規律:</b> V5 = simple-only。各所「作り込む」より「実測ループに効く最小改修」に寄せる。</li>
+    </ul>
+    <p class="links" style="margin-top:14px;color:var(--sub);font-size:13px">関連: <a href="v5-improvement-plan.html">課題→打ち手→仮説（Agent別）</a> · <a href="v5-roadmap-gantt.html">ロードマップ・ガント</a></p>
+  </div>
+</section>
+
+<div class="foot">V5 全体設計 · 2026-07-01 · 分析根拠: 各skill精読 + feedback/fb-memory + accs/sheet-archive 実測 + edo Playbook実装分析 + wiki v5 hub</div>
+
+</div>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad:true, theme:'dark', themeVariables:{ fontSize:'13px' } });
+</script>
+</body>
+</html>
