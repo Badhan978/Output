@@ -8,7 +8,7 @@
   :root{
     --bg:#0f1115;--panel:#171a21;--ink:#e8ebf0;--sub:#9aa4b2;--line:#2a2f3a;
     --loop:#f0b429;--mkt:#1fb6c9;--ceo:#4a9eff;--plan:#37c26b;--anly:#b07cff;
-    --affi:#ff5d8f;--client:#ff8a3d;--prep:#6b7280;--today:#ff4d4d;
+    --affi:#ff5d8f;--client:#ff8a3d;--prep:#6b7280;--today:#ff4d4d;--fable:#d7cffb;
     --cols:11; /* 週数 */
   }
   *{box-sizing:border-box}
@@ -46,13 +46,14 @@
     padding:0 7px;white-space:nowrap;color:#0b0d10;font-weight:600;overflow:visible;z-index:2}
   .bar.lite{color:#0b0d10}
   .tag{font-size:10px;color:var(--sub);margin-left:6px;font-weight:400}
+  .bar.fab{background:repeating-linear-gradient(45deg,#c9c2f0 0 9px,#e6e1ff 9px 18px);color:#1a1330}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>V5 改善ロードマップ — ガント</h1>
   <div class="meta">2026-07-01 起点 · 2ヶ月スプリント＋Client化（〜9月中旬）· 縦=施策/仮説（Agent・機能レーン別）横=時間</div>
-  <div class="note"><b>読み方:</b> 各Agent(CEO/Planner/Analyzer)のP項目が並行トラックで走り、依存関係で前後する。機能レーン（①市場データ ②View予測PDCA=実測ループ ③アフィ導線）＋ Client化(8月中旬〜) を重ねた。<b>バーの長さ・開始は計画ドラフト</b>（実装＝駿冴/Zach作業、実測で調整前提）。</div>
+  <div class="note"><b>読み方:</b> 各Agent(CEO/Planner/Analyzer)のP項目が並行トラックで走り、依存関係で前後する。機能レーン（①市場データ ②View予測PDCA=実測ループ ③アフィ導線）＋ Client化(8月中旬〜) を重ねた。<b>Fable差分検証</b>を横断レーンとして常設（各施策の完了時に v5 vs Fable を実測ループで採点し moat線を更新）。<b>バーの長さ・開始は計画ドラフト</b>（実装＝駿冴/Zach作業、実測で調整前提）。</div>
 
   <div class="legend">
     <span><i class="sw" style="background:var(--loop)"></i>実測ループ / View予測PDCA</span>
@@ -63,6 +64,7 @@
     <span><i class="sw" style="background:var(--affi)"></i>アフィ導線</span>
     <span><i class="sw" style="background:var(--client)"></i>Client化(Dashboard/UIUX)</span>
     <span><i class="sw" style="background:var(--prep)"></i>整備</span>
+    <span><i class="sw" style="background:var(--fable)"></i>Fable差分検証(横断)</span>
   </div>
 
   <div class="gantt">
@@ -79,6 +81,12 @@
         </div>
       </div>
     </div>
+
+    <!-- ===== Fable差分検証 (横断・常設) ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--fable)"></i>Fable差分検証 / moat線引き<span class="tag" style="color:var(--sub)">横断・常設</span></div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">v5 vs Fable 差分ゲート<span class="tag">各施策の完了時</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar fab" style="left:0%;width:100%">同一input → 実測ループで採点 → moat線更新（毎コンポーネント）</div></div></div>
+    <div class="row"><div class="lblcol">(A) 素Fable vs v5<span class="tag">moat線引き</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar fab" style="left:0%;width:45.45%">CEO/Planner/Analyzer で同一input比較</div></div></div>
+    <div class="row"><div class="lblcol">(B) v5内部モデル入替<span class="tag">model-policy更新</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar fab" style="left:9.09%;width:45.45%">Opus4.8→Fable でコンポ別に判定</div></div></div>
 
     <!-- ===== 共通基盤: 実測ループ / View予測PDCA ===== -->
     <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--loop)"></i>実測ループ / View予測PDCA</div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
@@ -137,6 +145,12 @@
   <div class="note" style="border-left-color:var(--client);margin-top:22px">
     <b>依存の要点:</b> ①「実測ledger MVP」と「要素別データ供給(A3 P2)」が全ての土台 → これが立つと「因果分類の自動化」「CEO P1/P2」「Planner P3/P4」が動く。②「市場データ取得機能」→「枠組み生成→市場学習(H2)」。③ アフィ導線と Client化は View が立ち始める中盤以降。④ Dashboard/UIUX は8月中旬〜9月で仕上げ。<br>
     <b>未確定:</b> バーの長さ・依存は計画ドラフト。要調整点があれば動かします。
+  </div>
+
+  <div class="note" style="border-left-color:var(--fable);margin-top:14px">
+    <b>Fable差分検証（横断・常設）:</b> Fable が明日から利用可（前回未実施の検証を再開）。各施策の完了時に "Fable diff gate" を1ステップ挟む。採点器は専用に作らず<b>実測ループを流用</b>し、v5 と Fable を同じ土俵で採点。
+    <b>(A) moat線引き〔Zach主眼〕</b>＝同一inputで「素のFable単体 vs v5フルシステム」を比較し、Fable単体で並ぶ所（＝コモディティ、過剰投資を避ける）と v5 が勝つ所（＝ハーネス/検証ゲート/FBメモリ/Playbook制約/データ文脈＝moat、強化）の線を引く。
+    <b>(B) モデル入替</b>＝v5内部モデルを Opus4.8→Fable に差した時の改善をコンポ別に判定し model-policy を更新。
   </div>
 </div>
 </body>
