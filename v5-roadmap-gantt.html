@@ -56,7 +56,7 @@
 <div class="wrap">
   <h1>V5 改善ロードマップ — ガント</h1>
   <div class="meta">2026-07-01 起点 · 2ヶ月スプリント＋Client化（〜9月中旬）· 縦=施策/仮説（Agent・機能レーン別）横=時間</div>
-  <div class="note"><b>読み方:</b> 各Agent(CEO/Planner/Analyzer)のP項目が並行トラックで走り、依存関係で前後する。機能レーン（①市場データ ②View予測PDCA=実測ループ ③アフィ導線）＋ Client化(8月中旬〜) を重ねた。<b>Fable差分検証</b>を横断レーンとして常設（各施策の完了時に v5 vs Fable を実測ループで採点し moat線を更新）。<b>バーの長さ・開始は計画ドラフト</b>（実装＝駿冴/Zach作業、実測で調整前提）。</div>
+  <div class="note"><b>読み方:</b> 各Agent(CEO/Planner/Analyzer)のP項目が並行トラックで走り、依存関係で前後する。機能レーン（①市場データ ②View予測PDCA=実測ループ ③アフィ導線）＋ Client化(8月中旬〜) を重ねた。<b>Fable差分検証</b>を横断レーンとして常設（各施策の完了時に v5 vs Fable を実測ループで採点し moat線を更新）。<br><b>簡易版方針(2026-07-01):</b> Plannerは精度十分につき凍結、残ブレは<b>構造制約層(Playbook/共通ルール)</b>で縛る。市場データ×<b>ジャンル別DB</b>で精度を上げ、<b>商材→コンセプト→初期コンテンツ</b>のClient自走入口を組み、3-4週運用で完成。<br><b>バーの長さ・開始は計画ドラフト</b>（実装＝駿冴/Zach作業、実測で調整前提）。</div>
 
   <div class="legend">
     <span><i class="sw" style="background:var(--loop)"></i>実測ループ / View予測PDCA</span>
@@ -113,6 +113,14 @@
     <div class="row"><div class="lblcol">市場データ取得機能<span class="tag">的確な引っ張り方</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:0%;width:27.27%;background:var(--mkt)">social-market-data/競合/タグ設計</div></div></div>
     <div class="row"><div class="lblcol">枠組み生成→市場学習<span class="tag">CEO H2 最有力</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:27.27%;width:27.27%;background:var(--mkt)">伸び投稿→勝ち型テンプレ抽出</div></div></div>
 
+    <div class="row"><div class="lblcol">ジャンル別DB構築<span class="tag">仮説burndown/7月末</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:9.09%;width:36.36%;background:var(--mkt)">PF×ジャンルでDB化→精度↑</div></div></div>
+
+    <!-- ===== 商材→コンセプト→初期コンテンツ (Client自走入口) ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--affi)"></i>商材→コンセプト→初期コンテンツ<span class="tag" style="color:var(--sub)">Client自走入口・新スコープ</span></div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">商材→コンセプト案 生成</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:27.27%;width:18.18%;background:var(--affi)">アイデア出し</div></div></div>
+    <div class="row"><div class="lblcol">初期コンテンツ 生成フロー</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:36.36%;width:18.18%;background:var(--affi)">Client自身が回せる形</div></div></div>
+    <div class="row"><div class="lblcol">Client自走パッケージング</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:45.45%;width:18.18%;background:var(--affi)">特定ジャンル向け</div></div></div>
+
     <!-- ===== Agent1 CEO ===== -->
     <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--ceo)"></i>Agent1 CEO</div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
     <div class="row"><div class="lblcol">P5 参照データ土台修復</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:0%;width:18.18%;background:var(--ceo)">過去戦略シート/memory洗い直し</div></div></div>
@@ -124,7 +132,7 @@
     <div class="row"><div class="lblcol">P7 逸脱検知 Self-check</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:54.54%;width:9.09%;background:var(--ceo)">Floor崩壊予防</div></div></div>
 
     <!-- ===== Agent2 Planner ===== -->
-    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--plan)"></i>Agent2 Planner</div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--plan)"></i>Agent2 Planner<span class="tag" style="color:var(--sub)">精度十分→凍結 / 残ブレは構造制約層へ</span></div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
     <div class="row"><div class="lblcol">P2 TTS予防<span class="tag">quick win</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:0%;width:18.18%;background:var(--plan)">読み仮名/難読scan/数字統一</div></div></div>
     <div class="row"><div class="lblcol">P1 内容品質ゲート</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:9.09%;width:27.27%;background:var(--plan)">自動critique→自己再生成</div></div></div>
     <div class="row"><div class="lblcol">P5 情報密度スコア</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:27.27%;width:18.18%;background:var(--plan)">1カット=1新情報/谷検出</div></div></div>
