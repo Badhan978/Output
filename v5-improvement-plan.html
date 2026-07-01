@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V5 改善計画 — CEO / Planner / Analyzer / 全体像</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1d2129; --ink:#e8ebf0; --sub:#9aa4b2;
+    --line:#2a2f3a; --ceo:#4a9eff; --plan:#37c26b; --anly:#b07cff; --all:#f0b429;
+    --bad:#ff6b6b; --good:#37c26b;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    line-height:1.7;font-size:15px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px 120px}
+  header.hero{padding:56px 22px 32px;max-width:1080px;margin:0 auto}
+  .hero h1{font-size:30px;margin:0 0 8px;letter-spacing:.02em}
+  .hero .meta{color:var(--sub);font-size:13px}
+  .hero .lead{margin-top:20px;background:var(--panel);border:1px solid var(--line);
+    border-left:4px solid var(--all);border-radius:10px;padding:18px 20px}
+  .hero .lead b{color:#fff}
+  nav.toc{position:sticky;top:0;background:rgba(15,17,21,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);z-index:10;padding:10px 22px}
+  nav.toc .inner{max-width:1080px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;font-size:13px}
+  nav.toc a{color:var(--sub);text-decoration:none;padding:5px 11px;border-radius:20px;border:1px solid var(--line)}
+  nav.toc a:hover{color:#fff;border-color:var(--sub)}
+  section{margin-top:44px;scroll-margin-top:60px}
+  h2.sec{font-size:22px;margin:0 0 4px;padding-left:12px;border-left:5px solid var(--line)}
+  .sec-sub{color:var(--sub);font-size:13px;margin:0 0 18px;padding-left:17px}
+  .agent-ceo h2.sec{border-color:var(--ceo)} .agent-plan h2.sec{border-color:var(--plan)}
+  .agent-anly h2.sec{border-color:var(--anly)} .agent-all h2.sec{border-color:var(--all)}
+  .badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;
+    font-weight:600;vertical-align:middle;margin-left:8px}
+  .b-ceo{background:rgba(74,158,255,.15);color:var(--ceo)}
+  .b-plan{background:rgba(55,194,107,.15);color:var(--plan)}
+  .b-anly{background:rgba(176,124,255,.15);color:var(--anly)}
+  .b-all{background:rgba(240,180,41,.15);color:var(--all)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:16px}
+  h3{font-size:15px;margin:2px 0 12px;color:#fff;letter-spacing:.02em}
+  h3 .k{color:var(--sub);font-weight:400;font-size:13px;margin-left:6px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--sub);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  td.id{font-weight:700;white-space:nowrap;color:#fff}
+  .tag{font-size:11px;padding:1px 7px;border-radius:5px;background:var(--panel2);color:var(--sub);white-space:nowrap}
+  .ev{color:var(--sub);font-size:12.5px}
+  .hyp{border:1px solid var(--line);border-radius:10px;padding:15px 17px;margin-top:12px;background:var(--panel2)}
+  .hyp .t{font-weight:700;color:#fff;margin-bottom:6px}
+  .hyp .row{font-size:13px;margin:3px 0}
+  .hyp .lbl{color:var(--sub);display:inline-block;min-width:74px}
+  .hyp.best{border-color:var(--all);box-shadow:0 0 0 1px rgba(240,180,41,.2) inset}
+  .pill{font-size:11px;padding:1px 8px;border-radius:20px;background:rgba(240,180,41,.15);color:var(--all);margin-left:8px}
+  .roots{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+  .root{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .root .n{font-size:12px;color:var(--sub)} .root .h{font-weight:700;color:#fff;margin:2px 0 4px}
+  .flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;margin:6px 0 4px}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px;text-align:center;min-width:120px}
+  .node.own{border-color:var(--anly);color:#fff}
+  .arrow{color:var(--sub);font-size:18px}
+  .fb{margin-top:10px;text-align:center;color:var(--sub);font-size:12.5px}
+  ul.tight{margin:6px 0 0;padding-left:20px} ul.tight li{margin:4px 0}
+  .rm{color:var(--sub)}
+  .foot{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--sub);font-size:12px}
+  @media(max-width:680px){.roots{grid-template-columns:1fr}.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>V5 改善計画</h1>
+  <div class="meta">Agent1 CEO ／ Agent2 Planner ／ Agent3 Analyzer ＋ 全体像 · 診断 2026-07-01 · Goal＝Agent が自力で View を伸ばす（2ヶ月で Client-touchable）</div>
+  <div class="lead">
+    <b>統合診断（1行）:</b> 3エージェントの症状は全部 <b>同じ2つの根</b> に収束する。
+    ① どのエージェントも View/Imp を<b>目的関数として持っていない</b>。
+    ② 「予測→実測→因果→反映」の<b>実測ループが存在せず、オーナーも居ない</b>。
+    結果、<b>人間（Badhan）が唯一の目的関数＝品質関門＝学習ドライバー</b>になっている。
+    View 自走化 ＝ この3役を仕組みに移すこと。
+  </div>
+</header>
+
+<nav class="toc"><div class="inner">
+  <a href="#intro">2根と江戸</a>
+  <a href="#ceo">① CEO</a>
+  <a href="#planner">② Planner</a>
+  <a href="#analyzer">③ Analyzer</a>
+  <a href="#overall">④ 全体像・ロードマップ</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ============ INTRO ============ -->
+<section id="intro">
+  <h2 class="sec">2根と、江戸の「代償」構造</h2>
+  <p class="sec-sub">個別課題を読む前提。すべての症状はここに帰る。</p>
+
+  <div class="card">
+    <h3>共通の2根</h3>
+    <div class="roots">
+      <div class="root"><div class="n">根 1</div><div class="h">View/Imp 目的関数の不在</div>
+        CEO は制約充足の整流器、Planner は format/technical ゲートだけ、Analyzer は acc内baseline比判定。誰も「View で選び、View で採点」していない。</div>
+      <div class="root"><div class="n">根 2</div><div class="h">実測ループの不在（オーナー不在）</div>
+        予測（CEO推測view / Planner predicted_kpis）と実測（Agent3）が join されず、「なぜ外したか」が生成側に返らない。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>なぜ一部（江戸）だけ勝つか <span class="k">＝ エージェントの欠陥を題材とPlaybookが肩代わりしている</span></h3>
+    <p class="rm" style="margin-top:0">江戸の勝ちacc（0223湯女200万 / 0226悦楽134K / 0225 / 0228）は「エージェントが強い」のでなく、題材とPlaybook構造が欠陥をタダで代償している。だから他accに移らない。</p>
+    <table>
+      <tr><th>江戸が内蔵している優位</th><th>代償しているエージェント欠陥</th><th>証拠</th></tr>
+      <tr><td class="id">3選型Playbook構造<br><span class="rm">①→②→③ 衝撃度昇順</span></td><td>Planner の情報密度の谷</td><td class="ev">同じ江戸でも<b>比較型</b>(0229/0231)は密度の谷で605〜3,352に死亡＝効いてるのは「江戸」でなく「3選タブー構造」</td></tr>
+      <tr><td class="id">性/闇タブー題材</td><td>CEO の無難テーマ／Planner の視聴動機不在・母集団最大化</td><td class="ev">タブー＝ペルソナ最遠でも2秒停止。ACC_0226 庶民個人受難主語 median 113,950 vs 機構主語 24,644（4.6倍）</td></tr>
+      <tr><td class="id">題材由来の逆説Hook</td><td>Planner の弱Hook</td><td class="ev">「処刑人なのに江戸一の富豪」等が題材から自然に出る</td></tr>
+      <tr><td class="id">デモグラ取得済み＋勝ちformula確立</td><td>CEO/Planner の学習不在（survivorship）</td><td class="ev">0223/0226/0268 はヒット率5-6/6・3/3。他accはデモグラ未取得でペルソナ深掘り不能</td></tr>
+    </table>
+    <p class="rm" style="margin-bottom:0"><b>含意:</b> 打ち手は「江戸のコピー」でなく、<b>江戸がタダで得ている3つ（情報密度・タブー母集団・逆説Hook）を任意のacc/題材で意図的に engineer できる能力</b>をエージェントに持たせること。<br>
+    <span class="rm">交絡: アルゴ遅延拾いの宝くじ性／スナップショット判定の誤りで江戸数値も一部過大の可能性／TT一部scraper失敗。最強の反証＝比較型江戸の敗北＝ジャンルでなく構造勝ち。</span></p>
+  </div>
+</section>
+
+<!-- ============ CEO ============ -->
+<section id="ceo" class="agent-ceo">
+  <h2 class="sec">① Agent1 — CEO<span class="badge b-ceo">テーマ 20→7 確定 / ceo-run</span></h2>
+  <p class="sec-sub">CEO は「View を伸ばすエンジン」でなく「Badhan の戦略を制約内で7本に整流する装置」。だから View で選ばず、外しても毎週作話する。3課題 (a)(b)(c) は全て実データで裏付け。</p>
+
+  <div class="card">
+    <h3>課題一覧 <span class="k">View レバレッジ順</span></h3>
+    <table>
+      <tr><th>#</th><th>課題</th><th>根</th><th>エビデンス</th></tr>
+      <tr><td class="id">C1</td><td>View 目的関数の不在（BT引用＋制約充足で、View期待値の選別が無い）</td><td><span class="tag">考え方</span></td><td class="ev">推測view vs 実測が10-100倍乖離（拷問具50K→90）。予測列が事実上フィクション</td></tr>
+      <tr><td class="id">C2</td><td>自己補正ループの不在（PDCAのCheckがAgent3外部化・空でも平常運転、毎週作話）</td><td><span class="tag">考え方</span></td><td class="ev">コストコを「Hook弱」→4日後「新formula」神格化。大奥ヒットを「政治権力」誤帰属→後で撤回</td></tr>
+      <tr><td class="id">C3</td><td>戦略探索がスコープ外（所与の戦略枠内で20案出すだけ）</td><td><span class="tag">考え方</span></td><td class="ev">View成長のドライバーが Badhan の人力に残存</td></tr>
+      <tr><td class="id">C4</td><td>時事軸×ペルソナ軸のフレーム欠落（direction_type に時間軸/ターゲット軸なし）</td><td><span class="tag">考え方</span></td><td class="ev">21/21 が theme_addition。時事もペルソナも「死んでから逆算」でしか出ない</td></tr>
+      <tr><td class="id">C5</td><td>参照データの陳腐化・未接続（judgment の前提が壊れている）</td><td><span class="tag">参照データ</span></td><td class="ev">過去戦略シート403。memory.md が実測とズレ（ACC_0225 記載21,840 vs 実175万=80倍誤）。単一時点viewでPhase誤判定</td></tr>
+      <tr><td class="id">C6</td><td>FBの重心が「事故防止」でテーマ当たりに薄い</td><td><span class="tag">FB質量</span></td><td class="ev">27原則中テーマ着眼は8本、残りは運用規律。昇華がBadhan口述筆記型</td></tr>
+      <tr><td class="id">C7</td><td>クロスPF転写の崩壊（IG→YT丸流用）</td><td><span class="tag">参照/運用</span></td><td class="ev">子十字軍 IG124,632→YT1,402（88倍減）。YT兄弟ほぼ全滅</td></tr>
+      <tr><td class="id">C8</td><td>Floor崩壊の脆弱性（formula逸脱で1本即死）</td><td><span class="tag">考え方/運用</span></td><td class="ev">ACC_0225 4月avg 242,357→5月avg 638（380倍減）</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>打ち手</h3>
+    <table>
+      <tr><th>#</th><th>打ち手</th><th>効く課題</th></tr>
+      <tr><td class="id">P1</td><td>View 目的関数を導入。各案に「View期待値＋信頼度」を必須付与し、20→7の一次フィルタに予測スコア（最終選定はBadhan）</td><td class="tag">C1</td></tr>
+      <tr><td class="id">P2</td><td>最小の自己採点ループ。毎バッチ末に推測view vs 実測の差分表→外れをHook/シナリオ/題材/PF/アルゴ遅延に分類→構造化蓄積。3回反復した因果だけ昇華（作話潰し）</td><td class="tag">C2,C6</td></tr>
+      <tr><td class="id">P3</td><td>20案に「探索枠」を強制配分（7準拠+3探索）。探索枠のヒット率を別トラッキング</td><td class="tag">C3,C4</td></tr>
+      <tr><td class="id">P4</td><td>direction_type に時事軸/ペルソナ軸を正式追加。トレンド起点に市場の急上昇投稿データを接続</td><td class="tag">C4</td></tr>
+      <tr><td class="id">P5</td><td>参照データ土台の修復。過去戦略シート接続 or 代替canonical固定／memory実測洗い直し／Phase判定を7-14日累積に統一</td><td class="tag">C5,C2</td></tr>
+      <tr><td class="id">P6</td><td>PF別タイトル/Hook変換を必須化（IG=share型／YT=検索KW先頭）。YT兄弟の丸流用を封印ルール化</td><td class="tag">C7</td></tr>
+      <tr><td class="id">P7</td><td>逸脱検知をSelf-checkに追加（Floor崩壊予防）。母集団最大化軸を全acc必須項目に格上げ</td><td class="tag">C8,C6</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>精度を上げる仮説</h3>
+    <div class="hyp"><div class="t">H1 — View目的関数 + クローズドループ学習</div>
+      <div class="row"><span class="lbl">仮説</span>View予測→実測突合→因果分類→次選定への反映のループを持てば、Badhan無しで週次に予測精度が上がりヒット率が改善</div>
+      <div class="row"><span class="lbl">検証</span>推測viewの対実測 誤差（対数MAE）が逓減するか／ヒット率が上向くか</div>
+      <div class="row"><span class="lbl">土台</span>P1 + P2 + P5</div></div>
+    <div class="hyp best"><div class="t">H2 — 枠組み生成 → 市場の伸び投稿で学習<span class="pill">最有力</span></div>
+      <div class="row"><span class="lbl">仮説</span>直接ブレストでなく、市場の急上昇投稿から「なぜ今この型が伸びるか」の勝ち型テンプレを機械抽出→それに沿って生成。供給側(自社過去BT)偏重を需要側(市場の今)へ</div>
+      <div class="row"><span class="lbl">なぜ</span>(b)無難テーマと(c)時事欠落を同時に潰せる。接続先＝social-market-data / ig-competitor-research</div>
+      <div class="row"><span class="lbl">検証</span>市場由来枠組み vs 従来テーマの A/B ヒット率</div></div>
+    <div class="hyp"><div class="t">H3 — 二軸強制配分 + 軸別ヒット率トラッキング</div>
+      <div class="row"><span class="lbl">仮説</span>20案を「今伸びる系/ターゲット刺し系/探索」に強制配分し軸別ヒット率を追えば、accごとに勝ち軸へ資源集中できる</div>
+      <div class="row"><span class="lbl">土台</span>P3 + P4</div></div>
+  </div>
+</section>
+
+<!-- ============ PLANNER ============ -->
+<section id="planner" class="agent-plan">
+  <h2 class="sec">② Agent2 — Planner<span class="badge b-plan">シナリオ生成 / video-creation-orchestrator</span></h2>
+  <p class="sec-sub">Hook型・craftルールは充実。だが内容品質を止めるゲートが無く（内容verifyはshadow=非ブロック）、実質 Badhan の人間レビューだけが品質関門。学習信号は❌30件(負例)のみで、✅263件(90%)の合格は本文空＝勝ち筋が未学習。4課題は全て裏付け。</p>
+
+  <div class="card">
+    <h3>課題一覧 <span class="k">Imp レバレッジ順</span></h3>
+    <table>
+      <tr><th>#</th><th>課題</th><th>根</th><th>エビデンス</th></tr>
+      <tr><td class="id">C1</td><td>内容品質ゲートの不在（実装ゲートは全てformat/technical、内容verifyは shadow＝非ブロック）</td><td><span class="tag">考え方</span></td><td class="ev">質の悪いシナリオがDoc化を止められず、Badhan人間ゲートで初めて弾かれる</td></tr>
+      <tr><td class="id">C2</td><td>学習ループが負例のみ・Imp非連動</td><td><span class="tag">考え方/参照</span></td><td class="ev">293中❌30件(10%)・6ACC偏在・8ACCゼロ。✅263件は空。predicted_kpis全てdefault</td></tr>
+      <tr><td class="id">C3</td><td>TTS読み上げの予防が完全にゼロ（事後検出＋再ビルド頼み）</td><td><span class="tag">考え方/FB</span></td><td class="ev">4課題で唯一 絶対ルールがゼロ。揚代・花魁・湯女・陰間・内済等の誤読多数。数字表記もアラビア/漢数字混在</td></tr>
+      <tr><td class="id">C4</td><td>Hook/Body分離最適化＋カット間接続検証の欠落（一括turn生成）</td><td><span class="tag">考え方</span></td><td class="ev">02_江戸比較で中盤6カットが同一beat反復＝情報密度の谷。カエサルc8→c9でトーンwhiplash</td></tr>
+      <tr><td class="id">C5</td><td>視聴動機がCEO出力に全面依存（Planner自身は再設計せずreflectのみ）</td><td><span class="tag">上流連鎖</span></td><td class="ev">比較型Hookは「江戸の〇〇は世界一」の事実断定で当事者化なし。#3卵は良、#2ゴマドレは空振り</td></tr>
+      <tr><td class="id">C6</td><td>Imp/3秒維持の定量ゲートが無い（BT率は参照値どまり）</td><td><span class="tag">考え方</span></td><td class="ev">比較Playbook 7テーマ全て同一Hookテンプレ＝Hook疲労。cut1単独で止まらずcut2依存</td></tr>
+      <tr><td class="id">C7</td><td>Playbook間の品質格差が構造的（闇/性の3選型に強く、比較型に弱い）</td><td><span class="tag">参照/設計</span></td><td class="ev">改善は個別シナリオでなく比較Playbookの本編設計に打つのが費用対効果高い</td></tr>
+    </table>
+    <p class="rm" style="margin-bottom:0"><b>context rot 注記:</b> 大型Playbook(200-283KB)で必須field優先が craft(Hook/Body品質)を先に削る方向に効くと推測。長prompt Playbook ほど品質が落ちやすい。</p>
+  </div>
+
+  <div class="card">
+    <h3>打ち手</h3>
+    <table>
+      <tr><th>#</th><th>打ち手</th><th>効く課題</th></tr>
+      <tr><td class="id">P1</td><td>内容品質ゲートを人間の前に置く（自動critique→自己再生成）。shadowのverify-hypothesisをブロッキング化し、Hook約束回収/カット接続/情報密度/視聴動機を自動採点</td><td class="tag">C1,C4,C5</td></tr>
+      <tr><td class="id">P2</td><td>TTS-safe化を生成時に予防。読み仮名フィールド必須スキーマ化→難読語scan→数字表記ポリシー（漢数字統一）を絶対ルール化</td><td class="tag">C3</td></tr>
+      <tr><td class="id">P3</td><td>予測KPIを実データ連動＝Imp最適化ループを生成側に閉じる。過去view実績をinjectし実績ベースに較正、勝ちHook型を優先</td><td class="tag">C2,C6</td></tr>
+      <tr><td class="id">P4</td><td>正例学習を起動。✅パスに「なぜ通したか」1行タグ→勝ち筋をルール昇華。ネガ回避からポジ再現へ</td><td class="tag">C2</td></tr>
+      <tr><td class="id">P5</td><td>情報密度スコアを導入。「1カット=1新情報か」を採点、中盤の谷を検出して詰める</td><td class="tag">C4,C7</td></tr>
+      <tr><td class="id">P6</td><td>比較Playbookの本編設計を作り直す（Playbookレベル）。中盤に別軸の新情報を強制、Hookテンプレ多様化。ceed-playbooksへIssue化</td><td class="tag">C7,C4,C6</td></tr>
+      <tr><td class="id">P7</td><td>視聴動機のPlanner内補完（CEO Layer2が薄い時にターゲット当事者化フックを補う）。根はCEO側＝全体像で連結</td><td class="tag">C5</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>精度を上げる仮説</h3>
+    <div class="hyp"><div class="t">H1 — 内容品質ゲートを人間の前に置く（自動critique 自己再生成）</div>
+      <div class="row"><span class="lbl">仮説</span>Hook約束回収/カット接続/情報密度/TTS読み/視聴動機を自動採点し閾値未満を再生成すれば、Badhanレビュー前に質が上がり❌率が下がる</div>
+      <div class="row"><span class="lbl">検証</span>人間ゲートの❌率・再生成回数・手直し量の逓減</div>
+      <div class="row"><span class="lbl">土台</span>P1 + P2 + P5</div></div>
+    <div class="hyp best"><div class="t">H2 — 実測 Imp 連動の学習ループ（生成側に閉じる）<span class="pill">最有力</span></div>
+      <div class="row"><span class="lbl">仮説</span>過去view実績×Hook型×視聴動機タグをfeedしpredicted_kpisを実績較正＋勝ちHook優先すれば、当てずっぽうから脱しImp最大化が生成ループに閉じる</div>
+      <div class="row"><span class="lbl">なぜ</span>CEO H1と同型。#4全体像で1本の実測ループに統合すべき（各Agentで別々に作らない）</div>
+      <div class="row"><span class="lbl">土台</span>P3 + P4</div></div>
+    <div class="hyp"><div class="t">H3 — 正例学習でネガ回避型からポジ再現型へ</div>
+      <div class="row"><span class="lbl">仮説</span>✅263件の合格に勝ち筋タグを残して昇華すれば、減点回避から加点狙いの強Hook量産へ移れる</div>
+      <div class="row"><span class="lbl">土台</span>P4 + P3</div></div>
+  </div>
+</section>
+
+<!-- ============ ANALYZER ============ -->
+<section id="analyzer" class="agent-anly">
+  <h2 class="sec">③ Agent3 — Analyzer<span class="badge b-anly">実績収集・分析・知見集約</span></h2>
+  <p class="sec-sub">単体は健全（reach分析SOP v1.1 は Hook/Body/CTA 3要素ファネル分解まで持ち良質）。刷新はデータ堅牢化＋アフィ(CV)層に効いた。だが「Agent1〜2の学習供給者」として見ると3つの構造ギャップ。Agent3 はこのスプリントの<b>要</b>。</p>
+
+  <div class="card">
+    <h3>課題一覧 <span class="k">学習供給者としてのギャップ</span></h3>
+    <table>
+      <tr><th>#</th><th>課題</th><th>種別</th><th>内容</th></tr>
+      <tr><td class="id">G1</td><td>予測⇄実測の突合が誰の担当でもない（最重要・全体像マター）</td><td><span class="tag">オーナー不在</span></td><td class="ev">CEO推測view・Planner predicted_kpis と実測をjoinして「どれだけ/なぜ外したか」を生成側に返す担当が居ない。SOPもbaseline比判定で予測に閉じてない</td></tr>
+      <tr><td class="id">G2</td><td>要素別分解の入力データが手動/目視で自走しない</td><td><span class="tag">参照/自動化</span></td><td class="ev">リテンションカーブ(目視5%刻み)・CTA開始秒・尺が非自動。<b>CEO誤帰属（角度の誤り）の真因の可能性</b>＝データ無しでモデルが作話</td></tr>
+      <tr><td class="id">G3</td><td>正例（勝ち筋）の供給が遅く人手ゲート</td><td><span class="tag">学習信号</span></td><td class="ev">for_agent2昇華は裏付け≥3＋Badhan承認で遅い。Plannerの✅空問題を解けない。勝ち筋カードを自動供給すべき</td></tr>
+    </table>
+    <p class="rm" style="margin-bottom:0"><b>ウォッチ:</b> 分析の「角度」の質＝モデル推論の問題。DR機構・schema-guardはデータ整合性には効くが n=1過学習・誤帰属・断定調 は直さない（SOP規律徹底＋G2で作話余地を消す）／投資ミスマッチ（刷新はCV層中心、Viewが要求するreach層は目視依存・閾値仮置き）／自走性（cron planned・Gemini決済・安定化中）。</p>
+  </div>
+
+  <div class="card">
+    <h3>打ち手</h3>
+    <table>
+      <tr><th>#</th><th>打ち手</th><th>効く課題</th></tr>
+      <tr><td class="id">P1</td><td>実測ループのオーナーをAgent3に置く。per-postで「予測×実測×誤差×因果分類」を1行ledger化しfor_agent1/2に返す。判定を予測との差分主軸に</td><td class="tag">G1</td></tr>
+      <tr><td class="id">P2</td><td>要素別分解の入力データをパイプラインに載せる（リテンションカーブ相当・CTA開始秒・尺をAPI or 構造化手動キャプチャで自動化）。作話の余地を消す</td><td class="tag">G2</td></tr>
+      <tr><td class="id">P3</td><td>勝ち筋カードを自動生成（Hook型×視聴動機×密度×実測）→Plannerが正例ingest。Badhan承認は昇華の段だけに残す</td><td class="tag">G3</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>精度／供給力を上げる仮説</h3>
+    <div class="hyp best"><div class="t">H1 — 予測⇄実測クローズドループのオーナー化<span class="pill">全体像で統合</span></div>
+      <div class="row"><span class="lbl">仮説</span>Agent3が「予測×実測×誤差×因果」をper-postで返せば、CEO/Plannerが自己補正でき Badhan無しで週次に精度が上がる</div>
+      <div class="row"><span class="lbl">注</span>単独設計せず #4 で「1本の実測ループ」として設計（CEO H1・Planner H2 と同一）</div>
+      <div class="row"><span class="lbl">土台</span>P1</div></div>
+    <div class="hyp"><div class="t">H2 — 実データ駆動の要素別因果分解（作話の排除）</div>
+      <div class="row"><span class="lbl">仮説</span>リテンションカーブ相当を自動供給すれば因果分解が実データで走り、誤帰属が構造的に減る</div>
+      <div class="row"><span class="lbl">検証</span>因果帰属の後日撤回率（コストコ/大奥型）が減るか</div>
+      <div class="row"><span class="lbl">土台</span>P2</div></div>
+    <div class="hyp"><div class="t">H3 — 正例供給の自動化でネガ回避→ポジ再現へ</div>
+      <div class="row"><span class="lbl">仮説</span>勝ち筋カードを自動でPlannerに供給すれば、学習信号が❌偏重から勝ちパターン再現へ移る</div>
+      <div class="row"><span class="lbl">土台</span>P3</div></div>
+  </div>
+</section>
+
+<!-- ============ OVERALL ============ -->
+<section id="overall" class="agent-all">
+  <h2 class="sec">④ 全体像 — 統合設計とロードマップ</h2>
+  <p class="sec-sub">各Agentの打ち手を1本に統合。核は「View目的関数」と「実測ループ」を3回作らず1本化すること。</p>
+
+  <div class="card">
+    <h3>統合設計 ＝ 1本の実測ループ（The Loop）<span class="k">CEO H1 = Planner H2 = Agent3 G1 は同一ループの別視点</span></h3>
+    <div class="flow">
+      <div class="node">① CEO<br><span class="rm">テーマ + 推測view</span></div>
+      <div class="arrow">→</div>
+      <div class="node">② Planner<br><span class="rm">シナリオ + predicted_kpis</span></div>
+      <div class="arrow">→</div>
+      <div class="node">投稿</div>
+      <div class="arrow">→</div>
+      <div class="node own">③ Analyzer<br><span class="rm">ループのオーナー</span></div>
+    </div>
+    <div class="fb">↑ Analyzer が「予測 × 実測 × 誤差 × 因果分類(Hook/Body/CTA/題材/PF/アルゴ)」を ledger化 →<br>
+      <b>for_agent1</b>（テーマ軸別の当たり/誤差）と <b>for_agent2</b>（勝ち筋カード＝正例）を CEO/Planner に返す</div>
+    <ul class="tight" style="margin-top:14px">
+      <li><b>オーナー＝Agent3</b>。判定軸を acc内baseline比 → <b>予測との差分</b>に変える。</li>
+      <li>CEO推測view・Planner predicted_kpis を投稿メタに<b>保存</b>（今は較正されず捨てられている）。</li>
+      <li>因果分解は<b>実データで</b>（要素別データ供給が前提。目視作話を排除）。</li>
+      <li>これが埋まると <b>CEOの(a)(b)、Plannerの(2)(6)、Agent3のG1〜G3が同時に動く</b>。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>作るべき3能力 <span class="k">江戸がタダで得ているものを engineerable に</span></h3>
+    <table>
+      <tr><th>能力</th><th>engineer化の打ち手</th><th>出典</th></tr>
+      <tr><td class="id">情報密度</td><td>「1カット=1新情報か」の密度スコア→谷を詰める／3選型の昇順構造を比較Playbookに移植</td><td class="tag">Planner P5,P6</td></tr>
+      <tr><td class="id">タブー母集団<br><span class="rm">視聴動機</span></td><td>市場分析軸で「母集団の広さ×感情の強さ」を測る→CEOのテーマ選定を母集団最大化で採点。時事×ペルソナ軸をdirection_typeに追加</td><td class="tag">CEO P4/H2, Planner P7</td></tr>
+      <tr><td class="id">逆説Hook</td><td>Hook型別の実測ヒット率を回し逆説/常識破壊型を勝ちaccで優先。「世界一」テンプレ脱却</td><td class="tag">Planner P3, CEO P1</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>前提整備 <span class="k">ループを実運用に載せる土台</span></h3>
+    <ul class="tight">
+      <li><b>要素別データの自動供給（最重要前提）</b>：リテンションカーブ相当・CTA開始秒・尺を自動化＝CEO誤帰属の真因つぶし（Agent3 G2/P2）。</li>
+      <li><b>参照データ土台の修復</b>：過去戦略シート接続／memory実測洗い直し／Phase判定を7-14日累積に統一（CEO P5）。</li>
+      <li><b>自走性</b>：cron確定（日曜22:00）／Gemini 2.5 Pro 決済／ig-affiliate-analysis 安定化。</li>
+      <li><b>View漏れの目詰まり（テーマ以前）</b>：クロスPF転写崩壊、アカBAN・未起動acc放置・提案が生産に到達しない、重複投稿silent fail。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>2ヶ月ロードマップ <span class="k">Client-touchable ＝ ①予測可能なヒット率 ②手直しが例外処理 ③週次自走 ④説明可能</span></h3>
+    <table>
+      <tr><th>期間</th><th>主眼</th><th>具体</th></tr>
+      <tr><td class="id">M1 W1-2</td><td>ループ骨格＋土台</td><td>実測ledger MVP（予測×実測×誤差の突合をAgent3に配線）／要素別データ供給(P2)／参照データ土台修復(CEO P5)</td></tr>
+      <tr><td class="id">M1 W3-4</td><td>因果を実データで／正例起動</td><td>Hook/Body/CTA因果分解の自動化（作話排除）／勝ち筋カード供給(Agent3→Planner)／Planner内容品質ゲート(P1)＋TTS予防(P2)</td></tr>
+      <tr><td class="id">M2 W5-6</td><td>3能力の engineer化</td><td>情報密度スコア／市場分析軸=タブー母集団の測定(CEO C4)／逆説Hook多様化＋比較Playbook本編再設計</td></tr>
+      <tr><td class="id">M2 W7-8</td><td>自走＋client化</td><td>View目的関数で選定を回す／cron・Gemini・安定化／一貫性・エラー率・説明ダッシュボードで仕上げ</td></tr>
+    </table>
+    <p class="rm" style="margin-bottom:0">scope discipline: V5 = simple-only。各Agentで「作り込む」より「実測ループに効く最小改修」に寄せる。</p>
+  </div>
+
+  <div class="card">
+    <h3>横断優先順位 & 未決watch</h3>
+    <ul class="tight">
+      <li><b>1.【最優先・重複排除の要】実測ループ1本</b>（CEO H1 = Planner H2 = Agent3 G1）— 3回作らず Agent3 オーナーで1本。</li>
+      <li><b>2. 要素別データ供給(P2/G2)</b> — ループの燃料。無しでは因果分解が作話に戻る。</li>
+      <li><b>3. 正例学習</b>（Agent3 P3 → Planner P4）— ネガ回避型からポジ再現型へ。</li>
+      <li><b>4. 参照データ土台</b>（CEO P5）— judgment の前提を正す。</li>
+      <li><b>5. 3能力の engineer化 & 比較Playbook再設計</b> — 江戸の代償構造を任意accで再現。</li>
+      <li><b>6. TTS予防 / クロスPF / 目詰まり</b> — 並行の軽量修正、Viewの漏れ止め。</li>
+    </ul>
+    <p class="rm" style="margin-top:12px;margin-bottom:0"><b>未決（要Badhan判断）:</b> 6月「30体マネジ可能化」milestone 定義未了（load-bearing）／「v5遅延 vs 新KPI前提」内部矛盾（Client化の対外説明で表面化）／「局所チューニング vs 円環の構造変更」— 本計画は<b>円環は維持し欠けている実測ループを足す</b>立場。構造変更まで踏むかは別途 grill 推奨。</p>
+  </div>
+</section>
+
+<div class="foot">
+  V5 改善計画 · 診断 2026-07-01 · 根拠: ceo-run/video-creation-orchestrator/ig-affiliate-analysis 各skill精読 + feedback/fb-memory + accs/sheet-archive 実測 + Sheet2 実シナリオDoc + wiki v5 hub<br>
+  出典の詳細な数値・引用は元の4ドキュメント（v5-improvement-agent1〜3 / -4-overall）を参照。
+</div>
+
+</div>
+</body>
+</html>
