@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fable 5 チャンス活用 — やるべきこと実行計画（円環の増価層 × 品質改善）</title>
+<style>
+  :root{
+    --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --bg:#f7f8fa; --card:#fff;
+    --a1:#2563eb; --a1bg:#eff5ff; --a1ln:#bcd4fb;
+    --a2:#7c3aed; --a2bg:#f5f3ff; --a2ln:#ddd6fe;
+    --a3:#0d9488; --a3bg:#effbf8; --a3ln:#b9ece3;
+    --pub:#d97706; --pubbg:#fffbeb; --publn:#fde68a;
+    --up:#16a34a; --upbg:#f0fdf4; --upln:#bbf7d0;
+    --down:#dc2626; --downbg:#fef2f2; --downln:#f5c6c6;
+    --fab:#db2777; --fabbg:#fdf2f8; --fabln:#fbcfe8;
+    --warn:#d97706; --ok:#16a34a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    line-height:1.75;font-size:15px}
+  .wrap{max-width:1080px;margin:0 auto;padding:32px 22px 90px}
+  header.hero{border-bottom:3px solid var(--fab);padding-bottom:16px;margin-bottom:8px}
+  h1{font-size:26px;margin:0 0 6px}
+  .sub{color:var(--muted);font-size:13.5px}
+  h2{font-size:20px;margin:40px 0 14px;padding-left:11px;border-left:5px solid var(--fab)}
+  h3{font-size:16px;margin:18px 0 8px}
+  a{color:var(--a1)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  code{background:#f0f2f5;padding:1px 6px;border-radius:5px;font-size:12px;word-break:break-all}
+  .muted{color:var(--muted);font-size:13px}
+  ul{margin:6px 0;padding-left:20px} li{margin:5px 0}
+  .goalbox{background:#fffbeb;border:1px solid #fde68a;border-left:5px solid var(--warn);border-radius:10px;padding:14px 18px;margin:14px 0}
+  .goalbox .t{font-size:18px;font-weight:700;color:#b45309}
+  .tldr{background:var(--fabbg);border:1px solid var(--fabln);border-left:5px solid var(--fab);border-radius:10px;padding:16px 20px;margin:14px 0}
+  .tldr h3{color:#be185d;margin:0 0 6px;font-size:16px}
+  .tldr .one{font-size:15.5px;font-weight:700;margin:0 0 10px}
+  .tldr ul{margin:4px 0 0;padding-left:20px}
+  table.t{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;background:#fff}
+  table.t th,table.t td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+  table.t th{background:#f3f4f6}
+  table.t td.id{font-weight:700;white-space:nowrap;text-align:center}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:12.5px;color:var(--muted);margin:8px 0 12px}
+  .dot{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin-right:5px}
+  .st{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:1px 7px;color:#fff;white-space:nowrap}
+  .s-live{background:var(--ok)} .s-design{background:var(--a1)} .s-prop{background:var(--a3)} .s-hold{background:var(--warn)} .s-block{background:#64748b}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .chip{display:inline-block;border-radius:6px;padding:1px 8px;font-size:11.5px;font-weight:700;color:#fff;margin:2px 3px 0 0}
+  .c1{background:var(--a1)} .c2{background:var(--a2)} .c3{background:var(--a3)} .cpub{background:var(--pub)} .cfab{background:var(--fab)}
+  .cup{background:var(--up)} .cdown{background:var(--down)}
+  svg{max-width:100%;height:auto;display:block;margin:4px auto}
+  .figcap{text-align:center;color:var(--muted);font-size:12.5px;margin-top:4px}
+  .updown{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  .updown>div{border-radius:11px;padding:14px 16px;font-size:13.5px}
+  .upcol{background:var(--upbg);border:1px solid var(--upln)}
+  .downcol{background:var(--downbg);border:1px solid var(--downln)}
+  .upcol b:first-child,.downcol b:first-child{display:block;margin-bottom:6px;font-size:14.5px}
+  .task{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0;margin:14px 0;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .task .head{padding:12px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .task .head .num{font-size:15px;font-weight:800;color:#fff;background:var(--fab);border-radius:7px;padding:2px 10px}
+  .task .head .ttl{font-size:16px;font-weight:700}
+  .task .body{padding:6px 18px 16px}
+  .task.g1 .head{background:var(--upbg);border-bottom:1px solid var(--upln)} .task.g1 .head .num{background:var(--up)}
+  .task.g2 .head{background:var(--a2bg);border-bottom:1px solid var(--a2ln)} .task.g2 .head .num{background:var(--a2)}
+  .task.g3 .head{background:var(--a3bg);border-bottom:1px solid var(--a3ln)} .task.g3 .head .num{background:var(--a3)}
+  .task.g4 .head{background:var(--fabbg);border-bottom:1px solid var(--fabln)} .task.g4 .head .num{background:var(--fab)}
+  .kv{margin:8px 0}
+  .kv .k{font-weight:700;font-size:12.5px;color:#374151;display:inline-block;min-width:96px;vertical-align:top}
+  .why{background:#fffbeb;border-left:4px solid var(--warn);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13.5px}
+  .steps{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:8px 12px 8px 26px;margin:8px 0;font-size:13px}
+  .done{background:var(--upbg);border-left:4px solid var(--up);border-radius:8px;padding:6px 12px;margin:8px 0;font-size:13px}
+  .files{font-size:12px;color:#374151}
+  .grphd{font-weight:700;color:#fff;border-radius:8px;padding:9px 14px;margin:26px 0 8px;font-size:15px}
+  .grphd.g1{background:var(--up)} .grphd.g2{background:var(--a2)} .grphd.g3{background:var(--a3)} .grphd.g4{background:var(--fab)}
+  .ask{background:#fef2f2;border:1px solid #f5c6c6;border-left:5px solid var(--down);border-radius:10px;padding:8px 20px;margin:12px 0}
+  .proto{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:18px 20px;font-size:13.5px;line-height:1.9}
+  .proto b{color:#fff} .proto .c1{color:#93c5fd} .proto .c2{color:#c4b5fd} .proto .c3{color:#5eead4} .proto .cf{color:#f9a8d4}
+  .toc{columns:2;font-size:14px} .toc a{text-decoration:none}
+  footer{margin-top:46px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
+  @media(max-width:760px){.grid3,.grid2,.updown{grid-template-columns:1fr}.toc{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>🚀 Fable 5 チャンス活用 — やるべきこと実行計画</h1>
+  <div class="sub">円環（Agent1·2·3）の「将来も価値が残る部分＝増価層」を太らせ、シナリオ・動画・分析の品質/精度を上げるための実行指示書 ／ このHTMLを Fable 5 に読み込ませれば、そのまま作業を進められる自己完結ランブック ／ 作成 2026-07-01</div>
+</header>
+
+<!-- ========== コストゼロ理解ゾーン ========== -->
+<div class="goalbox">
+  <div class="t">🎯 最終ゴール：各アカウントで <u>アフィリエイト売上 月5万円</u>（＝CV）を達成する</div>
+  <p style="margin:6px 0 0">この計画の全タスクは「<b>これは月5万円に効くか？</b>」で評価する。効き方が<b>直接</b>（CVに直結）か<b>間接</b>（判断・品質の天井を上げる土台）かを各タスクに明記した。</p>
+</div>
+
+<div class="tldr">
+  <h3>🟣 このファイルは何？（10秒で理解）</h3>
+  <p class="one">「Claude Codeで史上最高性能モデル Fable 5 が使えるようになった。この滅多にないチャンスを無駄にせず、AI KOL事業（3エージェントの円環）を"将来も価値が残る形"に作り替え、品質を底上げするために、<b>何を・なぜ・どの順で・どう進めるか</b>を全部書いた実行指示書」です。</p>
+  <h3>まずこれだけ押さえればOK</h3>
+  <ul>
+    <li><b>背景：</b> 事業は3つのAI（① Agent1=戦略 / ② Agent2=動画制作 / ③ Agent3=分析）がバトンを渡し合う「円環」。1周ごとに賢くなり、最終的にアフィリエイトで稼ぐ。</li>
+    <li><b>なぜ今：</b> Fable 5 は6/9公開→6/12に輸出規制でオフライン→6/30解除→<b>7/1再解禁</b>。前回この最上位モデルでやろうとした"仕様見直し・品質洗い出し"が中断していた。今それを再開できる。</li>
+    <li><b>ものさし：</b> 「AIが進化しても<b>育つもの（増価層＝自社にしか貯まらない資産）</b>に投資し、<b>すたれるもの（減価層＝誰でもできる配管）</b>は薄く保つ」。</li>
+    <li><b>やること：</b> (A)全仕様を増価層の観点で0から見直す ＋ (B)シナリオ・動画・分析の品質/精度の問題点・改善点を全洗い出しして直す。</li>
+    <li><b>使い方：</b> このHTMLを Fable 5 に読ませ、下の「§10 実行プロトコル」に従って上から着手。<b>細かい判断は都度、駿冴さんに質問</b>してよい。</li>
+  </ul>
+  <p class="muted" style="margin:8px 0 0">↓ 下に進むほど具体的になります。まず次の2つの図（円環／ものさし）を眺めれば全体像がつかめます。</p>
+</div>
+
+<h2 id="toc" style="border:none;padding:0;font-size:15px;color:var(--muted);margin:24px 0 6px">目次</h2>
+<div class="card toc">
+  <a href="#why">1. なぜ今やるのか（Fable 5 のチャンス）</a><br>
+  <a href="#circle">2. 円環の全体像（対象システム）</a><br>
+  <a href="#lens">3. 判断のものさし（増価層 vs 減価層）</a><br>
+  <a href="#map">4. やるべきこと 全体マップ</a><br>
+  <a href="#prio">5. 優先順位（月5万円への効き × 工数）</a><br>
+  <a href="#g1">6. グループ①：増価層の基盤を太らせる</a><br>
+  <a href="#g2">7. グループ②：品質・信頼性を底上げ</a><br>
+  <a href="#g3">8. グループ③：供給線・分析を強化</a><br>
+  <a href="#g4">9. グループ④：Fableだからできる横断作業</a><br>
+  <a href="#proto">10. Fable 5 実行プロトコル（進め方）</a><br>
+  <a href="#start">11. 着手のしかた（最初の一手）</a><br>
+  <a href="#ask">12. 実行条件（確定済み ✅）</a>
+</div>
+
+<!-- ========== 1. なぜ今 ========== -->
+<h2 id="why">1. なぜ今やるのか（Fable 5 のチャンス）</h2>
+<div class="card">
+  <p><b>Fable 5 = Anthropic が一般公開した中で最も高性能なモデル</b>（Mythos 5クラスを安全化）。長時間の自律作業・多ファイル横断・難しい推論に強い＝<b>「全仕様を一気に見直す」「品質問題を根こそぎ洗い出す」という重い作業に最適</b>。今使っている Opus 4.8 の上位。</p>
+  <svg viewBox="0 0 900 150" role="img" aria-label="Fable5タイムライン">
+    <defs><marker id="arw" markerWidth="11" markerHeight="11" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9ca3af"/></marker></defs>
+    <line x1="40" y1="75" x2="860" y2="75" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#arw)"/>
+    <g text-anchor="middle" font-size="12">
+      <circle cx="120" cy="75" r="8" fill="#16a34a"/><text x="120" y="50" font-weight="700" fill="#16a34a">6/9</text><text x="120" y="108" fill="#6b7280">公開</text>
+      <circle cx="320" cy="75" r="8" fill="#dc2626"/><text x="320" y="50" font-weight="700" fill="#dc2626">6/12</text><text x="320" y="108" fill="#6b7280">輸出規制で停止</text>
+      <circle cx="560" cy="75" r="8" fill="#d97706"/><text x="560" y="50" font-weight="700" fill="#d97706">6/30</text><text x="560" y="108" fill="#6b7280">規制解除</text>
+      <circle cx="770" cy="75" r="9" fill="#db2777"/><text x="770" y="50" font-weight="800" fill="#db2777">7/1 🚀</text><text x="770" y="108" fill="#374151" font-weight="700">再解禁（Claude Code含む）</text>
+    </g>
+  </svg>
+  <div class="goalbox" style="margin-top:10px">
+    <b style="color:#b45309">⏳ 期限に注意（コスト条件）</b><br>
+    <b>7/1〜7/7</b> は Pro/Max/Team等で <b>週次利用上限の最大50%までFable 5が含まれる</b>。<b>7/8以降は usage credits 経由</b>（標準Enterprise席はクレジット有効化が必要）。→ <b>重い一斉スイープは7/7までの枠を厚めに使う</b>か、credits前提でスコープを刻む。</div>
+  <p class="muted">前回（6/10〜6/12）は mini 上で各エージェントを実際に Fable 5 に切替えて本番運用していた実績あり（ステータスバー <code>Fable 5</code> / コミット <code>Co-Authored-By: Claude Fable 5</code>）。今回はその"作業"でなく、一段上の<b>"仕組みの作り替え・品質の底上げ"</b>に使う。</p>
+</div>
+
+<!-- ========== 2. 円環 ========== -->
+<h2 id="circle">2. 円環の全体像（この計画が触るシステム）</h2>
+<div class="card">
+  <div class="legend">
+    <span><span class="dot" style="background:var(--a1)"></span>① Agent1 CEO（戦略）</span>
+    <span><span class="dot" style="background:var(--a2)"></span>② Agent2（動画制作）＝ content-pipeline</span>
+    <span><span class="dot" style="background:var(--pub)"></span>投稿・実績</span>
+    <span><span class="dot" style="background:var(--a3)"></span>④ Agent3（分析）</span>
+    <span>━ 実物の流れ　┄ 知見の還流</span>
+  </div>
+  <svg viewBox="0 0 900 470" role="img" aria-label="円環図">
+    <defs>
+      <marker id="a2" markerWidth="12" markerHeight="12" refX="8.5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker>
+      <marker id="a2g" markerWidth="12" markerHeight="12" refX="8.5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0d9488"/></marker>
+    </defs>
+    <circle cx="450" cy="235" r="72" fill="#faf7ff" stroke="#ddd6fe" stroke-width="2"/>
+    <text x="450" y="228" text-anchor="middle" font-size="14" font-weight="700" fill="#6d28d9">円環</text>
+    <text x="450" y="248" text-anchor="middle" font-size="10.5" fill="#6b7280">1周ごとに賢くなる</text>
+    <g font-weight="700" text-anchor="middle">
+      <rect x="55" y="40" width="260" height="98" rx="12" fill="#eff5ff" stroke="#2563eb" stroke-width="2"/>
+      <text x="185" y="66" font-size="14" fill="#2563eb">① Agent1 — CEO（戦略）</text>
+      <text x="185" y="88" font-size="11" font-weight="400" fill="#374151">skill: ceo-run ／ 操作: Badhan</text>
+      <text x="185" y="107" font-size="11" font-weight="400" fill="#6b7280">テーマ20→7確定 → Sheet1 S/U/K列</text>
+      <text x="185" y="125" font-size="11" font-weight="400" fill="#6b7280">正典: v5-agents</text>
+      <rect x="585" y="40" width="260" height="98" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+      <text x="715" y="63" font-size="14" fill="#7c3aed">② Agent2 — 動画制作</text>
+      <text x="715" y="84" font-size="10.5" font-weight="400" fill="#374151">skill: video-creation-orchestrator ほか</text>
+      <text x="715" y="102" font-size="11" font-weight="400" fill="#6b7280">仮説→動画→投稿予約（Step1-4）</text>
+      <text x="715" y="120" font-size="11" font-weight="400" fill="#9333ea">正典: content-pipeline ／ 操作: 駿冴</text>
+      <rect x="585" y="332" width="260" height="98" rx="12" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+      <text x="715" y="358" font-size="14" fill="#b45309">③ 投稿・実績収集</text>
+      <text x="715" y="380" font-size="11" font-weight="400" fill="#6b7280">動画を投稿し数字を集める</text>
+      <text x="715" y="400" font-size="11" font-weight="400" fill="#6b7280">投稿者・Lala・ContentOps（自動）</text>
+      <rect x="55" y="332" width="260" height="98" rx="12" fill="#effbf8" stroke="#0d9488" stroke-width="2"/>
+      <text x="185" y="358" font-size="14" fill="#0d9488">④ Agent3 — 分析</text>
+      <text x="185" y="380" font-size="10.5" font-weight="400" fill="#374151">skill: ig-post-analysis ほか3本</text>
+      <text x="185" y="400" font-size="11" font-weight="400" fill="#6b7280">実績→分析→知見化 → Sheet3/DB</text>
+      <text x="185" y="418" font-size="11" font-weight="400" fill="#6b7280">正典: v5-agents ／ 操作: Badhan</text>
+    </g>
+    <g stroke="#6b7280" stroke-width="2.6" fill="none">
+      <line x1="317" y1="89" x2="581" y2="89" marker-end="url(#a2)"/>
+      <line x1="715" y1="140" x2="715" y2="328" marker-end="url(#a2)"/>
+      <line x1="581" y1="381" x2="319" y2="381" marker-end="url(#a2)"/>
+    </g>
+    <g font-size="11.5" fill="#374151" text-anchor="middle">
+      <text x="449" y="80">戦略・7テーマ（S/U列）</text>
+      <text x="740" y="235" text-anchor="start">動画</text>
+      <text x="450" y="372">実績データ</text>
+    </g>
+    <g stroke="#0d9488" stroke-width="2.4" fill="none" stroke-dasharray="7 5">
+      <line x1="185" y1="330" x2="185" y2="140" marker-end="url(#a2g)"/>
+      <line x1="319" y1="350" x2="581" y2="120" marker-end="url(#a2g)"/>
+    </g>
+    <g font-size="11" fill="#0d9488">
+      <text x="195" y="235">知見を還流→戦略へ</text>
+      <text x="345" y="255">知見を還流→動画へ（承認後にルール化）</text>
+    </g>
+  </svg>
+  <p class="muted" style="text-align:center">緑の点線＝Agent3の学びが左の2人へ戻り円環が閉じる。<b>横断層に「L8 統一知見台帳」</b>（学びを名寄せ・失効管理する増価層の中核、稼働済み）が全体に被さる。</p>
+</div>
+
+<!-- ========== 3. ものさし ========== -->
+<h2 id="lens">3. 判断のものさし（増価層 vs 減価層）</h2>
+<div class="card">
+  <p style="margin:0 0 4px">全タスクの優先度と「どこに力を入れるか」を決める物差し。問い：<b>「来年もっと賢いAIが出ても、これは自社の強みとして残るか？」</b></p>
+  <div class="updown">
+    <div class="downcol"><b>📉 減価層（すたれる）</b>
+      AIが進化すると「誰でもすぐできる」ようになり価値が消えるもの。<br>
+      <span class="muted">例：動画を作る配管／競合スクレイピング／凝った生成ロジック。</span><br>
+      → <b>薄く・最小限に。</b>作り込みすぎない。壊れにくく頑丈にはするが、投資は寄せない。</div>
+    <div class="upcol"><b>📈 増価層（育つ）</b>
+      AIが進化しても、むしろ価値が増える「自社にしか貯まらない資産」。<br>
+      <span class="muted">例：投稿結果データ／何が売れたか（CV）／Hook・型の辞書／L8知見台帳／fb-memory絶対ルール群。</span><br>
+      → <b>ここに投資を寄せる。</b>Fable 5 の力もここに集中投下する。</div>
+  </div>
+  <p class="muted" style="margin:8px 0 0">出典: 構造改善アイデア候補マップ.html §1（Zack「減価層／増価層」）＋ v5-agents <code>knowledge/doctrine.md</code>。<b>この計画のタスクは、増価層を太らせるものを上位に、減価層は"頑丈化・省力化"に留める。</b></p>
+</div>
+
+<!-- ========== 4. 全体マップ ========== -->
+<h2 id="map">4. やるべきこと 全体マップ</h2>
+<div class="card">
+  <p style="margin:0 0 8px">やるべきことを<b>4グループ</b>に整理した。既存の「構造改善アイデア候補マップ」の構造レバー(L1-14)・システム改善(S1-20)を土台に、Fable 5 だからこそ着手すべきものを加えた。各グループの色は下の詳細セクションと対応。</p>
+  <div class="grid2">
+    <div class="card" style="margin:0;border-top:4px solid var(--up)">
+      <h3 style="color:var(--up);margin-top:4px">① 増価層の基盤を太らせる <span class="chip cup">最重要</span></h3>
+      <p class="muted" style="margin:0">自社にしか貯まらない資産（CV・知見・型）を蓄積・活用する仕組み。月5万円に最も近い。</p>
+      <p style="margin:6px 0 0"><span class="chip cup">L4 CV紐付け</span><span class="chip cup">L8 知見台帳</span><span class="chip cup">L3 型オントロジー</span><span class="chip cup">全仕様の増価層スイープ</span></p>
+    </div>
+    <div class="card" style="margin:0;border-top:4px solid var(--a2)">
+      <h3 style="color:var(--a2);margin-top:4px">② 品質・信頼性を底上げ <span class="chip c2">直接効く</span></h3>
+      <p class="muted" style="margin:0">シナリオ・動画の質と、壊れやすい仕組みの頑丈化。品質が上がれば view→CV。</p>
+      <p style="margin:6px 0 0"><span class="chip c2">L2 ルール強制</span><span class="chip c2">品質ゲート精度</span><span class="chip c2">S1-S20 頑丈化</span><span class="chip c2">ドリフト解消</span></p>
+    </div>
+    <div class="card" style="margin:0;border-top:4px solid var(--a3)">
+      <h3 style="color:var(--a3);margin-top:4px">③ 供給線・分析を強化 <span class="chip c3">土台</span></h3>
+      <p class="muted" style="margin:0">入力（ネタ源）と分析の精度を上げ、判断の天井を上げる。</p>
+      <p style="margin:6px 0 0"><span class="chip c3">L7 双方向pull</span><span class="chip c3">L11 再現発掘</span><span class="chip c3">L12 マルチモーダル</span><span class="chip c3">L9 自己学習自動化</span></p>
+    </div>
+    <div class="card" style="margin:0;border-top:4px solid var(--fab)">
+      <h3 style="color:var(--fab);margin-top:4px">④ Fableだからできる横断作業 <span class="chip cfab">Fableでこそ</span></h3>
+      <p class="muted" style="margin:0">高性能モデルの長時間自律・多ファイル横断を活かす一斉レビュー系。</p>
+      <p style="margin:6px 0 0"><span class="chip cfab">全仕様一斉レビュー</span><span class="chip cfab">テスト網羅</span><span class="chip cfab">設計⇔実装ずれ検出</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 5. 優先順位 ========== -->
+<h2 id="prio">5. 優先順位（月5万円への効き × 工数）</h2>
+<div class="card">
+  <table class="t">
+    <tr><th>優先度</th><th>やること</th><th>効き方（月5万円）</th><th>状態</th></tr>
+    <tr><td class="id" style="background:#fef9c3">最優先A</td><td><b>全仕様の増価層スイープ ＋ 品質/精度の問題点・全洗い出し</b>（このHTMLの本丸。Fableで一気に）</td><td>間接だが全タスクの母体。ここで優先順位が確定する</td><td><span class="st s-prop">今回着手</span></td></tr>
+    <tr><td class="id" style="background:#fef9c3">最優先B</td><td><b>T2 ドリフト解消</b>（README stale / CLAUDE.md vs 実態 / batch本数6-3）</td><td>間接（事故防止・判断の正確性）。低工数・高効果</td><td><span class="st s-prop">未着手</span></td></tr>
+    <tr><td class="id">直結</td><td><b>L4 CV紐付け</b>（どの売上がどの投稿・視聴層からか）</td><td><b>最も直接。</b>「何が売れるか」を学習しCVへ</td><td><span class="st s-hold">Badhan CVデータ整備待ち</span></td></tr>
+    <tr><td class="id">基盤</td><td><b>L8 較正・運用改善 / L2 ルール強制 / L3 型統一</b></td><td>間接。知見を新鮮に・ルールを守らせ・分析を動画まで継承</td><td><span class="st s-live">一部稼働</span></td></tr>
+    <tr><td class="id">品質</td><td><b>品質ゲート精度（動画/仮説）／ S1-S20 頑丈化</b></td><td>間接。品質安定・人手削減・事故防止</td><td><span class="st s-live">一部稼働</span></td></tr>
+    <tr><td class="id">供給線</td><td><b>L7 pull実装 / L11 再現発掘 / L12 / L9</b></td><td>間接。入力品質・学習速度</td><td><span class="st s-design">設計/構想</span></td></tr>
+  </table>
+  <p class="muted"><b>基準（構造改善マップ§5準拠）：</b>「売上=CV への直結度 × 残工数」。<b>L4 が最も直結</b>だが Badhan 側 CV データ整備待ちのため、その間に基盤・品質・スイープを進める。</p>
+</div>
+
+<!-- ========== 6. グループ1 ========== -->
+<div class="grphd g1" id="g1">グループ① 増価層の基盤を太らせる（自社にしか貯まらない資産）</div>
+
+<div class="task g1">
+  <div class="head"><span class="num">1</span><span class="ttl">全仕様の「増価層スイープ」</span><span class="chip cup">増価層</span><span class="st s-prop">今回の本丸</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>円環の全正典（Agent1/2/3＋全スキル＋横断層）を1ノードずつ読み直し、各仕様を「減価層 / 増価層」に仕分け。「減価層に過剰投資していないか」「増価層の取りこぼしはないか」を列挙する。</div>
+    <div class="why"><b>なぜ（ロジック）：</b>モデルが進化するほど「動画を作る配管（減価層）」の相対価値は下がり、「自社の投稿結果・CV・型辞書・知見台帳（増価層）」の価値が上がる。今の投資配分が増価層に寄っているかを点検しないと、すたれる所に労力を注ぎ続けてしまう。これが月5万円への全施策の母体になる。</div>
+    <div class="kv"><span class="k">対象ファイル</span><span class="files">①<code>v5-agents/agent1-ceo/skills/ceo-run/</code> ②<code>content-pipeline/docs/sheet-relay-workflow/SPEC.md</code> ＋ <code>.claude/skills/video-creation-orchestrator/</code> ③<code>v5-agents/agent3-analyzer/</code> ＋ 3スキル ④横断<code>v5-agents/knowledge/</code> <code>knowledge-ledger/</code></span></div>
+    <div class="steps">1. ノードを1つ選ぶ（①/②/③/横断）→ 2. サブエージェントを並列fan-outして正典を精読 → 3. 各仕様に「増価/減価」タグと「投資が過不足か」を付与 → 4. "増価層の取りこぼし"を改善候補として起票 → 5. 次ノードへ。</div>
+    <div class="done"><b>完了条件：</b>4ノード全ての仕分け表が完成し、増価層を太らせる改善候補が優先順位付きでリスト化されている。</div>
+  </div>
+</div>
+
+<div class="task g1">
+  <div class="head"><span class="num">2</span><span class="ttl">L4 — CV紐付け（統一台帳＋CV join key）</span><span class="chip cup">増価層そのもの</span><span class="st s-hold">CVデータ待ち</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>「1投稿=1行」で結果を貯める統一台帳に、<b>「どの売上（CV）が・どの投稿・どの視聴層から来たか」を結ぶ紐付け（join key）</b>を設計・実装する。</div>
+    <div class="why"><b>なぜ：</b><b>月5万円=アフィ購入(CV)に最も直結。</b>今は「どの売上がどの投稿から来たか」が分からず"何が売れるか"を学習できない（江戸クラスタの「PFV高いのにCV=0」が象徴）。CV紐付けが入れば「勝てる商材×視聴層」が分かり、売れる方へ寄せられる。他社が持てない増価層データそのもの。</div>
+    <div class="kv"><span class="k">前提/ブロッカー</span><span class="st s-hold">Badhan側でCVデータがまだ整備できていないため先送り中。</span>まずは A8等ASPのCVデータ形式を確認し、bio単一リンク＋投稿別 link_taps 時系列での<b>期間相関ベース</b>紐付け（V5自走実験.htmlで設計済みの方式）を設計だけ先に進められる。</div>
+    <div class="kv"><span class="k">対象ファイル</span><span class="files">content-performance-db（台帳スキーマ）／ V5自走実験.html §6（CVアトリビューション設計）／ Affiliate Weekly Tracker</span></div>
+    <div class="steps">1. Badhanに CVデータ整備状況を確認（→ ここは駿冴さん経由で質問） → 2. 期間相関ベースの紐付けロジックを設計 → 3. データが揃い次第、台帳への自動書込＋join実装。</div>
+    <div class="done"><b>完了条件：</b>週次でCVが投稿・視聴層に紐付き、「勝てる商材×層」がレポートに出る。</div>
+  </div>
+</div>
+
+<div class="task g1">
+  <div class="head"><span class="num">3</span><span class="ttl">L8 — 知識ライフサイクル台帳の較正・運用改善</span><span class="chip cup">増価層</span><span class="st s-live">稼働済み</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>既に稼働中のL8統一知見台帳（学びを<code>kid</code>で名寄せ・候補→確定→失効を管理）の<b>初期パラメータを実データで較正</b>し、運用の穴を塞ぐ。</div>
+    <div class="why"><b>なぜ：</b>各エージェントが「常に新鮮で確かな知見だけ」で判断できると、テーマ・台本・分析の質が上がり、古い前提での失敗を防ぐ。confidence式の<code>half_life_days=90</code>・反証閾値・<code>revalidate_after=90日</code>は"初期の仮置き"なので、稼働データで較正して精度を上げる余地がある。</div>
+    <div class="kv"><span class="k">対象ファイル</span><span class="files"><code>v5-agents/knowledge-ledger/SCHEMA.md</code> / <code>lib/ledger.py</code>（<code>compute_confidence</code>・定数）/ <code>ops/l8_maintenance.sh</code>（週次8ステップ）</span></div>
+    <div class="steps">1. 稼働ログから昇格/失効/再検証の実績を集計 → 2. half_life・閾値の妥当性を検証し較正 → 3. soft-dedup(3-gram Jaccard≥0.6)の誤検出率を点検 → 4. Badhan月次レビュー（引退/昇格タブ）の運用負荷を確認。</div>
+    <div class="done"><b>完了条件：</b>較正済みパラメータで再検証サイクルが回り、誤判断・重複昇格の実測が改善。</div>
+  </div>
+</div>
+
+<div class="task g1">
+  <div class="head"><span class="num">4</span><span class="ttl">L3 — 型（Hook/CTA）オントロジー統一＋継承の機械検証</span><span class="chip cup">増価層</span><span class="st s-live">一部稼働</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>Hook型・CTA型・ファネル(TOFU/MOFU/BOFU)の語彙を3エージェントで完全統一し、「知見→テーマ→シナリオ→動画」と渡る時に意図が引き継がれたかを機械検証する。</div>
+    <div class="why"><b>なぜ：</b>良い戦略が段から段へ減衰せず動画まで届き、伸びた理由も正しく帰属できる。型語彙は横断で複利化する背骨＝増価層。現状、矛盾軸照合コードは毎ビルド呼ばれるが Agent1 が矛盾軸を出さないと空回りする箇所がある（構造改善マップ L3）。</div>
+    <div class="kv"><span class="k">対象ファイル</span><span class="files"><code>v5-agents/knowledge/doctrine.md</code> §8（語彙統一の参照固定）/ <code>knowledge/reference/</code>（Hook 13型・CTA・funnel定義本体）/ content-pipeline <code>references/batch-strategy-format.md</code>（矛盾軸→回収）</span></div>
+    <div class="done"><b>完了条件：</b>3エージェントが同一のHook/CTA型カタログを参照し、受け渡し各段で型の引き継ぎが検証される。</div>
+  </div>
+</div>
+
+<!-- ========== 7. グループ2 ========== -->
+<div class="grphd g2" id="g2">グループ② 品質・信頼性を底上げ（シナリオ・動画・分析の質）</div>
+
+<div class="task g2">
+  <div class="head"><span class="num">5</span><span class="ttl">シナリオ・動画・分析の品質/精度 全洗い出し</span><span class="chip c2">品質の本丸</span><span class="st s-prop">今回着手</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>円環の各段で品質・精度を落としている箇所を網羅列挙し、改善策をまとめる。既存の構造改善マップ §7（S1-S20）を起点に、Fableで更に深掘り・追加する。</div>
+    <div class="why"><b>なぜ：</b>シナリオ（上流）の質が動画の質を決め、動画の質が view→CV を決める。品質を落とす箇所（もろい照合・見落とし・人手依存）を潰せば、円環全体の変換効率が上がる。</div>
+    <div class="kv"><span class="k">具体の起点</span><span class="files">シナリオ品質＝<code>references/planner-system-prompt.md</code>＋<code>batch-strategy-format.md</code>（矛盾軸→回収）／ 動画品質＝<code>references/video-gate-learning.md</code>（AI審査V列と人間Q列の乖離記録）＋<code>scenario-schema-compatibility.md</code>（Gate C等）／ 分析品質＝<code>sop-ig-analysis.md</code></span></div>
+    <div class="steps">1. 各段の品質ゲート・照合ロジックを精読 → 2. 過去事故カタログ（SKILL.md Critical）と乖離記録から"再発しうる品質問題"を抽出 → 3. S1-S20に追加する形で改善候補を起票 → 4. 月5万円への効き×工数で優先順位付け。</div>
+    <div class="done"><b>完了条件：</b>品質/精度の問題点が網羅リスト化され、各々に改善策と優先度が付いている。</div>
+  </div>
+</div>
+
+<div class="task g2">
+  <div class="head"><span class="num">6</span><span class="ttl">L2 — inject→enforce（ソフトルールを"守らせる"へ）</span><span class="chip c2">品質安定</span><span class="st s-live">一部稼働</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>ルールを「プロンプトに書いて渡す(inject)」だけでなく「守ったか機械で検査して、破ったら作り直す(enforce)」に格上げ。特に Hook品質・難語などの"ソフトなルール"。</div>
+    <div class="why"><b>なぜ：</b>CTA文言一致・人物除外などの"厳密なルール"は既に機械チェックが稼働。だがHook品質・難語回避などは渡すだけで検査されず再発する。自己採点で検査→違反は生成段階で却下・再生成すれば、品質が"守られて当たり前"になる。fb-memoryの絶対ルール群（cand_ca521b8c Hook品質、manual_fc3685e7 専門用語回避等）を検査可能な形に。</div>
+    <div class="kv"><span class="k">対象ファイル</span><span class="files"><code>references/fb-memory-spec.md</code>（5層inject）／ <code>fb-memory/absolute_rules_*.md</code>／ <code>sheet-relay-verify-hypothesis.ts</code>（仮説ゲート）</span></div>
+    <div class="done"><b>完了条件：</b>主要なソフトルールに自己採点チェックが付き、違反が生成段階で再生成される。</div>
+  </div>
+</div>
+
+<div class="task g2">
+  <div class="head"><span class="num">7</span><span class="ttl">S1-S20 — もろい仕組みの頑丈化・省力化</span><span class="chip c2">信頼性</span><span class="chip cdown">減価層=頑丈化に留める</span><span class="st s-prop">未着手多数</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>構造改善マップ §7 のシステム改善 S1-S20 を実施。壊れやすい作りを頑丈にし、人手作業を自動化する（＝減価層なので"作り込み"でなく"頑丈化・省力化"に留める）。</div>
+    <div class="why"><b>なぜ：</b>単体では売上に直接効かないが、円環各段の信頼性を上げ人手を減らし土台を底上げする。過去、列を1つ増やして番号がずれ「人間専用列を上書きする重大事故」が起きた（S1）等、放置すると増価層の資産を目減りさせる。</div>
+    <div class="kv"><span class="k">代表項目</span><span class="files">S1 列番号を1枚の対応表に集約 ／ S3 合否判定を共通部品化（「❌不合格」が「合格」を含む罠）／ S4 連番シート全読み ／ S5 SKILL.md⇔実シートのずれ自動検出 ／ S6 ルール採用理由の記録＆効果測定 ／ S9 学びの自動当てはめ ／ S16 やり残し自動仕分け ／ S19 テーマ文字化け検出 ／ S20 稼働ACCのSSOT統一</span></div>
+    <div class="kv"><span class="k">対象ファイル</span><span class="files">content-pipeline <code>.claude/skills/video-creation-orchestrator/scripts/</code> ／ 各シート（マスター/Phase1/Post Tracker/Affiliate）</span></div>
+    <div class="done"><b>完了条件：</b>各項目が「頑丈化 or 自動化」され、対応する過去事故が再発しない状態。</div>
+  </div>
+</div>
+
+<div class="task g2">
+  <div class="head"><span class="num">8</span><span class="ttl">T2 — 設計⇔実態のドリフト解消（低工数・高効果）</span><span class="chip c2">事故防止</span><span class="st s-prop">未着手</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>ドキュメントと実態のズレを解消。新規参加者やAIが古い記述を信じて事故るのを防ぐ。</div>
+    <div class="why"><b>なぜ：</b>ドリフトは"静かな事故源"。判断の正確性に直結し、低工数で効果が高い。今回の全体像精読で以下の実在ドリフトを確認済み。</div>
+    <div class="kv"><span class="k">確認済みズレ</span><span class="files">① content-pipeline <code>README.md</code> が<b>旧二段構造(Opus4.7)</b>のまま＝真実値は<code>SPEC.md</code> ／ ② v5-agents <code>agent3-analyzer/CLAUDE.md</code> の役割B/C(spec06/08)は<b>未実装の構想</b>＝<code>docs/architecture.md</code>が実態 ／ ③ <code>agent1-ceo/memory.md</code> のACC別<b>batch本数が6/3のまま</b>（実運用は7本）／ ④ CLAUDE.md群の <code>~/ceed-agents</code> パス記述（実体は別チェックアウト）</span></div>
+    <div class="steps">1. 各ドリフトを駿冴さんに報告し、正とする側を確認 → 2. 旧記述に「旧仕様」マーカー付与 or 更新（削除でなく履歴保持）→ 3. 起動時の設計⇔実態突き合わせチェック（S5）を検討。</div>
+    <div class="done"><b>完了条件：</b>主要ドキュメントが実態と一致 or ズレ箇所に明示マーカー。</div>
+  </div>
+</div>
+
+<!-- ========== 8. グループ3 ========== -->
+<div class="grphd g3" id="g3">グループ③ 供給線・分析を強化（入力品質と判断の天井）</div>
+
+<div class="task g3">
+  <div class="head"><span class="num">9</span><span class="ttl">L7 — 双方向フィードバック（Agent1/2 → Agent3 pull窓口）</span><span class="chip c3">判断品質</span><span class="st s-design">設計済み・未実装</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>下流（戦略・制作）が上流（分析）に「この問いを調べて」と頼める逆向きの窓口を実装。CEOが判断の最中に生まれる"その場の問い"にAgent3が答えるだけモードで回答する。</div>
+    <div class="why"><b>なぜ：</b>判断中に必要な分析をその場で取り寄せ、推測でなくデータで決められる（CEOが過去の勝ち筋を読み違えた実例あり）。分析=Agent3・判断=Agent1 の境界は死守、副作用ゼロ（書き込まない）。設計は L7 設計HTMLで完了済み、Phase1を小さく実装するところから。</div>
+    <div class="kv"><span class="k">対象ファイル</span><span class="files">L7 双方向フィードバック設計.html ／ <code>v5-agents/agent3-analyzer/.claude/skills/ig-post-analysis/</code>（query.py＋answer-onlyモード追加）／ <code>agent1-ceo/skills/ceo-run/</code>（呼び出し側）</span></div>
+    <div class="done"><b>完了条件：</b>ig-post-analysis に読取専用・型付き回答の"答えるだけモード"が動き、ceo-run から呼べる。</div>
+  </div>
+</div>
+
+<div class="task g3">
+  <div class="head"><span class="num">10</span><span class="ttl">L11 / L12 / L9 — 入力品質・分析深化・自己学習</span><span class="chip c3">供給線</span><span class="st s-live">一部稼働</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">L11 再現発掘</span>伸びてる動画を「自社で再現できるか」で採点し、作れる勝ち筋を自動収集（3スキルの出力を再現スコアで束ねる）。→ テーマ・仮説の入力品質を起点から上げる。</div>
+    <div class="kv"><span class="k">L12 分析深化</span>view/likeだけでなく動画の中身（離脱点・視聴維持カーブ・視聴層）まで分析。ig-post-analysis の Phase4 深掘りをコード化。</div>
+    <div class="kv"><span class="k">L9 自己学習自動化</span>各スキルの「学びを記録→次回読む」は稼働中。足すのは"システムが自分で失敗に気づいて改善案を下書きする"部分（動画ゲート乖離学習 video-gate-learning が先行実装）。</div>
+    <div class="why"><b>なぜ：</b>いずれも直接CVではないが、テーマ・仮説の入力品質と学習速度を上げ土台を底上げ。分析エンジン自体は減価層だが、そこから貯まる"再現できた勝ち筋データ・中身分析データ"は増価層。</div>
+    <div class="done"><b>完了条件：</b>各項目の"欠けた半分"（再現スコア/中身深掘りコード/自動改善下書き）が実装され稼働。</div>
+  </div>
+</div>
+
+<!-- ========== 9. グループ4 ========== -->
+<div class="grphd g4" id="g4">グループ④ Fable 5 だからできる横断作業（Fable 5 でこそできる）</div>
+
+<div class="task g4">
+  <div class="head"><span class="num">11</span><span class="ttl">全リポ横断の一斉レビュー＆テスト網羅</span><span class="chip cfab">Fable横断</span><span class="st s-prop">今回着手</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>Fable 5 の長時間自律・多ファイル横断能力を活かし、(a) 全リポ（content-pipeline / v5-agents / ceed-playbooks / ContentOps）の設計⇔実装ずれ・デッドコード・脆さを一斉レビュー、(b) 重要スクリプトのテスト網羅性を点検し不足を補う。</div>
+    <div class="why"><b>なぜ：</b>この規模の横断レビューは通常モデルでは1回のコンテキストに載らず分割が必要。Fable 5 なら一気通貫で"人が見落とす整合性の穴"を見つけられる＝Fable 5 でこそできる高価値作業。品質ゲート（Gate C・三重verify・audio-sync）の精度向上にも直結。</div>
+    <div class="kv"><span class="k">進め方</span><span class="files">サブエージェントを領域別にfan-outし、各領域の"整合性の穴・脆さ・テスト不足"を構造化レポート → 統合 → 優先度付け（§10のプロトコル）</span></div>
+    <div class="done"><b>完了条件：</b>横断レビューの指摘リストと、重要経路のテスト不足リストが優先度付きで揃う。</div>
+  </div>
+</div>
+
+<div class="task g4">
+  <div class="head"><span class="num">12</span><span class="ttl">V5 完全自走実験の準備・検討</span><span class="chip cfab">野心枠</span><span class="st s-design">設計フェーズ</span></div>
+  <div class="body">
+    <div class="kv"><span class="k">何をやる</span>「人間は売上目標だけ渡し、AIが6役割を横断してPDCAを自走で回せるか」の一回限りお試し実験（V5自走実験.html）。専用privateリポ＋Skillバンドル＋Markdown正本の準備。</div>
+    <div class="why"><b>なぜ：</b>Fable 5 の"サステインした自律・長期エージェント作業"能力を最も直接的に試せる。増価層/減価層の思想が最も先鋭化した設計で、うまくいけば円環の構造そのものを変える。ただし新規コールド垢・要準備なので、まずは設計フェーズの棚卸しから。</div>
+    <div class="kv"><span class="k">対象ファイル</span><span class="files">V5自走実験.html（§7 運用基盤・§8 残ギャップ）</span></div>
+    <div class="done"><b>完了条件：</b>実験リポの構造・mandate・データ契約が揃い、発火前チェックリストが埋まる（実行は別途Go判断）。</div>
+  </div>
+</div>
+
+<!-- ========== 10. プロトコル ========== -->
+<h2 id="proto">10. Fable 5 実行プロトコル（どう進めるか）</h2>
+<div class="proto">
+  <b>■ 基本サイクル（構造改善マップの進め方を踏襲）</b><br>
+  <span class="cf">① 棚卸し</span> → <span class="cf">② スイープ（並列fan-out）</span> → <span class="cf">③ 統合・優先順位</span> → <span class="cf">④ 1案ずつ設計を詰める</span> → <span class="cf">⑤ 駿冴さんと合意</span> → <span class="cf">⑥ 実装 or 成果物化</span><br><br>
+  <b>■ Fable 5 の力の使い方</b><br>
+  ・重い読み込み（全正典レビュー）は<b>サブエージェントを領域別に並列fan-out</b>し、結論だけ集約（今回の全体像精読と同じ手法）。<br>
+  ・洗い出しは<b>アドバーサリアルに</b>：見つけた問題を別視点で「本当に問題か」検証してから採用。<br>
+  ・<b>1ノード=1スイープ</b>で刻む（①Agent1 / ②Agent2 / ③Agent3 / 横断）。一度に全部やらない。<br><br>
+  <b>■ 守ること（絶対）</b><br>
+  ・<span class="c1">分析と判断を混ぜない</span>（事実出しはAI、意思決定は駿冴さん/Badhan）。<br>
+  ・<span class="c2">人間専用欄に書かない</span>（マスター M/N/Q/R＝Badhan領域、Sheet1 T/V＝Badhan領域、Sheet1スキーマ不変）。<br>
+  ・<span class="c3">正典（SSOT）を正とする</span>（README等の旧記述を信じない。SPEC.md / 各SKILL.md / architecture.md が実態）。<br>
+  ・<b>不可逆操作（削除・大量書換）は着手前に確認。</b>共有repoへの直接pushは避け、変更はブランチ or 都度commit。<br><br>
+  <b>■ コスト規律</b><br>
+  ・7/7までのFable枠を重いスイープに厚く使う。動画生成を伴う検証は<b>コスト事前確認</b>（テスト動画は無駄に作らない）。<br>
+  ・mini は本番稼働機（常駐tmux orchestrator/agent3/ig/l8-worker・launchdは保護）。検証はローカル or 影響を切り分けて。
+</div>
+
+<!-- ========== 11. 着手のしかた ========== -->
+<h2 id="start">11. 着手のしかた（最初の一手）</h2>
+<div class="card">
+  <ol>
+    <li><b>このHTMLを Fable 5 に読み込ませる</b>（Claude Code内で <code>/model</code> → Fable 5 に切替。7/7まで週次上限50%込み）。</li>
+    <li><b>着手対象を1つ選ぶ。</b>おすすめ順：<b>タスク8（ドリフト解消＝低工数・即効）</b> → <b>タスク1＋5（増価層スイープ＋品質洗い出し＝本丸）</b> → 優先度に応じてL群。</li>
+    <li>選んだタスクの「対象ファイル」をサブエージェントで並列精読 → 問題/改善を構造化 → アドバーサリアル検証 → <b>優先度付きリストで駿冴さんに提示</b>。</li>
+    <li><b>迷ったら止まって駿冴さんに質問（都度OK）。</b>特に「アウトプット形式」「不可逆操作」「CVデータ状況（Badhan確認）」は必ず確認。</li>
+  </ol>
+  <p class="muted">この計画自体も生きたドキュメント。スイープで新たに分かったことは、このHTMLの続き（改訂版）として Drive の同フォルダに蓄積していく。</p>
+</div>
+
+<!-- ========== 12. 確認事項 ========== -->
+<h2 id="ask">12. 実行条件（駿冴さんと確定済み ✅）</h2>
+<div class="ask" style="background:#f0fdf4;border-color:#bbf7d0;border-left-color:#16a34a">
+  <ul>
+    <li style="color:#15803d"><b>✅ アウトプット形式（確定 2026-07-01）：</b>このHTMLを改訂し、Drive同フォルダに蓄積していく（PR化・別タスクリスト化はしない）。</li>
+    <li style="color:#15803d"><b>✅ L4 CVデータ（確定 2026-07-01）：</b>まだ未整備。L4は先送り継続、その間は設計のみ先行可（実装はデータ整備後）。</li>
+    <li style="color:#15803d"><b>✅ 着手順（確定 2026-07-01・駿冴さんが判断を委任）：</b>① タスク8 ドリフト解消（低工数・即効のウォームアップ）→ ② タスク1＋5 増価層スイープ＋品質全洗い出し（本丸。ここで全改善候補と優先順位が確定）→ ③ 確定した優先度でL群（L2/L3/L8/L7…）。L4はCVデータ待ちのため設計のみ先行。全体は網羅しつつ月5万円直結を上位に。</li>
+    <li style="color:#15803d"><b>✅ 実行環境（確定 2026-07-01）：</b>ローカル（個人本体）で回す。本番機 mini の常駐（orchestrator/agent3/ig/l8-worker・launchd）には干渉しない。</li>
+    <li style="color:#15803d"><b>✅ ペース（確定 2026-07-01）：</b>7/7までの無料枠50%で、重い一斉スイープ（タスク1＋5＋11）を集中的に終わらせる。7/8以降のcredits継続はその時点で判断。</li>
+  </ul>
+</div>
+
+<footer>
+  Fable 5 チャンス活用 — やるべきこと実行計画。円環（Agent1·2·3）の増価層を太らせ、シナリオ・動画・分析の品質/精度を上げるための自己完結ランブック。<br>
+  土台資料: 構造改善アイデア候補マップ.html（L1-14 / S1-20）・V5自走実験.html・L7/L8設計.html・00_はじめに全体像オンボーディング.html ＋ content-pipeline / v5-agents 全正典の精読（2026-07-01）。<br>
+  生成: Claude Code（Opus 4.8）／ 実行担当: Fable 5。
+</footer>
+
+</div>
+</body>
+</html>
