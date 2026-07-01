@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V5 改善ロードマップ — ガント (2026-07 → 09)</title>
+<style>
+  :root{
+    --bg:#0f1115;--panel:#171a21;--ink:#e8ebf0;--sub:#9aa4b2;--line:#2a2f3a;
+    --loop:#f0b429;--mkt:#1fb6c9;--ceo:#4a9eff;--plan:#37c26b;--anly:#b07cff;
+    --affi:#ff5d8f;--client:#ff8a3d;--prep:#6b7280;--today:#ff4d4d;
+    --cols:11; /* 週数 */
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;font-size:14px;line-height:1.5}
+  .wrap{max-width:1280px;margin:0 auto;padding:26px 20px 90px}
+  h1{font-size:24px;margin:0 0 4px}
+  .meta{color:var(--sub);font-size:12.5px;margin-bottom:6px}
+  .note{color:var(--sub);font-size:12px;background:var(--panel);border:1px solid var(--line);
+    border-left:3px solid var(--loop);border-radius:8px;padding:10px 13px;margin:14px 0 20px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin-bottom:14px}
+  .legend span{display:inline-flex;align-items:center;gap:6px;color:var(--sub)}
+  .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .gantt{min-width:920px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}
+  /* header */
+  .ghead{display:flex;border-bottom:1px solid var(--line)}
+  .lblcol{flex:0 0 224px;padding:8px 12px;font-size:12px;color:var(--sub);border-right:1px solid var(--line)}
+  .track{flex:1;position:relative}
+  .months{display:flex}
+  .months>div{border-right:1px solid var(--line);text-align:center;font-size:12px;font-weight:600;padding:6px 0;color:#cfd6e0}
+  .weeks{display:grid;grid-template-columns:repeat(var(--cols),1fr);border-top:1px solid var(--line)}
+  .weeks>div{font-size:10.5px;color:var(--sub);text-align:center;padding:4px 0;border-right:1px solid var(--line)}
+  /* rows */
+  .grp{display:flex;align-items:stretch;border-top:1px solid var(--line);background:rgba(255,255,255,.015)}
+  .grp .lblcol{font-weight:700;color:#fff;font-size:12.5px;display:flex;align-items:center;gap:7px}
+  .row{display:flex;align-items:stretch;border-top:1px solid rgba(42,47,58,.5)}
+  .row .lblcol{color:#d6dbe4;font-size:12px;display:flex;align-items:center;border-right:1px solid var(--line)}
+  .row .track{padding:5px 0}
+  .grid{position:absolute;inset:0;
+    background-image:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px calc(100%/11));
+    pointer-events:none}
+  .today{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--today);z-index:5}
+  .today::after{content:"今日 7/1";position:absolute;top:-1px;left:4px;font-size:9.5px;color:var(--today);white-space:nowrap}
+  .bar{position:absolute;top:5px;height:20px;border-radius:5px;font-size:10.5px;line-height:20px;
+    padding:0 7px;white-space:nowrap;color:#0b0d10;font-weight:600;overflow:visible;z-index:2}
+  .bar.lite{color:#0b0d10}
+  .tag{font-size:10px;color:var(--sub);margin-left:6px;font-weight:400}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>V5 改善ロードマップ — ガント</h1>
+  <div class="meta">2026-07-01 起点 · 2ヶ月スプリント＋Client化（〜9月中旬）· 縦=施策/仮説（Agent・機能レーン別）横=時間</div>
+  <div class="note"><b>読み方:</b> 各Agent(CEO/Planner/Analyzer)のP項目が並行トラックで走り、依存関係で前後する。機能レーン（①市場データ ②View予測PDCA=実測ループ ③アフィ導線）＋ Client化(8月中旬〜) を重ねた。<b>バーの長さ・開始は計画ドラフト</b>（実装＝駿冴/Zach作業、実測で調整前提）。</div>
+
+  <div class="legend">
+    <span><i class="sw" style="background:var(--loop)"></i>実測ループ / View予測PDCA</span>
+    <span><i class="sw" style="background:var(--mkt)"></i>市場データ機能</span>
+    <span><i class="sw" style="background:var(--ceo)"></i>Agent1 CEO</span>
+    <span><i class="sw" style="background:var(--plan)"></i>Agent2 Planner</span>
+    <span><i class="sw" style="background:var(--anly)"></i>Agent3 Analyzer</span>
+    <span><i class="sw" style="background:var(--affi)"></i>アフィ導線</span>
+    <span><i class="sw" style="background:var(--client)"></i>Client化(Dashboard/UIUX)</span>
+    <span><i class="sw" style="background:var(--prep)"></i>整備</span>
+  </div>
+
+  <div class="gantt">
+    <!-- HEADER -->
+    <div class="ghead">
+      <div class="lblcol">施策 / 仮説</div>
+      <div class="track">
+        <div class="months">
+          <div style="flex:5">7月</div><div style="flex:4">8月</div><div style="flex:2">9月</div>
+        </div>
+        <div class="weeks">
+          <div>7/1</div><div>7/8</div><div>7/15</div><div>7/22</div><div>7/29</div>
+          <div>8/5</div><div>8/12</div><div>8/19</div><div>8/26</div><div>9/2</div><div>9/9</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 共通基盤: 実測ループ / View予測PDCA ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--loop)"></i>実測ループ / View予測PDCA</div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">予測メタ保存<span class="tag">推測view/predicted_kpis</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:0%;width:9.09%;background:var(--loop)">保存配線</div></div></div>
+    <div class="row"><div class="lblcol">実測ledger MVP<span class="tag">オーナー=A3</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:0%;width:18.18%;background:var(--loop)">予測×実測×誤差 突合</div></div></div>
+    <div class="row"><div class="lblcol">因果分類の自動化</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:27.27%;width:18.18%;background:var(--loop)">Hook/Body/CTA/題材/PF/アルゴ</div></div></div>
+    <div class="row"><div class="lblcol">View予測精度PDCA<span class="tag">精度向上・継続</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:45.45%;width:36.36%;background:var(--loop)">誤差逓減ループを回す</div></div></div>
+
+    <!-- ===== 市場データ機能 ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--mkt)"></i>① 市場データ機能</div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">市場データ取得機能<span class="tag">的確な引っ張り方</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:0%;width:27.27%;background:var(--mkt)">social-market-data/競合/タグ設計</div></div></div>
+    <div class="row"><div class="lblcol">枠組み生成→市場学習<span class="tag">CEO H2 最有力</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:27.27%;width:27.27%;background:var(--mkt)">伸び投稿→勝ち型テンプレ抽出</div></div></div>
+
+    <!-- ===== Agent1 CEO ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--ceo)"></i>Agent1 CEO</div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">P5 参照データ土台修復</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:0%;width:18.18%;background:var(--ceo)">過去戦略シート/memory洗い直し</div></div></div>
+    <div class="row"><div class="lblcol">P6 PF別変換 / YT封印</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:18.18%;width:18.18%;background:var(--ceo)">IG=share/YT=検索KW</div></div></div>
+    <div class="row"><div class="lblcol">P1 View目的関数</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:18.18%;width:18.18%;background:var(--ceo)">View期待値で一次フィルタ</div></div></div>
+    <div class="row"><div class="lblcol">P2 自己採点ループ</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:27.27%;width:18.18%;background:var(--ceo)">差分表→因果→3回で昇華</div></div></div>
+    <div class="row"><div class="lblcol">P4 時事/ペルソナ軸</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:36.36%;width:18.18%;background:var(--ceo)">direction_type 追加</div></div></div>
+    <div class="row"><div class="lblcol">P3 探索枠 強制配分</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:45.45%;width:18.18%;background:var(--ceo)">7準拠+3探索/軸別追跡</div></div></div>
+    <div class="row"><div class="lblcol">P7 逸脱検知 Self-check</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:54.54%;width:9.09%;background:var(--ceo)">Floor崩壊予防</div></div></div>
+
+    <!-- ===== Agent2 Planner ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--plan)"></i>Agent2 Planner</div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">P2 TTS予防<span class="tag">quick win</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:0%;width:18.18%;background:var(--plan)">読み仮名/難読scan/数字統一</div></div></div>
+    <div class="row"><div class="lblcol">P1 内容品質ゲート</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:9.09%;width:27.27%;background:var(--plan)">自動critique→自己再生成</div></div></div>
+    <div class="row"><div class="lblcol">P5 情報密度スコア</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:27.27%;width:18.18%;background:var(--plan)">1カット=1新情報/谷検出</div></div></div>
+    <div class="row"><div class="lblcol">P3 予測KPI 実データ連動</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:36.36%;width:18.18%;background:var(--plan)">実績較正/勝ちHook優先</div></div></div>
+    <div class="row"><div class="lblcol">P6 比較Playbook 本編再設計</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:36.36%;width:27.27%;background:var(--plan)">中盤に別軸/Hook多様化</div></div></div>
+    <div class="row"><div class="lblcol">P4 正例学習</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:45.45%;width:18.18%;background:var(--plan)">✅に勝ち筋タグ→昇華</div></div></div>
+    <div class="row"><div class="lblcol">P7 視聴動機の補完</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:54.54%;width:18.18%;background:var(--plan)">当事者化フック補完</div></div></div>
+
+    <!-- ===== Agent3 Analyzer ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--anly)"></i>Agent3 Analyzer</div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">自走性<span class="tag">cron/Gemini/安定化</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:0%;width:18.18%;background:var(--anly)">週次自動化の土台</div></div></div>
+    <div class="row"><div class="lblcol">P2 要素別データ供給<span class="tag">最重要前提</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:9.09%;width:18.18%;background:var(--anly)">retentionカーブ/CTA秒/尺</div></div></div>
+    <div class="row"><div class="lblcol">P3 勝ち筋カード自動生成</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:27.27%;width:18.18%;background:var(--anly)">Hook型×視聴動機×密度→Planner</div></div></div>
+
+    <!-- ===== アフィ導線 ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--affi)"></i>③ アフィ導線<span class="tag" style="color:var(--sub)">Client送客</span></div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">Logo埋め込み<span class="tag">Story/Reel</span></div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:27.27%;width:18.18%;background:var(--affi)">アカウント内 送客導線</div></div></div>
+    <div class="row"><div class="lblcol">CTA ABテスト基盤</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:45.45%;width:27.27%;background:var(--affi)">CTA型/配置のA/B</div></div></div>
+
+    <!-- ===== Client化 ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--client)"></i>Client化<span class="tag" style="color:var(--sub)">8月中旬〜</span></div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">Client向け Dashboard生成</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:54.54%;width:36.36%;background:var(--client)">クライアント向け可視化</div></div></div>
+    <div class="row"><div class="lblcol">Output 見せ方調整 (UIUX)</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:63.63%;width:36.36%;background:var(--client)">見せ方/UX 仕上げ</div></div></div>
+
+    <!-- ===== 整備 ===== -->
+    <div class="grp"><div class="lblcol"><i class="sw" style="background:var(--prep)"></i>整備</div><div class="track"><div class="grid"></div><div class="today"></div></div></div>
+    <div class="row"><div class="lblcol">View漏れ止め</div><div class="track"><div class="grid"></div><div class="today"></div><div class="bar" style="left:0%;width:27.27%;background:var(--prep);color:#e8ebf0">BAN/未起動/生産到達/重複</div></div></div>
+
+  </div>
+
+  <div class="note" style="border-left-color:var(--client);margin-top:22px">
+    <b>依存の要点:</b> ①「実測ledger MVP」と「要素別データ供給(A3 P2)」が全ての土台 → これが立つと「因果分類の自動化」「CEO P1/P2」「Planner P3/P4」が動く。②「市場データ取得機能」→「枠組み生成→市場学習(H2)」。③ アフィ導線と Client化は View が立ち始める中盤以降。④ Dashboard/UIUX は8月中旬〜9月で仕上げ。<br>
+    <b>未確定:</b> バーの長さ・依存は計画ドラフト。要調整点があれば動かします。
+  </div>
+</div>
+</body>
+</html>
