@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>V5 完全自走実験 — PDCA 記録 / 実験チャーター</title>
+<style>
+  :root{
+    --fg:#1f2328; --muted:#656d76; --line:#d0d7de; --bg:#ffffff;
+    --soft:#f6f8fa; --accent:#0969da; --accent-soft:#ddf4ff; --ok:#1a7f37;
+    --code:#eef1f4;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;
+    line-height:1.7; font-size:16px;
+  }
+  .wrap{max-width:860px; margin:0 auto; padding:0 24px 96px}
+  header.hero{
+    border-bottom:1px solid var(--line); margin-bottom:40px; padding:48px 0 28px;
+  }
+  header.hero h1{font-size:30px; line-height:1.3; margin:0 0 16px; letter-spacing:.2px}
+  .meta{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 16px}
+  .chip{
+    font-size:12.5px; color:var(--muted); background:var(--soft);
+    border:1px solid var(--line); border-radius:999px; padding:3px 12px;
+  }
+  .chip.ok{color:var(--ok); background:#eaf6ec; border-color:#b7e0bf}
+  .lead{color:var(--muted); font-size:15px; margin:0}
+  h2{font-size:22px; margin:48px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line)}
+  h3{font-size:17px; margin:30px 0 10px}
+  h3 .badge{font-size:12px; color:var(--ok); font-weight:600; margin-left:6px}
+  p{margin:12px 0}
+  ul,ol{margin:12px 0; padding-left:24px}
+  li{margin:5px 0}
+  li > ul, li > ol{margin:4px 0}
+  strong{font-weight:650}
+  code{background:var(--code); border-radius:5px; padding:1.5px 6px; font-size:13.5px;
+    font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace}
+  pre{background:var(--soft); border:1px solid var(--line); border-radius:8px;
+    padding:16px 18px; overflow:auto; line-height:1.5; font-size:13px}
+  pre code{background:none; padding:0}
+  table{border-collapse:collapse; width:100%; margin:16px 0; font-size:14.5px; display:block; overflow-x:auto}
+  th,td{border:1px solid var(--line); padding:8px 12px; text-align:left; vertical-align:top}
+  th{background:var(--soft); font-weight:650; white-space:nowrap}
+  blockquote{margin:16px 0; padding:8px 16px; border-left:3px solid var(--line);
+    color:var(--muted); background:var(--soft); border-radius:0 6px 6px 0}
+  hr{border:none; border-top:1px solid var(--line); margin:40px 0}
+  .callout{background:var(--accent-soft); border:1px solid #b6e3ff; border-radius:8px;
+    padding:14px 18px; margin:18px 0; font-size:14.5px}
+  .sector{border:1px solid var(--line); border-radius:10px; padding:6px 22px 18px; margin:18px 0; background:#fcfcfd}
+  footer{margin-top:64px; padding-top:20px; border-top:1px solid var(--line);
+    color:var(--muted); font-size:13px}
+  del{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>V5 完全自走実験 — PDCA 記録 / 実験チャーター</h1>
+  <div class="meta">
+    <span class="chip">最終更新: 2026-06-30</span>
+    <span class="chip ok">設計骨格 完成（6 セクター mandate 確定）</span>
+    <span class="chip">未発火</span>
+    <span class="chip">Team 共有用</span>
+  </div>
+  <p class="lead">完全自走型 v5 の feasibility probe。人間は普遍の Goal（売上 / Imp 目標）だけを渡し、以降は機械的なデータ受け渡しを除きゼロ介入で、AI セッションが 6 セクターの役割を横断して PDCA ループを自走で回す。本ドキュメントはその設計・判断・サイクル記録。</p>
+</header>
+
+<h2>0. これは何か</h2>
+<p>完全自走型 v5 の <strong>feasibility probe（信号が出るか見る一発）</strong>。人間は普遍の Goal（売上 / Imp 目標）だけを渡し、以降は機械的なデータ受け渡しを除きゼロ介入で、AI セッションが下記 6 セクターの役割を横断して PDCA ループを自走で回す。本ファイルはその設計・判断・サイクル記録を残し、Team へ共有するためのもの。</p>
+
+<h2>1. 仮説と背景（Why）</h2>
+<ul>
+  <li><strong>位置づけ = v5 を根本から疑う。</strong> 現状コア AI が自分で PDCA を回した成果を感じられておらず、helper tool に留まっている。</li>
+  <li><strong>律速の診断:</strong> ①人間の中途半端な介入 ②動画パイプライン（Playbook）の制約 ③人間側の知識・ナレッジの天井。</li>
+  <li><strong>賭け:</strong> 計算力・保有情報・莫大な外部データへのアクセス権を持つ Claude に、「設計 → 毎サイクルの方向調整 → Goal 前進」を丸ごと任せたらどこまで行くか。これは LLM が本来得意とする領域。</li>
+  <li><strong>probe の性格:</strong> 新規コールド垢・制約フリー・最小スキャフォールド。「対照付き証明」ではなく「信号が出るか見る一発」。後で human-in-loop と比較したくなったら別途 control が要る。</li>
+  <li><strong>設計指針:</strong> #2/#3（コンテンツ生成）を細かく仕様化しない。作り込むと逃れたかった Playbook 制約を再建し "制約フリー自走" の thesis に反する。ルール（#5）とデータ契約（#4）はハードに固め、戦略・生成は mandate（役割・入力・出力・guardrail）だけ渡して AI に委ねる。</li>
+</ul>
+
+<h2>2. 凍結した Goal spec（D1 locked: 2026-06-30）</h2>
+<table>
+  <tr><th>項目</th><th>内容</th></tr>
+  <tr><td>商材</td><td><strong>メーカー転職ならタイズ</strong>（A8 / category「仕事情報」/ payout_type fixed）</td></tr>
+  <tr><td>CV 発火点</td><td><strong>新規会員登録完了時点</strong>（ラグなし。否認は不正・不備・虚偽・いたずら・重複・即時解約・ログイン無・リスティング違反のみ）</td></tr>
+  <tr><td>単価</td><td>¥10,000 / CV → <strong>1 CV = 月間目標</strong></td></tr>
+  <tr><td>目標</td><td>売上 ¥10,000 / 月（directional）、最終射程 ¥50,000</td></tr>
+  <tr><td>対象</td><td>新規コールド IG 垢・制約フリー</td></tr>
+  <tr><td>観測窓</td><td>1 ヶ月</td></tr>
+  <tr><td>AI が舵を切る上流信号</td><td>reach → クリック → 会員登録</td></tr>
+</table>
+<p><strong>選定根拠:</strong> 成果条件が純粋な上流発火（会員登録完了時点）で、GEO / 年齢 / 連絡確認 / 経験の縛りが一切ない唯一のオファー。¥10,000 = 1 CV で目標到達するため、コールド垢の volume 問題が「1 ヶ月で登録 1 件取れるか」に最小化される（最も forgiving）。弱点は TAM がメーカー / ものづくり志望に寄る点だが、コールド新規垢は 1 ニッチに深く張る方がアルゴリズム的に有利で、競合の薄い実在の鉱脈。</p>
+<p><strong>却下したオファーと理由:</strong></p>
+<ul>
+  <li>ANNA（¥7,500）— 成果条件が「登録後 30 日以内に連絡が取れた時点」= 最大 30 日ラグ + 連絡不通否認 + GEO/年齢縛り。</li>
+  <li>レバテック（¥10,000）— 現役 IT / 未経験除外で TAM 狭、cookie 計上が脆い。</li>
+  <li>ワンキャリア（¥3,000）— クリーンだが正社員経験必須 + 約 4 CV 必要。最広 TAM の対抗馬。</li>
+</ul>
+<div class="callout"><strong>学び（一般則）:</strong> 人材紹介は payout ラベルが「会員登録」でも成果条件に連絡 / 実施依存が隠れる。<strong>発火点は payout 文字列でなく成果条件で読む。</strong></div>
+
+<h2>3. 測り方（指標構造）</h2>
+<ul>
+  <li><strong>主指標 = 上流ファネル軌跡</strong>（reach → クリック → 会員登録）。理由: コールド 1 ヶ月では売上は volume 枯れ + 初速ノイズに支配され、自走 PDCA の質を測れない。週次の方向調整はこの上流信号で回す。</li>
+  <li><strong>副指標 = 売上</strong>（directional・月次チェック）。1 CV = ¥10,000 = 目標。</li>
+  <li><strong>原則:</strong> 売上を pass/fail にしない。未達を「自走失敗」と即断しない（コールド垢 1 ヶ月の confound を切り分けられないため）。</li>
+  <li><strong>3 段 tier:</strong> floor = ファネル成立 + クリック/CV 軌跡が上向き / target = ¥10,000 / stretch = 最終 ¥50,000 への射程が見える。</li>
+</ul>
+
+<h2>4. システム構成 — 6 セクターモデル</h2>
+<p>Session は毎発火でこの 6 セクターを役割として横断し、PDCA を回す。依存関係:</p>
+<pre><code>[#5 制約・ルール]  ← 絶対の枠（全セクターを拘束）
+        │
+   [#0 全体戦略]    ← 統括・絶対効力（#1–#3 の指針を決める）
+    ├ #1 アカウント戦略
+    ├ #2 集客コンテンツ生成
+    └ #3 アフィ送客コンテンツ生成
+        ↑
+   [#4 データ分析]   ← #0–#3 へデータ供給</code></pre>
+<p>設計方針: <strong>#5・#4 はハード確定（人間所有）。#0–#3 は mandate レベル（役割・入力・出力・guardrail のみ、中身は AI に委ねる）。</strong></p>
+
+<div class="sector">
+<h3>#0 全体戦略（アカウント・アフィ）— 統括 / 絶対効力<span class="badge">✅ mandate 確定</span></h3>
+<ul>
+  <li><strong>権限:</strong> Session 内の最上位。#1–#3 への指針を決め、その判断は #1–#3 に対して絶対。ただし #5（制約・ルール）には従う。</li>
+  <li><strong>入力（毎発火で読む）:</strong>
+    <ul>
+      <li>Goal spec（§2）= 不変の北極星（¥10,000 / CV、上流信号 reach → クリック → 会員登録）</li>
+      <li>口座×日サマリ = 数値トレンド + 視聴層属性（年齢 / 性別 / 国）・流入元・初速</li>
+      <li>投稿単位の eval / bottleneck / verdict 集約 = 何が効いた / 効かない</li>
+      <li>手動 CV ドロップ = アフィの刺さり具合（ground truth）</li>
+      <li>前サイクルの実験台帳 = 自分の前回仮説・予測 vs 実測</li>
+    </ul>
+  </li>
+  <li><strong>毎発火で答える問い（reasoning mandate）:</strong>
+    <ol>
+      <li>現状は Goal に対しどこ? 上流信号（reach / クリック / 登録）は伸びているか?</li>
+      <li>得られている視聴層は誰で、狙うべきユーザーニーズと合っているか?</li>
+      <li>アフィ（メーカー転職）はその層に刺さっているか? ズレなら「層」か「訴求」どちらを動かすか?</li>
+      <li>前回の仮説は当たったか? PDCA サイクル自体を再定義すべきか?</li>
+    </ol>
+  </li>
+  <li><strong>出力:</strong> 「一言の指針」（#1–#3 が従う）/ 根拠 + 検証中の仮説を実験台帳に記録（<strong>予測を明記</strong>）/ kill・success・scale 判定（該当すれば人間に報告）</li>
+  <li><strong>guardrail:</strong> #5 に従う / 数値だけ追って視聴層・ニーズを無視した最適化をしない（ノイズ追従の戒め）/ 1 サイクルで戦略を全部ひっくり返さない（thrash 防止）= 変更は仮説ベースで、予測 → 実測で検証できる粒度に</li>
+</ul>
+</div>
+
+<div class="sector">
+<h3>#1 アカウント戦略<span class="badge">✅ mandate 確定</span></h3>
+<ul>
+  <li><strong>役割 / 権限:</strong> #0 の指針を「アカウント運用レベル」に翻訳する中間層。どこを調整するかを決め、#2 / #3 が実行できる施策に落とす。</li>
+  <li><strong>毎発火で答える問い:</strong>
+    <ol>
+      <li>#0 の指針を実現するに、運用のどこを動かす?（集客 #2 とアフィ送客 #3 の比率 / 狙う層の絞り・広げ / 投稿時間・フォーマット）</li>
+      <li>ファネルのどこが詰まっている?（TOFU 到達 / MOFU 関心 / BOFU 行動）→ ボトルネックに資源を寄せる</li>
+      <li>今は集客フェーズかアフィ刈り取りフェーズか?（新規垢の成長段階で #2 / #3 の重心を決める）</li>
+    </ol>
+  </li>
+  <li><strong>出力:</strong> #2 / #3 への施策指示 =「何を・どの比率で・どの層 / 切り口を狙って」作るか / 調整の意図（仮説）を実験台帳へ</li>
+  <li><strong>guardrail:</strong> #0 の指針に反しない / #5 に従う / アカウントの一貫性（視聴層・世界観）を壊す急旋回をしない / <strong>#2 / #3 の表現の中身（How）までは縛らない</strong>（What とどこを狙うかだけ渡し、作り方は委ねる = 制約フリー保持）</li>
+</ul>
+</div>
+
+<div class="sector">
+<h3>#2 集客コンテンツ生成（Reel / カルーセル）<span class="badge">✅ mandate 確定</span></h3>
+<ul>
+  <li><strong>役割:</strong> #1 の施策指示を受け、集客用コンテンツ（シナリオ → 動画）を生成・投稿。目的 = <strong>Imp 最大化 + 狙った層をページ（プロフ / リンク）へ送客</strong>。自己 PDCA で常時最適化。</li>
+  <li><strong>毎発火で行うこと:</strong>
+    <ol>
+      <li>過去投稿の eval / bottleneck を読み、何が効いた / 外したかから次の仮説を立てる</li>
+      <li>狙う層・ニーズに刺さる Hook → Body → CTA を設計（表現・言い回し・タイミング・誰に向けてを熟考）。CTA は集客用（リーチ増幅型中心）</li>
+      <li>シナリオ → 動画生成 → ホスティング → 投稿キューへ</li>
+      <li>投稿後、自分の投稿に eval / bottleneck / verdict を記入（#4 へ書き戻し）+ 仮説と予測を実験台帳へ</li>
+    </ol>
+  </li>
+  <li><strong>出力:</strong> 投稿 / 各投稿の eval・bottleneck・verdict（DB 書き戻し）/ 集客の仮説・予測（実験台帳）</li>
+  <li><strong>guardrail:</strong> #1 の狙いと #5 に従う / <strong>集客とアフィ送客を混同しない</strong>（#2 は Imp と送客が目的、直アフィ訴求は #3）/ Playbook 要点（ひらがな読み上げ・Hook/Body 教訓）は "参照" として尊重するが、<strong>Playbook が作れるものに自分を縛らない</strong>（必要なものを必要に作る = 制約フリー）</li>
+</ul>
+</div>
+
+<div class="sector">
+<h3>#3 アフィ送客コンテンツ生成（Stories / カルーセル / Reel）<span class="badge">✅ mandate 確定</span></h3>
+<ul>
+  <li><strong>役割:</strong> #1 の施策指示を受け、アフィ訴求特化のコンテンツを生成・投稿。目的 = <strong>既存フォロワー + #2 で来た新規ユーザーをファネルへ接続</strong>（プロフ → bio / Story リンク → ASP 会員登録）。自己 PDCA で最適化。</li>
+  <li><strong>毎発火で行うこと:</strong>
+    <ol>
+      <li>過去のアフィ送客投稿の eval +「リンククリック → CV」の歩留まりを読み、何が刺さった / 落ちたかから仮説を立てる</li>
+      <li>メーカー転職の訴求を、#2 で集めた層の痛み / ニーズに接続する設計（CTA プロフ誘導型中心、MOFU → BOFU）</li>
+      <li>Stories / カルーセル / Reel を生成 → 投稿</li>
+      <li>eval / bottleneck / verdict 書き戻し + 仮説・予測を実験台帳へ。CV と照合</li>
+    </ol>
+  </li>
+  <li><strong>出力:</strong> アフィ送客投稿 / eval・bottleneck・verdict（DB）/「送客 → CV」の仮説・予測（実験台帳）</li>
+  <li><strong>guardrail:</strong> #1 / #5 に従う / <strong>温まっていない層に押し売りしてフォロワーを焼かない</strong>（ファネル順序を守る）/ アフィ訴求の頻度・濃度がアカウントの一貫性・reach を壊さないよう #0 / #1 のフェーズ判断に従う</li>
+</ul>
+</div>
+
+<div class="sector">
+<h3>#4 データ分析 — データ契約確定<span class="badge">✅ 確定</span></h3>
+<ul>
+  <li><strong>役割:</strong> #0–#3 が使うデータを収集し分析可能に整形。<strong>読むだけでなく、各サイクルの分析結果（eval / bottleneck / verdict）を DB に書き戻す</strong>のも #4 の仕事 = 自走 PDCA のメモリ。</li>
+  <li><strong>データ契約 = 社内 IG Performance DB のスキーマを採用:</strong>
+    <ul>
+      <li><strong>口座 × 日サマリ:</strong> views / reach / impressions / follows_net / profile_visits / link_taps + 各率（like / comment / save / share / pvr / link_ctr / non_follower_reach）+ 視聴層属性（年齢 / 性別 / 国）・流入元・初速 → 口座レベルの方向性・<strong>得られている視聴層</strong>（#0 が読む）</li>
+      <li><strong>投稿単位（Reels / Stories / Highlights）:</strong> 全メトリクス + <strong>コンテンツ本体</strong>（hook / body / cta テキスト）+ <strong>型分類</strong>（hook_type / cta_type）+ <strong>評価</strong>（hook_eval / body_eval / cta_eval / bottleneck / verdict）→ 投稿単位の「何が効いた / 効かない」（#2 / #3 が読む・書く）</li>
+      <li><strong>共通語彙（Definitions）:</strong> Hook 4 型（好奇心扇動 / 逆張り / 問題提起 / FOMO）・CTA 5 型（プロフ誘導＝アフィ本命 / リーチ増幅＝Imp 稼ぎ / 保存シェア / セッション継続 / フォロー）・ファネル TOFU / MOFU / BOFU。Session はこの語彙で分類・推論する</li>
+      <li><strong>手動ドロップ（CV 側）:</strong> ASP の Click 数 / CV 数（発火前に人間が渡す）。</li>
+    </ul>
+  </li>
+  <li><strong>二層:</strong> 上流（IG メトリクス）= DB から自動。CV / 売上 = 手動ドロップ。</li>
+  <li><strong>アトリビューションの seam（#4 の課題）:</strong> IG 側リンククリック → ASP click → CV（手動）。CV を投稿 / 期間に紐付ける整形が要る。</li>
+</ul>
+</div>
+
+<div class="sector">
+<h3>#5 全体的な制約・決め事・ルール — 絶対厳守</h3>
+<ul>
+  <li><strong>役割:</strong> Fal.ai spend 上限・Session 発火タイミング等の General ルールを決める場所。各種ツール・仕様もここ。</li>
+  <li><strong>方針:</strong> 今は値を決めず <strong>型（スロット）だけ確定</strong>。実値は後で Team で決定。</li>
+</ul>
+<p><strong>ルール型（テンプレート）:</strong></p>
+<table>
+  <tr><th>ルール項目</th><th>値</th><th>単位</th><th>決定者</th><th>ステータス</th></tr>
+  <tr><td>Fal.ai spend 上限</td><td><em>TBD</em></td><td>¥ / 月</td><td>Team</td><td>型確定・値未定</td></tr>
+  <tr><td>cadence（発火頻度）</td><td><em>TBD</em></td><td>時間 or 日（CV 手動ドロップ頻度と同期）</td><td>Team</td><td>型確定・値未定</td></tr>
+  <tr><td>投稿頻度上限</td><td><em>TBD</em></td><td>本 / 日</td><td>Team</td><td>型確定・値未定</td></tr>
+  <tr><td>サーキットブレーカー（機械）</td><td>BAN / spend 上限のみ</td><td>条件 → 自動停止 + 報告</td><td>確定</td><td>✅ 含める</td></tr>
+  <tr><td>ツール一覧 + 仕様</td><td>下表参照</td><td>—</td><td>—</td><td>✅ 決定</td></tr>
+</table>
+<p><strong>ツール一覧（決定）:</strong></p>
+<table>
+  <tr><th>用途</th><th>ツール</th><th>仕様メモ</th></tr>
+  <tr><td>投稿</td><td>社内 Post Tracker（Sheet → API 自動投稿）</td><td>Draft セルにリンク → Post Time 自動投稿、Access Token は行単位で保持</td></tr>
+  <tr><td>動画生成</td><td>Fal.ai API</td><td>生成 → リンク化 → 投稿キュー投入</td></tr>
+  <tr><td>動画分析</td><td>Gemini API</td><td>競合 / 参考動画の内容分析</td></tr>
+  <tr><td>観客 / 競合分析</td><td>既存 IG 引き仕組み</td><td>無人 cron での代替経路を確認</td></tr>
+  <tr><td>数値読み戻し</td><td>社内 DB（上流自動）+ 手動ドロップ（CV）</td><td>二層</td></tr>
+  <tr><td>メモリ / 実験台帳</td><td>Git Repo</td><td>過去コンテキスト + 仮説 / 行動 / 予測 / 実測 / 学び</td></tr>
+</table>
+<p><strong>サーキットブレーカー（確定 — 閾値は Team）:</strong></p>
+<table>
+  <tr><th>トリガー</th><th>状態の定義</th><th>自動動作</th></tr>
+  <tr><td>アカウント BAN / 凍結</td><td>投稿不可 / Flagged 検知</td><td>一旦 Stop → 人間に報告</td></tr>
+  <tr><td>Fal.ai 生成費 上限到達</td><td>当月 spend が上限に到達</td><td>生成停止 → 人間に報告し判断を仰ぐ</td></tr>
+</table>
+<p>機械 breaker は <strong>客観・binary な状態のみ</strong>（BAN / spend 上限）。reach・フォロワーの異常は固定閾値にせず、<strong>AI が自分で判断して対応</strong>（崖 = シャドウバン/事故 か / じわ下げ = 通常の PDCA 領域 かを見極める。cold-start の warmup 乱高下は崖と誤認しない）。</p>
+<blockquote>break-glass（手動の緊急停止）: 機械 breaker は「自動停止 → 人間に報告/通知」型。最終判断・再開・強制停止は報告を受けた人間が握る（＝人間側の最終権限）。</blockquote>
+<p><strong>初期セットアップ要件（発火前に揃えるもの）— 各項目に担当者を割り当てる:</strong></p>
+<table>
+  <tr><th>項目</th><th>内容</th><th>担当</th></tr>
+  <tr><td>アカウント準備</td><td>新規 IG 垢作成 + API Access Token 発行</td><td><em>TBD</em></td></tr>
+  <tr><td>Git 新規 Repo + 構造整理</td><td>コンテキスト・ログ・実験台帳が残る Repo。構造案: <code>cycles/</code>（毎発火の log）/ <code>ledger/</code>（仮説・予測・実測・学び）/ <code>mandate/</code>（本設計 = 6 セクター）/ <code>data-refs/</code>（DB・Tracker の参照と読み方）</td><td><em>TBD</em></td></tr>
+  <tr><td>自動投稿の接続</td><td>Post Tracker に新規垢の行をプロビジョン → API 自動投稿が走る状態にする</td><td><em>TBD</em></td></tr>
+  <tr><td>発火日 + 担当者</td><td>いつ発火するか（cadence と整合）+ 各タスク・CV ドロップ・監視の担当</td><td><em>TBD</em></td></tr>
+  <tr><td>Team 合意</td><td>垢の所有・ログイン管理・責任の所在</td><td><em>TBD</em></td></tr>
+</table>
+</div>
+
+<h2>5. 配管 feasibility（投稿側・確定）</h2>
+<ul>
+  <li><strong>投稿 = GREEN。</strong> 社内 Post Tracker に行が乗り、行単位の Access Token を使って設定時刻に API が自動投稿。Session は動画ドラフトリンクをセルに書くだけで投稿成立 → headless 完全対応。最難関がインフラ側で解決済み。</li>
+  <li><strong>一回限りの人間 setup（発火前）:</strong> 新規 IG 垢作成 + API Access Token 発行 + Tracker 行プロビジョン。</li>
+  <li><strong>動画生成 + ホスティング:</strong> Fal.ai API で生成 → リンク化 → 投稿キュー投入。要構築。</li>
+</ul>
+
+<h2>6. 残ギャップ / リスク（severity 順）</h2>
+<ol>
+  <li><strong>CV / 売上の読み戻し = 手動 seam で解決（要運用規律）。</strong> ASP に API がないため、各サイクル発火前に人間が手動ドロップ。閉ループは成立するが、ドロップを忘れると CV 信号が止まる → 運用規律と cadence 同期が前提。</li>
+  <li><strong>headless cron での MCP auth 生存性</strong>（未検証）。対話認証が要るツールは無人で落ちる可能性 → 既存 IG 引きで代替検討。</li>
+  <li><strong>コールド新規垢の 1 ヶ月 reach</strong>（売上を主指標にしない理由）。</li>
+  <li><strong>動画生成 + ホスティング pipeline 未構築。</strong></li>
+  <li><strong>コンプラ blast radius</strong>（新規垢ゆえ equity リスクは低い）。</li>
+</ol>
+
+<h2>7. 運用 setup（発火前の人間タスク）</h2>
+<p>→ <strong>#5「初期セットアップ要件」に統合</strong>（アカウント準備 / Git 新規 Repo + 構造 / 自動投稿の接続 / 発火日 + 担当者 / Team 合意）。各項目の担当者割り当てが発火前の必須タスク。</p>
+
+<h2>8. PDCA ログ</h2>
+<ul>
+  <li><strong>2026-06-30 — 実験設計開始。</strong> ①位置づけを「v5 を根本から疑う完全自走 probe」と確定 ②指標構造（主 = 上流ファネル / 副 = 売上 directional）合意 ③新規コールド垢・制約フリーで進める方針確定 ④D1 = メーカー転職タイズ（¥10,000 / 会員登録完了、1 CV = 目標）確定 ⑤投稿配管 GREEN を確認。</li>
+  <li><strong>2026-06-30 — CV 読み戻し確定。</strong> ASP API なし → 発火前に人間が ASP Click/CV + ID DB 情報を手動ドロップ。二層ループ（上流自動 + CV 手動 ground truth）確定。</li>
+  <li><strong>2026-06-30 — システム構成を 6 セクターモデルに再編。</strong> #5・#4 をハード固め、#0–#3 は mandate のみ（制約フリー自走の thesis 保持）。</li>
+  <li><strong>2026-06-30 — #5 を「値でなく型を確定」方針に。</strong> 型スロット（spend 上限 / cadence / 投稿頻度）+ ツール一覧（決定）+ サーキットブレーカー（BAN / spend 上限のみ機械化、reach/フォロワーは AI 自走判断）。コンプラは削除。</li>
+  <li><strong>2026-06-30 — #4 データ契約確定。</strong> 社内 IG Performance DB スキーマを採用。投稿タブが metrics + コンテンツ + eval を持ち、eval 列は Session 自身が毎サイクル生成・書き戻す（自走 PDCA メモリ）。残課題 = CV↔投稿 アトリビューション整形のみ。</li>
+  <li><strong>2026-06-30 — 骨格完成。</strong> #0–#3 mandate 全確定、6 セクター骨格が一通り完成。</li>
+  <li><strong>2026-06-30 — #5 に初期セットアップ要件チェックリストを追加。</strong> アカウント準備 / Git Repo + 構造 / 自動投稿接続 / 発火日 + 担当者 / Team 合意。</li>
+</ul>
+
+<h2>次アクション</h2>
+<ul>
+  <li>#5 の Team 値（spend 上限・cadence・投稿頻度）を Team で決定</li>
+  <li>初期セットアップ各項目の担当者割り当て</li>
+  <li>CV ↔ 投稿 のアトリビューション整形設計</li>
+  <li>動画生成 + ホスティング pipeline 構築</li>
+</ul>
+
+<footer>
+  V5 完全自走実験 — PDCA 記録 / 実験チャーター ・ Team 共有用 ・ 最終更新 2026-06-30<br>
+  内部システム ID・認証情報は本共有版から除去済み。
+</footer>
+
+</div>
+</body>
+</html>

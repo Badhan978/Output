@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceed AI KOL 事業 — 全体像オンボーディング（円環 / Agent1·2·3 / スキル）</title>
+<style>
+  :root{
+    --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --bg:#f7f8fa; --card:#fff;
+    --a1:#2563eb; --a1bg:#eff5ff; --a1ln:#bcd4fb;
+    --a2:#7c3aed; --a2bg:#f5f3ff; --a2ln:#ddd6fe;
+    --a3:#0d9488; --a3bg:#effbf8; --a3ln:#b9ece3;
+    --pub:#d97706; --pubbg:#fffbeb; --publn:#fde68a;
+    --warn:#d97706; --ok:#16a34a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    line-height:1.75;font-size:15px}
+  .wrap{max-width:1040px;margin:0 auto;padding:32px 22px 80px}
+  header{border-bottom:3px solid var(--a2);padding-bottom:16px;margin-bottom:8px}
+  h1{font-size:25px;margin:0 0 6px}
+  .sub{color:var(--muted);font-size:13.5px}
+  h2{font-size:19px;margin:38px 0 14px;padding-left:11px;border-left:5px solid var(--a2)}
+  h3{font-size:15.5px;margin:18px 0 8px}
+  a{color:var(--a1)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  code{background:#f0f2f5;padding:1px 6px;border-radius:5px;font-size:12.5px}
+  .muted{color:var(--muted);font-size:13px}
+  ul{margin:6px 0;padding-left:20px} li{margin:5px 0}
+  .goalbox{background:#fffbeb;border:1px solid #fde68a;border-left:5px solid var(--warn);border-radius:10px;padding:14px 18px;margin:14px 0}
+  .goalbox .t{font-size:17px;font-weight:700;color:#b45309}
+  .tldr{background:#f5f3ff;border:1px solid #ddd6fe;border-left:5px solid var(--a2);border-radius:10px;padding:16px 20px;margin:14px 0}
+  .tldr h3{color:#6d28d9;margin:0 0 6px;font-size:16px}
+  .tldr .one{font-size:15.5px;font-weight:700;margin:0 0 10px}
+  .tldr ul{margin:4px 0 0;padding-left:20px}
+  .tldr li{margin:6px 0}
+  table.t{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;background:#fff}
+  table.t th,table.t td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+  table.t th{background:#f3f4f6}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:12.5px;color:var(--muted);margin:6px 0 10px}
+  .dot{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin-right:5px}
+  .st{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:1px 7px;color:#fff;white-space:nowrap}
+  .s-live{background:var(--ok)} .s-design{background:var(--a1)} .s-hold{background:var(--warn)}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .ag{border-radius:12px;padding:16px;border:1px solid var(--line)}
+  .ag.a1{background:var(--a1bg);border-color:var(--a1ln)}
+  .ag.a2{background:var(--a2bg);border-color:var(--a2ln)}
+  .ag.a3{background:var(--a3bg);border-color:var(--a3ln)}
+  .ag h4{margin:0 0 4px;font-size:15px}
+  .ag .role{font-size:13px;color:var(--muted)}
+  .ag ul{font-size:13px;margin:8px 0 0}
+  .chip{display:inline-block;border-radius:6px;padding:1px 8px;font-size:11.5px;font-weight:700;color:#fff;margin:2px 3px 0 0}
+  .c1{background:var(--a1)} .c2{background:var(--a2)} .c3{background:var(--a3)} .cpub{background:var(--pub)}
+  .caution{background:#fdf2f2;border:1px solid #f5c6c6;border-left:5px solid #dc2626;border-radius:10px;padding:6px 20px;margin:12px 0}
+  .caution li{margin:9px 0}
+  .links a{display:inline-block;background:#eef2ff;border:1px solid var(--line);border-radius:8px;padding:7px 13px;margin:5px 6px 0 0;text-decoration:none;font-size:13.5px}
+  .links a:hover{background:#e0e7ff}
+  .toc{columns:2;font-size:14px} .toc a{text-decoration:none}
+  svg{max-width:100%;height:auto;display:block;margin:4px auto}
+  footer{margin-top:46px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
+  @media(max-width:760px){.grid3{grid-template-columns:1fr}.toc{columns:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Ceed AI KOL 事業 — 全体像オンボーディング</h1>
+  <div class="sub">AI生成のショート動画を、多数の「AI KOL（AIインフルエンサー）」アカウントで量産・投稿し、収益化する運営サイクルの全体地図 ／ 対象: 新メンバー と そのClaude</div>
+</header>
+
+<div class="goalbox">
+  <div class="t">🎯 最終ゴール：各アカウントで <u>アフィリエイト売上 月5万円</u> を達成する</div>
+  <p style="margin:6px 0 0">すべての施策・改善は「これは月5万円に効くか？」を基準に評価します。単発で終わらせず、円環（分析→戦略→シナリオ→動画→投稿→計測→還流）のどこに効くかを必ず問います。</p>
+</div>
+
+<div class="tldr">
+  <h3>🟣 一言でいうと</h3>
+  <p class="one">3つのAI（戦略・制作・分析）がバトンを渡し合い、動画を作って投稿し、その結果を学んで次に活かす——この「ぐるぐる回る輪（円環）」を回して稼ぐ事業です。</p>
+  <h3>まずこれだけ押さえればOK</h3>
+  <ul>
+    <li><b>登場するのは3つのAIエージェント。</b> ① Agent1=戦略（テーマを決める）／ ② Agent2=動画制作（このリポ <code>content-pipeline</code> が担当）／ ③ Agent3=分析（結果を学びに変える）。</li>
+    <li><b>輪っかになっている。</b> 戦略→動画→投稿→分析→（学びが戻る）→戦略… と1周ごとに賢くなる。</li>
+    <li><b>各エージェントは「スキル」で動く。</b> 一番大きいのは Agent2 の <code>video-creation-orchestrator</code>（シナリオ作成〜投稿予約を自動化）。</li>
+    <li><b>人間は要所だけ。</b> 戦略・レビュー・承認は人間（Badhan / 駿冴 / Lala）。それ以外は Mac mini 上で自動で回る。</li>
+    <li><b>合言葉は「月5万円に効くか」と「育つもの（自社の資産）に投資」。</b></li>
+  </ul>
+  <p class="muted" style="margin:8px 0 0">↓ 下に進むほど詳しくなります。まず次の図を眺めれば全体像がつかめます。</p>
+</div>
+
+<h2 id="toc" style="border:none;padding:0;font-size:15px;color:var(--muted);margin:24px 0 6px">目次</h2>
+<div class="card toc">
+  <a href="#fig">0. 円環の全体像（図）</a><br>
+  <a href="#bg">1. 背景・目標（なぜ）</a><br>
+  <a href="#agents">2. 3つのエージェントと、その中で動くスキル</a><br>
+  <a href="#repos">3. リポジトリ地図（どこに何があるか）</a><br>
+  <a href="#skills">4. 各スキルの概要</a><br>
+  <a href="#cross">5. 知見をどう管理しているか</a><br>
+  <a href="#env">6. 運用環境（どこで動くか）</a><br>
+  <a href="#improve">7. いま進めている構造改善</a><br>
+  <a href="#caution">8. 気をつけること・働き方の約束</a><br>
+  <a href="#links">9. リンク集・最初に読むファイル</a>
+</div>
+
+<!-- 0 -->
+<h2 id="fig">0. 円環の全体像（図）</h2>
+<div class="card">
+  <div class="legend">
+    <span><span class="dot" style="background:var(--a1)"></span>Agent1 CEO（戦略）</span>
+    <span><span class="dot" style="background:var(--a2)"></span>Agent2（動画制作）</span>
+    <span><span class="dot" style="background:var(--pub)"></span>投稿・実績収集</span>
+    <span><span class="dot" style="background:var(--a3)"></span>Agent3（分析）</span>
+    <span>━ 実物の流れ　┄ 知見の還流</span>
+  </div>
+
+  <svg viewBox="0 0 900 500" role="img" aria-label="円環フロー図（Agent1→2→投稿→Agent3→還流）">
+    <defs>
+      <marker id="arw" markerWidth="12" markerHeight="12" refX="8.5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker>
+      <marker id="arwg" markerWidth="12" markerHeight="12" refX="8.5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0d9488"/></marker>
+    </defs>
+
+    <!-- center label -->
+    <circle cx="450" cy="250" r="78" fill="#faf7ff" stroke="#ddd6fe" stroke-width="2"/>
+    <text x="450" y="240" text-anchor="middle" font-size="15" font-weight="700" fill="#6d28d9">円環</text>
+    <text x="450" y="262" text-anchor="middle" font-size="11" fill="#6b7280">1周ごとに</text>
+    <text x="450" y="278" text-anchor="middle" font-size="11" fill="#6b7280">賢くなる</text>
+
+    <!-- nodes -->
+    <g font-weight="700" text-anchor="middle">
+      <!-- A1 top-left -->
+      <rect x="50" y="40" width="270" height="104" rx="13" fill="#eff5ff" stroke="#2563eb" stroke-width="2"/>
+      <text x="185" y="68" font-size="14.5" fill="#2563eb">① Agent1 — CEO（戦略）</text>
+      <text x="185" y="90" font-size="11.5" font-weight="400" fill="#374151">skill: ceo-run</text>
+      <text x="185" y="110" font-size="11.5" font-weight="400" fill="#6b7280">戦略を立て、投稿テーマを絞り込んで確定</text>
+      <text x="185" y="129" font-size="11.5" font-weight="400" fill="#6b7280">担当: Badhan</text>
+
+      <!-- A2 top-right -->
+      <rect x="580" y="40" width="270" height="104" rx="13" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+      <text x="715" y="66" font-size="14.5" fill="#7c3aed">② Agent2 — 動画制作</text>
+      <text x="715" y="87" font-size="11.5" font-weight="400" fill="#374151">skill: video-creation-orchestrator</text>
+      <text x="715" y="105" font-size="11" font-weight="400" fill="#9333ea">＋ scenario-experiment / manual-rule-input</text>
+      <text x="715" y="124" font-size="11.5" font-weight="400" fill="#6b7280">シナリオ→動画→投稿予約 ／ 担当: 駿冴</text>
+
+      <!-- PUB bottom-right -->
+      <rect x="580" y="356" width="270" height="104" rx="13" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+      <text x="715" y="384" font-size="14.5" fill="#b45309">③ 投稿・実績収集</text>
+      <text x="715" y="406" font-size="11.5" font-weight="400" fill="#6b7280">動画を投稿し、再生数などの数字を集める</text>
+      <text x="715" y="426" font-size="11.5" font-weight="400" fill="#6b7280">投稿者・Lala・ContentOps（自動）</text>
+
+      <!-- A3 bottom-left -->
+      <rect x="50" y="356" width="270" height="104" rx="13" fill="#effbf8" stroke="#0d9488" stroke-width="2"/>
+      <text x="185" y="384" font-size="14.5" fill="#0d9488">④ Agent3 — 分析</text>
+      <text x="185" y="406" font-size="11.5" font-weight="400" fill="#374151">skill: ig-post-analysis ほか</text>
+      <text x="185" y="426" font-size="11.5" font-weight="400" fill="#6b7280">なぜ伸びた/伸びないかを分析し知見化</text>
+      <text x="185" y="445" font-size="11.5" font-weight="400" fill="#6b7280">担当: Badhan</text>
+    </g>
+
+    <!-- solid main path -->
+    <g stroke="#6b7280" stroke-width="2.6" fill="none">
+      <line x1="322" y1="92" x2="576" y2="92" marker-end="url(#arw)"/>           <!-- 1->2 -->
+      <line x1="715" y1="146" x2="715" y2="352" marker-end="url(#arw)"/>          <!-- 2->pub -->
+      <line x1="576" y1="408" x2="324" y2="408" marker-end="url(#arw)"/>          <!-- pub->3 -->
+    </g>
+    <g font-size="12" fill="#374151" text-anchor="middle">
+      <text x="449" y="83">戦略・テーマ</text>
+      <text x="738" y="252" text-anchor="start">動画</text>
+      <text x="450" y="399">実績データ</text>
+    </g>
+
+    <!-- dashed return (Agent3 -> 1/2) -->
+    <g stroke="#0d9488" stroke-width="2.4" fill="none" stroke-dasharray="7 5">
+      <line x1="185" y1="354" x2="185" y2="146" marker-end="url(#arwg)"/>          <!-- 3->1 -->
+      <line x1="324" y1="372" x2="576" y2="128" marker-end="url(#arwg)"/>          <!-- 3->2 -->
+    </g>
+    <g font-size="11.5" fill="#0d9488">
+      <text x="195" y="250">学びを還流 →戦略へ</text>
+      <text x="350" y="270">学びを還流 →動画制作へ（人間の承認後にルール化）</text>
+    </g>
+  </svg>
+
+  <p class="muted" style="text-align:center">実線＝実物（戦略→動画→実績）の主な流れ。緑の点線＝Agent3の「学び」が左の2人へ戻って円環が閉じる。</p>
+</div>
+
+<!-- 1 -->
+<h2 id="bg">1. 背景・目標（なぜ）</h2>
+<div class="card">
+  <h3>やりたいこと</h3>
+  <p>たくさんの AI KOL アカウントで AI製ショート動画を継続投稿し、最終的に <b>アフィリエイト（商品紹介）で売上を立てる</b>。その運営を、人手をかけず <b>3つのAIエージェントの円環</b>で半自動的に回すのが事業の核です。</p>
+  <h3>なぜ「円環」なのか</h3>
+  <p>動画を作って終わりにせず、<b>投稿結果を分析し、学びを次の戦略・シナリオに戻す</b>ことで、回すほど賢くなる構造を狙っています。</p>
+  <div class="goalbox" style="margin-top:14px">
+    <div class="t" style="font-size:15px">🧭 判断の「ものさし」：すたれるもの vs 育つもの</div>
+    <p style="margin:6px 0 0">・<b>すたれるもの</b>＝AIが進化すれば誰でもできる作業（動画を作る配管など）→ 薄く・最小限に。<br>
+    ・<b>育つもの</b>＝自社にしか貯まらない資産（投稿結果データ・何が売れたか・Hookや型の辞書・学びの台帳）→ ここに投資する。</p>
+  </div>
+</div>
+
+<!-- 2 -->
+<h2 id="agents">2. 3つのエージェントと、その中で動くスキル</h2>
+<div class="grid3">
+  <div class="ag a1">
+    <h4>① Agent1 — CEO（戦略）</h4>
+    <div class="role">戦略に沿って投稿テーマを絞り込んで確定する。</div>
+    <div style="margin-top:8px"><span class="chip c1">ceo-run</span></div>
+    <ul><li>出力: アカウント一覧シート（戦略・テーマ・投稿時間）</li><li>担当: Badhan</li></ul>
+  </div>
+  <div class="ag a2">
+    <h4>② Agent2 — 動画制作</h4>
+    <div class="role">戦略を受けてシナリオ→動画→投稿予約まで実行。<b>このリポが担当。</b></div>
+    <div style="margin-top:8px"><span class="chip c2">video-creation-orchestrator</span><span class="chip c2">scenario-experiment</span><span class="chip c2">manual-rule-input</span></div>
+    <ul><li>出力: マスタータブ / 投稿管理シート</li><li>担当: 駿冴</li></ul>
+  </div>
+  <div class="ag a3">
+    <h4>④ Agent3 — 分析</h4>
+    <div class="role">投稿実績を集め、伸びた/伸びない理由を分析し知見化。</div>
+    <div style="margin-top:8px"><span class="chip c3">ig-post-analysis</span><span class="chip c3">ほか</span></div>
+    <ul><li>出力: 分析DB / 知見（Insights）</li><li>担当: Badhan</li></ul>
+  </div>
+</div>
+<p class="muted">※「③ 投稿・実績収集」はエージェントではなく、動画を実際に投稿し数字を集める段（投稿者・Lala・ContentOpsの自動収集）。</p>
+
+<!-- 3 -->
+<h2 id="repos">3. リポジトリ地図（どこに何があるか）</h2>
+<div class="card">
+  <p class="muted">「どのエージェント・スキルが、どのGitHubリポジトリにあるか」。触るときはまずここで場所を確認。</p>
+  <table class="t">
+    <tr><th>リポジトリ</th><th>担当（円環の位置）</th><th>中身</th></tr>
+    <tr><td><code>v5-agents</code></td><td><span class="chip c1">Agent1</span><span class="chip c3">Agent3</span> + 横断</td>
+      <td>円環の正典（全体仕様）、Agent1（CEO）、Agent3（分析）、知見台帳、共有の業界知識</td></tr>
+    <tr><td><a href="https://github.com/Ceed-dev/content-pipeline" target="_blank" rel="noopener"><code>content-pipeline</code></a></td><td><span class="chip c2">Agent2</span></td>
+      <td>動画制作のすべて。<code>video-creation-orchestrator</code> 本体、<code>scenario-experiment</code>、<code>manual-rule-input</code>、ワークフロー仕様書</td></tr>
+    <tr><td><a href="https://github.com/Ceed-dev/ceed-playbooks" target="_blank" rel="noopener"><code>ceed-playbooks</code></a></td><td>Agent2が呼ぶ（別管理）</td>
+      <td>実際に動画を作る「Playbook」群（妖怪/江戸/歴史/ライフハック等）。<b>トモさん</b>が管理</td></tr>
+    <tr><td>ContentOps / content-performance-db ほか</td><td><span class="chip cpub">③</span><span class="chip c3">Agent3周辺</span></td>
+      <td>実績の定期収集・競合分析・DB蓄積。<b>ContentOpsは別チームの基盤</b>で、Agent2が書く投稿管理シートを共有し自動投稿も担う</td></tr>
+  </table>
+  <p class="muted">本番では <code>content-pipeline</code> と <code>ceed-playbooks</code> を<b>同じ親フォルダに並べて</b>置く前提です。</p>
+</div>
+
+<!-- 4 -->
+<h2 id="skills">4. 各スキルの概要</h2>
+<div class="card">
+  <h3><span class="chip c2">video-creation-orchestrator</span> Agent2本体・最重要</h3>
+  <p>戦略を受けて作業を作り、<b>「サイクル開始 → シナリオ作成 → 動画ビルド → 投稿予約」</b>を自動で進める司令塔。1台のPCで完結し、動画ビルドだけ別プロセスで Playbook を呼びます。シナリオ・動画には自動の品質チェックが入り、合格分だけ次へ。レビュー（合否・指摘）を受けて学びを記録し、自分の仕様も改善します。</p>
+  <h3><span class="chip c2">scenario-experiment</span> シナリオ品質の対照実験</h3>
+  <p>「動画の質を決めるのは上流のシナリオ」という考えで、<b>シナリオ生成だけを対象に、1つだけ条件を変えて比べる対照実験</b>を回すスキル。評価軸は <b>再生数（Imp）最大化</b>。</p>
+  <h3><span class="chip c2">manual-rule-input</span> 人間のルールを直接登録</h3>
+  <p>人間が言語化したルールを、対話で重複・矛盾を確認しつつ<b>「絶対ルール」へ直接登録</b>。明示承認を経て反映します。</p>
+  <h3>karomi-weekly-report <span class="muted">（円環とは独立）</span></h3>
+  <p>外部クライアント向けの<b>週次レポート</b>を再生成する独立スキル。AI KOLの円環とは別系統です。</p>
+</div>
+
+<!-- 5 -->
+<h2 id="cross">5. 知見をどう管理しているか</h2>
+<div class="card">
+  <h3>学びをルールに育てる仕組み（fb-memory）</h3>
+  <p>レビューのフィードバックを「ためる → 似たものをまとめる → 人間（Badhan）が承認 → 絶対ルールに昇華 → 次回のシナリオ/動画に必ず反映」で回します。Agent3の知見もこの流れに合流します。</p>
+  <p style="text-align:center;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:10px;padding:11px;font-size:13.5px">
+    ためる &nbsp;→&nbsp; まとめる &nbsp;→&nbsp; 人間が承認 &nbsp;→&nbsp; 絶対ルール化 &nbsp;→&nbsp; 次回に反映
+  </p>
+  <h3>知見台帳（L8）</h3>
+  <p>散らばっていた知見を共通IDで1件にまとめ、「古くなったら失効・再検証する」管理を付けた仕組み。古い前提での誤判断を防ぎます。<span class="st s-live">実装・稼働済み</span></p>
+</div>
+
+<!-- 6 -->
+<h2 id="env">6. 運用環境（どこで動くか）</h2>
+<div class="card">
+  <ul>
+    <li>本番はすべて <b>1台の Mac mini</b> 上。定期ジョブと常駐プロセスが自動で回り、人手は要所（戦略・レビュー・承認）だけ。</li>
+    <li><b>常駐している処理は勝手に止めない・消さない。</b> 動画作成や分析がバックグラウンドで動いており、止めると本番が壊れます。</li>
+    <li><b>再起動には注意。</b> 別ユーザーがログインしたままだと定期ジョブが読み込まれないことがあります（担当者がceedでログインし直すと復旧）。</li>
+  </ul>
+</div>
+
+<!-- 7 -->
+<h2 id="improve">7. いま進めている構造改善</h2>
+<div class="card">
+  <p class="muted">スキル単体の調整から、<b>円環の構造そのものを変える</b>段階へ。改善案を整理し、設計書を別フォルダ「構造改善 設計ドキュメント」に1案ずつ蓄積中。</p>
+  <table class="t">
+    <tr><th>主な改善案</th><th>内容</th><th>状態</th></tr>
+    <tr><td>CV紐付け</td><td>「どの売上が・どの投稿から来たか」を結ぶ。<b>月5万円に最も直結</b></td><td><span class="st s-hold">最優先・データ準備待ち</span></td></tr>
+    <tr><td>知識ライフサイクル</td><td>知見を名寄せして失効管理（上記の台帳）</td><td><span class="st s-live">実装・稼働済み</span></td></tr>
+    <tr><td>双方向フィードバック</td><td>戦略の判断中に「その場の問い」を分析側へ投げ、答えをもらう</td><td><span class="st s-design">設計済み・未実装</span></td></tr>
+  </table>
+  <p class="muted">進め方は「1案ずつ：正当性検証 → 小分けで認識合わせ → 設計を仕上げ → 反対意見で検証 → HTML1枚にしてDriveへ蓄積」。設計書は下のリンク集のフォルダにあります。</p>
+</div>
+
+<!-- 8 -->
+<h2 id="caution">8. 気をつけること・働き方の約束</h2>
+<div class="caution">
+  <ul>
+    <li><b>担当領域を越えない。</b> Agent2（駿冴）/ Playbook（トモさん）/ Agent1・Agent3（Badhan）で担当が分かれています。相手の領域を勝手に変えず、まず自分の担当を確認。</li>
+    <li><b>人間専用の欄に書き込まない。</b> 合否やフィードバックなど「人間が判断して記入する欄」へAIが書くのは厳禁です。</li>
+    <li><b>分析と判断を混ぜない。</b> 事実・データを出すのは分析側、「だからこうする」と決めるのは人間（CEO）。</li>
+    <li><b>勝手に進めず、合意してから。</b> 取り消せない操作（削除など）や相手の領域に関わる変更は先に確認。承認をもらったら<b>その場で実行</b>（放置しない）。</li>
+    <li><b>説明は短く小分けに。</b> 情報を一気に詰め込まず、要点を先に。各作業は実測・実読みで都度 verify し、推測で進めない。</li>
+    <li><b>完了報告の前に「やり残し」を確認。</b> 自分が回した分だけ見て「全部完了」と言わない。全体を見て未対応が無いか必ずチェック。</li>
+    <li><b>日時はすべて日本時間（JST）で扱う。</b> 外部データがUTCなら必ず換算してから集計・表示。</li>
+    <li><b>このリポはGit運用に注意。</b> バックグラウンドの自動コミットが走るため、自分の変更は<code>add〜commit</code>を続けて行うか別ブランチで。対話中のmainへの直接pushは仕組み上ブロックされます（自動pushで後から反映）。</li>
+    <li><b>正典（SSOT）を正とする。</b> このページは要約です。作業時は各リポの正典ファイルを必ず確認してください。</li>
+  </ul>
+</div>
+
+<!-- 9 -->
+<h2 id="links">9. リンク集・最初に読むファイル</h2>
+<div class="card">
+  <h3>関連シート・フォルダ・リポジトリ（クリックで開く）</h3>
+  <div class="links">
+    <a href="https://docs.google.com/spreadsheets/d/1-rwFgeoyuwa4YXe7jwCc2Pl1OVXVZ0gV5iadllpFp10/edit" target="_blank" rel="noopener">📄 アカウント一覧シート（Agent1出力）</a>
+    <a href="https://docs.google.com/spreadsheets/d/1V7yznm28uWwsiFO2bQ0TkjfKRk1I84aCN2JYkiSyEqY/edit" target="_blank" rel="noopener">📄 マスタータブ（Agent2の進捗）</a>
+    <a href="https://docs.google.com/spreadsheets/d/1Nydqb7HlS6EShBRQH1ObLSWpgG7KZLa2XEQkBzo5k_U/edit" target="_blank" rel="noopener">📄 AI KOL Post Tracker（投稿管理）</a>
+    <a href="https://docs.google.com/spreadsheets/d/17OBpz2QkVMPeb5h8dZ2y7QEz4sJnLMHS_qgPxwLFepM/edit" target="_blank" rel="noopener">📄 Sheet3（最新パフォーマンス）</a>
+    <a href="https://docs.google.com/spreadsheets/d/1zojpADLladIDEaY0q3u3E--askXF4EnxDj0fTQ2oZsM/edit" target="_blank" rel="noopener">📄 IG Post Analysis DB（Agent3分析）</a>
+    <a href="https://drive.google.com/drive/folders/1eosVxYrRZCEVaWttFIiqD1grP62N-KlE" target="_blank" rel="noopener">📁 構造改善 設計ドキュメント（Drive）</a>
+    <a href="https://github.com/Ceed-dev/content-pipeline" target="_blank" rel="noopener">💻 content-pipeline（GitHub）</a>
+    <a href="https://github.com/Ceed-dev/ceed-playbooks" target="_blank" rel="noopener">💻 ceed-playbooks（GitHub）</a>
+  </div>
+  <h3 style="margin-top:18px">最初に開くと良い正典（SSOT）ファイル</h3>
+  <ul>
+    <li>円環全体: <code>v5-agents/ARCHITECTURE.md</code></li>
+    <li>Agent2（動画制作）: <code>content-pipeline/.claude/skills/video-creation-orchestrator/SKILL.md</code> と <code>docs/sheet-relay-workflow/SPEC.md</code></li>
+    <li>Agent1（CEO）: <code>v5-agents/agent1-ceo/CLAUDE.md</code> ／ Agent3（分析）: <code>v5-agents/agent3-analyzer/CLAUDE.md</code></li>
+    <li>知見台帳: <code>v5-agents/knowledge-ledger/README.md</code> ／ シナリオ品質改善: <code>content-pipeline/docs/scenario-quality-project/README.md</code></li>
+  </ul>
+  <p class="muted">用語: <b>AI KOL</b>=AIインフルエンサー ／ <b>円環</b>=Agent1→2→3と還流の1周 ／ <b>Playbook</b>=動画を実際に作る手順一式 ／ <b>仮説・シナリオ</b>=動画の設計図 ／ <b>Imp</b>=再生数 ／ <b>絶対ルール</b>=Badhanが承認した必ず守るルール。</p>
+</div>
+
+<footer>
+  Ceed AI KOL 事業 — 全体像オンボーディング資料。新メンバー向けの地図・概要であり、実装の最新仕様は各正典ファイルが優先します。生成: Claude Code。
+</footer>
+
+</div>
+</body>
+</html>
