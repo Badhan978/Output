@@ -63,7 +63,9 @@
   <a href="#arch">2層アーキ</a>
   <a href="#fixlist">直すべきリスト</a>
   <a href="#seq">シーケンス</a>
+  <a href="#variance">分散の管理</a>
   <a href="#cross">横断</a>
+  <a href="#timeline">タイムライン</a>
 </div></nav>
 
 <div class="wrap">
@@ -188,9 +190,69 @@ flowchart LR
   </div>
 </section>
 
-<!-- ===== 5. 横断 ===== -->
+<!-- ===== 5. 分散の管理 ===== -->
+<section id="variance">
+  <h2 class="sec">5. 分散の管理 — 同じテーマでも伸びる/伸びない</h2>
+  <p class="sec-sub">この分散は「構造」でないので Playbook では消えない。消さずに管理する設計に変える。</p>
+
+  <div class="card">
+    <h3>分散の出所は5つ、性質が違う <span class="k">どれも構造でない＝Playbookは触れない</span></h3>
+    <table>
+      <tr><th>出所</th><th>性質</th><th>打ち手の方向</th></tr>
+      <tr><td class="id">① アルゴの確率性</td><td>ほぼ不可逆（初速で増幅が決まるべき乗則）</td><td>消さない → 確率を上げる/当たりを増幅（下記4レバー）</td></tr>
+      <tr><td class="id">② 実装スラック</td><td>学習可能（Hook文言/事実選び/構成の余白）</td><td>Agent3→Agent2ループ＋Playbook昇格</td></tr>
+      <tr><td class="id">③ タイミング/潮目</td><td>需要側（時事・飽和・テーマ疲労）</td><td>covariateとして記録→分析で差し引く</td></tr>
+      <tr><td class="id">④ アカウント状態</td><td>重複ペナルティ/shadowban/構成drift</td><td>健全性フラグを記録</td></tr>
+      <tr><td class="id">⑤ 測定アーティファクト</td><td>単一時点判定の誤り</td><td>7-14日累積で判定</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>設計修正: 実測ループの粒度を「1投稿の予測」→「テーマ型のヒット率＝分布」に</h3>
+    <ul class="tight">
+      <li>1投稿は分散が大きすぎて<b>予測不能（宝くじ）</b>。個々の外れを説明しようとしない。</li>
+      <li>当てるのは「テーマ型Xは20本中30% vs Yは10%」という<b>分布の差</b>。<b>本数で分布を比較</b>する（大数の法則）。</li>
+      <li>Playbook＋テーマ選定の役割＝「毎回当てる」でなく<b>分布を上にずらす</b>（floorを上げ、期待ヒット率を上げる）。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>① アルゴ確率への打ち手（優先順）</h3>
+    <table>
+      <tr><th>#</th><th>打ち手</th><th>なぜ</th></tr>
+      <tr><td class="id">1</td><td>早期winner検知→増幅（最有力）</td><td>投稿後数時間の初速で伸び始めた1本にだけ燃料（即part2/クロスPF/Story誘導/少額ブースト）。当たりを検知してから賭け増す非対称戦略。ACC_0223が5/4→5/14で17倍の実例</td></tr>
+      <tr><td class="id">2</td><td>初速シグナル最適化</td><td>投稿時間(K列)・Hook/サムネ/冒頭3秒・Story⇄Reel相互送客で初速を作る＝増幅に乗る確率を上げる</td></tr>
+      <tr><td class="id">3</td><td>本数で分布を勝たせる</td><td>1本は宝くじだが良い分布×十分な本数で勝つ＝moatの「速く多く回す」と同義</td></tr>
+      <tr><td class="id">4</td><td>multi-shot（別実装で）</td><td>同テーマを別Hookで間隔を空けて複数ショット。単純リポストは重複ペナルティ（ACC_0228が13+1464に割れた）で死ぬので必ずフレッシュ実装</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>② 実装variance学習: Agent3 → Agent2 → Playbook 昇格</h3>
+    <pre class="mermaid">
+flowchart LR
+    POST["複数投稿の実測"] --> A3["Agent3<br/>Hook型/構成パターンを<br/>本数を跨いで集計"]
+    A3 -->|"単発でなく複数本で裏取り<br/>(単発の後付け=誤帰属を回避)"| PL["Agent2/Planner<br/>勝ち筋カードとして反映"]
+    A3 -->|"裏取れたパターン=新しい構造ルール"| PB["Playbook 昇格<br/>= floorを上げる(Layer P)"]
+    </pre>
+    <ul class="tight">
+      <li><b>単発の後付けにしない</b>: 「Hookが〇〇でバズった」を1本で結論すると①のアルゴ宝くじを実力と誤認＝CEOで見つけた誤帰属そのもの。必ず複数本でパターンの裏を取ってから返す。</li>
+      <li><b>裏取れた実装パターンはPlaybookに昇格</b>: floorを上げる構造ルールになる。＝Agent3→Agent2ループがそのままPlaybook工場を継続的に太らせる（Layer v5学習とLayer P工場を繋ぐ）。Playbookは一度作って終わりでなくここで育つ。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>③④ タイミング/アカウント状態: covariateとして記録するだけ</h3>
+    <ul class="tight">
+      <li>workstreamとして作る必要はないが、<b>記録しないと交絡</b>になる（テーマが滑ったのか、その週shadowbanだったのか区別できずテーマに誤帰属）。</li>
+      <li>実測ループのledgerに最小フラグを残す: <b>投稿時間 / アカウント健全性フラグ / テーマ鮮度・直近重複</b>。これだけで分析が差し引ける。重い作業でなくデータ項目の追加のみ。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 6. 横断 ===== -->
 <section id="cross">
-  <h2 class="sec">5. 横断（常設）</h2>
+  <h2 class="sec">6. 横断（常設）</h2>
   <div class="card">
     <ul class="tight">
       <li><b>Fable差分検証 / moat線引き:</b> 各コンポーネントで「素Fable vs v5」を同一inputで比較（採点器は実測ループを流用）。Fable単体で並ぶ＝コモディティ、v5が勝つ＝moat。model入替(Opus→Fable)もコンポ別に判定。</li>
@@ -198,6 +260,16 @@ flowchart LR
       <li><b>スコープ規律:</b> V5 = simple-only。各所「作り込む」より「実測ループに効く最小改修」に寄せる。</li>
     </ul>
     <p class="links" style="margin-top:14px;color:var(--sub);font-size:13px">関連: <a href="v5-improvement-plan.html">課題→打ち手→仮説（Agent別）</a> · <a href="v5-roadmap-gantt.html">ロードマップ・ガント</a></p>
+  </div>
+</section>
+
+<!-- ===== 7. タイムライン（ガント） ===== -->
+<section id="timeline">
+  <h2 class="sec">7. タイムライン（ガント）</h2>
+  <p class="sec-sub">2026-07-01 起点、2ヶ月スプリント＋Client化（〜9月中旬）。各Agent・機能レーンの並行トラック＋Fable差分横断。</p>
+  <div class="card">
+    <iframe src="v5-roadmap-gantt.html" title="V5 ロードマップ ガント" style="width:100%;height:820px;border:1px solid var(--line);border-radius:10px;background:#0f1115"></iframe>
+    <p style="margin:12px 0 0;color:var(--sub);font-size:12.5px">単体ページ: <a href="v5-roadmap-gantt.html" style="color:var(--v5)">v5-roadmap-gantt.html</a>（横スクロールで全期間表示）。ガントのバー長・依存は計画ドラフトで、実測に合わせ調整。</p>
   </div>
 </section>
 
