@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Claude Setup 全体再設計 — 2026-07-02</title>
+<style>
+  :root{
+    --ink:#172033; --muted:#667085; --line:#dfe5ef; --bg:#f6f7fb; --paper:#fff;
+    --shadow: 0 18px 50px rgba(16,24,40,.08);
+    --red:#dc2626; --red-bg:#fef2f2;
+    --blue:#2563eb; --blue-bg:#eff6ff;
+    --purple:#7c3aed; --purple-bg:#f5f3ff;
+    --teal:#0d9488; --teal-bg:#f0fdfa;
+    --amber:#d97706; --amber-bg:#fffbeb;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:15px;line-height:1.7}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px 100px}
+
+  header.hero{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#f1f5f9;
+    padding:56px 24px 44px}
+  .hero-inner{max-width:1180px;margin:0 auto}
+  .kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#93c5fd;font-weight:700;margin-bottom:10px}
+  .hero h1{font-size:30px;margin:0 0 12px;font-weight:800}
+  .hero .lead{font-size:15.5px;color:#cbd5e1;max-width:820px;margin:0 0 20px}
+  .pills{display:flex;gap:10px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;
+    padding:6px 14px;font-size:12.5px;color:#e2e8f0}
+  .pill b{color:#fff}
+
+  nav.toc{position:sticky;top:0;background:rgba(246,247,251,.94);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);z-index:10;padding:10px 24px}
+  nav.toc .inner{max-width:1180px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;font-size:13px}
+  nav.toc a{color:var(--muted);text-decoration:none;padding:5px 12px;border-radius:20px;border:1px solid var(--line);background:#fff}
+  nav.toc a:hover{color:var(--ink);border-color:var(--muted)}
+
+  section{margin-top:46px;scroll-margin-top:56px}
+  h2.sec{font-size:21px;margin:0 0 4px;padding-left:13px;font-weight:800}
+  .sec-red{border-left:5px solid var(--red)}
+  .sec-blue{border-left:5px solid var(--blue)}
+  .sec-purple{border-left:5px solid var(--purple)}
+  .sec-teal{border-left:5px solid var(--teal)}
+  .sec-amber{border-left:5px solid var(--amber)}
+  .sec-sub{color:var(--muted);font-size:13px;margin:0 0 18px;padding-left:18px}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px 24px;
+    box-shadow:var(--shadow)}
+
+  .thesis{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+    padding:26px 28px;margin-top:18px}
+  .thesis .t{font-size:19px;font-weight:800;line-height:1.5}
+  .thesis .t .hi{color:var(--red)}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px}
+  .finding{border-radius:14px;padding:18px 20px;border:1px solid}
+  .finding .n{font-size:26px;font-weight:800;line-height:1.1}
+  .finding .l{font-size:13px;margin-top:6px;font-weight:600}
+  .finding.f1{background:var(--red-bg);border-color:#fecaca;color:#7f1d1d}
+  .finding.f2{background:var(--amber-bg);border-color:#fde68a;color:#78350f}
+  .finding.f3{background:var(--purple-bg);border-color:#ddd6fe;color:#4c1d95}
+  .finding.f4{background:var(--blue-bg);border-color:#bfdbfe;color:#1e3a8a}
+  .finding .n{color:inherit}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:700;font-size:11.5px;letter-spacing:.03em;text-transform:uppercase}
+  td.k{font-weight:700;color:var(--ink);white-space:nowrap}
+
+  .callout{border-radius:14px;padding:18px 22px;margin-top:18px;border:1px solid;background:var(--teal-bg);border-color:#99f6e4}
+  .callout .h{font-weight:800;color:#0f766e;font-size:14.5px;margin-bottom:6px}
+  .callout p{margin:0;color:#134e4a;font-size:13.5px}
+
+  .phase-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+  .phase{border-radius:14px;padding:18px 18px;border:1px solid;position:relative}
+  .phase .badge{display:inline-block;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+  .phase .cnt{font-size:12px;color:var(--muted);margin-bottom:10px}
+  .phase ul{margin:0;padding-left:16px;font-size:12.5px}
+  .phase li{margin:6px 0}
+  .phase.p0{background:var(--red-bg);border-color:#fecaca}
+  .phase.p0 .badge{background:var(--red);color:#fff}
+  .phase.p1{background:var(--blue-bg);border-color:#bfdbfe}
+  .phase.p1 .badge{background:var(--blue);color:#fff}
+  .phase.p2{background:var(--purple-bg);border-color:#ddd6fe}
+  .phase.p2 .badge{background:var(--purple);color:#fff}
+  .phase.p3{background:#f8fafc;border-color:var(--line)}
+  .phase.p3 .badge{background:#64748b;color:#fff}
+  .phase-arrow{display:none}
+  @media(min-width:981px){
+    .phase-flow{position:relative}
+  }
+
+  .enforce{margin-top:16px}
+  .enforce ul{margin:8px 0 0;padding-left:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .enforce li{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px}
+
+  .layer-table td.contract{font-size:13px;color:var(--muted)}
+
+  .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+  .dcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+  .dcard .dtitle{font-weight:800;font-size:14.5px;margin-bottom:10px;color:var(--ink)}
+  .dcard .dtitle .tag{display:inline-block;background:var(--amber);color:#fff;font-size:11px;font-weight:800;
+    border-radius:6px;padding:2px 8px;margin-right:8px}
+  .dcard .opt{font-size:13px;color:var(--muted);margin:4px 0}
+  .dcard .opt b{color:var(--ink)}
+  .dcard .rec{margin-top:10px;background:var(--teal-bg);border:1px solid #99f6e4;border-radius:8px;
+    padding:8px 12px;font-size:12.5px;color:#0f766e}
+  .dcard .rec b{color:#134e4a}
+
+  .steps{display:flex;gap:0;margin-top:18px;flex-wrap:wrap}
+  .step{flex:1;min-width:180px;background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;position:relative;box-shadow:var(--shadow)}
+  .step .num{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;
+    display:flex;align-items:center;justify-content:center;font-size:13px;margin-bottom:10px}
+  .step p{margin:0;font-size:12.5px;color:var(--ink)}
+  .step-arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px;padding:0 4px}
+
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+
+  @media(max-width:980px){
+    .grid2,.grid4,.phase-flow,.dgrid{grid-template-columns:1fr}
+    .steps{flex-direction:column}
+    .step-arrow{transform:rotate(90deg);padding:6px 0}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="kicker">Claude Internal System Audit — DRAFT</div>
+    <h1>Claude Setup 全体再設計</h1>
+    <p class="lead">router → memory → wiki → runbooks → skills の階層構造そのものは健全。問題は「同じ事実の多重手書き」と「自分で定めたルールの未執行」の2つに集約される。</p>
+    <div class="pills">
+      <div class="pill">作成日 <b>2026-07-02</b></div>
+      <div class="pill">Status <b>DRAFT（Badhan review 待ち）</b></div>
+      <div class="pill">Source <b>Sonnet subagent 4体 全数監査</b>（router+runbooks / memory 2系統 / skills / wiki）</div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="inner">
+    <a href="#diagnosis">診断サマリ</a>
+    <a href="#arch">目標アーキテクチャ</a>
+    <a href="#plan">修正計画</a>
+    <a href="#decisions">Badhan決定事項</a>
+    <a href="#sequence">実行順</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <section id="diagnosis">
+    <h2 class="sec sec-red">0. 診断サマリ</h2>
+    <p class="sec-sub">構造ではなく実行の欠如 — 4つの症状</p>
+    <div class="thesis">
+      <div class="t">構造 <span class="hi">は健全</span>。壊れているのは <span class="hi">「同じ事実の多重手書き」と「自分で定めたルールの未執行」</span> の2点。</div>
+    </div>
+    <div class="grid4">
+      <div class="finding f1">
+        <div class="n">15+ 箇所</div>
+        <div class="l">退役告知（VM / Decision Log DB / Notion ToDo DB）が手書き複製。最大の重複源。</div>
+      </div>
+      <div class="finding f2">
+        <div class="n">自己違反</div>
+        <div class="l">self.md / backlog.md / index.md / INDEX.md が自分の Write Rules を自分で違反 — 執行機構が欠如。</div>
+      </div>
+      <div class="finding f3">
+        <div class="n">17+2 件</div>
+        <div class="l">wiki に孤立クラスタ（sns-growth/）17ファイル、auto-memoryに参照ゼロの重要ルール2件。</div>
+      </div>
+      <div class="finding f4">
+        <div class="n">即死バグ級</div>
+        <div class="l">new-account-design skill の <code>~/kai/</code> 死にパス3箇所、context-loading.md trigger table 誤パス2件。</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="arch">
+    <h2 class="sec sec-blue">1. 目標アーキテクチャ（レイヤー契約）</h2>
+    <p class="sec-sub">各ファイルが「持ってよい情報」を1行で契約化する。違反 = wiki-lint / systems-check の検出対象</p>
+    <div class="card">
+      <table class="layer-table">
+        <tr><th>レイヤー</th><th>契約（これ以外を持たない）</th></tr>
+        <tr><td class="k">~/.claude/CLAUDE.md</td><td class="contract">ルーティングのみ。原則は1行+リンク。スキル挿入ブロックは2-3行のポインタまで</td></tr>
+        <tr><td class="k">identity.md</td><td class="contract">静的 persona + 固定 ID のみ。BU 状態テーブルは廃止（active-context.md へ一本化）</td></tr>
+        <tr><td class="k">memory/self.md</td><td class="contract">INV は 2-4行厳守。インシデント詳細・SOP は wiki leaf へ</td></tr>
+        <tr><td class="k">memory/active-context.md</td><td class="contract">動的 BU 状態の唯一の置き場（現状維持）</td></tr>
+        <tr><td class="k">memory/backlog.md</td><td class="contract">self-repair（bug/stale/不整合）のみ。実務 TODO・機能開発計画は wiki todo.md / spec へ</td></tr>
+        <tr><td class="k">wiki/</td><td class="contract">知識ストア。org hub の「## Now」は置換のみ（蓄積禁止を lint で執行）</td></tr>
+        <tr><td class="k">runbooks/</td><td class="contract">手順のみ。障害ログ・変更履歴・deprecated 手順の全文残置は .archive/ へ</td></tr>
+        <tr><td class="k">skills SKILL.md</td><td class="contract">発火条件+フロー。低頻度パス・コードブロックは references/ へ</td></tr>
+        <tr><td class="k">auto-memory</td><td class="contract">役割定義が必要 — §3 決定事項 D2</td></tr>
+      </table>
+    </div>
+    <div class="callout">
+      <div class="h">新設: Retirement Registry（重複排除の要）</div>
+      <p><code>wiki/work/syntheses/retired-systems.md</code> を新設し、退役事実（VM 2026-06-01 / Decision Log DB 2026-05-22 / Notion ToDo DB 2026-06-04 / HyperBuilder 2026-04-30 等）を日付+後継+旧IDつきで一元管理。既存15箇所以上の手書き告知は「→ [[retired-systems]]」の1行参照に置換。以後の退役もここに1行追加するだけ。</p>
+    </div>
+  </section>
+
+  <section id="plan">
+    <h2 class="sec sec-purple">2. 修正計画（フェーズ別）</h2>
+    <p class="sec-sub">P0（即修正・バグ）→ P1（重複排除）→ P2（構造判断・要決定）→ P3（衛生）</p>
+    <div class="phase-flow">
+      <div class="phase p0">
+        <div class="badge">P0 — 即修正</div>
+        <div class="cnt">設計判断不要のバグ・1セッションで完了・8項目</div>
+        <ul>
+          <li><code>~/kai/</code> → <code>~/claude/</code> 死にパス3箇所</li>
+          <li>context-loading.md trigger table 誤パス2件</li>
+          <li>INDEX.md への runbook 追記漏れ</li>
+          <li>backlog.md 旧仕様の参照修正</li>
+          <li>output-discipline.md §4 文言更新</li>
+          <li>wiki/index.md leaf 数不整合3件</li>
+          <li>SKILL.md metadata.version 追加</li>
+          <li>__pycache__ 削除 + gitignore</li>
+        </ul>
+      </div>
+      <div class="phase p1">
+        <div class="badge">P1 — 重複排除</div>
+        <div class="cnt">レイヤー契約の適用・8項目</div>
+        <ul>
+          <li>Retirement Registry 新設 + 15箇所参照化</li>
+          <li>CLAUDE.md スキルブロック34行を SKILL.md へ縮退</li>
+          <li>identity.md から BU 状態テーブル削除</li>
+          <li>self.md casebook を wiki leaf へ移管</li>
+          <li>逐語重複の1行+リンク化</li>
+          <li>session-close 二重トリガー解消</li>
+          <li>Trigger Map に post-mtg 1行追加</li>
+          <li>navigation.md 索引専用化</li>
+        </ul>
+      </div>
+      <div class="phase p2">
+        <div class="badge">P2 — 構造判断</div>
+        <div class="cnt">§3 Badhan 決定後に実行・7項目</div>
+        <ul>
+          <li>sns-growth/ 統合（D1）</li>
+          <li>auto-memory の役割確定（D2）</li>
+          <li>claude-harvest の去就（D3）</li>
+          <li>ai-kol.md「## Now」蓄積22件 → History 切出</li>
+          <li>meeting-log/ アーカイブ規則新設</li>
+          <li>runbook deprecated 全文 → .archive/</li>
+          <li>weekly-performance-analysis.md 511行の分離</li>
+        </ul>
+      </div>
+      <div class="phase p3">
+        <div class="badge">P3 — 衛生</div>
+        <div class="cnt">急がない・7項目</div>
+        <ul>
+          <li>.archive/order-2-spec.md に SUPERSEDED マーク</li>
+          <li>feedback-2026-05-14/ 未移行2件の処理</li>
+          <li>token-usage-log.md（空テンプレ）削除</li>
+          <li>空の personal/ ディレクトリ削除</li>
+          <li>observations-staging.md 6週ルール実行（41KB蓄積）</li>
+          <li>backlog.md STALE項目（最長52日）処理</li>
+          <li>低頻度パス・コードの references/ 分離</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card enforce">
+      <div class="dtitle" style="font-weight:800;font-size:14.5px;margin-bottom:4px">執行機構（再発防止 — これがないと半年後に同じ状態に戻る）</div>
+      <p class="sec-sub" style="margin:0 0 4px;padding-left:0">wiki-lint / systems-check-auto に以下の機械チェックを追加</p>
+      <ul>
+        <li>INDEX.md ⇄ runbooks/ 実ファイルの差分検出</li>
+        <li>wiki/index.md の leaf 数 ⇄ ディスク実数</li>
+        <li>org hub「## Now」のエントリ数 &gt;1 検出（置換原則の執行）</li>
+        <li>self.md INV の行数超過検出</li>
+        <li><code>~/kai/</code> 等の死にパス grep</li>
+        <li>backlog.md open item の経過日数エスカレーション</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="decisions">
+    <h2 class="sec sec-amber">3. Badhan 決定が必要な5点</h2>
+    <p class="sec-sub">P2 実行の前提。推奨案つき</p>
+    <div class="dgrid">
+      <div class="dcard">
+        <div class="dtitle"><span class="tag">D1</span>sns-growth/（17ファイル）</div>
+        <div class="opt"><b>(a)</b> affiliate-knowledge / ai-kol-strategy へ統合</div>
+        <div class="opt"><b>(b)</b> 正式サブハブに格上げ（index 収載 + wikilink 接続）</div>
+        <div class="rec"><b>推奨:</b> 中身の概念重複を確認の上 (b)。意図的新設（2026-06-18）の形跡あり。</div>
+      </div>
+      <div class="dcard">
+        <div class="dtitle"><span class="tag">D2</span>auto-memory の役割</div>
+        <div class="opt">現状: ゲートなしの第二記憶。Core Principle #4 をバイパスし wiki と重複、孤立ルール2件</div>
+        <div class="opt"><b>(a)</b> Claude Code 操作上の軽量 preference のみに限定 + 知見系は session-close で promote</div>
+        <div class="opt"><b>(b)</b> 実質廃止（正規ファイルへ移して MEMORY.md を空に）</div>
+        <div class="rec"><b>推奨:</b> (a)。いずれでも孤立ルール2件は移管。</div>
+      </div>
+      <div class="dcard">
+        <div class="dtitle"><span class="tag">D3</span>claude-harvest skill の去就</div>
+        <div class="opt">inbox/processed/ が空 = 導入以来一度も完走していない</div>
+        <div class="opt"><b>(a)</b> 存続（発火機会がまだなかっただけ）</div>
+        <div class="opt"><b>(b)</b> 廃止して auto-memory promote フロー（D2-a）に吸収</div>
+        <div class="rec"><b>推奨:</b> D2 の決定とセットで判断。D2-a なら harvest は冗長化の可能性大。</div>
+      </div>
+      <div class="dcard">
+        <div class="dtitle"><span class="tag">D4</span>session-close skill の廃止</div>
+        <div class="opt">P1-6 の推奨通り、CLAUDE.md Trigger Map → runbook 直呼びに一本化してよいか</div>
+        <div class="opt">理由: 二重トリガー解消。skill は36行の薄ラッパーで存在価値が薄い</div>
+      </div>
+      <div class="dcard">
+        <div class="dtitle"><span class="tag">D5</span>.archive/feedback-2026-05-14/ 未移行2件</div>
+        <div class="opt">代筆ルール（draft_in_badhan_voice）→ output-discipline へ移行 or 破棄</div>
+        <div class="opt">scheduling_rules → runbook へ移行 or 破棄（49日放置中）</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sequence">
+    <h2 class="sec sec-teal">4. 実行順の提案</h2>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><p>このドラフトのレビュー → D1〜D5 決定</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="num">2</div><p>P0 を1セッションで一括実行（機械的、gate 不要級）</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="num">3</div><p>P1 を1〜2セッション（Retirement Registry → 参照置換 → router/identity/self スリム化）</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="num">4</div><p>P2 を決定に沿って実行、P3 は次回 Systems Check に同梱</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="num">5</div><p>執行機構チェックを wiki-lint / systems-check-auto に追加して閉じる</p></div>
+    </div>
+  </section>
+
+  <footer>
+    出典: Sonnet subagent 4体による全数監査（router+runbooks / memory 2系統 / skills / wiki）。詳細な監査 raw findings（file:line 証跡つき）は各 subagent レポートに残っており、必要なら本ファイルに追補。<br>
+    Source: <code>~/claude/output/claude-setup-redesign-2026-07-02.md</code> ・ 作成日 2026-07-02 ・ 内部 ID / 認証情報は除去済み。
+  </footer>
+
+</div>
+</body>
+</html>
