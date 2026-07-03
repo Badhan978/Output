@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>toC カテゴリ別 CV戦略 — 2026-07</title>
+<style>
+  :root{
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    --done:#16a34a; --donebg:#f0fdf4;
+    --run:#7c3aed;  --runbg:#f5f3ff;
+    --on:#2563eb;   --onbg:#eff6ff;
+    --off:#0d9488;  --offbg:#f0fdfa;
+    --todo:#94a3b8;
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
+
+  header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:30px 28px 26px}
+  .kicker{font-size:11px;letter-spacing:.18em;color:#7dd3fc;font-weight:800;text-transform:uppercase}
+  header h1{margin:6px 0 8px;font-size:30px;line-height:1.25}
+  header .lead{margin:0;color:#cbd5e1;font-size:13px;max-width:900px}
+  .pills{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    color:#e2e8f0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:12px;border:1px solid var(--line)}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  section{max-width:1180px;margin:24px auto;padding:0 20px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .mark{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
+    border-bottom:1px solid var(--line)}
+  .pad{padding:16px 20px}
+
+  .chip{font-size:10px;font-weight:800;padding:3px 10px;border-radius:5px;color:#fff}
+  .st{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px}
+  .st-done{background:#dcfce7;color:#15803d}
+  .st-run{background:#ede9fe;color:#6d28d9}
+  .st-todo{background:#f1f5f9;color:#64748b}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:10px 20px;
+    background:#fff;border:1px solid var(--line);border-radius:12px;font-size:11.5px;color:var(--sub)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700}
+  .lever{font-weight:700}
+  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  th.num{text-align:right}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:16px 20px}
+  .gcard{border:1.5px solid var(--line);border-radius:10px;overflow:hidden}
+  .gcard .ghead{padding:9px 14px;font-weight:800;font-size:13px;display:flex;gap:8px;align-items:center}
+  .gcard ul{margin:0;padding:10px 14px 12px 28px;font-size:12.5px}
+  .gcard li{margin-bottom:6px}
+
+  .metric{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:16px 20px}
+  .mcell{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff}
+  .mcell .v{font-size:28px;font-weight:800;line-height:1.1}
+  .mcell .l{font-size:11px;color:var(--sub);font-weight:700;margin-top:2px}
+  .mcell .d{font-size:11px;color:var(--sub);margin-top:4px}
+
+  .mapwrap{padding:24px 20px;display:grid;
+    grid-template-columns:1.1fr 46px 1fr 46px 1fr;gap:10px;align-items:start}
+  .node{border-radius:9px;padding:8px 12px;margin-bottom:8px;font-size:12px;
+    font-weight:600;border:1.5px solid}
+  .n-on{border-color:var(--on);background:var(--onbg)}
+  .n-off{border-color:var(--off);background:var(--offbg)}
+  .n-run{border-color:var(--run);background:var(--runbg)}
+  .n-done{border-color:var(--done);background:var(--donebg)}
+  .arrows{display:flex;flex-direction:column;justify-content:center;align-items:center;
+    height:100%;padding-top:40px;color:#94a3b8;font-size:22px;font-weight:700}
+  .colhead{font-size:11px;font-weight:800;color:var(--sub);margin-bottom:8px;letter-spacing:.06em}
+
+  .tstep{display:flex;gap:14px;margin-bottom:14px}
+  .tdate{flex:0 0 96px;font-weight:800;font-size:12px;color:#4f46e5;text-align:right}
+  .tbody{flex:1;border-left:3px solid #e0e7ff;padding-left:14px;font-size:12.5px}
+
+  footer{max-width:1180px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
+  @media(max-width:980px){
+    .grid3,.metric{grid-template-columns:1fr}
+    .mapwrap{grid-template-columns:1fr}
+    .arrows{transform:rotate(90deg);padding:0;height:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">AI KOL · toC Strategy</div>
+  <h1>Viewを一枚岩で見るのをやめる — 3カテゴリでCVを設計する</h1>
+  <p class="lead">全accに同じPDCAが走っていたが、集まるユーザー層はカテゴリで別物だった（CV/10万Impに<b>50倍差</b>）。カテゴリごとに「固定するもの / 回す変数1つ / 追う数値」を分離し、6月CV 11 → <b>7月CV 30±5</b> を実証済みパターンの移植だけで取りにいく。</p>
+  <div class="pills">
+    <span class="pill">作成 2026-07-03</span>
+    <span class="pill">現在地 6月確定: CV 11 / ¥10,421</span>
+    <span class="pill">7月目標 CV 30±5</span>
+    <span class="pill">方針 試行錯誤せず実証型の移植</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#bunkai">📊 6月分解 3カテゴリ</a>
+  <a href="#gensoku">🧭 原則 1つ</a>
+  <a href="#senryaku">🗂 カテゴリ戦略 3枚</a>
+  <a href="#soukyaku">🔀 送客設計 2ルート</a>
+  <a href="#kensho">🔬 データ検証 4件</a>
+  <a href="#kpi">🎯 7月KPI 4系統</a>
+  <a href="#week">⏱ 週次計画 4週</a>
+</nav>
+
+<section>
+  <div class="legend">
+    <b style="color:var(--ink)">凡例（状態色・全セクション共通）</b>
+    <span class="st st-done">実証済み・確定</span>
+    <span class="st st-run">検証中・判定待ち</span>
+    <span class="st st-todo">未着手・計測開始</span>
+  </div>
+</section>
+
+<section id="bunkai">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>📊 6月実測 — 合算ファネルが隠していたもの</h2>
+    <div class="note">全体値（PFV率3.86% / CTR 1.51% / CV率0.60%）は3つの別物の平均で、どの意思決定にも使えない数字だった。カテゴリ別に引き直すと、ボトルネックの「段」がそれぞれ違う。</div>
+    <div class="metric">
+      <div class="mcell"><div class="v">11 CV</div><div class="l">6月 全体</div><div class="d">売上 ¥10,421・Imp 315万</div></div>
+      <div class="mcell"><div class="v" style="color:var(--on)">0.23</div><div class="l">エンタメ CV/10万Imp</div><div class="d">Imp 221万・CV 5</div></div>
+      <div class="mcell"><div class="v" style="color:var(--off)">0.54</div><div class="l">生活系 CV/10万Imp</div><div class="d">Imp 93万・CV 5</div></div>
+      <div class="mcell"><div class="v" style="color:var(--done)">11.84</div><div class="l">教育系 CV/10万Imp</div><div class="d">Imp 0.8万・CV 1 — <b>50倍差</b></div></div>
+    </div>
+    <table>
+      <thead><tr><th>カテゴリ</th><th class="num">Imp</th><th class="num">PFV率</th><th class="num">LC CTR</th><th class="num">CV率</th><th class="num">CV</th><th>ボトルネックの段</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">エンタメ<span class="def">裏話・闇・妄想・令和・チャラ男</span></td><td class="num">2,209,889</td><td class="num">4.91%</td><td class="num"><b>1.06%</b></td><td class="num">0.44%</td><td class="num">5</td><td><b>リンクを踏まない</b><span class="def">プロフには来る。MOFUが弱い</span></td></tr>
+        <tr><td class="lever">生活系<span class="def">宮・アレックス・ゆうた</span></td><td class="num">932,796</td><td class="num"><b>1.20%</b></td><td class="num">4.77%</td><td class="num">0.93%</td><td class="num">5</td><td><b>プロフに来ない</b><span class="def">来た人は踏む。TOFU→プロフが弱い</span></td></tr>
+        <tr><td class="lever">教育系<span class="def">関西（プロト）</span></td><td class="num">8,448</td><td class="num">23.22%</td><td class="num">7.80%</td><td class="num">0.65%</td><td class="num">1</td><td><b>規模不足のみ</b><span class="def">全段勝ち。6月は3投稿しか出ていない</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="gensoku">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>🧭 原則 — 1カテゴリ＝回す変数1つ・他は固定</h2>
+    <div class="note">CVが動いた時に「何が効いたか」を判定できる状態を守る。判定基準が機械化できれば、数値算出・レポートはAgent/Claude側に落ち、人間は訴求設計とacc開設だけになる。</div>
+    <div class="grid3">
+      <div class="gcard"><div class="ghead" style="background:var(--donebg)"><span class="chip" style="background:var(--done)">固定</span>Fableで型を確定</div>
+        <ul><li>Hook型・シナリオ構成・CTAは<b>Fable期間中に最適形を割り出して固定</b></li><li>以後は試行錯誤しない（既存の型で安定）</li></ul></div>
+      <div class="gcard"><div class="ghead" style="background:var(--runbg)"><span class="chip" style="background:var(--run)">回す</span>カテゴリ固有の1変数</div>
+        <ul><li>エンタメ＝<b>ネタ選定</b>（CEO Runが装置）</li><li>生活系＝<b>商材×訴求</b>（週1）</li><li>教育系＝<b>規模</b>（本数→複製）</li></ul></div>
+      <div class="gcard"><div class="ghead" style="background:var(--onbg)"><span class="chip" style="background:var(--on)">判定</span>数値は機械算出</div>
+        <ul><li>週次: Imp/post・LC→CV・送客PFV増分</li><li>月次: 教育系の規模</li><li>算出はClaude（Tracker+生データ）</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="senryaku">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--off)"></span>🗂 カテゴリ別戦略</h2>
+    <div class="grid3">
+      <div class="gcard">
+        <div class="ghead" style="background:var(--onbg)"><span class="chip" style="background:var(--on)">エンタメ</span>母集団供給＋送客口</div>
+        <ul>
+          <li><b>固定:</b> 商材（低ハードル1本）／動線（Reel→Story CTA）／Playbook</li>
+          <li><b>回す:</b> ネタ選定（構造は固定型に従う）</li>
+          <li><b>アクション:</b> 江戸系clone横展開 <span class="st st-run">デバイス待ち</span>／Story CTA先を関西へ固定 <span class="st st-todo">今週</span></li>
+          <li><b>KPI:</b> Imp/post（裏話60k・闇34k）／clone比率／送客数</li>
+          <li><b>判定:</b> 週次（Imp/post）</li>
+        </ul>
+      </div>
+      <div class="gcard">
+        <div class="ghead" style="background:var(--offbg)"><span class="chip" style="background:var(--off)">生活系</span>転換装置（CVを設計）</div>
+        <ul>
+          <li><b>固定:</b> 動線（Reel・カルーセル＋Story）／課題ドメイン「生活の金と手間を減らす」</li>
+          <li><b>回す:</b> 商材×訴求（週1商材）</li>
+          <li><b>アクション:</b> 「続き・保存版はプロフへ」導線を ゆうた→宮2 の順で導入 <span class="st st-todo">今週</span>／アレックス=食の安全特化×保存版化 <span class="st st-run">2週判定</span>／ASPカタログから売れ筋絞込</li>
+          <li><b>KPI:</b> PFV率 1.20→3%＋／Saves/1k ≥2.0／CV率 0.93→4%目安</li>
+          <li><b>判定:</b> 週次（LC→CV）</li>
+        </ul>
+      </div>
+      <div class="gcard">
+        <div class="ghead" style="background:var(--donebg)"><span class="chip" style="background:var(--done)">教育系</span>質の獲得（型は実証済み）</div>
+        <ul>
+          <li><b>固定:</b> 商材（Audible＋書籍）／コンテンツ型（関西の型）</li>
+          <li><b>回す:</b> 規模のみ（投稿本数→acc複製）</li>
+          <li><b>アクション:</b> 関西を通常本数へ復元（6月は3投稿のみ） <span class="st st-todo">即</span>／型のPlaybook化 <span class="st st-run">Fable期間</span>／8月頭に2acc目判断／honehone裁定</li>
+          <li><b>KPI:</b> Imp 8,448→45k＋／Rev/CV ¥2,000維持／PFV率23%の劣化監視</li>
+          <li><b>判定:</b> 月次（本数のみ週次）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="soukyaku">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>🔀 送客設計 — 文脈が近いルートだけ繋ぐ</h2>
+    <div class="note">「ゆうたのCV率×裏話のImpなら月39CV相当」— これを1accで両立させるのではなく、カテゴリ間の受け渡しで実装する。文脈が飛ぶルート（江戸→ポイ活）は作らない。計測は行き先accのPFV増分＋Story経由LC（週次・今週から）。</div>
+    <div class="mapwrap">
+      <div>
+        <div class="colhead">供給（母集団）</div>
+        <div class="node n-on">江戸系エンタメ<br><span class="def">歴史興味層 108,494 PV/月</span></div>
+        <div class="node n-on">アレックス 恐怖フック<br><span class="def">食の安全テーマ 124k View実証</span></div>
+      </div>
+      <div class="arrows">→</div>
+      <div>
+        <div class="colhead">受け渡し（実装点）</div>
+        <div class="node n-run">Story CTA → 関西メンション<br><span class="def">「歴史書10選・保存版」へ誘導</span></div>
+        <div class="node n-run">acc内: 保存版一覧をプロフへ<br><span class="def">恐怖で見る→リストで保存→プロフ</span></div>
+      </div>
+      <div class="arrows">→</div>
+      <div>
+        <div class="colhead">転換（CV）</div>
+        <div class="node n-done">教育系: 関西<br><span class="def">CV/10万Imp 11.84・Audible</span></div>
+        <div class="node n-off">生活系: 保存→LC→CV<br><span class="def">CTR 4.77%は既に強い</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kensho">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>🔬 前提を疑って検証した4件（IG生データ・投稿単位）</h2>
+    <div class="grid3" style="grid-template-columns:repeat(4,1fr)">
+      <div class="gcard"><div class="ghead" style="background:var(--donebg)"><span class="chip" style="background:var(--done)">支持</span>保存型は実在</div>
+        <ul><li>Saves/1k: ゆうた<b>1.91</b>・宮2 <b>2.43</b> vs エンタメ0.6〜0.9</li><li>Likeを伴わない実用保存。CV率4.05%と整合</li></ul></div>
+      <div class="gcard"><div class="ghead" style="background:var(--donebg)"><span class="chip" style="background:var(--done)">棄却</span>「視聴維持でView」は逆</div>
+        <ul><li>視聴維持はエンタメの武器（28〜31s）</li><li>生活系は10〜13sと短い。Viewの源泉が違う</li></ul></div>
+      <div class="gcard"><div class="ghead" style="background:var(--runbg)"><span class="chip" style="background:var(--run)">発見</span>アレックスは1本集中</div>
+        <ul><li>月間Viewの<b>54%が1投稿</b>（上位2本で66%）</li><li>当たりは全て「食の安全・保存」クラスタ＝テーマ資産</li></ul></div>
+      <div class="gcard"><div class="ghead" style="background:var(--onbg)"><span class="chip" style="background:var(--on)">含意</span>恐怖フック×保存版</div>
+        <ul><li>恐怖で視聴されるが保存されない（0.84/1k）</li><li>→ 保存版リスト化＋プロフ導線で転換型に変換（2週判定）</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="kpi">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--done)"></span>🎯 7月 Goal KPI — CV 11 → 30±5</h2>
+    <div class="note">新KPI方針（エージェント自立稼働＋CV角度・2C売上は追わない）に整合。伸び分は新しい発明ではなく、①実証済み導線の移植 ②実証済み型の本数復元 で取る。生活系のImp目標は撤廃（転換装置に振り切り）。</div>
+    <div class="metric">
+      <div class="mcell"><div class="v" style="color:var(--off)">15–20</div><div class="l">生活系 CV（6月: 5）</div><div class="d">PFV率 1.20→3%＋が最大レバー</div></div>
+      <div class="mcell"><div class="v" style="color:var(--done)">5–10</div><div class="l">教育系 CV（6月: 1）</div><div class="d">本数3→16＋でImpリニア</div></div>
+      <div class="mcell"><div class="v" style="color:var(--on)">〜5</div><div class="l">エンタメ CV（6月: 5）</div><div class="d">現状維持＋送客に専念</div></div>
+      <div class="mcell"><div class="v">30±5</div><div class="l">全体 CV / 月</div><div class="d">8月〜は勝ち型×acc複製でリニアに拡張</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="week">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>⏱ 週次マイルストン（7月）</h2>
+    <div class="pad">
+      <div class="tstep"><div class="tdate">W1 7/6〜</div><div class="tbody"><b>導線・復元・型固定の同時着手。</b>ゆうたにプロフ導線導入／関西の本数復元開始／Fable全フォーマット（月・火）で型確定／江戸→関西のStory送客 第一弾／アレックス変換開始</div></div>
+      <div class="tstep"><div class="tdate">W2 7/13〜</div><div class="tbody"><b>展開と最初の判定。</b>宮2に導線展開／商材テスト#1判定（LC→CV）／clone稼働（デバイス着荷次第）／送客計測の初期値取得</div></div>
+      <div class="tstep"><div class="tdate">W3 7/20〜</div><div class="tbody"><b>アレックス判定。</b>Saves/1k≥2.0 かつ PFV率3%で継続、未達なら縮小しゆうた・宮2に集中／商材テスト#2／送客PFV増分の初回判定</div></div>
+      <div class="tstep"><div class="tdate">W4 7/27〜</div><div class="tbody"><b>月末総判定。</b>CV 30±5の達成度をカテゴリ別に分解／教育系2acc目の複製判断（clone比率を物差しに）／8月スケール計画（勝ち型×acc複製）へ</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <h2><span class="mark" style="background:var(--todo)"></span>⚠ 前提・リスク（数字を読む時の注意）</h2>
+    <div class="pad" style="font-size:12.5px">
+      <b>計測カバレッジ:</b> 宮本体（@0xitsmia・生活系最大 69万Imp）とチャラ男は現行API収集の対象外 — 保存型検証が未完のacc。連携復旧 or 手動計上ルールが要決定。／<b>教育系の高率:</b> PFV 23%は小規模ゆえの可能性あり — 規模拡大時の劣化を4週監視。／<b>視聴時間:</b> 動画尺データが無いため視聴維持率の絶対比較は不可（傾向比較のみ）。
+    </div>
+  </div>
+</section>
+
+<footer>
+  出典: AI KOL Affiliate Tracker（カテゴリ別・2026-07-03集計）／ performance_summary IG Post Insights 生データ（7/3 0時同期・投稿単位）／ 定例議事録 2026-07-03タブ。<br>
+  作成 2026-07-03 · 内部ID・認証情報は除去済み · 正本: 定例議事録「2026年7月3日」タブ 【toC】ブロック＋本セッション分析（daily-log 2026-07-03）
+</footer>
+
+</body>
+</html>
