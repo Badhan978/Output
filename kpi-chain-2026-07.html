@@ -3,171 +3,162 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KPI 因果チェーン — 2026-07-03</title>
+<title>投資家向けKPI設計 — 売上レバーツリー</title>
 <style>
   :root{
     --bg:#ffffff; --card:#ffffff; --ink:#1a1a1a; --sub:#6b6b6b;
-    --line:#d8d8d4; --accent:#0f62fe; --ext:#0f62fe; --int:#b45309;
-    --extbg:#eef4ff; --intbg:#fdf3e3; --dropbg:#f1f1ee;
+    --line:#dcdcd8; --accent:#0f62fe;
+    --run:#0e8345; --runbg:#e6f4ec;
+    --lab:#0f62fe; --labbg:#eef4ff;
+    --build:#b45309; --buildbg:#fdf3e3;
+    --wait:#6b6b6b; --waitbg:#f1f1ee;
+    --apexbg:#101828;
   }
-  /* 白ベース固定（dark mode override なし） */
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",sans-serif;
-       padding:32px 20px;line-height:1.55}
-  .wrap{max-width:880px;margin:0 auto}
-  h1{font-size:19px;font-weight:700;margin-bottom:4px}
-  .date{font-size:12px;color:var(--sub);margin-bottom:24px}
+       padding:36px 20px;line-height:1.55}
+  .wrap{max-width:920px;margin:0 auto}
+  h1{font-size:20px;font-weight:700;margin-bottom:4px}
+  .date{font-size:12px;color:var(--sub);margin-bottom:6px}
+  .principle{font-size:13px;color:var(--ink);background:var(--waitbg);border:1px solid var(--line);
+             border-radius:10px;padding:10px 16px;margin:14px 0 26px;display:inline-block}
+  .principle b{color:var(--accent)}
 
-  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:22px;font-size:12.5px}
-  .legend span{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card)}
-  .dot{width:10px;height:10px;border-radius:3px;display:inline-block}
-  .dot.ext{background:var(--ext)} .dot.int{background:var(--int)} .dot.drop{background:var(--sub)}
+  /* apex */
+  .apex{background:var(--apexbg);color:#fff;border-radius:14px;padding:20px 26px;text-align:center}
+  .apex .tag{font-size:11px;letter-spacing:.14em;opacity:.7;margin-bottom:4px}
+  .apex h2{font-size:22px;font-weight:700}
+  .apex .note{font-size:12px;opacity:.75;margin-top:4px}
 
-  .chain{position:relative}
-  .node{background:var(--card);border:1.5px solid var(--line);border-radius:14px;
-        padding:18px 22px;position:relative}
-  .node .tag{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--sub);text-transform:uppercase;margin-bottom:8px}
-  .node h2{font-size:16px;font-weight:700;margin-bottom:10px}
-  .kpis{display:flex;gap:10px;flex-wrap:wrap}
-  .kpi{background:var(--extbg);border:1px solid var(--ext);color:var(--ext);
-       border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600}
-  .kpi small{display:block;font-weight:400;font-size:11px;opacity:.85;margin-top:2px;color:var(--ink)}
-  .note{font-size:12px;color:var(--sub);margin-top:10px}
-  .warn{font-size:12px;margin-top:10px;padding:8px 12px;border-radius:8px;background:var(--intbg);border:1px dashed var(--int)}
+  .trunk{width:2px;height:26px;background:var(--line);margin:0 auto}
+  .trunklabel{text-align:center;font-size:11.5px;color:var(--sub);margin-bottom:14px}
 
-  .link{display:flex;align-items:stretch;gap:16px;padding:6px 0 6px 40px;position:relative}
-  .link .arrow{position:absolute;left:52px;top:-6px;bottom:-6px;width:2px;background:var(--line)}
-  .link .arrow::after{content:"";position:absolute;bottom:0;left:-5px;border:6px solid transparent;border-top-color:var(--line);border-bottom:0}
-  .linkcard{margin:10px 0 10px 40px;background:var(--intbg);border:1px solid var(--int);
-            border-radius:10px;padding:10px 14px;font-size:12.5px;max-width:520px}
-  .linkcard b{color:var(--int);font-size:11px;letter-spacing:.06em;display:block;margin-bottom:3px}
+  /* levers */
+  .levers{display:flex;flex-direction:column;gap:14px}
+  .lever{background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+         padding:18px 22px;display:grid;grid-template-columns:1fr 260px;gap:18px}
+  @media(max-width:720px){.lever{grid-template-columns:1fr}}
+  .lever .lid{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--sub);margin-bottom:5px}
+  .lever h3{font-size:15.5px;font-weight:700;margin-bottom:8px}
+  .kpi{display:inline-block;background:var(--labbg);border:1px solid var(--lab);color:var(--lab);
+       border-radius:8px;padding:6px 12px;font-size:13px;font-weight:600;margin:2px 6px 2px 0}
+  .kpi small{font-weight:400;color:var(--ink);opacity:.8}
+  .meta{border-left:1px solid var(--line);padding-left:18px;font-size:12.5px}
+  @media(max-width:720px){.meta{border-left:none;padding-left:0;border-top:1px dashed var(--line);padding-top:10px}}
+  .status{display:inline-block;font-size:12px;font-weight:700;border-radius:20px;padding:4px 12px;margin-bottom:8px}
+  .st-run{background:var(--runbg);color:var(--run)}
+  .st-lab{background:var(--labbg);color:var(--lab)}
+  .st-build{background:var(--buildbg);color:var(--build)}
+  .st-wait{background:var(--waitbg);color:var(--wait)}
+  .evolve{color:var(--sub)}
+  .evolve b{color:var(--ink);font-weight:600}
+  .snote{font-size:11.5px;color:var(--sub);margin-top:6px}
 
-  .connector{width:2px;height:34px;background:var(--ink);opacity:.35;margin:0 0 0 52px;position:relative}
-  .connector::after{content:"";position:absolute;bottom:-1px;left:-5px;border:6px solid transparent;border-top-color:var(--ink);opacity:.9;border-bottom:0}
-  .connwrap{display:flex;align-items:center;gap:14px}
+  /* reading */
+  .reading{margin-top:30px;background:var(--labbg);border:1.5px solid var(--lab);border-radius:14px;padding:18px 22px}
+  .reading h3{font-size:14.5px;font-weight:700;color:var(--lab);margin-bottom:10px}
+  .reading p{font-size:13px;margin-bottom:10px}
+  .cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+  .case{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:12.5px}
+  .case b{display:block;margin-bottom:3px;font-size:12.5px}
+  .case.now{border:2px solid var(--build)}
+  .case .pin{font-size:10.5px;font-weight:700;color:var(--build);letter-spacing:.06em}
 
-  .dropped{margin-top:26px;background:var(--dropbg);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
-  .dropped h3{font-size:13px;font-weight:700;color:var(--sub);margin-bottom:8px}
-  .dropped ul{list-style:none;font-size:12.5px;color:var(--sub)}
-  .dropped li{padding:3px 0}
-  .dropped li s{opacity:.8}
-
-  .tensions{margin-top:26px}
-  .tensions h3{font-size:14px;font-weight:700;margin-bottom:10px}
-  .tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:10px}
-  .tcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:12.5px}
-  .tcard b{display:block;font-size:13px;margin-bottom:6px}
-  .tcard .fix{color:var(--accent);font-weight:600}
-  .tcard .step{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
-  .tcard .step em{font-style:normal;font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.05em;display:block;margin-bottom:3px}
-  .decide{margin-top:14px;background:var(--intbg);border:1.5px solid var(--int);border-radius:12px;padding:16px 18px}
-  .decide h4{font-size:13.5px;font-weight:700;margin-bottom:8px;color:var(--int)}
-  .decide .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-top:8px}
-  .decide .opt{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12px}
-  .decide .opt.rec{border:2px solid var(--int)}
-  .decide .opt b{display:block;margin-bottom:3px;font-size:12.5px}
-  .decide .why{font-size:12px;margin-top:10px;color:var(--ink)}
+  .foot{margin-top:26px;font-size:12px;color:var(--sub);border-top:1px solid var(--line);padding-top:14px}
+  .foot li{margin:4px 0 4px 18px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>KPI 因果チェーン — 1本のチェーンから二層を導出する</h1>
-  <div class="date">2026-07-03 経営会議 整理 · 外部KPI = ノード（5個） / 内部KPI = 矢印（リンク）</div>
+  <h1>投資家向けKPI設計 — 売上を頂点にしたレバーツリー</h1>
+  <div class="date">2026-07-03 経営会議 → 再設計 · Agent＝コア資産 / toC＝自社R&Dラボ / toB＝キャッシュエンジン</div>
+  <div class="principle">指標は会議確定の6個のみ・<b>新指標ゼロ</b>。変えるのは配置 — 売上が伸びない時に「<b>どのレバーが未完か</b>」が構造から読めるようにする</div>
 
-  <div class="legend">
-    <span><i class="dot ext"></i>外部KPI（投資家に見せるノード値）</span>
-    <span><i class="dot int"></i>内部KPI（診断用リンク指標 — 外に出さない）</span>
-    <span><i class="dot drop"></i>外した・格下げ</span>
+  <div class="apex">
+    <div class="tag">結果指標（唯一）</div>
+    <h2>売上</h2>
+    <div class="note">toB側から見る（会議決定）— 下の4レバーの完成度が売上の説明そのもの</div>
+  </div>
+  <div class="trunk"></div>
+  <div class="trunklabel">▼ 売上に効く4つのレバー（各レバー = KPI × 成熟状態 × 進化先）</div>
+
+  <div class="levers">
+
+    <div class="lever">
+      <div>
+        <div class="lid">L1 — パイプライン</div>
+        <h3>商談をつくる力</h3>
+        <span class="kpi">商談数</span><span class="kpi">案件数</span>
+        <div class="snote">売上の直上流。弾（L2）と頭脳（L3）が揃っても、ここが無ければ売上は立たない</div>
+      </div>
+      <div class="meta">
+        <span class="status st-run">⚙ 稼働開始</span>
+        <div>来週から体制変更 — 営業＝Zach＋Badhan（会議決定）</div>
+        <div class="evolve" style="margin-top:8px">成熟後 → <b>受注率・チャーン/NRR</b> へ進化</div>
+      </div>
+    </div>
+
+    <div class="lever">
+      <div>
+        <div class="lid">L2 — 売る根拠</div>
+        <h3>「ImpでなくCVまで」の証明 ＝ 商談の弾薬</h3>
+        <span class="kpi">収益化済みアカウント数 <small>＝自社accでのCV実証の数</small></span>
+        <div class="snote">toC＝自社R&Dラボの成果物。ジャンル×商材でCVまで到達した実証が営業の武器になる</div>
+      </div>
+      <div class="meta">
+        <span class="status st-lab">🔬 実証中</span>
+        <div>toCアカウント群で実験実証を回している段階</div>
+        <div class="evolve" style="margin-top:8px">成熟後 → <b>クライアントaccでの成果KPI</b>（成長率・下流CV・コスト効率）へ進化</div>
+      </div>
+    </div>
+
+    <div class="lever">
+      <div>
+        <div class="lid">L3 — デリバリーの頭脳</div>
+        <h3>Agentコア ＝ 独自性の源泉</h3>
+        <span class="kpi">予測的中率 <small>どれが伸びるかの的中</small></span>
+        <span class="kpi">採択率 <small>人の修正なしで投稿された割合</small></span>
+        <div class="snote">独自アルゴリズムが機能している証明。ここが強ければL2の量産が始まり、L4が動き出す</div>
+      </div>
+      <div class="meta">
+        <span class="status st-build">🔧 構築中</span>
+        <div>型作り／Fableとの差埋めが先 — マイルストーンは今は置かない（会議決定）</div>
+        <div class="evolve" style="margin-top:8px">成熟後 → <b>工程カバレッジ・vertical横断の再現性</b>（Agent成熟度）へ進化</div>
+      </div>
+    </div>
+
+    <div class="lever">
+      <div>
+        <div class="lid">L4 — スケール経済</div>
+        <h3>Agentが原価構造を変える証明</h3>
+        <span class="kpi">（置くだけ置いて、数値は肌感）</span>
+        <div class="snote">「1案件あたりの人が減り利益率が上がる」の定量化。今数字を置くと説明コストだけ増える</div>
+      </div>
+      <div class="meta">
+        <span class="status st-wait">⏸ 未着手</span>
+        <div>クライアント数が立ってから計測開始</div>
+        <div class="evolve" style="margin-top:8px">成熟後 → <b>人時/案件・ARPA・粗利率</b> へ進化</div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="chain">
-
-    <div class="node">
-      <div class="tag">① エンジン — Agentの賢さ</div>
-      <h2>Agentがどれだけ賢いか</h2>
-      <div class="kpis">
-        <div class="kpi">予測的中率<small>100本予測して何本当たるか（頭の良さ）</small></div>
-        <div class="kpi">採択率<small>人の介入ゼロで収益化ラインに乗ったacc数（自律度）</small></div>
-      </div>
-      <div class="warn">採択率の定義（固定案）：<b>人の上書きゼロのまま、開設からN週以内に収益化ラインへ到達したacc数</b>。フィードバック（結果を教える）=OK／上書き（判断の差し替え）=NG — 「エージェント中心・人は補助でフィードバック」の設計思想とそのまま整合</div>
+  <div class="reading">
+    <h3>投資家への読み方 — 「売上が伸びていない」は必ずレバーの状態で語れる</h3>
+    <p>「Agentは賢くなっているのに売上が伸びないのはなぜ？」という質問自体が発生しない構造にする。売上はL1〜L4の完成度の関数であり、未完レバーがどれかは状態表示がそのまま答える。</p>
+    <div class="cases">
+      <div class="case now"><span class="pin">▼ 今ここ</span><b>L3が構築中</b>頭脳の型が固まっていないので、L2（CV実証）の量産がまだ始まらない。売上はL1の人力営業ぶんのみ</div>
+      <div class="case"><b>L2が薄い場合</b>商談の弾（実証ケース）が少なく、商談はあっても受注率・単価が上がらない</div>
+      <div class="case"><b>L1が未整備の場合</b>弾はあるのに商談自体が無い — 営業体制の問題であってAgentの問題ではない</div>
     </div>
-
-    <div class="connwrap">
-      <div class="connector"></div>
-      <div class="linkcard"><b>内部リンク指標</b>立ち上げ→収益化のリードタイム ／ acc あたり収益<br>
-      <span style="color:var(--sub)">切れたら：Agent側の問題（賢さが成果に変換できていない）</span></div>
-    </div>
-
-    <div class="node">
-      <div class="tag">② 成果ストック — ToC はここに吸収</div>
-      <h2>収益化済みアカウント数</h2>
-      <div class="kpis">
-        <div class="kpi">収益化済みアカウント数<small>Agentの成果が積み上がるストック</small></div>
-      </div>
-      <div class="note">ToC = この母集団 ＝ Agentの学習場。単独指標が「無い」のではなく<b>構造上存在しない</b>（会議結論の裏書き）</div>
-    </div>
-
-    <div class="connwrap">
-      <div class="connector"></div>
-      <div class="linkcard"><b>内部リンク指標</b>実績→商談の転換 ＋ <b style="display:inline">商談の獲得経路タグ</b>（Agent実績起点／紹介／アウトバウンド）<br>
-      <span style="color:var(--sub)">切れたら：営業側の問題（Agentは賢いのに売上が伸びない、の正体）。経路タグがこのリンクの生死の実測になる</span></div>
-    </div>
-
-    <div class="node">
-      <div class="tag">③ マネタイズ — ToB</div>
-      <h2>売上はここから見る</h2>
-      <div class="kpis">
-        <div class="kpi">商談数</div>
-        <div class="kpi">案件数</div>
-        <div class="kpi">売上<small>ToB側から見る（会議決定）</small></div>
-      </div>
-      <div class="note">変換率（商談→案件）は本当は見たい → 内部リンク指標として保持、外部には出さない</div>
-    </div>
-
   </div>
 
-  <div class="dropped">
-    <h3>外した・格下げ（ノードでない＝外部に置かない、が振り分け基準）</h3>
+  <div class="foot">
     <ul>
-      <li>・インプレッション — 出すが「見ていない」位置づけ（参考値）</li>
-      <li>・効率化系（1案件あたり担当人数減／利益率） — 説明コスト高・ノイズ。置くだけ置いて数値は肌感</li>
-      <li>・<s>集客人数</s> — 金額依存で弱い（消えた候補）</li>
-      <li>・<s>ToC単独指標</s> — ②に吸収済み</li>
+      <li>Fable三層構造との対応：②エージェント性能＝L3 ／ ①クライアント成果＝L2の進化先 ／ ③事業KPI＝頂点（売上）＋L1・L4</li>
+      <li>内部KPI（実験スループット・知見組込数・商談経路タグ等）は別軸で詳細設計 — このシートには混ぜない（裁定 2026-07-04）</li>
+      <li>残る定義作業：「収益化済み」のライン（初収益 or 月次生成コスト超え）／ 採択率の判定粒度 ／ 各KPIの数値目標（土日で再考）</li>
     </ul>
-  </div>
-
-  <div class="tensions">
-    <h3>積み残し4点 → 解決策（方針＋具体アクション）</h3>
-    <div class="tgrid">
-      <div class="tcard"><b>1. 内部 vs 外部の二層分離 → 「2つの面」に実装</b>
-        振り分け基準：<span class="fix">ノード＝外部／矢印（変換率）＝内部</span>。
-        外部面＝KPIシート（Zach→吉田さん確認）にノード5個のみ。内部面＝週次スコアボードにリンク指標3つ（リードタイム／accあたり収益／商談経路内訳）。
-        <div class="step"><em>アクション</em>採択率は初月「置くだけ置いて数値は肌感」でスタート（定義が若く、低い初期値が独り歩きするリスク回避）。1〜2ヶ月内部計測→安定したら数値を外部昇格</div>
-      </div>
-      <div class="tcard"><b>2. 「賢いのに売上伸びない」 → 検知器を1個仕込む</b>
-        見せ方：KPIを指標リストでなく<span class="fix">チェーンとして提示</span>し「Agent KPI＝先行指標・売上＝遅行指標。ズレたらどのリンクが切れたか指せます」と先回りで言う。
-        <div class="step"><em>アクション</em>商談に獲得経路タグ（Agent実績起点／紹介／アウトバウンド）を1フィールド追加 — 来週からの新体制でZachの商談メモに足すだけ。②→③リンクの生死が実測になる</div>
-      </div>
-      <div class="tcard"><b>3. 採択率の人依存 → 定義固定で解消</b>
-        <span class="fix">「人の上書きゼロのまま、開設からN週以内に収益化ライン到達」</span>。フィードバック=OK／上書き=NG。
-        <div class="step"><em>「人キーでは」への回答</em>そのとおりで、それで良い。人・データ投資は採択率を上げる手段そのもの。指標が測るのは<b style="display:inline">運転の自律性</b>（製造の無人化ではない）。投資が効いてAgentが自律していく様子を示すのだから、人と相関して上がるのは正しい挙動</div>
-      </div>
-      <div class="tcard"><b>4. ToC指標の空白 → 探すのをやめる、で確定</b>
-        <span class="fix">②に構造ごと吸収</span>：ToCはチェーンの上流（学習場＋母集団）そのもの。
-        <div class="step"><em>アクション</em>追加指標をこれ以上探さない。ToCの健全性は内部リンク指標①（リードタイム）②（accあたり収益）が既にカバー。探し続けるコストの方が高い</div>
-      </div>
-    </div>
-
-    <div class="decide">
-      <h4>⚖ 最大の裁定点（4点のどれでもなく、全体を貫く穴）：「収益化ライン」の定義</h4>
-      収益化acc数と採択率 — <b>5指標中2つの根</b>がここに刺さっている。ここが決まらないと定義シートが書けない。
-      <div class="opts">
-        <div class="opt"><b>(a) 初収益発生</b>アフィ初発生。計測が最も楽だが「収益化」として弱い → 内部の先行指標に</div>
-        <div class="opt rec"><b>(b) 月次で生成コスト超え ★推奨</b>「稼げるacc」として投資家に説明が立つ。6月実測（生成コスト$3,953・純ロス$569）でコスト側データは既に取れている</div>
-        <div class="opt"><b>(c) 累計ペイバック</b>最も硬いが、立ち上がり期は全accが「未収益化」に見えて数字が死ぬ</div>
-      </div>
-      <div class="why">推奨構成：<b>外部定義＝(b)、(a)は内部の先行指標として併記</b>。裁定後、5指標の定義シート（分母分子・計測ソース・判定タイミング）を書き切り、土日の再考とZachのKPIシートへ渡す</div>
-    </div>
   </div>
 
 </div>
