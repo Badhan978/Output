@@ -246,12 +246,65 @@
 <section id="kpi">
   <div class="card">
     <h2><span class="mark" style="background:var(--done)"></span>🎯 7月 Goal KPI — CV 11 → 30±5</h2>
-    <div class="note">新KPI方針（エージェント自立稼働＋CV角度・2C売上は追わない）に整合。伸び分は新しい発明ではなく、①実証済み導線の移植 ②実証済み型の本数復元 で取る。生活系のImp目標は撤廃（転換装置に振り切り）。</div>
-    <div class="metric">
-      <div class="mcell"><div class="v" style="color:var(--off)">15–20</div><div class="l">生活系 CV（6月: 5）</div><div class="d">PFV率 1.20→3%＋が最大レバー</div></div>
-      <div class="mcell"><div class="v" style="color:var(--done)">5–10</div><div class="l">教育系 CV（6月: 1）</div><div class="d">本数3→16＋でImpリニア</div></div>
-      <div class="mcell"><div class="v" style="color:var(--on)">〜5</div><div class="l">エンタメ CV（6月: 5）</div><div class="d">現状維持＋送客に専念</div></div>
-      <div class="mcell"><div class="v">30±5</div><div class="l">全体 CV / 月</div><div class="d">8月〜は勝ち型×acc複製でリニアに拡張</div></div>
+    <div class="note">新KPI方針（エージェント自立稼働＋CV角度・2C売上は追わない）に整合。各ジャンルとも「Goal ← 達成式 ← 週次で追う操作数値」の2層。<b>Goal行の下に並ぶ操作数値が目標値に達すれば、Goalは算術的に出る</b>（伸び分は発明でなく、実証済み導線の移植と本数復元）。</div>
+    <div class="pad" style="display:grid;gap:20px">
+
+      <div>
+        <div style="margin-bottom:6px"><span class="chip" style="background:#1e293b">全体</span></div>
+        <table>
+          <thead><tr><th>指標</th><th class="num">6月実測</th><th class="num">7月目標</th><th>判定</th><th>動かし方</th></tr></thead>
+          <tbody>
+            <tr><td class="lever">月間CV</td><td class="num">11</td><td class="num"><b>30±5</b></td><td>月末総判定</td><td>生活系15–20＋教育系5–10＋エンタメ〜5の積み上げ</td></tr>
+            <tr><td class="lever">売上</td><td class="num">¥10,421</td><td class="num">追わない</td><td>—</td><td>2C売上はKPI外（学びとして記録のみ）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <div style="margin-bottom:6px"><span class="chip" style="background:var(--off)">生活系</span>　<span class="def" style="display:inline">達成式: 93万Imp（横ばい）× PFV率 × CTR × CV率</span></div>
+        <table>
+          <thead><tr><th>指標</th><th class="num">6月実測</th><th class="num">7月目標</th><th>判定</th><th>動かし方</th></tr></thead>
+          <tbody>
+            <tr><td class="lever">月間CV（Goal）</td><td class="num">5</td><td class="num"><b>15–20</b></td><td>週次</td><td>下記①②の複合で算術到達</td></tr>
+            <tr><td class="lever">① PFV率 <span class="def">主レバー</span></td><td class="num">1.20%</td><td class="num"><b>3.0%</b></td><td>週次・acc別</td><td>「続き・保存版はプロフへ」導線（ゆうた→宮2→アレックス）</td></tr>
+            <tr><td class="lever">② CV率</td><td class="num">0.93%</td><td class="num"><b>1.2〜1.5%</b></td><td>商材テスト毎</td><td>週1商材×訴求（実証上限＝ゆうた4.05%）</td></tr>
+            <tr><td class="lever">月間LC <span class="def">検算用の従属変数</span></td><td class="num">535</td><td class="num">約1,300</td><td>週次</td><td>PFV率3%到達で自動的に付いてくる</td></tr>
+            <tr><td class="lever">Saves/1k <span class="def">guardrail</span></td><td class="num">ゆうた1.91・宮2 2.43</td><td class="num">≥2.0維持</td><td>週次</td><td>導線変更が保存価値を壊していないか</td></tr>
+            <tr><td class="lever">LC CTR <span class="def">guardrail</span></td><td class="num">4.77%</td><td class="num">≥4%維持</td><td>週次</td><td>導線流入で質が薄まっていないか</td></tr>
+            <tr><td class="lever">月間Imp</td><td class="num">932,796</td><td class="num">目標撤廃（横ばい想定）</td><td>—</td><td>転換装置に振り切り（決定 7/3）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <div style="margin-bottom:6px"><span class="chip" style="background:var(--done)">教育系</span>　<span class="def" style="display:inline">達成式: 本数 × Imp/post × CV/10万Imp 11.84（実証済み）</span></div>
+        <table>
+          <thead><tr><th>指標</th><th class="num">6月実測</th><th class="num">7月目標</th><th>判定</th><th>動かし方</th></tr></thead>
+          <tbody>
+            <tr><td class="lever">月間CV（Goal）</td><td class="num">1</td><td class="num"><b>5–10</b></td><td>月次</td><td>16本×2,816 Imp×11.84/10万＝5.3が下限ライン</td></tr>
+            <tr><td class="lever">① 投稿本数 <span class="def">唯一の操作変数</span></td><td class="num">3本/月</td><td class="num"><b>16本/月（4/週）</b></td><td>週次</td><td>本数復元（制約は復元着手時に洗い出し）</td></tr>
+            <tr><td class="lever">月間Imp <span class="def">従属変数</span></td><td class="num">8,448</td><td class="num">45,000＋</td><td>週次</td><td>本数×Imp/postで自動到達</td></tr>
+            <tr><td class="lever">Imp/post</td><td class="num">2,816</td><td class="num">維持</td><td>週次</td><td>型を変えない（低下＝型劣化のサイン）</td></tr>
+            <tr><td class="lever">PFV率 <span class="def">guardrail</span></td><td class="num">23.22%</td><td class="num">≥15%維持</td><td>週次</td><td>3週連続割れで型の再設計へ</td></tr>
+            <tr><td class="lever">Rev/CV</td><td class="num">¥2,000</td><td class="num">維持</td><td>月次</td><td>商材固定（Audible＋書籍）・単価上げは規模後</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <div style="margin-bottom:6px"><span class="chip" style="background:var(--on)">エンタメ</span>　<span class="def" style="display:inline">CVは受動（商材固定）。貢献は母集団供給＋教育系へのImpソース</span></div>
+        <table>
+          <thead><tr><th>指標</th><th class="num">6月実測</th><th class="num">7月目標</th><th>判定</th><th>動かし方</th></tr></thead>
+          <tbody>
+            <tr><td class="lever">月間CV（Goal）</td><td class="num">5</td><td class="num"><b>〜5維持</b></td><td>週次</td><td>攻めない（主務は供給と送客）</td></tr>
+            <tr><td class="lever">① Imp/post</td><td class="num">裏話60,151・闇33,866</td><td class="num">維持</td><td>週次</td><td>ネタ選定（CEO Run）の判定値。構造はFable固定型</td></tr>
+            <tr><td class="lever">月間Imp</td><td class="num">2,209,889</td><td class="num">維持＋clone上乗せ</td><td>週次</td><td>江戸系clone横展開（デバイス着荷後）</td></tr>
+            <tr><td class="lever">② clone Imp/post比</td><td class="num">—</td><td class="num">オリジナル比50%目安</td><td>週次</td><td>型の複製可能性の物差し（8月の複製判断に流用）</td></tr>
+            <tr><td class="lever">③ 送客 <span class="def">関西PFV増分＋Story経由LC</span></td><td class="num">計測なし</td><td class="num">ベースライン取得</td><td>週次</td><td>江戸Story CTA→関西メンション（今週から）</td></tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 </section>
@@ -264,15 +317,6 @@
       <div class="tstep"><div class="tdate">W2 7/13〜</div><div class="tbody"><b>展開と最初の判定。</b>宮2に導線展開／商材テスト#1判定（LC→CV）／clone稼働（デバイス着荷次第）／送客計測の初期値取得</div></div>
       <div class="tstep"><div class="tdate">W3 7/20〜</div><div class="tbody"><b>アレックス判定。</b>Saves/1k≥2.0 かつ PFV率3%で継続、未達なら縮小しゆうた・宮2に集中／商材テスト#2／送客PFV増分の初回判定</div></div>
       <div class="tstep"><div class="tdate">W4 7/27〜</div><div class="tbody"><b>月末総判定。</b>CV 30±5の達成度をカテゴリ別に分解／教育系2acc目の複製判断（clone比率を物差しに）／8月スケール計画（勝ち型×acc複製）へ</div></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="card">
-    <h2><span class="mark" style="background:var(--todo)"></span>⚠ 前提・リスク（数字を読む時の注意）</h2>
-    <div class="pad" style="font-size:12.5px">
-      <b>計測カバレッジ:</b> 宮本体（@0xitsmia・生活系最大 69万Imp）とチャラ男は現行API収集の対象外 — 保存型検証が未完のacc。連携復旧 or 手動計上ルールが要決定。／<b>教育系の高率:</b> PFV 23%は小規模ゆえの可能性あり — 規模拡大時の劣化を4週監視。／<b>視聴時間:</b> 動画尺データが無いため視聴維持率の絶対比較は不可（傾向比較のみ）。
     </div>
   </div>
 </section>
