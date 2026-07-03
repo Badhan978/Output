@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KPI 因果チェーン — 2026-07-03</title>
+<style>
+  :root{
+    --bg:#ffffff; --card:#ffffff; --ink:#1a1a1a; --sub:#6b6b6b;
+    --line:#d8d8d4; --accent:#0f62fe; --ext:#0f62fe; --int:#b45309;
+    --extbg:#eef4ff; --intbg:#fdf3e3; --dropbg:#f1f1ee;
+  }
+  /* 白ベース固定（dark mode override なし） */
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",sans-serif;
+       padding:32px 20px;line-height:1.55}
+  .wrap{max-width:880px;margin:0 auto}
+  h1{font-size:19px;font-weight:700;margin-bottom:4px}
+  .date{font-size:12px;color:var(--sub);margin-bottom:24px}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:22px;font-size:12.5px}
+  .legend span{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card)}
+  .dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .dot.ext{background:var(--ext)} .dot.int{background:var(--int)} .dot.drop{background:var(--sub)}
+
+  .chain{position:relative}
+  .node{background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+        padding:18px 22px;position:relative}
+  .node .tag{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--sub);text-transform:uppercase;margin-bottom:8px}
+  .node h2{font-size:16px;font-weight:700;margin-bottom:10px}
+  .kpis{display:flex;gap:10px;flex-wrap:wrap}
+  .kpi{background:var(--extbg);border:1px solid var(--ext);color:var(--ext);
+       border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600}
+  .kpi small{display:block;font-weight:400;font-size:11px;opacity:.85;margin-top:2px;color:var(--ink)}
+  .note{font-size:12px;color:var(--sub);margin-top:10px}
+  .warn{font-size:12px;margin-top:10px;padding:8px 12px;border-radius:8px;background:var(--intbg);border:1px dashed var(--int)}
+
+  .link{display:flex;align-items:stretch;gap:16px;padding:6px 0 6px 40px;position:relative}
+  .link .arrow{position:absolute;left:52px;top:-6px;bottom:-6px;width:2px;background:var(--line)}
+  .link .arrow::after{content:"";position:absolute;bottom:0;left:-5px;border:6px solid transparent;border-top-color:var(--line);border-bottom:0}
+  .linkcard{margin:10px 0 10px 40px;background:var(--intbg);border:1px solid var(--int);
+            border-radius:10px;padding:10px 14px;font-size:12.5px;max-width:520px}
+  .linkcard b{color:var(--int);font-size:11px;letter-spacing:.06em;display:block;margin-bottom:3px}
+
+  .connector{width:2px;height:34px;background:var(--ink);opacity:.35;margin:0 0 0 52px;position:relative}
+  .connector::after{content:"";position:absolute;bottom:-1px;left:-5px;border:6px solid transparent;border-top-color:var(--ink);opacity:.9;border-bottom:0}
+  .connwrap{display:flex;align-items:center;gap:14px}
+
+  .dropped{margin-top:26px;background:var(--dropbg);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .dropped h3{font-size:13px;font-weight:700;color:var(--sub);margin-bottom:8px}
+  .dropped ul{list-style:none;font-size:12.5px;color:var(--sub)}
+  .dropped li{padding:3px 0}
+  .dropped li s{opacity:.8}
+
+  .tensions{margin-top:26px}
+  .tensions h3{font-size:14px;font-weight:700;margin-bottom:10px}
+  .tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:10px}
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:12.5px}
+  .tcard b{display:block;font-size:12.5px;margin-bottom:4px}
+  .tcard .fix{color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>KPI 因果チェーン — 1本のチェーンから二層を導出する</h1>
+  <div class="date">2026-07-03 経営会議 整理 · 外部KPI = ノード（5個） / 内部KPI = 矢印（リンク）</div>
+
+  <div class="legend">
+    <span><i class="dot ext"></i>外部KPI（投資家に見せるノード値）</span>
+    <span><i class="dot int"></i>内部KPI（診断用リンク指標 — 外に出さない）</span>
+    <span><i class="dot drop"></i>外した・格下げ</span>
+  </div>
+
+  <div class="chain">
+
+    <div class="node">
+      <div class="tag">① エンジン — Agentの賢さ</div>
+      <h2>Agentがどれだけ賢いか</h2>
+      <div class="kpis">
+        <div class="kpi">予測的中率<small>100本予測して何本当たるか（頭の良さ）</small></div>
+        <div class="kpi">採択率<small>人の介入ゼロで収益化ラインに乗ったacc数（自律度）</small></div>
+      </div>
+      <div class="warn">⚠ 採択率の人依存疑い → 定義固定で解く：人はデータ供給（賢くする投資）であって分子の介入者ではない</div>
+    </div>
+
+    <div class="connwrap">
+      <div class="connector"></div>
+      <div class="linkcard"><b>内部リンク指標</b>立ち上げ→収益化のリードタイム ／ acc あたり収益<br>
+      <span style="color:var(--sub)">切れたら：Agent側の問題（賢さが成果に変換できていない）</span></div>
+    </div>
+
+    <div class="node">
+      <div class="tag">② 成果ストック — ToC はここに吸収</div>
+      <h2>収益化済みアカウント数</h2>
+      <div class="kpis">
+        <div class="kpi">収益化済みアカウント数<small>Agentの成果が積み上がるストック</small></div>
+      </div>
+      <div class="note">ToC = この母集団 ＝ Agentの学習場。単独指標が「無い」のではなく<b>構造上存在しない</b>（会議結論の裏書き）</div>
+    </div>
+
+    <div class="connwrap">
+      <div class="connector"></div>
+      <div class="linkcard"><b>内部リンク指標</b>実績→商談の転換（収益化実績が営業の武器として機能しているか）<br>
+      <span style="color:var(--sub)">切れたら：営業側の問題（Agentは賢いのに売上が伸びない、の正体）</span></div>
+    </div>
+
+    <div class="node">
+      <div class="tag">③ マネタイズ — ToB</div>
+      <h2>売上はここから見る</h2>
+      <div class="kpis">
+        <div class="kpi">商談数</div>
+        <div class="kpi">案件数</div>
+        <div class="kpi">売上<small>ToB側から見る（会議決定）</small></div>
+      </div>
+      <div class="note">変換率（商談→案件）は本当は見たい → 内部リンク指標として保持、外部には出さない</div>
+    </div>
+
+  </div>
+
+  <div class="dropped">
+    <h3>外した・格下げ（ノードでない＝外部に置かない、が振り分け基準）</h3>
+    <ul>
+      <li>・インプレッション — 出すが「見ていない」位置づけ（参考値）</li>
+      <li>・効率化系（1案件あたり担当人数減／利益率） — 説明コスト高・ノイズ。置くだけ置いて数値は肌感</li>
+      <li>・<s>集客人数</s> — 金額依存で弱い（消えた候補）</li>
+      <li>・<s>ToC単独指標</s> — ②に吸収済み</li>
+    </ul>
+  </div>
+
+  <div class="tensions">
+    <h3>積み残し4点 → このチェーンでの解き方</h3>
+    <div class="tgrid">
+      <div class="tcard"><b>1. 内部 vs 外部の二層分離</b>振り分け基準が生まれる：<span class="fix">ノード＝外部／矢印（変換率）＝内部</span></div>
+      <div class="tcard"><b>2. 「賢いのに売上伸びない」</b>チェーンなら切れたリンクを指せる：<span class="fix">①→②切れ＝Agent側、②→③切れ＝営業側</span>。この切り分け可能性が投資家への回答</div>
+      <div class="tcard"><b>3. 採択率の人依存</b><span class="fix">分子の定義固定</span>：人の介入ゼロで収益化ラインに乗ったacc数。人の追加＝データ投資で定義は汚れない</div>
+      <div class="tcard"><b>4. ToC指標の空白</b><span class="fix">②に構造ごと吸収</span>：ToCはチェーンの上流（学習場＋母集団）そのもの</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
