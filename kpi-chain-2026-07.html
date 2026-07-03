@@ -55,9 +55,18 @@
   .tensions{margin-top:26px}
   .tensions h3{font-size:14px;font-weight:700;margin-bottom:10px}
   .tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:10px}
-  .tcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:12.5px}
-  .tcard b{display:block;font-size:12.5px;margin-bottom:4px}
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:12.5px}
+  .tcard b{display:block;font-size:13px;margin-bottom:6px}
   .tcard .fix{color:var(--accent);font-weight:600}
+  .tcard .step{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+  .tcard .step em{font-style:normal;font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.05em;display:block;margin-bottom:3px}
+  .decide{margin-top:14px;background:var(--intbg);border:1.5px solid var(--int);border-radius:12px;padding:16px 18px}
+  .decide h4{font-size:13.5px;font-weight:700;margin-bottom:8px;color:var(--int)}
+  .decide .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-top:8px}
+  .decide .opt{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12px}
+  .decide .opt.rec{border:2px solid var(--int)}
+  .decide .opt b{display:block;margin-bottom:3px;font-size:12.5px}
+  .decide .why{font-size:12px;margin-top:10px;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -80,7 +89,7 @@
         <div class="kpi">予測的中率<small>100本予測して何本当たるか（頭の良さ）</small></div>
         <div class="kpi">採択率<small>人の介入ゼロで収益化ラインに乗ったacc数（自律度）</small></div>
       </div>
-      <div class="warn">⚠ 採択率の人依存疑い → 定義固定で解く：人はデータ供給（賢くする投資）であって分子の介入者ではない</div>
+      <div class="warn">採択率の定義（固定案）：<b>人の上書きゼロのまま、開設からN週以内に収益化ラインへ到達したacc数</b>。フィードバック（結果を教える）=OK／上書き（判断の差し替え）=NG — 「エージェント中心・人は補助でフィードバック」の設計思想とそのまま整合</div>
     </div>
 
     <div class="connwrap">
@@ -100,8 +109,8 @@
 
     <div class="connwrap">
       <div class="connector"></div>
-      <div class="linkcard"><b>内部リンク指標</b>実績→商談の転換（収益化実績が営業の武器として機能しているか）<br>
-      <span style="color:var(--sub)">切れたら：営業側の問題（Agentは賢いのに売上が伸びない、の正体）</span></div>
+      <div class="linkcard"><b>内部リンク指標</b>実績→商談の転換 ＋ <b style="display:inline">商談の獲得経路タグ</b>（Agent実績起点／紹介／アウトバウンド）<br>
+      <span style="color:var(--sub)">切れたら：営業側の問題（Agentは賢いのに売上が伸びない、の正体）。経路タグがこのリンクの生死の実測になる</span></div>
     </div>
 
     <div class="node">
@@ -128,12 +137,36 @@
   </div>
 
   <div class="tensions">
-    <h3>積み残し4点 → このチェーンでの解き方</h3>
+    <h3>積み残し4点 → 解決策（方針＋具体アクション）</h3>
     <div class="tgrid">
-      <div class="tcard"><b>1. 内部 vs 外部の二層分離</b>振り分け基準が生まれる：<span class="fix">ノード＝外部／矢印（変換率）＝内部</span></div>
-      <div class="tcard"><b>2. 「賢いのに売上伸びない」</b>チェーンなら切れたリンクを指せる：<span class="fix">①→②切れ＝Agent側、②→③切れ＝営業側</span>。この切り分け可能性が投資家への回答</div>
-      <div class="tcard"><b>3. 採択率の人依存</b><span class="fix">分子の定義固定</span>：人の介入ゼロで収益化ラインに乗ったacc数。人の追加＝データ投資で定義は汚れない</div>
-      <div class="tcard"><b>4. ToC指標の空白</b><span class="fix">②に構造ごと吸収</span>：ToCはチェーンの上流（学習場＋母集団）そのもの</div>
+      <div class="tcard"><b>1. 内部 vs 外部の二層分離 → 「2つの面」に実装</b>
+        振り分け基準：<span class="fix">ノード＝外部／矢印（変換率）＝内部</span>。
+        外部面＝KPIシート（Zach→吉田さん確認）にノード5個のみ。内部面＝週次スコアボードにリンク指標3つ（リードタイム／accあたり収益／商談経路内訳）。
+        <div class="step"><em>アクション</em>採択率は初月「置くだけ置いて数値は肌感」でスタート（定義が若く、低い初期値が独り歩きするリスク回避）。1〜2ヶ月内部計測→安定したら数値を外部昇格</div>
+      </div>
+      <div class="tcard"><b>2. 「賢いのに売上伸びない」 → 検知器を1個仕込む</b>
+        見せ方：KPIを指標リストでなく<span class="fix">チェーンとして提示</span>し「Agent KPI＝先行指標・売上＝遅行指標。ズレたらどのリンクが切れたか指せます」と先回りで言う。
+        <div class="step"><em>アクション</em>商談に獲得経路タグ（Agent実績起点／紹介／アウトバウンド）を1フィールド追加 — 来週からの新体制でZachの商談メモに足すだけ。②→③リンクの生死が実測になる</div>
+      </div>
+      <div class="tcard"><b>3. 採択率の人依存 → 定義固定で解消</b>
+        <span class="fix">「人の上書きゼロのまま、開設からN週以内に収益化ライン到達」</span>。フィードバック=OK／上書き=NG。
+        <div class="step"><em>「人キーでは」への回答</em>そのとおりで、それで良い。人・データ投資は採択率を上げる手段そのもの。指標が測るのは<b style="display:inline">運転の自律性</b>（製造の無人化ではない）。投資が効いてAgentが自律していく様子を示すのだから、人と相関して上がるのは正しい挙動</div>
+      </div>
+      <div class="tcard"><b>4. ToC指標の空白 → 探すのをやめる、で確定</b>
+        <span class="fix">②に構造ごと吸収</span>：ToCはチェーンの上流（学習場＋母集団）そのもの。
+        <div class="step"><em>アクション</em>追加指標をこれ以上探さない。ToCの健全性は内部リンク指標①（リードタイム）②（accあたり収益）が既にカバー。探し続けるコストの方が高い</div>
+      </div>
+    </div>
+
+    <div class="decide">
+      <h4>⚖ 最大の裁定点（4点のどれでもなく、全体を貫く穴）：「収益化ライン」の定義</h4>
+      収益化acc数と採択率 — <b>5指標中2つの根</b>がここに刺さっている。ここが決まらないと定義シートが書けない。
+      <div class="opts">
+        <div class="opt"><b>(a) 初収益発生</b>アフィ初発生。計測が最も楽だが「収益化」として弱い → 内部の先行指標に</div>
+        <div class="opt rec"><b>(b) 月次で生成コスト超え ★推奨</b>「稼げるacc」として投資家に説明が立つ。6月実測（生成コスト$3,953・純ロス$569）でコスト側データは既に取れている</div>
+        <div class="opt"><b>(c) 累計ペイバック</b>最も硬いが、立ち上がり期は全accが「未収益化」に見えて数字が死ぬ</div>
+      </div>
+      <div class="why">推奨構成：<b>外部定義＝(b)、(a)は内部の先行指標として併記</b>。裁定後、5指標の定義シート（分母分子・計測ソース・判定タイミング）を書き切り、土日の再考とZachのKPIシートへ渡す</div>
     </div>
   </div>
 
