@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>v5 汎用仮説 検証タイムライン — 2026-07</title>
+<style>
+  :root{
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    --done:#16a34a; --donebg:#dcfce7;
+    --run:#7c3aed;  --runbg:#ede9fe;
+    --on:#2563eb;   --onbg:#dbeafe;
+    --off:#0d9488;  --offbg:#ccfbf1;
+    --todo:#94a3b8; --todobg:#f1f5f9;
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
+
+  header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:26px 28px}
+  header .kicker{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7dd3fc;font-weight:800;margin:0 0 6px}
+  header h1{margin:0;font-size:30px;line-height:1.25}
+  header .lead{margin:10px 0 14px;color:#cbd5e1;font-size:13px;max-width:860px}
+  .pill{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    border-radius:99px;padding:4px 14px;font-size:11.5px;margin-right:8px;color:#e2e8f0}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:12px;border:1px solid var(--line)}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  section{max-width:1220px;margin:26px auto;padding:0 20px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .mark{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
+    border-bottom:1px solid var(--line)}
+
+  .chip{font-size:10px;font-weight:800;padding:3px 10px;border-radius:5px;color:#fff}
+
+  .legend{display:flex;gap:16px;flex-wrap:wrap;padding:12px 20px;background:#fff;
+    border:1px solid var(--line);border-radius:12px;font-size:12px;align-items:center}
+  .lg{display:flex;align-items:center;gap:6px;font-weight:600}
+  .sw{width:22px;height:12px;border-radius:3px;display:inline-block;border:1.5px solid}
+
+  .st{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px}
+  .st-done{background:var(--donebg);color:#15803d}
+  .st-run{background:var(--runbg);color:#6d28d9}
+  .st-todo{background:var(--todobg);color:#64748b}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700}
+  .lever{font-weight:700}
+  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
+
+  /* ガント (CSS Grid 自製) */
+  .gwrap{overflow-x:auto;padding:18px 20px}
+  .gantt{display:grid;grid-template-columns:200px repeat(42,minmax(9px,1fr));
+    gap:3px 0;min-width:840px;font-size:11px}
+  .g-axis{grid-row:1;font-weight:800;color:var(--sub);font-size:10.5px;
+    border-left:1.5px solid var(--line);padding:0 0 6px 4px}
+  .g-label{grid-column:1;font-weight:700;font-size:12px;padding:3px 10px 3px 0;
+    display:flex;flex-direction:column;justify-content:center;line-height:1.35}
+  .g-label small{color:var(--sub);font-weight:600;font-size:10.5px}
+  .g-bar{height:17px;border-radius:4px;border:1.5px solid;align-self:center;
+    font-size:9.5px;font-weight:800;line-height:14px;padding:0 5px;white-space:nowrap;overflow:hidden}
+  .b-prep{background:var(--onbg);border-color:var(--on);color:#1d4ed8}
+  .b-run{background:var(--runbg);border-color:var(--run);color:#6d28d9}
+  .b-base{background:var(--offbg);border-color:var(--off);color:#0f766e}
+  .g-judge{align-self:center;color:var(--done);font-size:13px;font-weight:900;line-height:17px}
+  .g-ms{align-self:center;font-size:10px;font-weight:800;color:#15803d;white-space:nowrap}
+  .g-sep{grid-column:1 / -1;border-top:1px dashed var(--line);height:0;margin:4px 0}
+
+  footer{max-width:1220px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
+  @media(max-width:980px){
+    header h1{font-size:22px}
+    .cols{grid-template-columns:1fr !important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="kicker">V5 · Hypothesis Sprint · 2026-07</p>
+  <h1>v5 汎用仮説 検証タイムライン</h1>
+  <p class="lead">汎用6本を同時多発PDCAで走らせる。走行期間は判定シグナルの速度で決める — 生成ブレ系 ≈ 1-2週（投稿不要）／ Imp系 ≈ 2週初速・4週本判定 ／ CV・精度系 ≈ 4週以上。ジャンル特化4本は一旦 Stay。</p>
+  <span class="pill">作成 2026-07-06</span>
+  <span class="pill">対象 汎用6本（リソース: 駿冴・Tomo）</span>
+  <span class="pill">刈り込み 7月末 → 8月中旬の2段</span>
+</header>
+
+<nav>
+  <a href="#gantt">📊 ガント 6本</a>
+  <a href="#list">📋 一覧 6本</a>
+  <a href="#design">🔗 詳細設計 6枠</a>
+  <a href="#stay">⏸ Stay 4件</a>
+</nav>
+
+<section>
+  <div class="legend">
+    <span style="font-weight:800;color:var(--sub);font-size:11px">凡例</span>
+    <span class="lg"><span class="sw" style="background:var(--onbg);border-color:var(--on)"></span>準備</span>
+    <span class="lg"><span class="sw" style="background:var(--runbg);border-color:var(--run)"></span>検証走行</span>
+    <span class="lg"><span class="sw" style="background:var(--offbg);border-color:var(--off)"></span>基盤構築</span>
+    <span class="lg" style="color:var(--done)">◆ 判定</span>
+    <span class="lg"><span class="sw" style="background:var(--todobg);border-color:var(--todo)"></span>Stay（未着手）</span>
+  </div>
+</section>
+
+<section id="gantt">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>ガントチャート — 7/7 着火 → 8月中旬 最終判定</h2>
+    <div class="note">基盤2本（FBループ・実績配管）は仮説ではなく全PDCAの回転速度を上げる先行投資 — W1-W2 に最優先。7月中旬以降は5本が同時走行。</div>
+    <div class="gwrap">
+      <div class="gantt">
+        <!-- 週軸 (7日刻み) -->
+        <div class="g-label" style="grid-row:1"></div>
+        <div class="g-axis" style="grid-column:2/9">7/7</div>
+        <div class="g-axis" style="grid-column:9/16">7/14</div>
+        <div class="g-axis" style="grid-column:16/23">7/21</div>
+        <div class="g-axis" style="grid-column:23/30">7/28</div>
+        <div class="g-axis" style="grid-column:30/37">8/4</div>
+        <div class="g-axis" style="grid-column:37/44">8/11</div>
+
+        <!-- 1 自走エージェント: run 7/7-7/27, 判定 7/28 -->
+        <div class="g-label" style="grid-row:2">自走エージェント（小太郎）<small>駿冴 · 3日×6サイクル</small></div>
+        <div class="g-bar b-run" style="grid-row:2;grid-column:2/23">走行 7/7→7/27</div>
+        <div class="g-judge" style="grid-row:2;grid-column:23/25">◆7/28</div>
+
+        <!-- 2 プレイブック: prep 7/7-7/8, run 7/8-7/16, 判定 7/17 -->
+        <div class="g-label" style="grid-row:3">プレイブック要件揃え<small>駿冴 · 生成比較・投稿不要</small></div>
+        <div class="g-bar b-prep" style="grid-row:3;grid-column:2/4"></div>
+        <div class="g-bar b-run" style="grid-row:3;grid-column:4/12">走行 7/8→7/16</div>
+        <div class="g-judge" style="grid-row:3;grid-column:12/14">◆7/17</div>
+
+        <!-- 3 市場アカウント分析: prep 7/7-7/8, run 7/9-8/3, 判定 8/4 -->
+        <div class="g-label" style="grid-row:4">市場アカウント分析<small>Tomo · 収集→採用→実測</small></div>
+        <div class="g-bar b-prep" style="grid-row:4;grid-column:2/4"></div>
+        <div class="g-bar b-run" style="grid-row:4;grid-column:4/30">走行 7/9→8/3</div>
+        <div class="g-judge" style="grid-row:4;grid-column:30/32">◆8/4</div>
+
+        <!-- 4 FBループ: build 7/8-7/14, 稼働確認 7/14 -->
+        <div class="g-label" style="grid-row:5">FBループ生成（窓口統合）<small>駿冴 · 基盤（走行なし）</small></div>
+        <div class="g-bar b-base" style="grid-row:5;grid-column:3/10">構築 7/8→7/14</div>
+        <div class="g-judge" style="grid-row:5;grid-column:10/12">◆7/14</div>
+
+        <!-- 5 予測学習: prep 7/15-7/17, run 7/20-8/13, 判定 8/14 -->
+        <div class="g-label" style="grid-row:6">予測精度の学習システム<small>駿冴 · 実績配管→週次照合×4</small></div>
+        <div class="g-bar b-prep" style="grid-row:6;grid-column:10/13"></div>
+        <div class="g-bar b-run" style="grid-row:6;grid-column:15/40">走行 7/20→8/13</div>
+        <div class="g-judge" style="grid-row:6;grid-column:40/42">◆8/14</div>
+
+        <!-- 6 AB①: prep 7/17-7/21, run 7/21-8/16, 判定 8/17 -->
+        <div class="g-label" style="grid-row:7">型別分類＋パラメーター（AB①）<small>駿冴 · 定例判定後に実装</small></div>
+        <div class="g-bar b-prep" style="grid-row:7;grid-column:12/17"></div>
+        <div class="g-bar b-run" style="grid-row:7;grid-column:17/43">走行 7/21→8/16</div>
+        <div class="g-judge" style="grid-row:7;grid-column:43/44">◆</div>
+
+        <div class="g-sep" style="grid-row:8"></div>
+
+        <!-- 刈り込みマイルストーン -->
+        <div class="g-label" style="grid-row:9"><small>刈り込み 2段</small></div>
+        <div class="g-ms" style="grid-row:9;grid-column:26/33">◆ 7/31 一次刈り込み（生成系・自走）</div>
+        <div class="g-ms" style="grid-row:9;grid-column:40/44">◆ 8/14〜 最終判定</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="list">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>一覧 — 着火日・走行期間・判定</h2>
+    <table>
+      <thead><tr><th>項目</th><th>owner</th><th>着火日</th><th>走行期間</th><th>判定</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">自走エージェント（小太郎）<span class="def">3日に1回発火→3日分自動生成・予約投稿。追加開発なし</span></td><td>駿冴</td><td><b>7/7(火)</b></td><td>3日×6サイクル ≈ 3週</td><td>7/28頃</td></tr>
+        <tr><td class="lever">プレイブック要件揃え<span class="def">共通ルールのみで出力ブレが許容範囲か。生成20-30本比較</span></td><td>駿冴</td><td><b>7/7(火)</b></td><td>1-2週（投稿不要）</td><td>7/17頃</td></tr>
+        <tr><td class="lever">市場アカウント分析<span class="def">収集+指示書化→テーマ採用→投稿実測で効果判定</span></td><td>Tomo</td><td><b>7/7(火)</b></td><td>実測2サイクル ≈ 4週</td><td>8/4頃</td></tr>
+        <tr><td class="lever">FBループ生成（窓口統合）<span class="def">3分割窓口の統合。全PDCAの回転速度を上げる基盤</span></td><td>駿冴</td><td><b>7/8(水)</b></td><td>基盤（走行なし）</td><td>7/14 稼働確認</td></tr>
+        <tr><td class="lever">予測精度の学習システム<span class="def">実績配管（実測供給）→予測⇄実測の週次照合×4点</span></td><td>駿冴</td><td><b>7/15(水)</b></td><td>週次照合×4 ≈ 4週</td><td>8月中旬</td></tr>
+        <tr><td class="lever">型別分類＋パラメーター（AB①）<span class="def">型×パラメーター設定→売上進捗（月次1〜2万円）で判定</span></td><td>駿冴</td><td><b>7/17(金)</b></td><td>4週</td><td>8月中旬</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="design">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--done)"></span>詳細設計リンク集 — Badhan 構想ページ（〜7/7 で記載）</h2>
+    <div class="note">各仮説の詳細設計は Badhan が構想を書いた HTML ページをここにリンクづける（〜7/7）。リンク確定後にこのページを更新。</div>
+    <table>
+      <thead><tr><th>項目</th><th>詳細設計ページ</th><th>状態</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">自走エージェント（小太郎）</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
+        <tr><td class="lever">プレイブック要件揃え</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
+        <tr><td class="lever">市場アカウント分析</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
+        <tr><td class="lever">FBループ生成（窓口統合）</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
+        <tr><td class="lever">予測精度の学習システム</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
+        <tr><td class="lever">型別分類＋パラメーター（AB①）</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="stay">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--todo)"></span>Stay — ジャンル特化 4件（再開判断 = 7月末 一次刈り込み後）</h2>
+    <table>
+      <thead><tr><th>項目</th><th>状態</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">外部DBをくっつける<span class="def">シナリオ精度の向上（ジャンル別に中身が異なる — Zach FB で特化へ）</span></td><td><span class="st st-todo">Stay</span></td></tr>
+        <tr><td class="lever">シナリオ台本を食わせる<span class="def">シナリオ精度あげ</span></td><td><span class="st st-todo">Stay</span></td></tr>
+        <tr><td class="lever">5万円領域での Imp 狩り<span class="def">インテリア・人材・金融</span></td><td><span class="st st-todo">Stay</span></td></tr>
+        <tr><td class="lever">単一商品の訴求型で PDCA<span class="def">PF別の仮説検証: TT・IG</span></td><td><span class="st st-todo">Stay</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  正本: Slack #ai-ad チャンネル 2026-07-06 スレッド（仮説・Todo 最終リスト）＋ 会議議事録 2026-07-03 経営会議 / 2026-06-30 AI AD 定例 ／ 作成 2026-07-06 ／ 内部 ID・認証情報は除去済み
+</footer>
+
+</body>
+</html>
