@@ -8,11 +8,11 @@
 <style>
   :root{
     --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
-    --done:#16a34a; --donebg:#f0fdf4;   /* 緑 = モデル由来(上位モデルで無償改善) */
-    --run:#7c3aed;  --runbg:#f5f3ff;    /* 紫 = 交絡あり・要再検証 */
-    --on:#2563eb;   --onbg:#eff6ff;     /* 青 = 設計由来(v5 が担う資産) */
-    --off:#0d9488;  --offbg:#f0fdfa;    /* teal = Opus 側が優位だった次元 */
-    --todo:#94a3b8;                      /* 灰 = 答え合わせ待ち・中立 */
+    --done:#16a34a; --donebg:#f0fdf4;   /* 緑 = Fable / モデル由来 */
+    --run:#7c3aed;  --runbg:#f5f3ff;    /* 紫 = 交絡・要再検証 */
+    --on:#2563eb;   --onbg:#eff6ff;     /* 青 = 設計由来(v5 資産) */
+    --off:#0d9488;  --offbg:#f0fdfa;    /* teal = Opus 優位 */
+    --todo:#94a3b8;
   }
   *{box-sizing:border-box}
   body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
@@ -21,7 +21,7 @@
   header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:30px 28px}
   .kicker{font-size:11px;letter-spacing:.18em;color:#7dd3fc;font-weight:800;text-transform:uppercase}
   header h1{margin:8px 0 10px;font-size:29px;line-height:1.35}
-  header .lead{max-width:900px;color:#cbd5e1;font-size:13.5px;margin:0 0 14px}
+  header .lead{max-width:920px;color:#cbd5e1;font-size:13.5px;margin:0 0 14px}
   .pill{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
     border-radius:99px;padding:4px 14px;font-size:11.5px;margin:0 6px 6px 0}
 
@@ -32,7 +32,6 @@
   nav a:hover{background:#f1f5f9;color:var(--ink)}
 
   section{max-width:1200px;margin:26px auto;padding:0 20px}
-
   .card{background:#fff;border:1px solid var(--line);border-radius:12px;
     overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
   .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
@@ -40,8 +39,6 @@
   .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
     border-bottom:1px solid var(--line)}
   .mark{width:12px;height:12px;border-radius:4px;display:inline-block;flex:0 0 12px}
-
-  .chip{font-size:10px;font-weight:800;padding:3px 10px;border-radius:5px;color:#fff}
 
   .st{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;white-space:nowrap}
   .st-model{background:#dcfce7;color:#15803d}
@@ -61,40 +58,52 @@
   .num{font-variant-numeric:tabular-nums;font-weight:700}
   .bad{color:#b91c1c;font-weight:800}
 
-  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:18px 20px}
+  /* Section 1: 価値ランキング */
+  .rank{display:flex;gap:14px;padding:13px 20px;border-bottom:1px solid #f1f5f9;align-items:flex-start}
+  .rank:last-child{border-bottom:none}
+  .rank .no{flex:0 0 40px;font-size:26px;font-weight:800;color:var(--on);line-height:1.2;text-align:center}
+  .rank .body b{font-size:14px}
+  .rank .why{color:var(--sub);font-size:12px;display:block;margin-top:2px}
+  .drop{padding:6px 20px 14px;display:flex;gap:8px;flex-wrap:wrap}
+  .dropitem{border:1.5px solid var(--donebg);background:var(--donebg);border-radius:9px;
+    padding:8px 12px;font-size:12px;flex:1 1 200px}
+  .dropitem b{color:#15803d}
+  .dropitem span{color:var(--sub);font-size:11.5px;display:block;margin-top:2px}
+
+  /* Section 2: タブ */
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:12px 20px;background:#f8fafc;border-bottom:1px solid var(--line)}
+  .tabbtn{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:99px;
+    padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+  .tabbtn.active{background:#1e293b;color:#fff;border-color:#1e293b}
+  .tabpane{display:none}
+  .tabpane.active{display:block}
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px 20px}
+  .side{border-radius:10px;border:1.5px solid;overflow:hidden}
+  .side .shead{padding:8px 14px;font-size:12px;font-weight:800;color:#fff}
+  .side .sbody{padding:12px 14px;font-size:12.5px}
+  .side .sbody ul{margin:0;padding-left:16px}
+  .side .sbody li{margin-bottom:6px}
+  .s-opus{border-color:var(--off)} .s-opus .shead{background:var(--off)}
+  .s-fable{border-color:var(--done)} .s-fable .shead{background:var(--done)}
+  .quote{background:#f8fafc;border-left:3px solid var(--line);padding:6px 10px;margin:6px 0;
+    font-size:12px;border-radius:0 6px 6px 0}
+  .insight{margin:0 20px 18px;border:1.5px solid var(--on);background:var(--onbg);
+    border-radius:10px;padding:14px 16px}
+  .insight h4{margin:0 0 8px;font-size:12.5px;color:#1d4ed8;letter-spacing:.05em}
+  .insight ul{margin:0;padding-left:18px}
+  .insight li{margin-bottom:6px}
+
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 20px 4px}
   .metric{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#f8fafc}
-  .metric .v{font-size:28px;font-weight:800;line-height:1.1}
+  .metric .v{font-size:26px;font-weight:800;line-height:1.1}
   .metric .l{font-size:11px;color:var(--sub);font-weight:700;margin-top:4px}
 
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px 20px}
-  .gcol{border-radius:10px;padding:14px 16px;border:1.5px solid}
-  .gcol h3{margin:0 0 10px;font-size:13.5px}
-  .gcol ul{margin:0;padding-left:18px}
-  .gcol li{margin-bottom:7px}
-
-  .mapwrap{padding:24px 20px;display:grid;
-    grid-template-columns:1fr 46px 1fr 46px 1fr;gap:10px;align-items:start}
-  .node{border-radius:9px;padding:8px 12px;margin-bottom:8px;font-size:12px;
-    font-weight:600;border:1.5px solid}
-  .node small{display:block;font-weight:400;color:var(--sub);font-size:11px;margin-top:2px}
-  .n-design{border-color:var(--on);background:var(--onbg)}
-  .n-model{border-color:var(--done);background:var(--donebg)}
-  .n-out{border-color:#334155;background:#f8fafc}
-  .arrows{display:flex;flex-direction:column;justify-content:center;align-items:center;
-    height:100%;padding-top:40px;color:#94a3b8;font-size:22px;font-weight:700}
-  .colhead{font-size:11px;font-weight:800;color:var(--sub);letter-spacing:.08em;margin-bottom:8px}
-
-  .tstep{display:flex;gap:14px;margin-bottom:14px}
-  .tdate{flex:0 0 90px;font-weight:800;font-size:12px;color:#4f46e5;text-align:right}
-  .tbody{flex:1;border-left:3px solid #e0e7ff;padding-left:14px}
-
   .thesis{margin:0;padding:20px;background:var(--onbg);border-top:1px solid var(--line);
-    font-size:16.5px;font-weight:800;line-height:1.55;color:#1d4ed8}
+    font-size:16px;font-weight:800;line-height:1.55;color:#1d4ed8}
 
   footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
   @media(max-width:980px){
-    .mapwrap{grid-template-columns:1fr}.arrows{transform:rotate(90deg);padding:0;height:34px}
-    .metrics{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}
+    .duel{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}
   }
 </style>
 </head>
@@ -102,215 +111,270 @@
 
 <header>
   <div class="kicker">V5 Model Verification — Fable 5 × Opus 4.8</div>
-  <h1>差は「設計の外側」で生まれた。<br>v5 の仕事は“教える”から“配管・検査・学習ループ”へ。</h1>
-  <p class="lead">同一アカウント・同一入力ベースで 6 項目を二世代モデルで比較。組み込み範囲内の差はほぼゼロ、
-  差はブラックボックス(未指示領域)に集中し、その発火条件は常に「データが配管されていること」だった。</p>
-  <span class="pill">検証台: ACC_0007 ゆうた(IG 節約系)</span>
-  <span class="pill">Opus 4.8 = 6/26 バッチ</span>
-  <span class="pill">Fable 5 = 7/2 バッチ</span>
-  <span class="pill">実測答え合わせ 5/7 本済</span>
+  <h1>差は「設計の外側」で生まれた。<br>v5 が磨くべきは配管・検査・学習ループ。</h1>
+  <p class="lead">同一アカウント(ACC_0007 ゆうた・IG 節約系)で 6 項目を二世代モデルで比較し、実測 views で答え合わせ。
+  組み込み範囲内の差はほぼゼロ — 差はブラックボックス(未指示領域)に集中し、発火条件は常に「データが配管されていること」だった。</p>
+  <span class="pill">Opus 4.8 = 6/26 バッチ(投稿済・実測 5/7 本)</span>
+  <span class="pill">Fable 5 = 7/2 バッチ(投稿はこれから)</span>
   <span class="pill">作成 2026-07-06</span>
 </header>
 
 <nav>
-  <a href="#design">🧪 検証設計 6項目</a>
-  <a href="#score">📊 判定 6件</a>
-  <a href="#facts">🎯 答え合わせ 5本</a>
-  <a href="#layers">🔍 範囲内 vs 自発</a>
-  <a href="#map">🗺 発火の因果</a>
-  <a href="#assets">🏛 資産 vs 一蹴</a>
-  <a href="#verdict">🧭 結論</a>
-  <a href="#next">⏭ 残り 4手</a>
+  <a href="#verdict">⚖️ 検証結果: 価値の仕訳</a>
+  <a href="#detail">🔬 検証の中身 6項目</a>
+  <a href="#duel">🥊 Fable × Opus 比較表</a>
 </nav>
 
 <div class="legend">
-  <span class="lab">色 = 差の由来:</span>
-  <span class="st st-model">モデル由来(無償改善)</span>
+  <span class="lab">色 = 由来:</span>
+  <span class="st st-model">Fable 優位 / モデル由来</span>
+  <span class="st st-opus">Opus 優位</span>
   <span class="st st-design">設計由来(v5 資産)</span>
   <span class="st st-conf">交絡・要再検証</span>
-  <span class="st st-opus">Opus 優位の次元</span>
   <span class="st st-wait">答え合わせ待ち</span>
 </div>
 
-<section id="design">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--run)"></span>🧪 検証設計 — 6項目とクリーン度</h2>
-    <div class="note">目的: 上位モデルで“設計なしに”改善される部分を洗い出し、モデル非依存の v5 注力点を特定する。市場競合のみ同日・同条件の統制比較。他 5 項目は経路(Planner vs ceo-run)・時点・入力量に交絡がある。</div>
-    <table>
-      <thead><tr><th>#</th><th>項目</th><th>比較したもの</th><th>クリーン度</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td class="lever">アカウント戦略</td><td>週次バッチ戦略の立案品質<span class="def">勝ち筋設計・方向性</span></td><td><span class="st st-conf">入力・経路に交絡</span></td></tr>
-        <tr><td>2</td><td class="lever">投稿テーマ</td><td>20案→7本のテーマ発想<span class="def">引き・具体数字・重複回避</span></td><td><span class="st st-conf">ファネル有無の交絡</span></td></tr>
-        <tr><td>3</td><td class="lever">シナリオ生成</td><td>仮説Doc 7本×2 の本文品質<span class="def">フック・構成・Playbook適合</span></td><td><span class="st st-conf">テーマ・戦略供給の交絡</span></td></tr>
-        <tr><td>4</td><td class="lever">投稿前性能予想</td><td>再生数予想の的中精度<span class="def">数字で白黒がつく唯一の項目</span></td><td><span class="st st-wait">Fable 側 7/14 検証</span></td></tr>
-        <tr><td>5</td><td class="lever">自社パフォーマンス分析</td><td>同一 17 投稿からの読解深度<span class="def">勝ちパターン・課題抽出</span></td><td><span class="st st-conf">検算プロトコル読込差</span></td></tr>
-        <tr><td>6</td><td class="lever">市場・競合分析</td><td>同一競合リール 64 件の示唆抽出<span class="def">7/3 同日・独立セッション</span></td><td><span class="st st-model">クリーン A/B</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section id="score">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--done)"></span>📊 判定スコアボード — 6件</h2>
-    <div class="note">優劣は一方向ではない。Fable 全勝ではなく、唯一の統制比較(項目6)では Opus が測定規律で上回る次元があった。</div>
-    <table>
-      <thead><tr><th>項目</th><th>優劣</th><th>差の由来</th><th>v5 への示唆</th></tr></thead>
-      <tbody>
-        <tr><td class="lever">1 アカウント戦略</td><td><span class="st st-model">Fable 明確優位</span></td><td>判断力=モデル × 判断材料=設計<span class="def">軸転換は実測で事後検証済み</span></td><td>実績配管+消耗判定の必須ステップ化<span class="def">判断自体はモデルへ委譲可</span></td></tr>
-        <tr><td class="lever">2 投稿テーマ</td><td><span class="st st-model">Fable 優位</span></td><td>生活文脈への接地=モデル<span class="def">一次因は項目1の軸差</span></td><td>テーマ層は薄い設計で足りる<span class="def">lint 3種のみ、投資は戦略層へ</span></td></tr>
-        <tr><td class="lever">3 シナリオ生成</td><td><span class="st st-model">Fable 優位</span></td><td>自己検証・物語装置=モデル<span class="def">数字品質は上流供給=設計</span></td><td>プロンプト規律→機械 lint へ昇格<span class="def">双方に規律違反が実在</span></td></tr>
-        <tr><td class="lever">4 投稿前性能予想</td><td><span class="st st-design">主因は設計欠陥</span></td><td>外れ=実績未供給+目標アンカー<span class="def">欠損を flag しない過信=モデル差</span></td><td><b>最優先投資先</b>: 較正ループ<span class="def">KPI「予測的中率」の成立条件</span></td></tr>
-        <tr><td class="lever">5 自社分析</td><td><span class="st st-model">Fable 大差優位</span></td><td>監査様式=モデル、A-29=設計<span class="def">選択的引用は Fable にも残る</span></td><td>集計は機械・解釈はモデルに分業<span class="def">DB 基盤投資の正当化材料</span></td></tr>
-        <tr><td class="lever">6 市場・競合分析</td><td><span class="st st-wait">引き分け</span></td><td>結論=設計が規定(収束)<span class="def">差分=無指示領域の気質のみ</span></td><td>両者のベストを 4 行の checklist に蒸留<span class="def">モデル選択は速度・コスト判断へ</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section id="facts">
-  <div class="card">
-    <h2><span class="mark" style="background:#334155"></span>🎯 数字の答え合わせ — Opus 予想 vs 実測(5/7 本)</h2>
-    <div class="note">Opus 6/26 バッチは実績未供給のまま「目標 30k」から逆算した予想を出した。機能したのは新鮮な軸の 1 本のみ — 崩落そのものが Fable の「店舗軸消耗」判断の事後実証になった。</div>
-    <div class="metrics">
-      <div class="metric"><div class="v">2,362</div><div class="l">実測 5 本平均(予想下限は 8K)</div></div>
-      <div class="metric"><div class="v">1/5</div><div class="l">予想レンジに届いた本数</div></div>
-      <div class="metric"><div class="v bad">-85〜93%</div><div class="l">外れ 4 本の下限乖離</div></div>
-      <div class="metric"><div class="v">0/3</div><div class="l">成功定義 avg≥10K ほか達成</div></div>
-    </div>
-    <table>
-      <thead><tr><th>投稿日</th><th>テーマ(Opus)</th><th>予想</th><th>実測</th><th>判定</th></tr></thead>
-      <tbody>
-        <tr><td>6/29</td><td>100均で損する日用品5選</td><td class="num">10K-30K</td><td class="num">8,730</td><td><span class="st st-wait">下限-13% ニアミス</span></td></tr>
-        <tr><td>6/30</td><td>特売日の損する買い方</td><td class="num">8K-25K</td><td class="num bad">640</td><td><span class="st st-conf">大外れ</span></td></tr>
-        <tr><td>7/01</td><td>ふるさと納税 返礼品5選</td><td class="num">8K-22K</td><td class="num bad">707</td><td><span class="st st-conf">大外れ</span></td></tr>
-        <tr><td>7/02</td><td>まとめ買いで損する食材</td><td class="num">8K-25K</td><td class="num bad">1,197</td><td><span class="st st-conf">大外れ</span></td></tr>
-        <tr><td>7/03</td><td>ネットスーパー 得と罠</td><td class="num">8K-22K</td><td class="num bad">538</td><td><span class="st st-conf">大外れ</span></td></tr>
-        <tr><td>7/04-05</td><td>冷凍食品 / ポイ活</td><td class="num">8K-25K</td><td class="num">—</td><td><span class="st st-wait">収集ラグ・7/7 頃着弾</span></td></tr>
-      </tbody>
-    </table>
-    <div class="note">Fable 5 側の予想(テーマ別 4K-15K・勝ち筋続編に高レンジ)は投稿がこれから — 7/14 頃に同じ表で答え合わせ可能。</div>
-  </div>
-</section>
-
-<section id="layers">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--on)"></span>🔍 組み込み範囲内 vs ブラックボックス — 差はどの層で生まれたか</h2>
-    <div class="note">範囲内(型・ゲート・契約)の差はほぼゼロ。ただし「組み込んだ=守られる」ではない — 漏れ方が違うだけで両モデル漏れる。差の本体は未指示領域の自発挙動で、正体は創造性でなく「未指示のデータ検分・矛盾検知・自己検証の深さ」。</div>
-    <table>
-      <thead><tr><th>項目</th><th>範囲内(機械的作業)の差分</th><th>ブラックボックスの差分と正体</th></tr></thead>
-      <tbody>
-        <tr><td class="lever">1 戦略</td><td>型準拠 100% で差ゼロ</td><td><span class="st st-model">Fable</span> 軸消耗の検知→転換・成功定義の実測較正<span class="def">正体: メタ認知+目標アンカーへの抵抗</span></td></tr>
-        <tr><td class="lever">2 テーマ</td><td>既出回避・タイトル一致とも遵守で差ゼロ<span class="def">20案→7本は Fable 週のみ=プロセス交絡</span></td><td><span class="st st-model">Fable</span> ターゲットを属性でなく「7月の生活文脈」で扱う解像度</td></tr>
-        <tr><td class="lever">3 シナリオ</td><td><b>双方に確率的漏れ</b><span class="def">Opus=1カット2話者 / Fable=NGトークン混入+金額欠落</span></td><td><span class="st st-model">Fable</span> 提出前自己検証(算術・TTS字数)・物語装置の自発投入<span class="def">正体: 出す前に自分の原稿を検査する深さ</span></td></tr>
-        <tr><td class="lever">4 予想</td><td>ER 0.03 一律・照合不在は両者同一=進化ゼロ</td><td><span class="st st-opus">Opus の負</span> データ欠損を flag しない過信<span class="def">正体: 認識的正直さの差</span></td></tr>
-        <tr><td class="lever">5 自社分析</td><td>A-29 発火は経路差(設計交絡)</td><td><span class="st st-model">Fable</span> 監査様式・事後成長の時間感覚・指示外アラート<span class="def">負: 選択的引用の confirmation bias は残存</span></td></tr>
-        <tr><td class="lever">6 市場競合</td><td>4 指示点の結論はほぼ同一に収束=差ゼロ</td><td><b>双方向</b>: <span class="st st-opus">Opus=測定者気質</span> <span class="st st-model">Fable=制作者気質</span><span class="def">正体: 無指示領域のデフォルト気質の違い</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section id="map">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--done)"></span>🗺 発火の因果 — 配管(設計)× 自発性(モデル)× 実測検証</h2>
-    <div class="note">読み方: 左=設計が用意した材料 → 中=モデルの未指示挙動 → 右=検証された成果。配管がないと自発性は発火しない(Opus 週は実績未供給で目標 30k 逆算に陥った)。</div>
-    <div class="mapwrap">
-      <div class="col">
-        <div class="colhead">設計が用意(v5 資産)</div>
-        <div class="node n-design">固有データ配管<small>IG Perf DB・全投稿史・競合64件</small></div>
-        <div class="node n-design">プロトコル<small>A-29 検算・20案→7本・DR 起票</small></div>
-        <div class="node n-design">出力契約・ゲート<small>スキーマ固定・confirm-before-write</small></div>
-      </div>
-      <div class="arrows">→</div>
-      <div class="col">
-        <div class="colhead">モデルの自発挙動(未指示)</div>
-        <div class="node n-model">データを使う前に検分<small>BT 記録乖離・事後成長 75,630 を検出</small></div>
-        <div class="node n-model">矛盾検知と較正<small>目標 30k と実測分布の両立処理</small></div>
-        <div class="node n-model">発見の規則化<small>フック規律・投稿順ガイダンス新設</small></div>
-      </div>
-      <div class="arrows">→</div>
-      <div class="col">
-        <div class="colhead">成果(実測で検証済)</div>
-        <div class="node n-out">店舗軸消耗→夏行動軸へ転換<small>Opus 店舗軸の実測崩落が事後実証</small></div>
-        <div class="node n-out">現実的な成功定義<small>平均≥3,500 — 実測 2,362 に整合的</small></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="assets">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--on)"></span>🏛 v5 の中長期資産 7 × モデルに一蹴される領域 5</h2>
-    <div class="grid2">
-      <div class="gcol" style="border-color:var(--on);background:var(--onbg)">
-        <h3>🏛 資産(上位モデルが来るほど価値が増す)</h3>
-        <ul>
-          <li><b>データ配管と DB 基盤</b><span class="def">全優位の発火条件。モデルは配管を代替できない</span></li>
-          <li><b>機械ゲート / lint</b><span class="def">最上位モデルでも確率的に漏れると実証済み</span></li>
-          <li><b>機械集計層</b><span class="def">選択的引用の実証 — 計算は永遠にコードの仕事</span></li>
-          <li><b>答え合わせ・較正ループ</b><span class="def">どのモデルも自発しなかった=設計でしか生まれない</span></li>
-          <li><b>固有データそのもの</b><span class="def">共食い実例・勝ち Formula・Playbook 実績</span></li>
-          <li><b>気質の蒸留プロセス</b><span class="def">良い自発挙動→checklist 化。モデル更新ごとに資産が増える</span></li>
-          <li><b>出力契約・ゲート構造</b><span class="def">エージェント間 interface はモデル非依存</span></li>
-        </ul>
-      </div>
-      <div class="gcol" style="border-color:var(--done);background:var(--donebg)">
-        <h3>💨 一蹴される(作り込む価値が消える)</h3>
-        <ul>
-          <li><b>思考手順の細かいプロンプト指示</b><span class="def">Fable は無指示で上回った(細パラメーター型)</span></li>
-          <li><b>戦略判断の代行ルール化</b><span class="def">消耗検知・軸転換はモデルが上から解決</span></li>
-          <li><b>テーマ発想の厚い設計</b><span class="def">生活文脈接地はモデルが無償で持ってくる</span></li>
-          <li><b>人間スロットの一部</b><span class="def">Layer 1 戦略・20→7 選定を今回モデルが代行できた</span></li>
-          <li><b>型の中身の語り口</b><span class="def">器(Playbook 構造)は資産、文言はモデルが更新</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
+<!-- ============ 1. 検証結果: 価値の仕訳 ============ -->
 <section id="verdict">
   <div class="card">
-    <h2><span class="mark" style="background:#334155"></span>🧭 結論 — 検証の意義と帰結</h2>
-    <div class="grid2">
-      <div class="gcol" style="border-color:var(--line);background:#f8fafc">
-        <h3>検証の意義(Badhan)</h3>
-        <ul>
-          <li>これまでの運用は設計が甘くとも「とにかく回っていた」— 完全上位モデルの登場で、<b>詳細設計なしに改善される部分</b>を洗い出せる</li>
-          <li>残った部分=<b>モデルに左右されない v5 の強み</b>。そこに力を集中する</li>
-        </ul>
-      </div>
-      <div class="gcol" style="border-color:var(--line);background:#f8fafc">
-        <h3>分析からの帰結(Claude)</h3>
-        <ul>
-          <li>7/3 の「<b>背景知識リッチ型先行+外部 DB 構築</b>」をこの検証データが全面支持</li>
-          <li>最優先投資 = <b>予測の較正ループ</b>(KPI「予測的中率」の成立条件そのもの)</li>
-          <li>「範囲内に書いた=守られる」は幻想 — 確定遵守は<b>機械 lint</b> でしか作れない</li>
-          <li>モデル更新のたびに良い気質を checklist へ蒸留する<b>定常運用</b>を仕組み化する</li>
-        </ul>
-      </div>
+    <h2><span class="mark" style="background:var(--on)"></span>⚖️ 検証結果 — 価値のあるものと無価値なものの仕訳</h2>
+    <div class="note">v5 が磨くべきもの、価値の高い順。判断基準 = ①上位モデルでも自然発生しなかったか ②モデル昇格でむしろ価値が増すか ③今回の実測・実証に直結しているか。</div>
+
+    <div class="rank"><div class="no">1</div><div class="body"><b>予測の答え合わせ・較正ループ</b>
+      <span class="why">Opus 予想は 4/5 本が実測を 85〜93% 上回る大外れ(平均 2,362 vs 下限 8K)。主因は実績未供給+目標 30k の逆算という設計欠陥で、照合→較正のループはどちらのモデルも自発しなかった=設計でしか生まれない。KPI「予測的中率」の成立条件そのもの。</span></div></div>
+
+    <div class="rank"><div class="no">2</div><div class="body"><b>データ配管と DB 基盤(実績・競合・知見を LLM の目の前に置く仕組み)</b>
+      <span class="why">Fable の全優位(軸転換・実測較正・監査)は「IG Perf DB・全投稿史・知見台帳が配管されていた」ことが発火条件。同じ Opus でも実績供給ありの回は現実的な判断を出しており、配管の有無が知能の差より効く。上位モデルほど配管の限界効用は上がる。</span></div></div>
+
+    <div class="rank"><div class="no">3</div><div class="body"><b>機械 lint・ゲート(規律の確定遵守はコードで)</b>
+      <span class="why">「範囲内に書いた=守られる」は幻想と実証: 禁止トークンは設計に存在するのに Fable が混入させ、Opus は 1 カット 2 話者を混入。漏れ方が違うだけで両モデル漏れる。NGトークン・話者数・タイトル金額・文字化けは機械ゲートでしか 100% にならない。</span></div></div>
+
+    <div class="rank"><div class="no">4</div><div class="body"><b>機械集計層(計算=コード、解釈=モデルの分業)</b>
+      <span class="why">Fable ですら「views 上位 4 本は全て逆張り型」と主張して 3 位(問題提起型 5,240)を黙って除外する選択的引用をした。最良モデルでも集計を騙る以上、上位 N 本抽出・BT 判定・retention 集計はスクリプトが正を持ち、モデルは解釈だけを担う。</span></div></div>
+
+    <div class="rank"><div class="no">5</div><div class="body"><b>固有データ・知見の蓄積そのもの</b>
+      <span class="why">共食い実例(1,429→170)・勝ち Formula・競合 64 件・Playbook 実績は、どのモデルに載せても効く唯一の入力であり他社が持てない。市場競合分析で両モデルの結論が収束した事実は「何を見つけるかはデータと設計が規定する」ことの実証。</span></div></div>
+
+    <div class="rank"><div class="no">6</div><div class="body"><b>気質の蒸留プロセス(良い自発挙動 → checklist / Playbook へ)</b>
+      <span class="why">Opus の測定規律(欠損警告・中央値集計)も Fable の制作粒度(キャラ声コピー・コメント欄装置)も、数行の指示で他方のモデルに移植可能と判定。モデル更新のたびに観察→蒸留する運用自体が、更新のたびに資産が増える仕組みになる。</span></div></div>
+
+    <div class="rank"><div class="no">7</div><div class="body"><b>出力契約・エージェント間 interface</b>
+      <span class="why">スキーマ固定・confirm-before-write・T/V 列保護は両モデルで完全遵守 — この層は既にモデル非依存を達成しており、維持コストだけで価値が持続する。</span></div></div>
+
+    <div class="note" style="border-top:1px solid var(--line)">無価値になるもの — 上位モデルが無償で持ってくるため、作り込むだけ損する領域。</div>
+    <div class="drop">
+      <div class="dropitem"><b>思考手順の細かいプロンプト指示</b><span>Fable は無指示で上回った(細パラメーター型の敗北)</span></div>
+      <div class="dropitem"><b>戦略判断のルール化</b><span>軸消耗の検知→転換はモデルが上から解決</span></div>
+      <div class="dropitem"><b>テーマ発想の厚い設計</b><span>生活文脈への接地はモデルが無償で持ってくる</span></div>
+      <div class="dropitem"><b>人間スロットの一部</b><span>Layer 1 戦略・20→7 選定を今回モデルが代行できた</span></div>
+      <div class="dropitem"><b>型の中身の語り口</b><span>器(Playbook 構造)は資産、文言はモデルが更新し続ける</span></div>
     </div>
+  </div>
+</section>
+
+<!-- ============ 2. 検証の中身(タブ) ============ -->
+<section id="detail">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>🔬 検証の中身 — 項目別の出力比較とインサイト</h2>
+    <div class="tabs">
+      <button class="tabbtn active" onclick="showTab(event,'t1')">1 アカウント戦略</button>
+      <button class="tabbtn" onclick="showTab(event,'t2')">2 投稿テーマ</button>
+      <button class="tabbtn" onclick="showTab(event,'t3')">3 シナリオ生成</button>
+      <button class="tabbtn" onclick="showTab(event,'t4')">4 性能予想(答え合わせ)</button>
+      <button class="tabbtn" onclick="showTab(event,'t5')">5 自社分析</button>
+      <button class="tabbtn" onclick="showTab(event,'t6')">6 市場・競合分析</button>
+    </div>
+
+    <!-- Tab 1 -->
+    <div class="tabpane active" id="t1">
+      <div class="duel">
+        <div class="side s-opus"><div class="shead">OPUS 4.8 — 6/26 バッチ戦略</div><div class="sbody"><ul>
+          <li>過去の勝ち筋(具体金額 × vs比較 / 逆張りフック)を<b>踏襲</b></li>
+          <li>店舗・手段を分散(100均/特売/ふるさと納税/冷凍/ポイ活…)して共食い回避 — <b>7 本全て「買い物・店舗」軸</b></li>
+          <li>成功定義: <b>avg≥10,000・2本≥20K・1本≥30K</b>(実績 top 11,026 のアカウントに対して)</li>
+          <li>目標 30k view を予測にもそのまま反映</li>
+        </ul></div></div>
+        <div class="side s-fable"><div class="shead">FABLE 5 — 7/2 バッチ戦略</div><div class="sbody"><ul>
+          <li><b>店舗軸 11 種の「消耗」を無指示で認定</b> →「夏の生活行動・習慣の損」軸へ転換(エアコン/冷蔵庫/夏休み給食)。店舗続編は勝ち筋確実化の 2 本のみ = 探索 5 : 活用 2</li>
+          <li>フック規律を新設: retention 平均 ~13%・25% 到達 2/17 本の実測から「矛盾軸に具体数字の落差必須」</li>
+          <li>投稿順ガイダンス新設: 共食い実例(1,429→170)を裏取りして「同系統を連日に固めない」</li>
+          <li>成功定義: <b>≥1本 10K+ / 平均≥3,500 / save≥10 が 4本</b> — 実測分布に較正(30k の旗は維持)</li>
+        </ul></div></div>
+      </div>
+      <div class="insight"><h4>INSIGHT</h4><ul>
+        <li><b>今回最大の差分は、v5 の設計範囲の外で起きた。</b>ceo-run は「CEO は戦略を立案しない(Layer 1 は人間が提供)」と明記 — つまり軸転換は<b>人間用に空けてあるスロット</b>で発生。両週とも実は LLM が人間役を代行しており、そこで差が開いた</li>
+        <li><b>軸転換の正しさは実測で事後証明された</b>: Opus の店舗軸バッチは投稿後に崩落(640〜1,197 views)</li>
+        <li>型準拠(必須メタ・テーマ別戦略フィールド)は両者 100% — 組み込み範囲内の差はゼロ</li>
+        <li>ただし交絡あり: Fable は ceo-run 経由でリッチ入力、Opus は Planner 経由で実績未供給。<b>判断力=モデル × 判断材料=設計</b>の掛け算が正しい読み</li>
+      </ul></div>
+    </div>
+
+    <!-- Tab 2 -->
+    <div class="tabpane" id="t2">
+      <div class="duel">
+        <div class="side s-opus"><div class="shead">OPUS 4.8 — 7 テーマ(推測view)</div><div class="sbody"><ul>
+          <li>100均で買うと損する日用品5選【月2000円】(10-30K)</li>
+          <li>特売日、実は損してる買い方3選【月3000円】(8-25K)</li>
+          <li>ふるさと納税、返礼品5選【年3万円】(8-22K)</li>
+          <li>まとめ買いが逆に損する食材5選【月2000円】(8-25K)</li>
+          <li>ネットスーパー、得する使い方と罠【月3000円】(8-22K)</li>
+          <li>冷凍食品、自炊より得する5品【月3000円】(8-25K)</li>
+          <li>ポイ活、キャッシュレス3選【月2000円】(8-22K)</li>
+          <li class="def">7 本全て「◯◯で損する◯選【月◯円】」の単一テンプレ・丸い金額</li>
+        </ul></div></div>
+        <div class="side s-fable"><div class="shead">FABLE 5 — 7 テーマ(推測view)</div><div class="sbody"><ul>
+          <li>「エアコンは28℃」…あの28℃は設定温度じゃないぞ (8-15K)</li>
+          <li>7月18日から夏休み、昼ごはん代が月1万円増える — 業スなら1食120円 (6-12K)</li>
+          <li>冷蔵庫パンパン・冷凍庫スカスカ、置き方が逆で年3,300円損 (5-10K)</li>
+          <li>エアコン消す夫 vs つけっぱ妻、正解はどっち? (5-12K)</li>
+          <li>100均の夏グッズ、買っていいのは5つだけ (8-15K)</li>
+          <li>「隠れ保温」家電3つ、夏に切るだけで年5,000円 (4-8K)</li>
+          <li>風量「弱」はむしろ損だぞ (4-9K)</li>
+          <li class="def">構文 7 通り・計算痕のある数字(1食120円/年3,300円)・日付時事</li>
+        </ul></div></div>
+      </div>
+      <div class="insight"><h4>INSIGHT</h4><ul>
+        <li><b>テーマの質は戦略(Layer 1)の従属変数。</b>Opus の敗因はテーマ発想力でなく軸選定 — 同じ Opus 製でも軸が新鮮なテーマ1 は 8,730、消耗軸の残りは 500〜1,200</li>
+        <li>ターゲット考慮は両者ともしている。差は<b>解像度</b>: Opus はターゲットを「属性」(F35-54 主婦)で扱い、Fable は「時間軸つき生活文脈」(7月の主婦は毎日エアコンで迷い、7/18 から給食が消える)で扱う</li>
+        <li>20案→7本ファネルを通ったのは Fable 週のみ = プロセス交絡あり</li>
+        <li>v5 示唆: テーマ層は薄い設計で足りる。lint 3 種(構文テンプレ連発・金額均一・時事アンカー有無)だけ置き、投資は戦略層へ</li>
+      </ul></div>
+    </div>
+
+    <!-- Tab 3 -->
+    <div class="tabpane" id="t3">
+      <div class="duel">
+        <div class="side s-opus"><div class="shead">OPUS 4.8 — 仮説Doc 7本の傾向</div><div class="sbody">
+          <div class="quote">「1品目は冷凍ブロッコリー。…廃棄ゼロで月600円浮くぞ」— 出典=「一般的な節約知識」のみ。600+500+800+500+600=3,000 円の<b>綺麗すぎる無出典内訳</b></div>
+          <div class="quote">フックは 7 本中 5 本が「待った!/待って!」定型 — 実測でも定型フック回は skip 53% 台の大量離脱</div>
+          <ul><li>構成は「品目1〜5+合算」の平坦列挙が主</li>
+          <li>Gate C 字数・CTA verbatim・bookend は完全遵守</li>
+          <li>瑕疵: テーマ7 で 1 カット内 2 話者混入(TTS 事故リスク)</li></ul>
+        </div></div>
+        <div class="side s-fable"><div class="shead">FABLE 5 — 仮説Doc 7本の傾向</div><div class="sbody">
+          <div class="quote">「半分に減らせば年約1360円の節電だぞ」— <b>資源エネ庁・年間約43.84kWh×31円/kWh を出典欄に明記</b>+「約」ヘッジ+算術検証(120×2=240&lt;250 で半額以下成立)</div>
+          <div class="quote">「エアコン消す夫とつけっぱ妻、損はどっちだ?」— 対立構造+コメント分裂狙いを設計意図として明文化。中盤どんでん返し・micro open loop を自発投入</div>
+          <ul><li>提出前に TTS ひらがな字数・推定総尺・単一話者を<b>頼まれず自己検査</b></li>
+          <li>瑕疵: 禁止トークン「object only, scene only」を全カット混入(自分の別 Doc で禁止と明記)+タイトル金額欠落 2 本</li></ul>
+        </div></div>
+      </div>
+      <div class="insight"><h4>INSIGHT</h4><ul>
+        <li><b>「組み込んだ=守られる」ではない。</b>禁止トークンは設計に存在するのに Fable でも漏れた。プロンプト規律は上位モデルでも確率的 — 確定遵守は機械 lint でしか作れない(違反箇所が違うだけで両モデル漏れる)</li>
+        <li>Fable の数字品質の相当部分は <b>Fable 製バッチ戦略が出典値を上流供給した結果</b>(Doc 自身が明記)— シナリオ層のモデル差でなく、戦略層の設計で再現可能</li>
+        <li>純粋にモデル由来なのは「出す前に自分の原稿を検査する深さ」と物語装置(反転・open loop) — 後者は Playbook のフック型リストに蒸留可能</li>
+      </ul></div>
+    </div>
+
+    <!-- Tab 4 -->
+    <div class="tabpane" id="t4">
+      <div class="metrics">
+        <div class="metric"><div class="v">2,362</div><div class="l">実測 5 本平均(Opus 予想下限は 8K)</div></div>
+        <div class="metric"><div class="v">1/5</div><div class="l">予想レンジに届いた本数</div></div>
+        <div class="metric"><div class="v bad">-85〜93%</div><div class="l">外れ 4 本の下限乖離</div></div>
+        <div class="metric"><div class="v">0/3</div><div class="l">Opus 成功定義の達成数</div></div>
+      </div>
+      <div style="padding:4px 20px 16px">
+      <table>
+        <thead><tr><th>投稿日</th><th>テーマ(Opus)</th><th>予想</th><th>実測</th><th>判定</th></tr></thead>
+        <tbody>
+          <tr><td>6/29</td><td>100均で損する日用品5選</td><td class="num">10K-30K</td><td class="num">8,730</td><td><span class="st st-wait">下限-13% ニアミス</span></td></tr>
+          <tr><td>6/30</td><td>特売日の損する買い方</td><td class="num">8K-25K</td><td class="num bad">640</td><td><span class="st st-conf">大外れ</span></td></tr>
+          <tr><td>7/01</td><td>ふるさと納税 返礼品5選</td><td class="num">8K-22K</td><td class="num bad">707</td><td><span class="st st-conf">大外れ</span></td></tr>
+          <tr><td>7/02</td><td>まとめ買いで損する食材</td><td class="num">8K-25K</td><td class="num bad">1,197</td><td><span class="st st-conf">大外れ</span></td></tr>
+          <tr><td>7/03</td><td>ネットスーパー 得と罠</td><td class="num">8K-22K</td><td class="num bad">538</td><td><span class="st st-conf">大外れ</span></td></tr>
+          <tr><td>7/04-05</td><td>冷凍食品 / ポイ活</td><td class="num">8K-25K</td><td class="num">—</td><td><span class="st st-wait">収集ラグ・7/7 頃着弾</span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="insight"><h4>INSIGHT — 唯一「数字で白黒つく」項目</h4><ul>
+        <li><b>Opus は goal と forecast を混同した</b>: Planner は実績未供給(postInsights 空)のまま「目標 30k」から逆算し、7 本中 6 本に金太郎飴の 8K-25K を付与。外れの主因は<b>モデルでなく設計</b>(実績配管の欠落+目標アンカー混入)</li>
+        <li>より深刻なのは<b>データ欠損を flag しない過信</b> — 欠損時に確信度を下げず堂々とレンジを出す。ここは認識的正直さというモデル差</li>
+        <li>Fable はテーマ別 4K-15K に較正(勝ち筋続編に高レンジ)。答え合わせは投稿後 7/14 頃 — ただし較正の質は成功定義(平均 3,500)が実測 2,362 と整合的な時点で有望</li>
+        <li>両モデル共通の限界: ER 0.03 一律・予測スキーマの貧困・<b>答え合わせの自発実行ゼロ</b> → 較正ループは設計でしか生まれない = <b>v5 最優先投資先</b></li>
+      </ul></div>
+    </div>
+
+    <!-- Tab 5 -->
+    <div class="tabpane" id="t5">
+      <div class="duel">
+        <div class="side s-opus"><div class="shead">OPUS 4.8 — 分析(戦略内包)</div><div class="sbody"><ul>
+          <li>勝ち Formula(具体金額×vs比較 / Contrarian)・感情ドライバー(損失回避→save)を概念化 — <b>概念自体は正しい</b>(Fable の結論とほぼ同じ)</li>
+          <li>店舗分散による共食い回避を設計</li>
+          <li><b>記録値をそのまま受容 — 検算・異常検知はゼロ</b></li>
+        </ul></div></div>
+        <div class="side s-fable"><div class="shead">FABLE 5 — 実データ検算分析</div><div class="sbody"><ul>
+          <li><b>A-29 検算で記録乖離を検出</b>: 「6月 BT 0本」の記録に対し生データ再集計で BT 達成 2 本+views の事後成長(36,086→<b>75,630</b>)を発見、直近 2 ヶ月 BT 5 本と再判定し DR 起票</li>
+          <li>共食いを実例数値(1,429→170)で裏取り→投稿順ルール化</li>
+          <li>6/19 バッチ未消化の突合アラート(指示外)</li>
+          <li>retention 平均 12.5%・25% 到達 2/17 本と再計算(第三者再集計 13.1% と整合=正確)</li>
+          <li><b>瑕疵</b>: 「上位 4 本は全て逆張り型」— 実際の 3 位 5,240(問題提起型)を黙って除外する選択的引用</li>
+        </ul></div></div>
+      </div>
+      <div class="insight"><h4>INSIGHT</h4><ul>
+        <li>分析の様式が「<b>パターン認識</b>」vs「<b>監査</b>」— Fable は数字を使う前に記録と生データを突合する。BT 0→5 本の乖離検出は Growth thesis を書き換えるレベルの実利</li>
+        <li>事後成長(75,630)への気づき = 「このデータはいつの値か」を問う時間感覚。スナップショットの静的読みでは原理的に出ない</li>
+        <li><b>Fable でも confirmation bias は残る</b>(選択的引用)→ 計算はコード、解釈はモデル、の分業が結論</li>
+        <li>この監査を可能にしたのは IG Perf DB という構造化基盤が先にあったこと — 「背景知識リッチ型+外部 DB 構築」の価値を最も強く実証した項目</li>
+      </ul></div>
+    </div>
+
+    <!-- Tab 6 -->
+    <div class="tabpane" id="t6">
+      <div class="duel">
+        <div class="side s-opus"><div class="shead">OPUS 4.8 — 13分 / 承認7回</div><div class="sbody"><ul>
+          <li>jq 集計で有効 42 件判定・ジャンル別<b>中央値テーブル</b>・外れ値除外を明示</li>
+          <li><b>データ品質警告を無指示で 3 つ</b>: 保存数(主 KPI)がデータに不在 / 取得失敗 22 件で空白領域判定は楽観バイアス / 音源列全空欄 — 次回収集の改善提案まで</li>
+          <li>独自発見: 「3D キャラは実演に構造的に弱い — kurashi の実演を追うな」というフォーマット適合の論理</li>
+        </ul></div></div>
+        <div class="side s-fable"><div class="shead">FABLE 5 — 8分 / 承認0回</div><div class="sbody"><ul>
+          <li>全 64 件通読(有効 43 件)・ナラティブ 4 論点</li>
+          <li><b>そのまま台本に落ちる粒度</b>: キャラ一人称コピー「財布のゆうたが泣いた、スーパーで損してる行動5選」/ numa 111万再生から「◯個目はコメント欄」装置を抽出 / フォロワー地域偏在(関西+九州)→ローカル戦略</li>
+          <li>データ品質への警戒はスナップショット注意の 1 行のみ</li>
+        </ul></div></div>
+      </div>
+      <div class="insight"><h4>INSIGHT — 唯一のクリーン A/B(同一 64 件・同日・独立セッション)</h4><ul>
+        <li><b>核心結論(勝ちパターン・空白領域)は両者ほぼ同一に収束</b> — 「何を見つけるか」はデータ+設計が既に規定しており、モデル格差は発見の内容に効いていない</li>
+        <li>差が出たのは無指示領域の「デフォルト気質」で、<b>優劣は一方向でない</b>: Opus=測定者気質、Fable=制作者気質。Fable 全勝ではないことがここで確認できた</li>
+        <li>どちらの美点も 4 行の checklist(①データ品質セクション必須 ②中央値集計を前処理必須 ③示唆はキャラ一人称の原文まで ④次回収集改善提案必須)で他方に移植可能 → <b>モデル選択は速度・コスト判断に還元</b></li>
+        <li>8 分・承認 0 回という自律稼働性は、エージェント中心設計での運用適性そのもの</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. Fable × Opus 比較表 ============ -->
+<section id="duel">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--done)"></span>🥊 Fable と Opus、それぞれが優れていたもの — ブラックボックスの中身</h2>
+    <div class="note">組み込み範囲内(型・ゲート・契約)の差はほぼゼロだった。下表は範囲の外=未指示領域で現れた差と、その正体。差の本質は創造性ではなく「未指示のデータ検分・矛盾検知・自己検証をどこまで自発するか」。</div>
+    <table>
+      <thead><tr><th>項目</th><th>Opus 4.8 が優れていた点</th><th>Fable 5 が優れていた点</th><th>ブラックボックスの正体(insight)</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">1 戦略</td><td>—<span class="def">勝ち筋踏襲は堅実だが軸の再生産</span></td><td>軸消耗の検知→夏行動軸へ転換・成功定義の実測較正<span class="def">実測崩落(640〜1,197)が事後実証</span></td><td>メタ認知+目標アンカーへの抵抗。<b>発生場所は設計外の「人間スロット」</b></td></tr>
+        <tr><td class="lever">2 テーマ</td><td>—<span class="def">単一テンプレ×丸い金額</span></td><td>構文 7 通り・計算痕のある数字・日付時事(7/18)</td><td>ターゲットを属性でなく「7月の生活文脈」で扱う解像度</td></tr>
+        <tr><td class="lever">3 シナリオ</td><td>ふるさと納税回の caveat 処理は丁寧<span class="def">ただし数字は無出典が基調</span></td><td>提出前自己検証(算術・TTS字数・話者)・物語装置(反転・open loop)・出典明記</td><td>「出す前に自分の原稿を検査する」深さ。<b>ただし規律違反は両モデルに実在</b> → 機械 lint 必須</td></tr>
+        <tr><td class="lever">4 予想</td><td>—<span class="def">欠損を flag しない過信(負の差分)</span></td><td>実測分布からの外挿・テーマ別レンジ較正</td><td>認識的正直さ。ただし外れの主因は設計(実績未供給+目標アンカー) — <b>照合ループはどちらも自発せず</b></td></tr>
+        <tr><td class="lever">5 自社分析</td><td>概念化は同水準に到達<span class="def">勝ち Formula は Fable と同結論</span></td><td>監査様式(記録 vs 生データ突合)・事後成長 75,630 検出・指示外アラート 2 件</td><td>「使う前に疑う」姿勢+時間感覚。<b>選択的引用は Fable にも残る</b> → 計算はコードへ</td></tr>
+        <tr><td class="lever">6 市場競合</td><td><b>測定者気質</b>: 中央値集計・欠損/バイアス警告・収集改善提案</td><td><b>制作者気質</b>: キャラ声コピー原文・コメント欄装置・地域戦略。8分/承認0回</td><td>無指示領域のデフォルト気質の違い。核心結論は収束=<b>「何を見つけるか」は設計が規定</b></td></tr>
+      </tbody>
+    </table>
     <p class="thesis">頭脳はレンタルし、配管・ゲート・学習ループ・固有データを自社資産にする。<br>
     設計の仕事は「考え方を教える」から「材料を届け、出力を検査し、結果を学習に戻す」へ。</p>
   </div>
 </section>
 
-<section id="next">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--todo)"></span>⏭ 残りの答え合わせ — 4 手</h2>
-    <div style="padding:18px 20px">
-      <div class="tstep"><div class="tdate">7/7 頃</div><div class="tbody"><b>Opus テーマ6・7 の実測着弾</b><span class="def">insights 収集ラグ解消 — 予想照合を 7/7 に完成</span></div></div>
-      <div class="tstep"><div class="tdate">7/8</div><div class="tbody"><b>定例で本検証を提示</b><span class="def">コア特定(Fable テストの当初目的)として報告</span></div></div>
-      <div class="tstep"><div class="tdate">7/12 頃</div><div class="tbody"><b>Fable バッチ 7 本の投稿消化</b><span class="def">毎日 21:00 ペース想定(7/6 開始)</span></div></div>
-      <div class="tstep"><div class="tdate">7/14 頃</div><div class="tbody"><b>Fable 予想の答え合わせ+次回は統制比較で</b><span class="def">同一テーマ×同一戦略供給での A/B を推奨</span></div></div>
-    </div>
-  </div>
-</section>
-
 <footer>
   正本: モデル比較検証シート(Google Sheets「検証項目比較」+ 詳細 6 タブ)＋分析セッション 2026-07-06 ／
-  実測ソース: IG Performance DB(Reels)／ 内部 ID・認証情報は除去済み ／ 作成: Claude × Badhan
+  実測ソース: IG Performance DB(Reels)／ 残る答え合わせ: 7/7 頃 Opus テーマ6・7 実測着弾 → 7/14 頃 Fable バッチ照合 ／
+  内部 ID・認証情報は除去済み ／ 作成: Claude × Badhan
 </footer>
 
+<script>
+function showTab(ev, id){
+  document.querySelectorAll('.tabpane').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.tabbtn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  ev.currentTarget.classList.add('active');
+}
+</script>
 </body>
 </html>
