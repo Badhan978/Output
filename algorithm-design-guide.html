@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>アルゴリズムの作り方 — 意思決定システムの設計と育成</title>
+<style>
+  :root{
+    /* 構造トークン */
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    /* 状態トークン (5値固定) */
+    --concept:#2563eb; --conceptbg:#eff6ff;   /* 概念・部品 */
+    --proc:#7c3aed;    --procbg:#f5f3ff;      /* 工程・手順 */
+    --do:#16a34a;      --dobg:#f0fdf4;        /* 定石・Do */
+    --dont:#dc2626;    --dontbg:#fef2f2;      /* 禁じ手・Don't */
+    --ex:#0d9488;      --exbg:#f0fdfa;        /* 実例 */
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
+
+  header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:34px 28px 28px}
+  .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#7dd3fc;font-weight:700;margin:0 0 8px}
+  header h1{margin:0;font-size:30px;line-height:1.3}
+  header .lead{margin:12px 0 0;color:#cbd5e1;font-size:13.5px;max-width:860px}
+  .pills{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    border-radius:99px;padding:4px 14px;font-size:11.5px;color:#e2e8f0}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:12px;border:1px solid var(--line)}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  section{max-width:1180px;margin:26px auto;padding:0 20px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .mark{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
+    border-bottom:1px solid var(--line)}
+  .pad{padding:18px 20px}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;
+    background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px;
+    font-size:11.5px;color:var(--sub)}
+  .dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:-1px}
+
+  .chip{font-size:10px;font-weight:800;padding:3px 10px;border-radius:5px;color:#fff}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .cell{border-radius:10px;padding:12px 14px;border:1.5px solid}
+  .cell b{display:block;font-size:13px;margin-bottom:3px}
+  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
+  .c-concept{border-color:var(--concept);background:var(--conceptbg)}
+  .c-proc{border-color:var(--proc);background:var(--procbg)}
+  .c-do{border-color:var(--do);background:var(--dobg)}
+  .c-dont{border-color:var(--dont);background:var(--dontbg)}
+  .c-ex{border-color:var(--ex);background:var(--exbg)}
+
+  .num{font-size:26px;font-weight:800;line-height:1.1}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700}
+  .hl{background:var(--dobg);font-weight:700}
+  .dim{color:var(--sub)}
+
+  .mapwrap{padding:24px 20px;display:grid;
+    grid-template-columns:1fr 42px 1fr 42px 1fr 42px 1fr;gap:10px;align-items:center}
+  .node{border-radius:9px;padding:10px 12px;font-size:12px;font-weight:700;border:1.5px solid;text-align:center}
+  .node small{display:block;font-weight:400;color:var(--sub);font-size:11px;margin-top:2px}
+  .arrows{display:flex;justify-content:center;align-items:center;color:#94a3b8;font-size:22px;font-weight:700}
+  .loopback{grid-column:1/-1;text-align:center;color:var(--proc);font-size:12px;font-weight:700;
+    border-top:2px dashed #c4b5fd;padding-top:10px;margin-top:6px}
+
+  .tstep{display:flex;gap:14px;margin-bottom:14px}
+  .tdate{flex:0 0 110px;font-weight:800;font-size:12px;color:#4f46e5;text-align:right}
+  .tbody{flex:1;border-left:3px solid #e0e7ff;padding-left:14px}
+  .tbody b{font-size:13px}
+
+  footer{max-width:1180px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
+  @media(max-width:980px){
+    .grid3,.grid4,.grid2{grid-template-columns:1fr}
+    .mapwrap{grid-template-columns:1fr}
+    .arrows{transform:rotate(90deg)}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="kicker">Algorithm Design Guide</p>
+  <h1>アルゴリズムの作り方</h1>
+  <p class="lead">ここで言うアルゴリズムはソートや探索でなく<b>意思決定システム</b> — 「何を選ぶか」を再現可能な手続きにしたもの。中身は世界共通で3部品しかなく、育て方の定石は「小さく始めて、ループの速さで育てる」。実例はショート動画のテーマ選定で通す。</p>
+  <div class="pills">
+    <span class="pill">作成 2026-07-06</span>
+    <span class="pill">部品 3 × 育成 4 段階</span>
+    <span class="pill">実例: テーマ選定スコアリング</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#anatomy">🧩 3部品</a>
+  <a href="#loop">🔁 全体ループ</a>
+  <a href="#grow">🌱 育て方 4段階</a>
+  <a href="#scoring">🎯 スコアリング設計</a>
+  <a href="#example">🧮 計算実例</a>
+  <a href="#metrics">📏 評価指標 4原則</a>
+  <a href="#explore">🎲 探索と活用 4ルール</a>
+  <a href="#antipattern">🚫 禁じ手 6</a>
+</nav>
+
+<section>
+  <div class="legend">
+    <b style="color:var(--ink)">色の凡例:</b>
+    <span><span class="dot" style="background:var(--concept)"></span>概念・部品</span>
+    <span><span class="dot" style="background:var(--proc)"></span>工程・手順</span>
+    <span><span class="dot" style="background:var(--do)"></span>定石・Do</span>
+    <span><span class="dot" style="background:var(--dont)"></span>禁じ手・Don't</span>
+    <span><span class="dot" style="background:var(--ex)"></span>実例</span>
+  </div>
+</section>
+
+<section id="anatomy">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--concept)"></span>🧩 中身は3部品 — どんな意思決定アルゴリズムも同じ骨格</h2>
+    <div class="note">どれか1つが曖昧なまま他を作り込むと必ず手戻りする。特に目的関数が最優先。</div>
+    <div class="pad grid3">
+      <div class="cell c-concept"><b>① 入力 (シグナル)</b>判断材料になる数値・ラベル
+        <span class="def">例: 過去投稿の視聴データ / ジャンルラベル / 競合動向 / 経過日数</span></div>
+      <div class="cell c-concept"><b>② 目的関数</b>「何を最大化するか」1本の定義
+        <span class="def">例: 視聴数か、CVか、フォロワー転換か。ここが全設計の起点</span></div>
+      <div class="cell c-concept"><b>③ 決定ロジック</b>入力 → 出力の変換規則
+        <span class="def">成熟度で3段階: ルール → スコアリング → 学習ベース</span></div>
+    </div>
+    <div class="pad grid3" style="padding-top:0">
+      <div class="cell c-proc"><b>段階1: ルールベース</b>if-then の明文化
+        <span class="def">人間の勘をそのまま規則に。精度よりログが残ることが価値</span></div>
+      <div class="cell c-proc"><b>段階2: スコアリング</b>要素 × 重みの足し算
+        <span class="def">score = Σ(特徴量×重み)。手動チューニングで運用</span></div>
+      <div class="cell c-proc"><b>段階3: 学習ベース</b>重みをデータが決める
+        <span class="def">十分なデータが溜まってから。最初からやるのは禁じ手</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="loop">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--proc)"></span>🔁 全体ループ — アルゴリズムは「回路」で完成する</h2>
+    <div class="note">決定して終わりではなく、結果が入力に還流して初めてアルゴリズム。還流が切れた瞬間に学習は止まる。</div>
+    <div class="mapwrap">
+      <div class="node c-concept">入力<small>実績・トレンド・競合</small></div>
+      <div class="arrows">→</div>
+      <div class="node c-proc">決定ロジック<small>スコアリング + 探索枠</small></div>
+      <div class="arrows">→</div>
+      <div class="node c-ex">出力<small>今週のテーマ 7個</small></div>
+      <div class="arrows">→</div>
+      <div class="node c-do">計測<small>事前固定した物差しで判定</small></div>
+      <div class="loopback">↩ 結果 (当たり / 外れの両方) をスコア表へ還流 — このループの回転速度が成長速度</div>
+    </div>
+  </div>
+</section>
+
+<section id="grow">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--proc)"></span>🌱 育て方 4段階 — 小さく始めてループ速度で育てる</h2>
+    <div class="note">順序が命。最初から学習ベース (ML) に行くのが最頻出の失敗。</div>
+    <div class="pad">
+      <div class="tstep"><div class="tdate">STEP 1</div><div class="tbody"><b>ルールベースで書く</b><br>
+        <span class="dim">人間の勘の明文化だけでよい。「全判断がログに残る」状態を最速で作るのが目的。</span></div></div>
+      <div class="tstep"><div class="tdate">STEP 2</div><div class="tbody"><b>評価指標を先に固定する</b><br>
+        <span class="dim">変更の良し悪しを測る物差しがないと、以降の改善は全部「気がする」になる。</span></div></div>
+      <div class="tstep"><div class="tdate">STEP 3</div><div class="tbody"><b>仮説 → 1変更 → 測定 のサイクルを回す</b><br>
+        <span class="dim">1回に変えるのは1箇所。同時に2つ変えるとどちらが効いたか永久に分からない。サイクルを週1→3日に縮める投資は精度改善より効く。</span></div></div>
+      <div class="tstep"><div class="tdate">STEP 4</div><div class="tbody"><b>データが溜まってからスコアリング → 学習へ置換</b><br>
+        <span class="dim">ルールで蓄えたログが、次の段階の教師データになる。</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="scoring">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--proc)"></span>🎯 スコアリング設計 — 4工程 + 質を分ける3補正</h2>
+    <div class="note">基本形: 候補ごとに score = Σ(特徴量 × 重み) → 上位N採用。ただし実務の質は足し算より「補正」で決まる。</div>
+    <div class="pad grid4">
+      <div class="cell c-proc"><b>工程1: 特徴量の列挙</b>判断に効きそうな要素を出す
+        <span class="def">同ラベル平均視聴 / 直近伸び率 / 競合出現頻度 / 経過日数</span></div>
+      <div class="cell c-proc"><b>工程2: 正規化</b>全て 0〜1 に揃える
+        <span class="def">桁が大きい項の支配を防ぐ。定番 = percentile 化 (外れ値に強い)</span></div>
+      <div class="cell c-proc"><b>工程3: 重み付け</b>直感を数字にする
+        <span class="def">例: 実績.4 / 伸び率.3 / 競合.2 / 鮮度.1 — 合計1で調整しやすく</span></div>
+      <div class="cell c-proc"><b>工程4: 出力規則</b>上位N or 閾値 + 探索枠
+        <span class="def">N個中1〜2個はスコア無視の新テーマ枠を必ず確保</span></div>
+    </div>
+    <div class="pad grid3" style="padding-top:0">
+      <div class="cell c-do"><b>補正1: 標本数補正</b>少数サンプルは平均側へ縮小
+        <span class="def">1投稿10万再生 &lt; 10投稿平均5万。まぐれ当たりに釣られない</span></div>
+      <div class="cell c-do"><b>補正2: 時間減衰</b>古い実績ほど軽くする
+        <span class="def">例: 30日で半減。トレンド変化が速い環境ほど減衰も速く</span></div>
+      <div class="cell c-do"><b>補正3: 飽和ペナルティ</b>連投テーマにマイナス項
+        <span class="def">直近採用回数を減点。勝ちテーマの使い潰しを防ぐ</span></div>
+    </div>
+    <div class="pad" style="padding-top:0">
+      <div class="cell c-do" style="display:block"><b>検証 = back-test</b>過去データで「このスコアなら何を選んでいたか」を再現し、実際の当たりを選べていたかを見る。重みを1つずつ動かして順位変化を観察すれば手動でも詰められる。</div>
+    </div>
+  </div>
+</section>
+
+<section id="example">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--ex)"></span>🧮 計算実例 — テーマ4候補から今週の3枠を選ぶ</h2>
+    <div class="note">重み: 実績 0.4 / 伸び率 0.3 / 競合頻度 0.2 / 鮮度 0.1。特徴量は percentile 正規化済み (0〜1)。</div>
+    <div class="pad" style="overflow-x:auto">
+      <table>
+        <thead><tr>
+          <th>候補テーマ</th><th>実績 ×.4</th><th>伸び率 ×.3</th><th>競合 ×.2</th><th>鮮度 ×.1</th><th>素点</th><th>標本数補正後</th><th>判定</th>
+        </tr></thead>
+        <tbody>
+          <tr class="hl"><td>偉人の食文化<span class="def">2投稿・平均8.4万再生</span></td>
+            <td>0.90</td><td>0.90</td><td>0.60</td><td>0.60</td><td>0.81</td><td><b>0.70</b><span class="def">実績0.9→0.63に縮小 (2投稿のみ)</span></td><td>採用 ①</td></tr>
+          <tr class="hl"><td>偉人の意外な日常<span class="def">12投稿・平均5.2万再生</span></td>
+            <td>0.60</td><td>0.50</td><td>0.90</td><td>0.20</td><td>0.59</td><td><b>0.59</b><span class="def">補正なし (標本十分)</span></td><td>採用 ②</td></tr>
+          <tr><td class="dim">都市伝説解説<span class="def">9投稿・平均3.8万再生</span></td>
+            <td class="dim">0.30</td><td class="dim">0.20</td><td class="dim">0.30</td><td class="dim">1.00</td><td class="dim">0.34</td><td class="dim">0.34</td><td class="dim">見送り</td></tr>
+          <tr class="hl"><td>昭和レトロ (新規)<span class="def">データなし</span></td>
+            <td colspan="5" class="dim">スコア対象外 — 実績ゼロの候補はスコアでは永遠に選ばれない</td><td>—</td><td>採用 ③ <b>探索枠</b></td></tr>
+        </tbody>
+      </table>
+      <p class="dim" style="font-size:12px;margin:12px 0 0">読みどころ: (1) 首位「食文化」は補正で 0.81→0.70 に下がるが順位は維持 — 投稿が増えて実力なら信頼が回復し、まぐれなら自然に落ちる。(2) 3枠目はスコア無視の探索枠 — これが無いと新テーマが永遠に入れない。(3) 外れても「昭和レトロ×この数値」という情報が残り、次回のスコア表が賢くなる。</p>
+    </div>
+  </div>
+</section>
+
+<section id="metrics">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--do)"></span>📏 評価指標の決め方 — 4原則</h2>
+    <div class="note">物差しが曖昧なままの改善は全部「事後正当化」になる。実験の前に決めて書き残す。</div>
+    <div class="pad grid4">
+      <div class="cell c-do"><b>1. 北極星は1本</b>最大化する指標は1つに絞る
+        <span class="def">下げてはいけない指標は「ガードレール枠」に分離 — 監視のみ・最適化しない</span></div>
+      <div class="cell c-do"><b>2. 先行指標で回す</b>遅行指標で答え合わせ
+        <span class="def">CVは遅すぎる → 相関する速い指標で日々判定し、月次で物差し自体を較正</span></div>
+      <div class="cell c-do"><b>3. 判定ルール事前固定</b>何投稿・何日・何超えで勝ちか
+        <span class="def">結果を見てから基準を動かした実験は、実験ではない</span></div>
+      <div class="cell c-dont"><b>4. グッドハートの法則</b>指標が目標になると歪む
+        <span class="def">再生数を追うと釣り動画化する等。ガードレールは歪み検知装置</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="explore">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--do)"></span>🎲 探索と活用の配分 — 4ルール</h2>
+    <div class="note">勝ちパターンだけ回すと学習が止まる。一定割合は意図的に外し球を打つのが普遍原則。</div>
+    <div class="pad grid4">
+      <div class="cell c-do"><b>1. 固定割合の探索枠</b>採用枠の 10〜20%
+        <span class="def">ε-greedy。環境変化が速いショート動画系は高め (20%前後) が定石</span></div>
+      <div class="cell c-do"><b>2. 不確実性の大きい候補へ</b>ランダムより情報価値
+        <span class="def">データが少なく実力不明なテーマを優先 (UCBの発想)。同じ1枠の情報量が最大に</span></div>
+      <div class="cell c-do"><b>3. 失敗も必ず還流</b>「試して外れた」を記録
+        <span class="def">記録しないと同じ外れ球を何度も打つ。外れ = 次回のスコア表の材料</span></div>
+      <div class="cell c-do"><b>4. 配分は状況で動かす</b>安定→下げる / 急落→上げる
+        <span class="def">複数アカ並走なら「探索多めアカ / 活用特化アカ」の役割分担も取れる</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="antipattern">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--dont)"></span>🚫 禁じ手 6 — やった瞬間に育たなくなる</h2>
+    <div class="pad grid3">
+      <div class="cell c-dont"><b>最初からML</b>データ蓄積前に学習ベース
+        <span class="def">教師データが無い。ルール→スコアの順で貯めてから</span></div>
+      <div class="cell c-dont"><b>目的関数が複数</b>全部最適化しようとする
+        <span class="def">全指標が中途半端に。北極星1本 + ガードレール分離</span></div>
+      <div class="cell c-dont"><b>同時に2箇所変更</b>どれが効いたか不明に
+        <span class="def">1サイクル1変更。速く回すことで本数を稼ぐ</span></div>
+      <div class="cell c-dont"><b>事後に基準変更</b>結果を見てから勝ち定義を動かす
+        <span class="def">全実験が事後正当化になる。判定ルールは事前固定</span></div>
+      <div class="cell c-dont"><b>探索枠ゼロ</b>スコア上位だけ回し続ける
+        <span class="def">新テーマが構造的に入れず、環境変化に気づけない</span></div>
+      <div class="cell c-dont"><b>還流の切断</b>結果がスコア表に戻らない
+        <span class="def">ループが切れた決定システムはただの静的ルール表</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  作成 2026-07-06 ／ 正本: 本ページ (Claude セッション生成の教材、元 MD なし) ／ 内部 ID・認証情報は含まず ／ 実例の数値は説明用の架空値
+</footer>
+
+</body>
+</html>
