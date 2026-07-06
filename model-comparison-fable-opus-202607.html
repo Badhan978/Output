@@ -101,9 +101,17 @@
   .thesis{margin:0;padding:20px;background:var(--onbg);border-top:1px solid var(--line);
     font-size:16px;font-weight:800;line-height:1.55;color:#1d4ed8}
 
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px 20px}
+  .src{border:1.5px solid var(--on);background:#fff;border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+  .src .shead{background:var(--on);color:#fff;padding:10px 14px;font-size:14px;font-weight:800}
+  .src .sdef{padding:9px 14px;font-size:12px;font-weight:700;color:#1d4ed8;background:var(--onbg);border-bottom:1px solid #dbeafe}
+  .src ul{margin:0;padding:10px 14px 12px 30px;font-size:12px}
+  .src li{margin-bottom:7px}
+
   footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
   @media(max-width:980px){
     .duel{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}
+    .grid3{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -123,6 +131,7 @@
   <a href="#verdict">⚖️ 検証結果: 価値の仕訳</a>
   <a href="#detail">🔬 検証の中身 6項目</a>
   <a href="#duel">🥊 Fable × Opus 比較表</a>
+  <a href="#source">💎 勝ち源泉 3つ</a>
 </nav>
 
 <div class="legend">
@@ -359,6 +368,52 @@
     </table>
     <p class="thesis">頭脳はレンタルし、配管・ゲート・学習ループ・固有データを自社資産にする。<br>
     設計の仕事は「考え方を教える」から「材料を届け、出力を検査し、結果を学習に戻す」へ。</p>
+  </div>
+</section>
+
+<!-- ============ 4. Fable が考える v5 の勝ち源泉 ============ -->
+<section id="source">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>💎 Fable が考える v5 の勝ち源泉 — データ・契約・ループ</h2>
+    <div class="note">シナリオ層の議論からの抽象化。汎用 LLM の進化で解けるもの(語りの技術)を除いたとき、v5 に残る資産はこの 3 語に集約される。</div>
+    <div class="grid3">
+
+      <div class="src">
+        <div class="shead">1. データ</div>
+        <div class="sdef">モデルの外にあって、モデルに入れる固有物</div>
+        <ul>
+          <li>LLM は世界の一般知識しか持たない — <b>うちしか持たない入力を渡した分だけ、出力が他社に再現不能になる</b></li>
+          <li>具体物: IG Perf DB の実測(retention・save・共食い実例)/ 競合 64 件 / 知見台帳・fb-memory / 出典つき数字(kWh・価格)</li>
+          <li>今回の実証: Fable の優位は全て「データが配管されていた場面」で発火。同じ Opus でも実績供給ありの回は現実的な判断を出した</li>
+          <li>性質: <b>モデルが賢くなるほど価値が上がる</b>(賢い読み手ほど良い資料を活かす)。減価しない唯一の資産</li>
+        </ul>
+      </div>
+
+      <div class="src">
+        <div class="shead">2. 契約</div>
+        <div class="sdef">出力を確定的に検査・固定するもの</div>
+        <ul>
+          <li>LLM の遵守は確率的 — プロンプトに書いた規律は上位モデルでも漏れる(<b>Fable=NGトークン / Opus=2話者、と実証済み</b>)</li>
+          <li>具体物: スキーマ固定(Agent2 不変契約)/ 機械 lint(禁止トークン・話者数・タイトル金額・文字化け)/ confirm-before-write などのゲート</li>
+          <li>役割: エージェント間 interface を守り、1 違反=事故(キャラ消失・パイプライン停止)を確率ゼロに落とす</li>
+          <li>性質: モデルを差し替えても壊れない「壁」。<b>知能でなくコードで担保する</b>から、モデル進化の影響を受けない</li>
+        </ul>
+      </div>
+
+      <div class="src">
+        <div class="shead">3. ループ</div>
+        <div class="sdef">結果を測って、次の生成に戻すもの</div>
+        <ul>
+          <li>予測→実測照合→較正、生成→実績→知見化。今回<b>どのモデルも自発しなかった</b> = 待っていても生えない、設計でしか作れない</li>
+          <li>具体物: 予想の自動答え合わせ(投稿+2日で照合→誤差ログ)/ 検算の定常化 / 良い自発挙動を checklist へ蒸留する運用</li>
+          <li>今回の実証: 答え合わせ列は全行空欄のまま、ER 0.03 一律は二世代で進化ゼロ — <b>ループ不在の場所は時が止まる</b></li>
+          <li>性質: KPI「予測的中率」の成立条件そのもの。回るたびにデータ(源泉 1)が増える、<b>複利の発生装置</b></li>
+        </ul>
+      </div>
+
+    </div>
+    <p class="thesis">データが入力を固有化し、契約が出力を安全化し、ループが両者を毎週太らせる。<br>
+    モデルはこの 3 つの間に挟まる「レンタル頭脳」— 差し替わるたびに、この 3 資産の価値はむしろ上がる。</p>
   </div>
 </section>
 
