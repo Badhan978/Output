@@ -531,6 +531,38 @@
         <tr><td class="lever">自社投稿DB</td><td>実測KPIチェーン</td><td>市場投稿DBと同一スキーマ＋実測KPI（フック率〜CVR）。実装は同テーブルに source=market/own フラグでも可</td></tr>
       </tbody>
     </table>
+    <div class="note" style="border-top:1px solid var(--line)">パイプライン構想図 — 収集からデコード、DB、生成、実測の還流まで:</div>
+    <div class="flowrow" style="grid-template-columns:1fr 28px 1fr 28px 1.15fr 28px 1.15fr 28px 1fr">
+      <div>
+        <div class="zlabel" style="font-size:10.5px;font-weight:800;color:var(--sub);margin-bottom:6px">ソース</div>
+        <div class="fbox n-on" style="margin-bottom:8px;text-align:left">市場投稿<small>スクレイプ収集（proxy KPIのみ）</small></div>
+        <div class="fbox n-run" style="text-align:left">自社投稿<small>実測KPI付き（フック率〜CVR）</small></div>
+      </div>
+      <div class="farr">→</div>
+      <div>
+        <div class="zlabel" style="font-size:10.5px;font-weight:800;color:var(--sub);margin-bottom:6px">デコード</div>
+        <div class="fbox n-on" style="text-align:left">LLMデコーダー<small>25パラメーター＋12類型でアノテート（全自動）</small></div>
+      </div>
+      <div class="farr">→</div>
+      <div>
+        <div class="zlabel" style="font-size:10.5px;font-weight:800;color:var(--sub);margin-bottom:6px">DB群</div>
+        <div class="fbox n-on" style="margin-bottom:8px;text-align:left">投稿DB<small>市場＋自社を同一スキーマ（source フラグ）</small></div>
+        <div class="fbox n-done" style="margin-bottom:8px;text-align:left">商材DB<small>理解5項目＋カテゴリタグ</small></div>
+        <div class="fbox n-done" style="text-align:left">ペルソナDB<small>商材から独立・横断再利用</small></div>
+      </div>
+      <div class="farr">→</div>
+      <div>
+        <div class="zlabel" style="font-size:10.5px;font-weight:800;color:var(--sub);margin-bottom:6px">導出ビュー</div>
+        <div class="fbox n-run" style="margin-bottom:8px;text-align:left">勝率表<small>水準×KPI＝事前分布</small></div>
+        <div class="fbox n-run" style="margin-bottom:8px;text-align:left">テーマ候補<small>商材DB×ペルソナDBの交差</small></div>
+        <div class="fbox n-run" style="text-align:left">Playbook凍結値<small>正解が収束済みの表現</small></div>
+      </div>
+      <div class="farr">→</div>
+      <div>
+        <div class="zlabel" style="font-size:10.5px;font-weight:800;color:var(--sub);margin-bottom:6px">生成・投稿</div>
+        <div class="fbox n-done" style="text-align:left">台本生成 → 投稿<small>実測KPIは自社投稿DBへ還流 ↩（②自社PDCA学習のループ）</small></div>
+      </div>
+    </div>
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
       <b>軽量化5原則:</b> ①テールだけ学ぶ（上位50〜100本） ②収束したら止める ③新商材はカテゴリ判定＋差分に還元 ④Just-in-time化（初弾生成時にデコード、DBは副産物） ⑤市場から観測できない層（CTA〜CVR）に収集コストを払わない。<br>
       <b>資本効率:</b> 市場学習＝<b>他人が実弾で回したPDCAの結果をトークン代で吸収する</b>最安の学習チャネル。重いのは初回のパイプライン構築のみ。
