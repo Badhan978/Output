@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>V5 投稿パフォーマンス予測 再設計 v1.0</title>
+<style>
+  :root{
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    --done:#16a34a; --donebg:#f0fdf4;
+    --run:#7c3aed;  --runbg:#f5f3ff;
+    --on:#2563eb;   --onbg:#eff6ff;
+    --off:#0d9488;  --offbg:#f0fdfa;
+    --todo:#94a3b8; --todobg:#f1f5f9;
+    --bad:#dc2626;  --badbg:#fef2f2;
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
+
+  header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:34px 28px 30px}
+  .hwrap{max-width:1200px;margin:0 auto}
+  .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#7dd3fc;font-weight:800;margin:0 0 8px}
+  header h1{margin:0;font-size:30px;line-height:1.3}
+  header .lead{margin:12px 0 0;color:#cbd5e1;font-size:14px;max-width:900px}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    border-radius:99px;padding:5px 14px;font-size:12px;font-weight:700}
+  .pill b{color:#7dd3fc}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:12px;border:1px solid var(--line);font-weight:600}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  section{max-width:1200px;margin:26px auto;padding:0 20px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .mark{width:12px;height:12px;border-radius:4px;flex:0 0 12px}
+  .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
+    border-bottom:1px solid var(--line)}
+  .pad{padding:18px 20px}
+
+  .chip{font-size:10px;font-weight:800;padding:3px 10px;border-radius:5px;color:#fff}
+
+  .st{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;white-space:nowrap}
+  .st-done{background:#dcfce7;color:#15803d}
+  .st-run{background:#ede9fe;color:#6d28d9}
+  .st-on{background:#dbeafe;color:#1d4ed8}
+  .st-off{background:#ccfbf1;color:#0f766e}
+  .st-todo{background:#f1f5f9;color:#64748b}
+  .st-bad{background:#fee2e2;color:#b91c1c}
+
+  .legend{max-width:1200px;margin:18px auto 0;padding:0 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .legend span.lab{font-size:11px;color:var(--sub);font-weight:700}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700;white-space:nowrap}
+  .lever{font-weight:700}
+  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .mcard{border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff}
+  .mcard .big{font-size:28px;font-weight:800;line-height:1.1}
+  .mcard .lab{font-size:11px;color:var(--sub);font-weight:700;margin-bottom:4px}
+  .mcard .sub{font-size:11.5px;color:var(--sub);margin-top:4px}
+
+  .mapwrap{padding:24px 20px;display:grid;
+    grid-template-columns:1.1fr 40px 1fr 40px 1.15fr;gap:10px;align-items:start}
+  .zone-t{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--sub);margin:0 0 8px;text-transform:uppercase}
+  .node{border-radius:9px;padding:8px 12px;margin-bottom:8px;font-size:12px;
+    font-weight:600;border:1.5px solid}
+  .node small{display:block;font-weight:400;color:var(--sub);font-size:11px;margin-top:2px}
+  .n-on{border-color:var(--on);background:var(--onbg)}
+  .n-off{border-color:var(--off);background:var(--offbg)}
+  .n-done{border-color:var(--done);background:var(--donebg)}
+  .n-run{border-color:var(--run);background:var(--runbg)}
+  .arrows{display:flex;flex-direction:column;justify-content:center;align-items:center;
+    height:100%;padding-top:40px;color:#94a3b8;font-size:22px;font-weight:700}
+  .loopback{margin:0 20px 20px;border:1.5px dashed var(--run);background:var(--runbg);
+    border-radius:9px;padding:10px 14px;font-size:12px;font-weight:600;text-align:center;color:#6d28d9}
+
+  .formula{margin:0;padding:16px 20px;background:#0f172a;color:#e2e8f0;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.9;overflow-x:auto}
+  .formula b{color:#7dd3fc}
+  .formula .cm{color:#64748b}
+
+  .bar{display:grid;grid-template-columns:170px 1fr 92px;gap:10px;align-items:center;margin-bottom:9px}
+  .bar .blab{font-size:12px;font-weight:700;text-align:right}
+  .bar .btrack{background:#f1f5f9;border-radius:5px;height:20px;position:relative}
+  .bar .bfill{height:100%;border-radius:5px}
+  .bar .bval{font-size:12px;font-weight:800}
+
+  .tstep{display:flex;gap:14px;margin-bottom:14px}
+  .tdate{flex:0 0 92px;font-weight:800;font-size:12px;color:#6d28d9;text-align:right}
+  .tbody{flex:1;border-left:3px solid #e0e7ff;padding-left:14px}
+  .tbody .tt{font-weight:800;font-size:13px}
+
+  footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px;line-height:1.8}
+  @media(max-width:980px){
+    .mapwrap,.grid3,.grid4,.grid2{grid-template-columns:1fr}
+    .arrows{transform:rotate(90deg);padding:0;height:32px}
+    .bar{grid-template-columns:110px 1fr 80px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <p class="kicker">V5 · Imp Prediction Redesign v1.0</p>
+    <h1>予測を「機械ベースライン × LLM乗率 × 較正」に分離し、<br>週次の予実ループで当て続ける</h1>
+    <p class="lead">現行はLLMが数字を丸ごと当てる構造で <b>2倍以内的中 26%</b>・実測の3.1倍過大。505投稿のバックテストで、機械ベースライン層だけで <b>52%</b> を実証済み。LLMの仕事を「アカウント実力からの相対判断 (乗率)」に純化し、毎週採点して価値を証明させる。</p>
+    <div class="pills">
+      <span class="pill">作成 <b>2026-07-06</b></span>
+      <span class="pill">根拠 <b>予実505件 + 3リポ実装調査</b></span>
+      <span class="pill">現在地 <b>Hit@2x 26%</b></span>
+      <span class="pill">Phase1 実証 <b>52%</b></span>
+      <span class="pill">Phase3 目標 <b>60%+</b></span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <a href="#diag">📉 現状診断 7欠陥</a>
+  <a href="#loop">🔄 理想ループ + 式</a>
+  <a href="#diff">🆚 現行vs理想 7項目</a>
+  <a href="#evidence">🧪 実証 505件</a>
+  <a href="#prep">🏗️ 事前準備 5本</a>
+  <a href="#phases">🗓️ フェーズ 0-3</a>
+</nav>
+
+<div class="legend">
+  <span class="lab">凡例:</span>
+  <span class="st st-on">機械層 (script計算)</span>
+  <span class="st st-off">LLM層 (判断)</span>
+  <span class="st st-done">実証済み・既存資産</span>
+  <span class="st st-run">新設する仕組み</span>
+  <span class="st st-bad">現行の欠陥</span>
+</div>
+
+<!-- ============ 1. 現状診断 ============ -->
+<section id="diag">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--bad)"></span>📉 現状診断 — 予測は「勘」で出ている</h2>
+    <div class="note">駿冴の予実データセット (505投稿, 5/12〜7/3) と content-pipeline / v5-agents / v5-autonomous-experiment の実装調査から。比較は全て n=440 (ACC過去3本以上)・時系列順・リーク無し。</div>
+    <div class="pad">
+      <div class="grid4">
+        <div class="mcard" style="border-color:var(--bad)">
+          <div class="lab">2倍以内的中 (Hit@2x)</div>
+          <div class="big" style="color:var(--bad)">26%</div>
+          <div class="sub">コイン投げ未満の精度</div>
+        </div>
+        <div class="mcard" style="border-color:var(--bad)">
+          <div class="lab">予測バイアス</div>
+          <div class="big" style="color:var(--bad)">3.1倍</div>
+          <div class="sub">中央値で実測の3.1倍過大</div>
+        </div>
+        <div class="mcard" style="border-color:var(--bad)">
+          <div class="lab">テーマ弁別力 (ACC内順位相関)</div>
+          <div class="big" style="color:var(--bad)">−0.01</div>
+          <div class="sub">どのテーマが伸びるか識別ゼロ</div>
+        </div>
+        <div class="mcard" style="border-color:var(--done)">
+          <div class="lab">ナイーブ基準 (ACC過去中央値)</div>
+          <div class="big" style="color:var(--done)">52%</div>
+          <div class="sub">「過去実測を写すだけ」が現行の2倍</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:13px;margin:20px 0 10px">実測の分布 — 現行予測の達成率 (実測÷予測, 505件)</h3>
+      <div class="bar"><div class="blab">&lt;10%</div><div class="btrack"><div class="bfill" style="width:71%;background:var(--bad)"></div></div><div class="bval">25% (125件)</div></div>
+      <div class="bar"><div class="blab">10〜50%</div><div class="btrack"><div class="bfill" style="width:100%;background:var(--bad)"></div></div><div class="bval">35% (179件)</div></div>
+      <div class="bar"><div class="blab">50〜80%</div><div class="btrack"><div class="bfill" style="width:29%;background:var(--todo)"></div></div><div class="bval">10% (50件)</div></div>
+      <div class="bar"><div class="blab">80〜125% ≒ 的中</div><div class="btrack"><div class="bfill" style="width:26%;background:var(--done)"></div></div><div class="bval">9% (43件)</div></div>
+      <div class="bar"><div class="blab">125〜300%</div><div class="btrack"><div class="bfill" style="width:31%;background:var(--todo)"></div></div><div class="bval">11% (55件)</div></div>
+      <div class="bar"><div class="blab">&gt;300%</div><div class="btrack"><div class="bfill" style="width:29%;background:var(--todo)"></div></div><div class="bval">10% (53件)</div></div>
+      <p style="font-size:11.5px;color:var(--sub);margin:8px 0 0">6割の投稿で予測の半分にも届かない (過大側)。一方で3倍超の上振れも1割 — 点予測では両側を表現できない。</p>
+    </div>
+
+    <div class="pad" style="border-top:1px solid var(--line)">
+      <h3 style="font-size:13px;margin:0 0 10px">なぜ当たらないか — 実装調査で確定した7つの構造欠陥</h3>
+      <table>
+        <thead><tr><th style="width:30px">#</th><th style="width:180px">欠陥</th><th>実装上の事実</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="lever">予測式が実質存在しない</td><td>Planner への指示は「過去views平均値付近で設定」の自然言語1段落のみ<span class="def">planner-system-prompt.md Step2。回帰・補正・レンジ設計なし</span></td></tr>
+          <tr><td>2</td><td class="lever">過去実績が未供給だった</td><td>実績データ注入は 2026-07-06 実装。測定対象バッチは実績ゼロの勘で一律 10,000/15,000<span class="def">実績なし時のデフォルト = views:1000 固定</span></td></tr>
+          <tr><td>3</td><td class="lever">アカウントパワー未考慮</td><td>フォロワー数は agent 定義に記載あるが未実装。ACC実力は中央値で 152〜45,014 = <b>297倍の幅</b><span class="def">この幅を無視して全ACC同じロジックで予測</span></td></tr>
+          <tr><td>4</td><td class="lever">PFアルゴリズム知識が届かない</td><td>知識は v5-agents/knowledge/ に存在 (1,527行) だが、Planner はクリーン環境で外部Read禁止 = 物理的に参照不能<span class="def">CEO経由の間接圧縮のみ、予測数値には非連動</span></td></tr>
+          <tr><td>5</td><td class="lever">伸び要因が予測に非連動</td><td>Hook/Body/CTA 分解はシナリオ生成専用。予測数値には一切入力されない<span class="def">結果 = テーマ弁別力 ρ −0.01</span></td></tr>
+          <tr><td>6</td><td class="lever">予実照合ループ不在</td><td>予測誤差を回収して次に返す機構が3リポともゼロ。駿冴シートが初の照合<span class="def">実測は「次のテーマ選定」にしか還流しない</span></td></tr>
+          <tr><td>7</td><td class="lever">二重予測 + 過大化圧</td><td>CEO「推測view」と Planner predicted_kpis が非統合。実験経路は「過去中央値を必ず超える予測を出せ」と指示<span class="def">goal と forecast が混線 → 構造的に過大予測</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. 理想ループ ============ -->
+<section id="loop">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>🔄 理想の予測ループ — 機械が土台、LLMは乗率だけ、毎週採点</h2>
+    <div class="note">読み方: 予測生成 (左) → 投稿・計測 (中) → 週次学習 (右) → 破線がパラメータと知識の還流。<span class="st st-on">機械層</span> と <span class="st st-off">LLM層</span> を分離するのが設計の核 — LLMの寄与が単独で採点可能になる。</div>
+
+    <div class="mapwrap">
+      <div class="col">
+        <p class="zone-t">① 予測生成 (投稿予約時)</p>
+        <div class="node n-on">B_a ベースライン計算<small>同ACC×PF 直近10本の実測 log中央値</small></div>
+        <div class="node n-on">C_a 較正係数を適用<small>予実ログ由来のACC別バイアス補正</small></div>
+        <div class="node n-off">M_i LLM乗率を判断<small>テーマ×Hook×競合anchor×PF知識 → 0.33〜3x + 根拠必須</small></div>
+        <div class="node n-run">P10 / P50 / P90 を構造化保存<small>マスターにJSON列新設 — 散文Docから独立</small></div>
+      </div>
+      <div class="arrows">→</div>
+      <div class="col">
+        <p class="zone-t">② 投稿・計測</p>
+        <div class="node n-done">投稿 (既存パイプライン)<small>content-pipeline / Post Tracker</small></div>
+        <div class="node n-done">48h実測スナップショット<small>ContentOps 毎時API収集 (既存・全投稿)</small></div>
+        <div class="node n-on">最終Imp換算 r_a<small>48h × 1.26 (ACC別に更新) — 検証が3日で回る</small></div>
+      </div>
+      <div class="arrows">→</div>
+      <div class="col">
+        <p class="zone-t">③ 週次採点・学習</p>
+        <div class="node n-run">予実突合 (permalink主キー)<small>駿冴シートのロジックを恒常ジョブ化</small></div>
+        <div class="node n-run">4 KPI採点<small>Hit@2x / Coverage80 / 弁別力ρ / Bias</small></div>
+        <div class="node n-on">パラメータ自動更新<small>C_a・σ_a・r_a を数理更新 (LLM不介在)</small></div>
+        <div class="node n-off">乗率の当たり外れを言語化<small>Agent3 が要因分析 → few-shot bank 追記</small></div>
+      </div>
+    </div>
+    <div class="loopback">⟲ 更新された C_a・σ_a・r_a と few-shot bank が次サイクルの「① 予測生成」へ自動注入 — 予測が毎週、現実に寄っていく</div>
+
+    <div class="formula">
+<b>P50(i) = B_a × C_a × M_i</b>
+B_a  = exp( median( ln Imp_j ) )              <span class="cm"># 同ACC×PF 直近10投稿の実測 (最低3本)</span>
+C_a  = clip( median( A_j / P50_j ), 0.5, 2 )  <span class="cm"># 較正係数。初期1.0 → 直近4週の予実で週次更新</span>
+M_i  ∈ {0.33, 0.5, 0.7, 1.0, 1.4, 2.0, 3.0}   <span class="cm"># LLM乗率。根拠必須・デフォルト1.0</span>
+
+P10 = P50 ÷ 10^(1.28·σ_a)   P90 = P50 × 10^(1.28·σ_a)   <span class="cm"># σ_a 初期0.66 → 帯=÷/×6.9、実測カバレッジ85%</span>
+最終Imp = P50_48h × r_a                        <span class="cm"># r_a 初期1.26 (P10 1.04 / P90 1.82)。予測主軸は48h</span>
+
+<span class="cm"># コールドスタート (実測&lt;3本): B_a = ジャンル×PF prior中央値、M=1.0固定、σ=0.85 (広め)</span>
+    </div>
+
+    <div class="pad">
+      <div class="grid2">
+        <div>
+          <h3 style="font-size:13px;margin:0 0 10px">採点KPI (週次) — 「予測的中率」の定義</h3>
+          <table>
+            <thead><tr><th>KPI</th><th>定義</th><th>現行</th><th>目標</th></tr></thead>
+            <tbody>
+              <tr><td class="lever">Hit@2x</td><td>実測が P50 の 0.5〜2倍</td><td><span class="st st-bad">26%</span></td><td><span class="st st-run">P1 50% → P3 60%</span></td></tr>
+              <tr><td class="lever">Coverage80</td><td>実測が P10-P90 帯に入る率</td><td>—</td><td><span class="st st-run">80±5%</span></td></tr>
+              <tr><td class="lever">弁別力 ρ</td><td>ACC内 corr( M_i, 実測÷ベースライン )</td><td><span class="st st-bad">−0.01</span></td><td><span class="st st-run">&gt;0.3</span></td></tr>
+              <tr><td class="lever">Bias</td><td>median( 実測 ÷ P50 )</td><td><span class="st st-bad">0.32</span></td><td><span class="st st-run">0.8〜1.25</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 style="font-size:13px;margin:0 0 10px">設計原則 3本</h3>
+          <table>
+            <tbody>
+              <tr><td class="lever">乗率解雇ルール</td><td>弁別力ρが4週連続 ≤0 なら M=1.0 固定にフォールバック<span class="def">LLM乗率は「価値を証明できた時だけ」稼働する honest gate</span></td></tr>
+              <tr><td class="lever">goal と forecast の分離</td><td>「目標を必ず超える予測を出せ」系の注入は全撤廃<span class="def">目標は目標、予測は予測。CEO推測view は乗率+根拠形式に一本化</span></td></tr>
+              <tr><td class="lever">バズは当てずに検出する</td><td>3倍超バズは15% — 点予測の対象外。P90帯で表現し、48h初速がP90超えでアラート<span class="def">予測の仕事は「通常レンジを当てる」+「異常を早く検知」</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 差分 ============ -->
+<section id="diff">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>🆚 現行 vs 理想 — 7項目の差分</h2>
+    <div class="note">左列 = 実装調査で確定した現行の姿。右列 = 本設計での置き換え。</div>
+    <div class="pad">
+      <table>
+        <thead><tr><th style="width:150px">要素</th><th>現行 <span class="st st-bad">欠陥</span></th><th>理想 <span class="st st-run">本設計</span></th></tr></thead>
+        <tbody>
+          <tr><td class="lever">ベースライン</td><td>「平均値付近で」の自然言語指示・実績未供給<span class="def">実質デフォルト値と勘</span></td><td>B_a を script が機械計算し強制注入<span class="def">LLMに土台の数字を出させない</span></td></tr>
+          <tr><td class="lever">アカウントパワー</td><td>フォロワー未実装・297倍の実力差を無視</td><td>B_a + C_a がACC実力を直接エンコード<span class="def">実証: これだけで 26→52%</span></td></tr>
+          <tr><td class="lever">PFアルゴリズム知識</td><td>Planner に物理的に届かない (外部Read禁止)</td><td>乗率判断への要約注入<span class="def">48h初速・保持率ベンチ・Phase別ベンチマーク</span></td></tr>
+          <tr><td class="lever">伸び要因 (テーマ/Hook)</td><td>予測数値に非連動 (弁別力 −0.01)</td><td>M_i 乗率として分離し毎週採点<span class="def">few-shot bank (実証例) で判断を鍛える</span></td></tr>
+          <tr><td class="lever">予実照合</td><td>機構ゼロ (駿冴シートが初)</td><td>週次自動採点 + C/σ/r 自動更新<span class="def">駿冴のロジックがそのまま恒常ジョブの土台</span></td></tr>
+          <tr><td class="lever">出力形式</td><td>点予測1個 + CEO推測viewと二重非統合</td><td>P10/P50/P90 + 乗率根拠、予測は一本化<span class="def">構造化列で保存 — 採点可能な形式</span></td></tr>
+          <tr><td class="lever">過大化圧</td><td>「必ず超えよ」注入 (goalMedianViews)</td><td>撤廃 — goal と forecast の分離</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. 実証 ============ -->
+<section id="evidence">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--done)"></span>🧪 式の実証 — 505件バックテスト (時系列順・リーク無し)</h2>
+    <div class="note">「各投稿の時点で入手可能だった過去実測のみ」を使って予測を再現し、実測と照合。n=440 (ACC過去3本以上)。</div>
+    <div class="pad">
+      <h3 style="font-size:13px;margin:0 0 10px">2倍以内的中率 (Hit@2x) の比較</h3>
+      <div class="bar"><div class="blab">V0 現行LLM予測</div><div class="btrack"><div class="bfill" style="width:43%;background:var(--bad)"></div></div><div class="bval">26%</div></div>
+      <div class="bar"><div class="blab">V4 現行×較正のみ</div><div class="btrack"><div class="bfill" style="width:52%;background:var(--todo)"></div></div><div class="bval">31%</div></div>
+      <div class="bar"><div class="blab">V1 ベースライン B_a</div><div class="btrack"><div class="bfill" style="width:87%;background:var(--on)"></div></div><div class="bval"><b>52%</b> 実証</div></div>
+      <div class="bar"><div class="blab">Phase3 目標 B×C×M</div><div class="btrack"><div class="bfill" style="width:100%;background:var(--run)"></div></div><div class="bval">60%+</div></div>
+      <p style="font-size:11.5px;color:var(--sub);margin:8px 0 16px">log誤差中央値: 現行 3.9倍ズレ → ベースライン 2.0倍ズレ。現行LLM予測に較正を足すだけ (V4) では31%止まり — 土台の置き換えが必要。</p>
+
+      <div class="grid3">
+        <div class="mcard" style="border-color:var(--on)">
+          <div class="lab">48h → 最終Imp 倍率</div>
+          <div class="big" style="color:var(--on)">1.26x</div>
+          <div class="sub">P10 1.04 / P90 1.82 で安定。48h時点で最終の79%到達 → <b>予測主軸を48hに置ける</b> = 検証が3日で回る</div>
+        </div>
+        <div class="mcard" style="border-color:var(--on)">
+          <div class="lab">P10-P90 帯の実測カバレッジ</div>
+          <div class="big" style="color:var(--on)">85%</div>
+          <div class="sub">σ=0.66 → 帯 = P50 ÷/× 6.9。目標80%にほぼ一致 — レンジ設計が機能する証拠</div>
+        </div>
+        <div class="mcard" style="border-color:var(--todo)">
+          <div class="lab">予測の限界 (バズ率)</div>
+          <div class="big" style="color:var(--sub)">15%</div>
+          <div class="sub">ACC中央値の3倍超え15% / 10倍超え3.9%。点では原理的に当たらない → 帯+初速検出で扱う</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. 事前準備 ============ -->
+<section id="prep">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>🏗️ 事前準備 (Phase 0) — 過去データでの初期学習と土台づくり</h2>
+    <div class="note">ループを回し始める前に済ませる5本。①が全ての前提。②〜④は既存505件からの「事前学習」= 初日から較正済みの状態で開始できる。</div>
+    <div class="pad">
+      <table>
+        <thead><tr><th style="width:30px">#</th><th style="width:210px">準備</th><th>内容</th><th style="width:110px">状態</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="lever">予実パイプライン恒常化</td><td>駿冴シートの突合ロジック (permalink主キー) を週次ジョブ化。マスターに予測の構造化列 (P10/P50/P90/乗率/根拠) を新設<span class="def">散文の仮説Docから予測を独立させる — 採点可能性の担保</span></td><td><span class="st st-run">新設</span></td></tr>
+          <tr><td>2</td><td class="lever">パラメータ・バックフィル</td><td>505件で C_a・σ_a・r_a を初期化。<b>本設計の初期値 (σ=0.66, r=1.26 等) がその算出結果</b><span class="def">= 過去データでの事前学習。初日から較正済みで開始</span></td><td><span class="st st-done">算出済み</span></td></tr>
+          <tr><td>3</td><td class="lever">コールドスタート prior 表</td><td>ジャンル×PF の実測中央値表。実測3本未満の新規ACCはここから開始 (σ広め=0.85)<span class="def">新規アカ設計 (NAD) の期待値設定にも流用可能</span></td><td><span class="st st-run">新設</span></td></tr>
+          <tr><td>4</td><td class="lever">乗率 few-shot bank 初期版</td><td>3倍超の上振れ64件・大幅下振れ事例を Agent3 が要因言語化 → 乗率プロンプトの実証例セットに<span class="def">「何起因で伸びたか」の教師データを過去分から先に作る</span></td><td><span class="st st-run">新設</span></td></tr>
+          <tr><td>5</td><td class="lever">KPI合意 + ガードレール撤去</td><td>「予測的中率」= Hit@2x で定義合意 (7/3 経営会議のKPI軸に接続)。goalMedianViews 撤廃・CEO推測view 一本化<span class="def">定義が曖昧なままだと「的中率75%」等の目標が測定不能</span></td><td><span class="st st-run">合意事項</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. フェーズ ============ -->
+<section id="phases">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>🗓️ 実装フェーズ 0-3 — 各段で精度が測定可能に上がる</h2>
+    <div class="note">順序が効く: ベースライン (P1) が入って初めて乗率 (P3) の寄与が測れる。P3 は「挑戦」— 乗率解雇ルールで価値を毎週検証しながら進める。</div>
+    <div class="pad">
+      <div class="tstep">
+        <div class="tdate">Phase 0</div>
+        <div class="tbody"><span class="tt">事前準備</span> — 上記5本。予実ログの構造化が全ての前提。<span class="st st-run">新設</span></div>
+      </div>
+      <div class="tstep">
+        <div class="tdate">Phase 1</div>
+        <div class="tbody"><span class="tt">ベースライン注入</span> — Planner Step2 改修: B_a·C_a を機械注入、LLM出力は乗率+根拠のみに変更。<b>効果はバックテスト実証済み 26% → 52%</b>。<span class="st st-done">効果実証済み</span></div>
+      </div>
+      <div class="tstep">
+        <div class="tdate">Phase 2</div>
+        <div class="tbody"><span class="tt">較正ループ稼働</span> — 週次採点ジョブ + C/σ/r 自動更新 + P10-P90 レンジ運用開始。Coverage80 と Bias が監視下に入る。<span class="st st-run">新設</span></div>
+      </div>
+      <div class="tstep">
+        <div class="tdate">Phase 3</div>
+        <div class="tbody"><span class="tt">弁別力への挑戦</span> — PF知識・Hook実証値・競合anchor・few-shot bank を乗率判断に注入し、ρ −0.01 → 0.3+ を狙う。乗率解雇ルール (4週連続ρ≤0でM=1固定) で価値を毎週検証。<span class="st st-off">LLM層</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  出典: 予測vs実測データセット (駿冴作成, 505投稿, 2026-05-12〜07-03) ／ 実装調査: content-pipeline (Planner Step2・変数注入層)・v5-agents (CEO ceo-run Step5・knowledge/)・v5-autonomous-experiment (cycle-001 予測設計)。<br>
+  バックテストは全て時系列順・情報リーク無しで実施。内部ID・認証情報は除去済み。<br>
+  正本: <code>~/claude/output/v5-imp-prediction-redesign.md</code> ／ 作成 2026-07-06 (Badhan × Claude)
+</footer>
+
+</body>
+</html>
