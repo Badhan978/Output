@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>【提案】AB① パラメーター設計 v2 — ライフハック × CV直結型</title>
+<title>【提案】AB① CV直結型 コンテンツ設計 v2</title>
 <style>
   :root{
     --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
@@ -38,7 +38,7 @@
   .card{background:#fff;border:1px solid var(--line);border-radius:12px;
     overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
   .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
-    display:flex;align-items:center;gap:10px}
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
     border-bottom:1px solid var(--line)}
   .mark{width:12px;height:12px;border-radius:4px;display:inline-block}
@@ -84,43 +84,53 @@
   .n-on{border-color:var(--on);background:var(--onbg)}
   .farr{text-align:center;color:#94a3b8;font-size:18px;font-weight:800}
 
-  .formula{padding:22px 20px;text-align:center;font-size:19px;font-weight:800;letter-spacing:.02em}
-  .formula .fx{color:var(--on)}
-  .formula .sub-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;font-size:11.5px;font-weight:600;color:var(--sub)}
+  /* 式: 項とその担当層ラベルを同一セルに入れて、ズレを構造的に不可能にする */
+  .fgrid{display:grid;grid-template-columns:auto auto 1fr auto 1fr auto 1fr auto 1fr;
+    gap:8px;align-items:stretch;padding:22px 20px}
+  .fterm{border:1.5px solid var(--on);background:var(--onbg);border-radius:10px;
+    padding:12px 10px;text-align:center;font-weight:800;font-size:15px}
+  .fterm small{display:block;font-weight:600;color:var(--sub);font-size:11px;margin-top:6px}
+  .fcv{border-color:var(--done);background:var(--donebg)}
+  .fop{display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#94a3b8}
+
+  .tabbtn{border:1.5px solid var(--line);background:#fff;color:var(--sub);border-radius:99px;
+    padding:6px 18px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}
+  .tabbtn.active{border-color:var(--run);background:var(--runbg);color:var(--run)}
 
   footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
   @media(max-width:980px){
-    .grid4,.grid3,.grid2,.flowrow,.formula .sub-row{grid-template-columns:1fr}
+    .grid4,.grid3,.grid2,.flowrow{grid-template-columns:1fr}
     .grid4>div,.grid3>div{border-right:none;border-bottom:1px solid var(--line)}
     .farr{transform:rotate(90deg);padding:6px 0}
+    .fgrid{grid-template-columns:1fr}
+    .fop{transform:rotate(90deg)}
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="kicker">Proposal v2 — AB Test ① Parameter Design / for AI AD 定例</div>
-  <h1>【提案】ライフハック × CV直結型 パラメーター設計 v2</h1>
-  <p class="lead">投稿タイプを「インプ最大化 / ターゲット獲得」に2分岐させず、<b style="color:#fff">1投稿の中で Hook＝関心層の母体最大化 / Body＝購買衝動 / CTA＝摩擦ゼロの刈り取り、と層分担</b>させ、層別KPIでパラメーターPDCAを回す設計案。</p>
+  <div class="kicker">Proposal v2 — AB Test ① Content Design / for AI AD 定例</div>
+  <h1>【提案】CV直結型 コンテンツ設計 v2</h1>
+  <p class="lead">投稿タイプを「インプ最大化 / ターゲット獲得」に2分岐させず、<b style="color:#fff">1投稿の中で Hook＝関心層の母体最大化 / Body＝購買衝動 / CTA＝摩擦ゼロの刈り取り、と層分担</b>させ、層別KPIでパラメーターPDCAを回す設計案。ジャンルに依存しない汎用フレームワーク（実例はAudible／真空シーラーの2商材で並走）。</p>
   <div class="pills">
     <span class="pill pill-warn">⚠ ステータス: チーム議論前の提案 — 意思決定はTeam議論後（第一弾: 2026-07-06 AI AD定例）</span>
   </div>
   <div class="pills">
-    <span class="pill">📅 2026-07-06 v2</span>
-    <span class="pill">ジャンル: ライフハック（お得・節約）</span>
-    <span class="pill">商材例: Audible</span>
-    <span class="pill">対: Session3 AB②と同一ジャンル</span>
+    <span class="pill">📅 2026-07-06 v2.1</span>
+    <span class="pill">実例商材: Audible（サブスク）／ 真空シーラー（物販）</span>
+    <span class="pill">対: Session3 AB②と対で比較</span>
   </div>
 </header>
 
 <nav>
   <a href="#formula">🧮 大原則の式</a>
-  <a href="#layers">🗺 4層構造とPDCA速度</a>
-  <a href="#theme">🎯 テーマ層 3座標×4軸</a>
-  <a href="#scenario">🎬 シナリオ層 12類型×5軸</a>
+  <a href="#layers">🗺 4層の枠組み</a>
+  <a href="#theme">🎯 テーマ層</a>
+  <a href="#scenario">🎬 シナリオ層 12類型</a>
   <a href="#params">🎛 パラメーター 25個</a>
   <a href="#playbook">📘 Playbook境界</a>
-  <a href="#example">📝 実投稿例 1本</a>
+  <a href="#example">📝 実例 2商材で通す</a>
   <a href="#agenda">🗣 定例の論点</a>
 </nav>
 
@@ -129,44 +139,45 @@
   <span class="st st-done">★ 残る（資産）</span>
   <span class="st st-run">AB で振る変数</span>
   <span class="st st-todo">✗ 残らない（周辺変数・初期凍結候補）</span>
-  <span class="st st-risk">⚠ 制作適合リスク（偽体験・景表法）</span>
-  <span class="st st-on">提案内の整理事項</span>
+  <span class="st st-risk">⚠ 制作適合リスク（偽体験・景表法 — Playbook側で線引き）</span>
 </div>
 
 <section id="formula">
   <div class="card">
     <h2><span class="mark" style="background:var(--on)"></span>🧮 大原則の式 — CVの分解</h2>
-    <div class="note">レートだけでなく母数を持つのがポイント。どれだけ率が良くてもリーチがゼロならCVはゼロ。各項を下の4層が分担する。</div>
-    <div class="formula">
-      CV <span class="fx">=</span> 母数(リーチ) <span class="fx">×</span> ターゲット適合 <span class="fx">×</span> 訴求の刺さり <span class="fx">×</span> 導線の綺麗さ
-      <div class="sub-row">
-        <div>↑ Hook層 ＋ 配信層が担う</div>
-        <div>↑ テーマ層が担う</div>
-        <div>↑ Body層が担う</div>
-        <div>↑ CTA層が担う</div>
-      </div>
+    <div class="note">レートだけでなく母数を持つのがポイント。どれだけ率が良くてもリーチがゼロならCVはゼロ。各項の下が、その項を担当する層。</div>
+    <div class="fgrid">
+      <div class="fterm fcv">CV</div>
+      <div class="fop">=</div>
+      <div class="fterm">母数（リーチ）<small>Hook層 ＋ 配信層</small></div>
+      <div class="fop">×</div>
+      <div class="fterm">ターゲット適合<small>テーマ層</small></div>
+      <div class="fop">×</div>
+      <div class="fterm">訴求の刺さり<small>Body層</small></div>
+      <div class="fop">×</div>
+      <div class="fterm">導線の綺麗さ<small>CTA層</small></div>
     </div>
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
-      <b>Hook方針 = (a) 商材関心層内で母体最大化。</b>(b) エンタメ寄せの絶対数最大化は不採用 — 生インプは伸びるがCVRが希釈され、アルゴの学習も濁るため。
+      <b>Hook方針 = (a) 商材関心層内で母体最大化。</b>(b) エンタメ寄せの絶対数最大化は不採用 — 生インプは伸びるがCVRが希釈され、アルゴの学習も濁るため。（※アカウント運用としてエンタメ投稿を混ぜて流入確保すべきかは別論点 — 定例論点5）
     </div>
   </div>
 </section>
 
 <section id="layers">
   <div class="card">
-    <h2><span class="mark" style="background:var(--done)"></span>🗺 4層構造 — 層ごとにPDCAの回転速度が違う</h2>
-    <div class="note">上の層ほど「選んで固定」（遅いPDCA）、下の層ほど「振って検証」（速いPDCA）。速い実験は全部下の層に押し付ける設計。</div>
+    <h2><span class="mark" style="background:var(--done)"></span>🗺 全体の枠組み — 1コンテンツ＝4層での仮説検証</h2>
+    <div class="note">1本のコンテンツは「テーマ→シナリオ→パラメーター→分析」という<b>4層の意思決定の積み上げ</b>で作られる。各層がそれぞれ仮説検証の単位になっており、層ごとに検証の回転速度が違う — 上の層ほど「選んで固定」（遅い検証）、下の層ほど「振って試す」（速い検証）。速い実験は全部下の層に押し付ける。</div>
     <div class="flowrow">
-      <div class="fbox n-done">1. テーマ層<small>遅いPDCA（週次〜月次）<br>アカウントの軸</small></div>
+      <div class="fbox n-done">1. テーマ層<small>何を・誰に売るか<br>遅い検証（週次〜月次）</small></div>
       <div class="farr">→</div>
-      <div class="fbox n-done">2. シナリオ層<small>中PDCA（数本単位）<br>打ち出し方の選択</small></div>
+      <div class="fbox n-done">2. シナリオ層<small>どの打ち出し方で見せるか<br>中速検証（数本単位）</small></div>
       <div class="farr">→</div>
-      <div class="fbox n-run">3. パラメーター層<small>速いPDCA（毎投稿）<br>25変数を振る</small></div>
+      <div class="fbox n-run">3. パラメーター層<small>台本の部品をどう埋めるか<br>速い検証（毎投稿）</small></div>
       <div class="farr">→</div>
-      <div class="fbox n-on">4. 分析<small>層別KPIチェーンで<br>落ちた層だけ振る</small></div>
+      <div class="fbox n-on">4. 分析<small>どの層で落ちたかを特定し<br>その層だけ振り直す</small></div>
     </div>
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
-      <b>分析の決定ロジック:</b> フック率 → 完視聴率 → リンクCTR → CVR の順にどの層で落ちたかを特定し、その層のパラメーターだけ差し替えて次の投稿へ。全層同時に振らない（変数分離）。
+      <b>分析の決定ロジック:</b> フック率 → 完視聴率 → リンクCTR → CVR の層別KPIチェーンでどの層で落ちたかを特定し、その層のパラメーターだけ差し替えて次の投稿へ。全層同時に振らない（変数分離）。
     </div>
   </div>
 </section>
@@ -174,43 +185,72 @@
 <section id="theme">
   <div class="card">
     <h2><span class="mark" style="background:var(--done)"></span>🎯 テーマ層 — 3座標 × 決定ロジック3段</h2>
-    <div class="note">テーマは1語ではなく3座標の掛け合わせ。例:「Audible × 読書したいのに時間がない通勤社会人 × 比較検討中」で1テーマ。</div>
+    <div class="note">テーマは1語ではなく3座標の掛け合わせ。例:「Audible × 朝1時間の通勤があるコンサル勤務の20代 × 比較検討中」で1テーマ。<b>仮説の発散はLLM（CEO Agent）の思考に委ね、ここでは「考える順序」と「採点基準」だけを固定する</b>（Playbookと同じブレ排除の思想）。</div>
     <div class="grid3">
       <div>
         <div class="colhead">座標1: 商材</div>
-        <div class="pdef">Audible等サブスク / 電力 / 通信 / 保険 / ポイ活 …</div>
+        <div class="pdef" style="margin-bottom:8px">「商材理解」で実際に押さえる項目:</div>
+        <div class="param"><div class="pname">① オファー構造</div><div class="pdef">価格・無料体験・還元・キャンペーン</div></div>
+        <div class="param"><div class="pname">② CV導線</div><div class="pdef">登録/購入までのステップ数と摩擦</div></div>
+        <div class="param"><div class="pname">③ 提供価値と使用場面</div><div class="pdef">何がどのシーンで良くなるか</div></div>
+        <div class="param"><div class="pname">④ 競合・代替品</div><div class="pdef">視聴者の頭の中で何と比べられるか</div></div>
+        <div class="param"><div class="pname">⑤ 訴求規制</div><div class="pdef">PR表記・NG表現・効果誇張の線</div></div>
       </div>
       <div>
-        <div class="colhead">座標2: 誰の</div>
-        <div class="pdef">通勤社会人 / 主婦 / 一人暮らし … 極限まで細分化</div>
+        <div class="colhead">座標2: ターゲット</div>
+        <div class="pdef" style="margin-bottom:8px">決め方は4段で狭めていく:</div>
+        <div class="param"><div class="pname">① コアか潜在か</div><div class="pdef">商材の飽和度で判断。認知が高い商材はコアが取り切られているので潜在顧客層を救い上げる</div></div>
+        <div class="param"><div class="pname">② ターゲット仮説を複数出す</div><div class="pdef">方向性の違う候補を並べる（下の例参照）</div></div>
+        <div class="param"><div class="pname">③ ペルソナまで落とす</div><div class="pdef">「20代通勤社会人」では不十分。生活動線・職業・利用シーンまで具体化</div></div>
+        <div class="param"><div class="pname">④ CV路線で絞り配分</div><div class="pdef">「今もっともCV路線の高いターゲット」に絞り込み、仮説ごとに試す投稿量を決める</div></div>
       </div>
       <div>
         <div class="colhead">座標3: 購買スタイル</div>
-        <div class="pdef">課題認知 / 比較検討中 / 行動直前 — 視聴者が今どの段階か</div>
+        <div class="pdef">課題認知 / 比較検討中 / 行動直前 — 視聴者が今どの段階か。<br><br>商材の認知度と連動する: 認知が高い商材（Audible）は比較検討中〜行動直前が厚く、認知が低い商材（真空シーラー）はまず課題認知から作る必要がある。</div>
+      </div>
+    </div>
+    <div class="note" style="border-top:1px solid var(--line)">ターゲット仮説の例（Audible）— 同じ商材でも路線が複数あり、CV路線の高い順に投稿量を配分する:</div>
+    <div class="grid3">
+      <div>
+        <div class="colhead">仮説A: 通勤コンサル</div>
+        <div class="pdef">月〜金出勤、毎朝9:00から電車でおよそ1時間。コンサル勤務でビジネス書を多量多読する必要 → <b>自己投資・多読路線</b></div>
+      </div>
+      <div>
+        <div class="colhead">仮説B: 家事中の主婦</div>
+        <div class="pdef">家事の時間がただの作業になっている → 小説/占いを聴きながら<b>有意義化する路線</b></div>
+      </div>
+      <div>
+        <div class="colhead">仮説C: QOL向上系</div>
+        <div class="pdef">生産性・自己改善に感度が高い層 → <b>生産性の訴求路線</b>（デッドタイムの資産化）</div>
       </div>
     </div>
     <div style="border-top:1px solid var(--line)">
       <table>
-        <thead><tr><th style="width:200px">決定ロジック（3段）</th><th>中身</th></tr></thead>
+        <thead><tr><th style="width:170px">決定ロジック（3段）</th><th>中身</th></tr></thead>
         <tbody>
-          <tr><td class="lever">段1: 理解</td><td>商材の理解・ターゲットの深掘り（選定前のインプット作業）</td></tr>
-          <tr><td class="lever">段2: 生成</td><td>候補テーマをパターン別に打ち出す</td></tr>
-          <tr><td class="lever">段3: 採点（4軸）</td><td>
-            <b>軸1 インサイト強度</b><span class="def">6大インサイトのうち何個・どの強さで働くか</span>
-            <b>軸2 収益直結度</b><span class="def">単価 × 承認率 × 導線の短さ</span>
-            <b>軸3 検証適合度</b><span class="def">母数が取れるか × 変数が分離できるか（量産期には外す）</span>
-            <b>軸4 量産余地</b><span class="def">そのテーマで切り口が何本続くか</span>
-          </td></tr>
+          <tr><td class="lever">段1: 理解</td><td>商材の理解（座標1の5項目）・ターゲットの深掘り（座標2の4段）— 選定前のインプット作業</td></tr>
+          <tr><td class="lever">段2: 生成</td><td>候補テーマ（3座標の組み合わせ）をパターン別に打ち出す</td></tr>
+          <tr><td class="lever">段3: 採点（4軸）</td><td>下の採点表で候補を比較し、絞り込みと投稿量配分を決める</td></tr>
         </tbody>
       </table>
     </div>
+    <div class="note" style="border-top:1px solid var(--line)">段3の採点基準 — AIが読み手なので、軸ごとに「問い」と高低のアンカーを固定してブレを排除する:</div>
+    <table>
+      <thead><tr><th style="width:140px">軸</th><th style="width:280px">採点の問い</th><th>高スコアの姿</th><th>低スコアの姿</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">軸1 インサイト強度</td><td>6大インサイト（損失回避/緊急性/面倒回避/不安/社会的証明/自己実現）のうち何個・どの強さで働くか</td><td>2個以上が「◎」で重なる（Audible×通勤=面倒回避◎+自己実現○）</td><td>どれも「その気になれば刺さる」程度で主砲がない</td></tr>
+        <tr><td class="lever">軸2 収益直結度</td><td>単価 × 承認率 × 導線の短さの積はどうか</td><td>無料体験など心理障壁ゼロの導線、承認条件が緩い</td><td>高単価でも導線が長い・承認条件が厳しい</td></tr>
+        <tr><td class="lever">軸3 検証適合度</td><td>母数が取れるか × 変数が分離できるか（量産期には外す）</td><td>関心層が広く、商材がシンプルで差分が読める</td><td>ニッチすぎて統計が取れない、商材が複雑で何が効いたか不明</td></tr>
+        <tr><td class="lever">軸4 量産余地</td><td>そのテーマで切り口が何本続くか</td><td>ジャンル別・シーン別に何十本も切れる</td><td>5本で言うことがなくなる</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
 <section id="scenario">
   <div class="card">
-    <h2><span class="mark" style="background:var(--done)"></span>🎬 シナリオ層 — 実在カタログ12類型 × 決定軸5つ</h2>
-    <div class="note">SNSで実際に回っているPRコンテンツの打ち出し方を集約したカタログ。<b>検証期は事前に1類型を固定</b>（探索の初期値・整合性制約・ABの変数分離）。量産期は実測の勝ち束が型を再定義し、カタログは分類タグに格下げ。</div>
+    <h2><span class="mark" style="background:var(--done)"></span>🎬 シナリオ層 — 実在カタログ12類型 × 決定軸4つ</h2>
+    <div class="note">SNSで実際に回っているPRコンテンツの打ち出し方を集約したカタログ。<b>検証期は事前に1類型を固定</b>（探索の初期値・整合性制約・ABの変数分離）。量産期は実測の勝ち束が型を再定義し、カタログは分類タグに格下げ。制作適合（AI KOLで証拠映像を作れるか・偽体験/ステマの線引き）は<b>Playbook側の事前ゲートに移管</b>済み — シナリオ選定時には判断しない。</div>
     <div class="grid2">
       <div>
         <div class="colhead">カタログ（12類型）</div>
@@ -221,7 +261,7 @@
         <div class="param"><div class="pname">⑤ 体験談ナラティブ型</div><div class="pdef">「積読3年の私が変わった話」。転落→回復の物語</div></div>
         <div class="param"><div class="pname">⑥ ルーティン/Vlog型</div><div class="pdef">日常に自然登場。売り込み色最小</div></div>
         <div class="param"><div class="pname">⑦ 購入品紹介型（ハウル）</div><div class="pdef">「今月買ってよかったもの」。体験×列挙</div></div>
-        <div class="param"><div class="pname">⑧ 権威・暴露型 <span class="st st-risk">⚠</span></div><div class="pdef">「薬剤師が選ぶ」。肩書き詐称はAI KOLで高リスク</div></div>
+        <div class="param"><div class="pname">⑧ 権威・暴露型 <span class="st st-risk">⚠</span></div><div class="pdef">「薬剤師が選ぶ」。肩書きの扱いはPlaybookゲートで裁定</div></div>
         <div class="param"><div class="pname">⑨ 検証チャレンジ型</div><div class="pdef">「30日間◯◯生活」。連載で信頼を積みCVへ</div></div>
         <div class="param"><div class="pname">⑩ 速報・お得アラート型</div><div class="pdef">「今日までセール」。情報鮮度×緊急性だけで押す</div></div>
         <div class="param"><div class="pname">⑪ Q&A/コメント返し型 <span class="st st-todo">2打目専用</span></div><div class="pdef">反応層への2打目。1本目には選ばない</div></div>
@@ -230,11 +270,10 @@
       </div>
       <div style="border-left:1px solid var(--line)">
         <div class="colhead">決定軸（どれを選ぶか）</div>
-        <div class="param"><div class="pname">① 購買スタイル適合</div><div class="pdef">テーマ座標3と噛み合うか。比較検討中→③⑧、課題認知→④⑤⑩</div></div>
+        <div class="param"><div class="pname">① 購買スタイル適合</div><div class="pdef">テーマ座標3と噛み合うか。比較検討中→①③、課題認知→②④⑤⑩</div></div>
         <div class="param"><div class="pname">② 信頼構築量</div><div class="pdef">CVに必要な信頼をその類型の証拠で作れるか</div></div>
         <div class="param"><div class="pname">③ Hook接続性</div><div class="pdef">関心層内最大化のHookを自然に切り出せるか</div></div>
         <div class="param"><div class="pname">④ 量産再現性</div><div class="pdef">勝ち類型として掛け合わせ量産に耐えるか</div></div>
-        <div class="param"><div class="pname">⑤ 制作適合 <span class="st st-risk">⚠</span></div><div class="pdef">AI KOLで証拠映像を作れるか＋偽体験・ステマ規制リスク</div></div>
         <div class="colhead" style="margin-top:18px">裏道具</div>
         <div class="pdef">証拠×語り口マトリクス（証拠: 自分の体験/他人の声/並置比較/情報網羅/生活文脈/権威 × 語り口: 直接/反論潰し/物語/列挙/埋め込み）を<b>新型の発見器・分類器</b>として保持。新しい打ち出し方が出たらどのセルか確認して13番目以降を判定。</div>
       </div>
@@ -262,10 +301,10 @@
       <div>
         <div class="colhead">Body層 <span style="font-weight:400;color:var(--sub)">7個</span></div>
         <div class="kpi">KPI: 完視聴率・視聴維持</div>
-        <div class="param"><div class="pname">B1 購買インサイト <span class="st st-done">★★コア</span></div><div class="pdef">損失回避/緊急性/面倒回避/不安/社会的証明/<b>自己実現・向上</b></div></div>
+        <div class="param"><div class="pname">B1 購買インサイト <span class="st st-done">★★コア</span></div><div class="pdef">損失回避/緊急性/面倒回避/不安/社会的証明/自己実現・向上</div></div>
         <div class="param"><div class="pname">B2 感情カーブ <span class="st st-done">★</span></div><div class="pdef">不安→解消/驚き→納得/共感→背中押し</div></div>
         <div class="param"><div class="pname">B3 情報の深さ <span class="st st-done">★</span></div><div class="pdef">結論のみ/手順まで/数字根拠まで</div></div>
-        <div class="param"><div class="pname">B4 信頼要素 <span class="st st-risk">★⚠</span></div><div class="pdef">実数字/実体験⚠/デメリット開示/権威/<b>利用者の声</b></div></div>
+        <div class="param"><div class="pname">B4 信頼要素 <span class="st st-risk">★⚠</span></div><div class="pdef">実数字/実体験⚠/デメリット開示/権威/利用者の声</div></div>
         <div class="param"><div class="pname">B5 商材の出し方 <span class="st st-done">△</span></div><div class="pdef">名指し/ジャンルのみ/伏せ（商材が水準を制約）</div></div>
         <div class="param"><div class="pname">B6 尺配分 <span class="st st-todo">✗</span></div><div class="pdef">Hook後何秒でインサイト着火するか</div></div>
         <div class="param"><div class="pname">B7 語り口 <span class="st st-done">★新設</span></div><div class="pdef">直接主張/反論処理/問いかけ・共犯/物語り<br>※B2=感情の軌道、B7=論理の進め方で別次元</div></div>
@@ -274,7 +313,7 @@
         <div class="colhead">CTA層 <span style="font-weight:400;color:var(--sub)">5個</span></div>
         <div class="kpi">KPI: プロフ遷移率・リンクCTR → CV</div>
         <div class="param"><div class="pname">C1 誘導先 <span class="st st-done">△PF依存</span></div><div class="pdef">コメント欄/プロフ/LP直</div></div>
-        <div class="param"><div class="pname">C2 動機づけ <span class="st st-done">★</span></div><div class="pdef">緊急/限定/損失リマインド/簡単さ/<b>0円リスク明示（オファーの翻訳）</b><br>※オファー本体は商材の所与条件でパラメーター外</div></div>
+        <div class="param"><div class="pname">C2 動機づけ <span class="st st-done">★</span></div><div class="pdef">緊急/限定/損失リマインド/簡単さ/0円リスク明示（オファーの翻訳）<br>※オファー本体は商材の所与条件でパラメーター外</div></div>
         <div class="param"><div class="pname">C3 摩擦除去 <span class="st st-done">★</span></div><div class="pdef">手順明示/単一CTA/次アクション名指し</div></div>
         <div class="param"><div class="pname">C4 配置・回数 <span class="st st-todo">✗</span></div><div class="pdef">最後のみ/中盤+最後/冒頭ちら見せ</div></div>
         <div class="param"><div class="pname">C5 文体 <span class="st st-todo">✗</span></div><div class="pdef">命令/誘い/問いかけ</div></div>
@@ -287,7 +326,7 @@
         <div class="param"><div class="pname">D3 投稿時間帯 <span class="st st-todo">✗</span></div><div class="pdef">ターゲットの生活動線（通勤前/昼/夜）</div></div>
         <div class="param"><div class="pname">D4 音源選択 <span class="st st-todo">✗</span></div><div class="pdef">トレンド乗り/オリジナル/無音</div></div>
         <div class="param"><div class="pname">D5 カバー画像 <span class="st st-todo">✗</span></div><div class="pdef">フック静止画/テキスト型/統一デザイン</div></div>
-        <div class="pdef" style="margin-top:8px">⚠ この層は5個中4個が「残らない」— 母数には効くが<b>PDCAの主軸を置かない</b>（残る層で勝ち筋を作り、ここは都度チューニング）。「投稿頻度」は投稿単位で振れないためアカウント運用レイヤーへ</div>
+        <div class="pdef" style="margin-top:8px">⚠ この層は5個中4個が「残らない」— 母数には効くがPDCAの主軸を置かない。「投稿頻度」は投稿単位で振れないためアカウント運用レイヤーへ</div>
       </div>
     </div>
   </div>
@@ -297,14 +336,18 @@
   <div class="card">
     <h2><span class="mark" style="background:var(--on)"></span>📘 Playbook境界 — 振る変数と固定する表現の切り分け</h2>
     <div class="note">画面に出すもの/出さないもの・音声の言い回しなどの実行スタイルをどこに持たせるかの提案。</div>
-    <div class="grid2">
+    <div class="grid3">
       <div>
         <div class="colhead">パラメーター（振る）</div>
-        <div class="pdef"><b>「何を言うか・どの構造か」</b> — 意味の選択。上の25個のうち★系16個がPDCAの対象。差が出たときに学びになる変数だけを振る。</div>
+        <div class="pdef"><b>「何を言うか・どの構造か」</b> — 意味の選択。25個のうち★系16個がPDCAの対象。差が出たときに学びになる変数だけを振る。</div>
       </div>
-      <div style="border-left:1px solid var(--line)">
+      <div>
         <div class="colhead">Playbook（先に固定）</div>
-        <div class="pdef"><b>「どう言うか・どう画面に載せるか」</b> — 言い回しの細部・テロップのデザイン/タイミング・画面レイアウト・ナレーション速度など。＋✗残らない系9個の初期凍結値。</div>
+        <div class="pdef"><b>「どう言うか・どう画面に載せるか」</b> — 言い回しの細部・テロップのデザイン/タイミング・画面レイアウト・ナレーション速度。＋✗残らない系9個の初期凍結値。</div>
+      </div>
+      <div>
+        <div class="colhead">制作適合ゲート（Playbook内）</div>
+        <div class="pdef"><b>作れるか・言っていいか</b>の事前裁定 — AI KOLで用意できる証拠映像の型、実体験表現・肩書き・誇張トーンの線引き（偽体験・ステマ規制）。シナリオ選定時には判断せず、ここで先に潰す。</div>
       </div>
     </div>
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
@@ -315,55 +358,140 @@
 
 <section id="example">
   <div class="card">
-    <h2><span class="mark" style="background:var(--run)"></span>📝 実投稿例 — ツリーを1本通すとこうなる</h2>
-    <div class="note">4層を上から順に選んで固定し、最後にパラメーターを埋めた1本。<b>各セリフの右に「どのパラメーターのどの水準を使ったか」</b>を注記。ABではこの注記の水準だけを差し替えて2本目・3本目を作る。</div>
-    <div class="flowrow" style="grid-template-columns:1fr 36px 1fr 36px 1fr;padding-bottom:6px">
-      <div class="fbox n-done">テーマ<small>Audible × 読書したいのに時間がない通勤社会人 × 比較検討中</small></div>
-      <div class="farr">→</div>
-      <div class="fbox n-done">シナリオ<small>① 正直レビュー型 × 単発（語り口B7=反論処理）</small></div>
-      <div class="farr">→</div>
-      <div class="fbox n-run">パラメーター<small>下表の右列が選んだ水準</small></div>
+    <h2><span class="mark" style="background:var(--run)"></span>📝 実例 — 同じフレームワークを2商材に通す
+      <span style="margin-left:auto;display:flex;gap:8px">
+        <button class="tabbtn active" id="btn-audible" onclick="showEx('audible')">🎧 Audible（サブスク）</button>
+        <button class="tabbtn" id="btn-sealer" onclick="showEx('sealer')">🥩 真空シーラー（物販）</button>
+      </span>
+    </h2>
+    <div class="note">テーマ（3座標＋採点4軸）→ シナリオ（決定軸4つで類型選定）→ パラメーター（台本に水準を埋める）まで、フレームワーク全段を適用した例。ボタンで商材を切り替え — 認知の高いサブスクと認知の低い物販で、<b>座標が変わるとシナリオとパラメーターが連動して変わる</b>のを比較できる。</div>
+
+    <!-- ============ Audible ============ -->
+    <div class="excase" id="ex-audible">
+      <div class="note" style="background:#fff;border-bottom:1px solid var(--line)"><b>STEP 1 — テーマの組み立て</b>: 商材理解 → ターゲット4段 → 採点</div>
+      <table>
+        <tbody>
+          <tr><td class="lever" style="width:170px">座標1: 商材理解</td><td>オファー=30日無料体験・月1,500円 ／ CV導線=リンクから登録数分・心理障壁ゼロ ／ 価値=ながら時間の読書化 ／ 競合=紙の本・YouTube・Podcast ／ 規制=PR表記必須</td></tr>
+          <tr><td class="lever">座標2: ターゲット</td><td>認知が高い商材 → コア（読書家）は取り切られている → <b>潜在顧客層を救い上げる</b>。仮説A通勤コンサル／仮説B家事中の主婦／仮説C QOL向上系のうち、CV路線最高の<b>仮説A</b>から着手。ペルソナ: 月〜金出勤、毎朝9:00から電車1時間、コンサル勤務でビジネス書の多読が必要な20代</td></tr>
+          <tr><td class="lever">座標3: 購買スタイル</td><td><b>比較検討中</b> — サービスは知っているが「聴く読書で頭に入るのか」の疑いで止まっている層</td></tr>
+          <tr><td class="lever">採点（4軸）</td><td>軸1=面倒回避◎+自己実現○で主砲2つ ／ 軸2=無料体験で導線最短 ／ 軸3=「読みたいのに読めてない」母数大 ／ 軸4=書籍ジャンル別×シーン別で切り口多数 → <b>採用</b></td></tr>
+        </tbody>
+      </table>
+      <div class="note" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><b>STEP 2 — シナリオ選定</b>: 決定軸4つを12類型に当てる</div>
+      <table>
+        <tbody>
+          <tr><td class="lever" style="width:170px">① 購買スタイル適合</td><td>比較検討中=疑いを潰すフェーズ → ①正直レビュー・③比較が候補</td></tr>
+          <tr><td class="lever">② 信頼構築量</td><td>サブスクの疑い（頭に入らない？）には実体験ベースの証拠が必要 → ①が優位</td></tr>
+          <tr><td class="lever">③ Hook接続性</td><td>「通勤年300時間」の損失フックが①から自然に切り出せる</td></tr>
+          <tr><td class="lever">④ 量産再現性</td><td>レビューは書籍ジャンル別・シーン別に量産可</td></tr>
+          <tr><td class="lever">選定結果</td><td><b>① 正直レビュー型 × 単発</b>（語り口 B7=反論処理）</td></tr>
+        </tbody>
+      </table>
+      <div class="note" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><b>STEP 3 — パラメーターを台本に埋める</b></div>
+      <table>
+        <thead><tr>
+          <th style="width:70px">秒数</th><th style="width:60px">層</th>
+          <th>画・セリフ（実際の台本）</th><th style="width:290px">効かせたパラメーター＝水準</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>0-2秒</td><td><span class="st st-on">Hook</span></td>
+            <td class="lever">「本読みたいのに読めてない人、その通勤時間<b>年300時間</b>捨ててるかも」<span class="def">画: 満員電車でスマホ＋イヤホン、数字を赤テロップ</span></td>
+            <td><span class="def">H1＝損失恐怖 ／ H2＝数字提示 ／ H3＝中庸 ／ H4＝状況名指し ／ H5＝実物（通勤風景） ／ H8＝声から入る</span></td>
+          </tr>
+          <tr>
+            <td>2-8秒</td><td><span class="st st-on">Body</span></td>
+            <td class="lever">「聴く読書って頭に入らなそうでしょ？私もずっとそう思ってた」<span class="def">視聴者の反論（頭に入らない）を先に代弁して掴む</span></td>
+            <td><span class="def">B7＝反論処理 ／ B1＝不安（効果への疑い） ／ B2＝不安喚起→解消の前半</span></td>
+          </tr>
+          <tr>
+            <td>8-20秒</td><td><span class="st st-on">Body</span></td>
+            <td class="lever">「実際使ったら通勤と家事だけで<b>月4冊</b>。倍速もできるし、ラインナップは12万冊」<span class="def">画: アプリの読了ライブラリ画面録画＋倍速操作の実録</span></td>
+            <td><span class="def">B3＝手順まで ／ B4＝実数字＋実体験⚠ ／ B2＝解消パート ／ B1＝自己実現（月4冊読む自分）</span></td>
+          </tr>
+          <tr>
+            <td>20-25秒</td><td><span class="st st-on">Body</span></td>
+            <td class="lever">「デメリットは1個だけ、月1,500円すること。ただ<b>最初の30日は無料</b>で、解約はアプリから1分」<span class="def">正直開示で信頼を締めつつ、料金の壁を無料体験で相殺</span></td>
+            <td><span class="def">B4＝デメリット開示 ／ B5＝名指し（Audible） ／ B1＝面倒回避（解約1分）</span></td>
+          </tr>
+          <tr>
+            <td>25-30秒</td><td><span class="st st-on">CTA</span></td>
+            <td class="lever">「プロフのリンクから<b>30日無料</b>で試せるよ。無料のうちに解約すれば0円。明日の通勤から1冊目いこ」</td>
+            <td><span class="def">C1＝プロフリンク ／ C2＝0円リスク明示＋簡単さ ／ C3＝手順明示＋次アクション名指し</span></td>
+          </tr>
+          <tr>
+            <td>投稿時</td><td><span class="st st-on">配信</span></td>
+            <td class="lever">タイトル「通勤300時間、何に使ってる？」＋ 朝7時台に投稿</td>
+            <td><span class="def">D1＝フック再掲＋問いかけ ／ D3＝通勤前 ／ D2/D4/D5＝Playbook凍結値</span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <table>
-      <thead><tr>
-        <th style="width:70px">秒数</th><th style="width:60px">層</th>
-        <th>画・セリフ（実際の台本）</th><th style="width:290px">効かせたパラメーター＝水準</th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td>0-2秒</td><td><span class="st st-on">Hook</span></td>
-          <td class="lever">「本読みたいのに読めてない人、その通勤時間<b>年300時間</b>捨ててるかも」<span class="def">画: 満員電車でスマホ＋イヤホン、数字を赤テロップ</span></td>
-          <td><span class="def">H1＝損失恐怖 ／ H2＝数字提示 ／ H3＝中庸 ／ H4＝状況名指し ／ H5＝実物（通勤風景） ／ H8＝声から入る</span></td>
-        </tr>
-        <tr>
-          <td>2-8秒</td><td><span class="st st-on">Body</span></td>
-          <td class="lever">「聴く読書って頭に入らなそうでしょ？私もずっとそう思ってた」<span class="def">視聴者の反論（頭に入らない）を先に代弁して掴む</span></td>
-          <td><span class="def">B7＝反論処理 ／ B1＝不安（効果への疑い） ／ B2＝不安喚起→解消の前半</span></td>
-        </tr>
-        <tr>
-          <td>8-20秒</td><td><span class="st st-on">Body</span></td>
-          <td class="lever">「実際使ったら通勤と家事だけで<b>月4冊</b>。倍速もできるし、ラインナップは12万冊」<span class="def">画: アプリの読了ライブラリ画面録画＋倍速操作の実録</span></td>
-          <td><span class="def">B3＝手順まで ／ B4＝実数字＋実体験⚠ ／ B2＝解消パート ／ B1＝自己実現（月4冊読む自分）</span></td>
-        </tr>
-        <tr>
-          <td>20-25秒</td><td><span class="st st-on">Body</span></td>
-          <td class="lever">「デメリットは1個だけ、月1,500円すること。ただ<b>最初の30日は無料</b>で、解約はアプリから1分」<span class="def">正直開示で信頼を締めつつ、料金の壁を無料体験で相殺</span></td>
-          <td><span class="def">B4＝デメリット開示 ／ B5＝名指し（Audible） ／ B1＝面倒回避（解約1分）</span></td>
-        </tr>
-        <tr>
-          <td>25-30秒</td><td><span class="st st-on">CTA</span></td>
-          <td class="lever">「プロフのリンクから<b>30日無料</b>で試せるよ。無料のうちに解約すれば0円。明日の通勤から1冊目いこ」</td>
-          <td><span class="def">C1＝プロフリンク ／ C2＝0円リスク明示＋簡単さ ／ C3＝手順明示＋次アクション名指し</span></td>
-        </tr>
-        <tr>
-          <td>投稿時</td><td><span class="st st-on">配信</span></td>
-          <td class="lever">タイトル「通勤300時間、何に使ってる？」＋ 朝7時台に投稿</td>
-          <td><span class="def">D1＝フック再掲＋問いかけ ／ D3＝通勤前 ／ D2/D4/D5＝Playbook凍結値</span></td>
-        </tr>
-      </tbody>
-    </table>
+
+    <!-- ============ 真空シーラー ============ -->
+    <div class="excase" id="ex-sealer" style="display:none">
+      <div class="note" style="background:#fff;border-bottom:1px solid var(--line)"><b>STEP 1 — テーマの組み立て</b>: 商材理解 → ターゲット4段 → 採点</div>
+      <table>
+        <tbody>
+          <tr><td class="lever" style="width:170px">座標1: 商材理解</td><td>オファー=単品3千〜1万円・EC購入 ／ CV導線=商品リンクから1〜2タップ ／ 価値=冷凍焼け・酸化防止でまとめ買い食材が長持ち ／ 競合=ジップロック・ラップ（「今ので困ってない」が最大の敵） ／ 規制=効果の誇張NG</td></tr>
+          <tr><td class="lever">座標2: ターゲット</td><td>認知が低い商材 → コア（キャンプ/低温調理ガチ勢）は狭い → <b>潜在層＝まとめ買い・作り置きの共働き主婦</b>。ペルソナ: 週末に業務スーパーでまとめ買い、平日は時短調理、食費月4万円を下げたい</td></tr>
+          <tr><td class="lever">座標3: 購買スタイル</td><td><b>課題認知</b> — 冷凍焼けを「仕方ないもの」と思っていて、解決策の存在自体を知らない層。まず問題を可視化するところから</td></tr>
+          <tr><td class="lever">採点（4軸)</td><td>軸1=損失回避◎（食材廃棄=お金を捨てる）+面倒回避○ ／ 軸2=単価中・EC導線短いが衝動買い帯 ／ 軸3=節約・作り置き層は母数大 ／ 軸4=食材別×保存シーン別で切り口多数 → <b>採用</b></td></tr>
+        </tbody>
+      </table>
+      <div class="note" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><b>STEP 2 — シナリオ選定</b>: 決定軸4つを12類型に当てる</div>
+      <table>
+        <tbody>
+          <tr><td class="lever" style="width:170px">① 購買スタイル適合</td><td>課題認知=問題の可視化フェーズ → ②Before/After・④ハウツーが候補（比較検討向けの①③はまだ早い）</td></tr>
+          <tr><td class="lever">② 信頼構築量</td><td>低〜中単価の物販は実演の絵だけで信頼が足りる → ②で十分</td></tr>
+          <tr><td class="lever">③ Hook接続性</td><td>冷凍焼けした肉のビジュアルは0.5秒で止められる — ②のフック力が突出</td></tr>
+          <tr><td class="lever">④ 量産再現性</td><td>Before/Afterは食材ごとに無限に量産可（肉/魚/パン/野菜…）</td></tr>
+          <tr><td class="lever">選定結果</td><td><b>② Before/After型 × 単発</b>（語り口 B7=直接主張）</td></tr>
+        </tbody>
+      </table>
+      <div class="note" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><b>STEP 3 — パラメーターを台本に埋める</b></div>
+      <table>
+        <thead><tr>
+          <th style="width:70px">秒数</th><th style="width:60px">層</th>
+          <th>画・セリフ（実際の台本）</th><th style="width:290px">効かせたパラメーター＝水準</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>0-2秒</td><td><span class="st st-on">Hook</span></td>
+            <td class="lever">「冷凍した肉、1ヶ月後こうなってない？」<span class="def">画: 冷凍焼けでパサついた肉のアップ — 絵だけで止める</span></td>
+            <td><span class="def">H1＝損失恐怖 ／ H2＝疑問 ／ H3＝中庸 ／ H4＝状況名指し（まとめ買いで冷凍する人） ／ H5＝実物（冷凍焼け） ／ H8＝無音から入る</span></td>
+          </tr>
+          <tr>
+            <td>2-8秒</td><td><span class="st st-on">Body</span></td>
+            <td class="lever">「まとめ買いは節約のつもりが、冷凍焼けで捨てる分だけ損してた。うちは<b>年6万円分</b>」<span class="def">「仕方ない」と思っていた問題に金額をつけて課題化する</span></td>
+            <td><span class="def">B7＝直接主張 ／ B1＝損失回避 ／ B2＝驚き→納得の前半 ／ B3＝数字根拠まで</span></td>
+          </tr>
+          <tr>
+            <td>8-20秒</td><td><span class="st st-on">Body</span></td>
+            <td class="lever">「空気を抜いて密封するだけで、<b>3週間後がこれ</b>。色も匂いもそのまま」<span class="def">画: Before/Afterの並置比較＋密封実演の実録</span></td>
+            <td><span class="def">B4＝実演（Before/After並置） ／ B3＝手順まで ／ B2＝納得パート ／ B1＝面倒回避（抜くだけ）</span></td>
+          </tr>
+          <tr>
+            <td>20-25秒</td><td><span class="st st-on">Body</span></td>
+            <td class="lever">「デメリットは専用袋代が月300円くらいかかること。捨ててた6万円とどっちを取るか」<span class="def">正直開示で信頼を締めつつ、コストを廃棄額と対比で相殺</span></td>
+            <td><span class="def">B4＝デメリット開示 ／ B5＝名指し（商品名） ／ B1＝損失回避（対比）</span></td>
+          </tr>
+          <tr>
+            <td>25-30秒</td><td><span class="st st-on">CTA</span></td>
+            <td class="lever">「リンクはプロフに置いてある。<b>今週の買い出しから</b>、冷凍の仕方だけ変えてみて」</td>
+            <td><span class="def">C1＝プロフリンク ／ C2＝簡単さ（仕方を変えるだけ） ／ C3＝次アクション名指し（今週の買い出し）</span></td>
+          </tr>
+          <tr>
+            <td>投稿時</td><td><span class="st st-on">配信</span></td>
+            <td class="lever">タイトル「冷凍焼け、年6万捨ててた」＋ 夕方17時台に投稿</td>
+            <td><span class="def">D1＝フック再掲 ／ D3＝夕方（献立・買い出し時間帯） ／ D2/D4/D5＝Playbook凍結値</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
-      <b>ABの回し方:</b> この台本を「1本目」とし、例えば <b>H1だけ</b> 損失恐怖→得の興奮（「通勤だけで年48冊読めた」）にした2本目、<b>H4だけ</b> ピンポイント名指し（「今Audible登録しようか迷ってる人」）にした3本目を並走 → フック率の差でHook層の勝ち水準を確定 → 次はBody層の変数へ。<b>1サイクルで振るのは2〜3変数まで。</b>分析はKPIチェーン（フック率→完視聴→CTR→CVR）で落ちた層だけを疑う。
+      <b>2商材の対比で見えること:</b> 認知が高いサブスク（Audible）は「比較検討中×正直レビューで疑いを潰す」、認知が低い物販（真空シーラー）は「課題認知×Before/Afterで問題ごと教える」— テーマ座標が変わるとシナリオとパラメーターが連動して変わる。フレームワークは同じ、埋まる中身だけが商材で変わる。<b>ABの回し方</b>はどちらも同じ: 1本目からH1やH4など2〜3変数だけ差し替えた2本目・3本目を並走し、層別KPIチェーン（フック率→完視聴→CTR→CVR）で落ちた層だけを疑う。
     </div>
   </div>
 </section>
@@ -376,19 +504,28 @@
       <tbody>
         <tr><td class="lever">1. この設計全体の採否</td><td>CV直結型のレイヤー分担・4層構造・25パラメーター体系をAB①の枠組みとして採用するか</td></tr>
         <tr><td class="lever">2. Playbook境界</td><td>実行スタイル（言い回し・画面構成）をPlaybookで先に固定する提案の採否と、凍結リストの中身</td></tr>
-        <tr><td class="lever">3. 制作適合の運用</td><td>AI KOLの偽体験リスク（⚠マーク箇所）の線引き — 実体験表現・肩書き・誇張トーンをどこまで許容するか</td></tr>
+        <tr><td class="lever">3. 制作適合ゲートの中身</td><td>Playbookに置く事前裁定ルール — AI KOLの実体験表現・肩書き・誇張トーンをどこまで許容するか（偽体験・ステマ規制の線引き）</td></tr>
         <tr><td class="lever">4. 商材ありきMedia化</td><td>型の汎用性は高いがアカウントの汎用性が不明。類似商材への流用可否（アカウント戦略レイヤー）</td></tr>
-        <tr><td class="lever">5. エンタメ型との使い分け</td><td>(b)インプ最大化型アカウントとのミックス比率（同上）</td></tr>
+        <tr><td class="lever">5. エンタメ流入の要否</td><td>SNSアカウント運用上、エンタメコンテンツも一定量混ぜて人の流入を確保すべきか — (b)インプ最大化型とのミックス比率（アカウント戦略レイヤー）</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
 <footer>
-  作成 2026-07-06 v2（v1: 07-04）／ Session 1: パラメーター設計（AB①側）／ 内部ID・認証情報は除去済み<br>
+  作成 2026-07-06 v2.1（v1: 07-04）／ Session 1: パラメーター設計（AB①側）／ 内部ID・認証情報は除去済み<br>
   <b>ステータス: チーム議論前の提案。意思決定はTeam議論後（第一弾: 2026-07-06 AI AD定例）。</b>wiki/decision-log保存は意思決定後。<br>
   正本: ハンドオフ元 ~/claude/output/handoffs/2026-07-03_session1-parameter-design.md ／ 元会議: 2026-07-03 経営会議
 </footer>
+
+<script>
+function showEx(id){
+  document.querySelectorAll('.excase').forEach(function(e){e.style.display='none'});
+  document.getElementById('ex-'+id).style.display='block';
+  document.querySelectorAll('.tabbtn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById('btn-'+id).classList.add('active');
+}
+</script>
 
 </body>
 </html>
