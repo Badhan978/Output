@@ -4,29 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>V5 テーマ選定アルゴリズム spec v1</title>
+<title>V5 テーマ選定アルゴリズム — 設計と実走デモ</title>
 <style>
   :root{
-    /* 構造トークン */
     --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
-    /* 状態トークン (5値固定) */
-    --rule:#16a34a;  --rulebg:#f0fdf4;   /* 確定ルール */
-    --part:#2563eb;  --partbg:#eff6ff;   /* 計算部品 */
-    --flow:#7c3aed;  --flowbg:#f5f3ff;   /* 工程・フロー */
-    --exp:#0d9488;   --expbg:#f0fdfa;    /* 探索・還流 */
-    --tbd:#94a3b8;   --tbdbg:#f8fafc;    /* 未決・placeholder */
+    /* 状態トークン 5値 */
+    --concept:#2563eb; --conceptbg:#eff6ff;   /* 枠組み・概念 */
+    --proc:#7c3aed;    --procbg:#f5f3ff;      /* 工程・計算 */
+    --do:#16a34a;      --dobg:#f0fdf4;        /* 確定ルール */
+    --warn:#d97706;    --warnbg:#fffbeb;      /* 注意・仮値・未決 */
+    --ex:#0d9488;      --exbg:#f0fdfa;        /* 実データ・実走 */
   }
   *{box-sizing:border-box}
   body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
     color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
 
-  header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:32px 28px 26px}
+  header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:34px 28px 28px}
   .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#7dd3fc;font-weight:700;margin:0 0 8px}
-  header h1{margin:0;font-size:30px;line-height:1.3}
-  header .lead{margin:12px 0 0;color:#cbd5e1;font-size:13.5px;max-width:880px}
-  .formula{margin:16px 0 0;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.25);
-    border-radius:10px;padding:12px 18px;font-size:16px;font-weight:800;letter-spacing:.02em;
-    font-family:ui-monospace,Menlo,monospace;overflow-x:auto;white-space:nowrap}
+  header h1{margin:0;font-size:29px;line-height:1.3}
+  header .lead{margin:12px 0 0;color:#cbd5e1;font-size:13.5px;max-width:900px}
+  header .lead b{color:#fff}
+  .formula{margin:16px 0 0;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);
+    border-radius:10px;padding:10px 16px;font-size:14px;font-weight:700;display:inline-block}
   .pills{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
   .pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
     border-radius:99px;padding:4px 14px;font-size:11.5px;color:#e2e8f0}
@@ -37,220 +36,336 @@
     font-size:12px;border:1px solid var(--line)}
   nav a:hover{background:#f1f5f9;color:var(--ink)}
 
-  section{max-width:1180px;margin:26px auto;padding:0 20px}
+  section{max-width:1200px;margin:26px auto;padding:0 20px}
 
   .card{background:#fff;border:1px solid var(--line);border-radius:12px;
-    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:16px}
   .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
     display:flex;align-items:center;gap:10px}
-  .mark{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .mark{width:12px;height:12px;border-radius:4px;display:inline-block;flex:0 0 12px}
   .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
     border-bottom:1px solid var(--line)}
-  .pad{padding:18px 20px}
+  .pad{padding:16px 20px}
 
   .legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;
     background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px;
     font-size:11.5px;color:var(--sub)}
   .dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:-1px}
 
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
   .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
   .cell{border-radius:10px;padding:12px 14px;border:1.5px solid}
   .cell b{display:block;font-size:13px;margin-bottom:3px}
   .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
-  .c-rule{border-color:var(--rule);background:var(--rulebg)}
-  .c-part{border-color:var(--part);background:var(--partbg)}
-  .c-flow{border-color:var(--flow);background:var(--flowbg)}
-  .c-exp{border-color:var(--exp);background:var(--expbg)}
-  .c-tbd{border-color:var(--tbd);background:var(--tbdbg)}
+  .c-concept{border-color:var(--concept);background:var(--conceptbg)}
+  .c-proc{border-color:var(--proc);background:var(--procbg)}
+  .c-do{border-color:var(--do);background:var(--dobg)}
+  .c-warn{border-color:var(--warn);background:var(--warnbg)}
+  .c-ex{border-color:var(--ex);background:var(--exbg)}
 
   table{width:100%;border-collapse:collapse;font-size:12.5px}
-  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
-  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700}
-  .lever{font-weight:700}
-  .big{font-size:15px;font-weight:800}
+  th,td{padding:8px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700;white-space:nowrap}
+  td.r,th.r{text-align:right;white-space:nowrap}
+  .hl{background:var(--dobg);font-weight:700}
+  .lo{color:var(--sub)}
+  .warncell{background:var(--warnbg)}
+  .scroll{overflow-x:auto}
 
-  .mapwrap{padding:24px 20px;display:grid;
+  .mapwrap{padding:22px 20px;display:grid;
     grid-template-columns:1fr 40px 1fr 40px 1fr 40px 1fr;gap:10px;align-items:center}
   .node{border-radius:9px;padding:10px 12px;font-size:12px;font-weight:700;border:1.5px solid;text-align:center}
   .node small{display:block;font-weight:400;color:var(--sub);font-size:11px;margin-top:2px}
   .arrows{display:flex;justify-content:center;align-items:center;color:#94a3b8;font-size:22px;font-weight:700}
-  .loopback{grid-column:1/-1;text-align:center;color:var(--exp);font-size:12px;font-weight:700;
-    border-top:2px dashed #99f6e4;padding-top:10px;margin-top:6px}
+  .loopback{grid-column:1/-1;text-align:center;color:var(--proc);font-size:12px;font-weight:700;
+    border-top:2px dashed #c4b5fd;padding-top:10px;margin-top:6px}
 
-  footer{max-width:1180px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
+  .tstep{display:flex;gap:14px;margin-bottom:12px}
+  .tdate{flex:0 0 96px;font-weight:800;font-size:12px;color:#4f46e5;text-align:right}
+  .tbody{flex:1;border-left:3px solid #e0e7ff;padding-left:14px}
+  .tbody b{font-size:13px}
+
+  .stitle{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--sub);
+    text-transform:uppercase;margin:34px 0 10px;padding:0 2px}
+
+  footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
   @media(max-width:980px){
-    .grid3,.grid5{grid-template-columns:1fr}
+    .grid2,.grid3,.grid4{grid-template-columns:1fr}
     .mapwrap{grid-template-columns:1fr}
     .arrows{transform:rotate(90deg)}
-    .formula{white-space:normal}
   }
 </style>
 </head>
 <body>
 
 <header>
-  <p class="kicker">V5 · Agent1 (CEO) Theme Selection — Spec v1</p>
-  <h1>V5 テーマ選定アルゴリズム spec v1</h1>
-  <p class="lead">CEO Run 週次バッチの 7 テーマ選定を、カテゴリ別スコアリング + 探索枠 + 事前固定判定ルールの 1 本の式に確定。北極星 = <b>CV</b>、日次最適化はカテゴリ別先行指標。</p>
-  <div class="formula">score(t) = 0.4·実績 + 0.2·伸び率 + 0.2·競合 + 0.2·外部 − 飽和(最大0.15)</div>
+  <p class="kicker">V5 · Theme Selection Algorithm — Design Session Output</p>
+  <h1>V5 テーマ選定アルゴリズム — 設計と実走デモ</h1>
+  <p class="lead"><b>何をするアルゴリズムか:</b> CEO Run の週次バッチで、アカウントごとに「次に投稿する 7 テーマ」を選ぶ意思決定システム。入力 = 過去投稿のテーマ別成績 + 競合 + トレンド、出力 = 今週の 7 テーマ。投稿結果が翌週のスコア表に還流し、<b>人間の勘でやっていたテーマ選びが、毎週賢くなる計算に置き換わる</b>。</p>
+  <div class="formula">score(テーマ軸) = 0.6×実績 + 0.2×伸び率 + 0.2×競合 − 飽和ペナルティ</div>
   <div class="pills">
-    <span class="pill">決定 2026-07-06 (6 決定)</span>
-    <span class="pill">カテゴリ 3 インスタンス</span>
-    <span class="pill">サイクル = 週次 (CEO Run 同期)</span>
+    <span class="pill">設計セッション 2026-07-06</span>
+    <span class="pill">確定 6 決定</span>
+    <span class="pill">実走デモ: 江戸裏話 26 投稿 (実測値)</span>
   </div>
 </header>
 
 <nav>
-  <a href="#score">🧮 スコア式・特徴量 5</a>
-  <a href="#params">📊 カテゴリ表 3</a>
-  <a href="#cycle">🔁 週次フロー 4段</a>
-  <a href="#explore">🎲 探索 3ルール</a>
-  <a href="#data">🗂 データソース 5</a>
-  <a href="#log">📝 決定ログ 6</a>
-  <a href="#tbd">🔭 未決 3</a>
+  <a href="#s1">1️⃣ 全体像 (部品3+ループ)</a>
+  <a href="#s2">2️⃣ 各項目の深堀 (11ルール)</a>
+  <a href="#s3">3️⃣ V5への当てはめ (6決定)</a>
+  <a href="#s4">4️⃣ 実走デモ: 江戸裏話 (6軸)</a>
 </nav>
 
 <section>
   <div class="legend">
     <b style="color:var(--ink)">色の凡例:</b>
-    <span><span class="dot" style="background:var(--rule)"></span>確定ルール</span>
-    <span><span class="dot" style="background:var(--part)"></span>計算部品</span>
-    <span><span class="dot" style="background:var(--flow)"></span>工程・フロー</span>
-    <span><span class="dot" style="background:var(--exp)"></span>探索・還流</span>
-    <span><span class="dot" style="background:var(--tbd)"></span>未決・placeholder</span>
+    <span><span class="dot" style="background:var(--concept)"></span>枠組み・概念</span>
+    <span><span class="dot" style="background:var(--proc)"></span>工程・計算</span>
+    <span><span class="dot" style="background:var(--do)"></span>確定ルール</span>
+    <span><span class="dot" style="background:var(--warn)"></span>注意・仮値・未決</span>
+    <span><span class="dot" style="background:var(--ex)"></span>実データ・実走</span>
   </div>
 </section>
 
-<section id="score">
+<!-- ============ SECTION 1 ============ -->
+<section id="s1">
+  <p class="stitle">Section 1 — アルゴリズムの作り方: 基本項目とそのつながり</p>
+
   <div class="card">
-    <h2><span class="mark" style="background:var(--part)"></span>🧮 スコア計算式と 5 特徴量</h2>
-    <div class="note">全特徴量は同カテゴリ候補内の percentile 正規化 (0〜1)。外部 DB 稼働前は外部項の重みを実績へ振替 (実績 0.6) — スキーマは 5 本のまま、稼働日に有効化。</div>
-    <div class="pad grid5">
-      <div class="cell c-part"><b>実績 ×0.4</b>同軸過去投稿の先行指標平均
-        <span class="def">標本数補正: n&lt;5 は (n·raw+(5−n)·0.5)/5。時間減衰 30日半減</span></div>
-      <div class="cell c-part"><b>伸び率 ×0.2</b>直近14日 vs 前14日の比
-        <span class="def">トレンド感度。percentile 化して加算</span></div>
-      <div class="cell c-part"><b>競合 ×0.2</b>競合出現頻度
-        <span class="def">ラベル+競合 単一パス (2026-05-08 再設計) を流用</span></div>
-      <div class="cell c-tbd"><b>外部 ×0.2</b>外部トレンド DB シグナル
-        <span class="def">DB 構築中 — 稼働まで重み 0 の placeholder</span></div>
-      <div class="cell c-part"><b>飽和 (減点)</b>min(0.05×直近4サイクル採用回数, 0.15)
-        <span class="def">勝ちテーマの使い潰し防止。加重でなく減点項</span></div>
+    <h2><span class="mark" style="background:var(--concept)"></span>意思決定アルゴリズムの中身は 3 部品</h2>
+    <div class="note">ソートや探索でなく「何を選ぶかを再現可能な手続きにしたもの」。どんな領域でも骨格は同じ 3 部品で、どれか 1 つが曖昧なまま作り込むと必ず手戻りする。</div>
+    <div class="pad grid3">
+      <div class="cell c-concept"><b>① 入力 (シグナル)</b>判断材料になる数値・ラベル
+        <span class="def">V5 では: テーマ別の過去成績 / 競合動向 / トレンド / 採用履歴</span></div>
+      <div class="cell c-concept"><b>② 目的関数</b>「何を最大化するか」1 本の定義
+        <span class="def">全設計の起点。曖昧だと以降すべてブレる</span></div>
+      <div class="cell c-concept"><b>③ 決定ロジック</b>入力 → 出力の変換規則
+        <span class="def">成熟 3 段階: ルール → スコアリング → 学習。V5 は段階 2 で開始</span></div>
     </div>
   </div>
-</section>
 
-<section id="params">
   <div class="card">
-    <h2><span class="mark" style="background:var(--rule)"></span>📊 カテゴリ別パラメータ表 — 同一骨格・別パラメータの 3 インスタンス</h2>
-    <div class="note">根拠: Imp-CV 逆相関の実測 (2026-07-02、CV は動線系に集中) + toC カテゴリ 3 分類 lock (2026-07-03)。CV は疎すぎるため日次判定に使わない。</div>
-    <div class="pad" style="overflow-x:auto">
-      <table>
-        <thead><tr><th>カテゴリ</th><th>先行指標 (日次判定の物差し)</th><th>探索枠 (7枠中)</th><th>勝ち判定</th></tr></thead>
-        <tbody>
-          <tr><td class="lever">エンタメ</td><td><span class="big">PFV</span> (プロフ来訪)<span class="def">役割 = 送客。カテゴリ判定基準と同じものを測る</span></td><td class="big">1</td><td>同カテゴリ percentile 上位 30%</td></tr>
-          <tr><td class="lever">生活</td><td><span class="big">LC</span> (リンククリック)<span class="def">役割 = プロフ導線×商材。CV の 1 段手前</span></td><td class="big">1</td><td>同上</td></tr>
-          <tr><td class="lever">教育</td><td><span class="big">PFV</span> (当面)<span class="def">商材導線設置後に LC へ切替検討</span></td><td class="big">2<span class="def">拡張期 (本数 3→16)</span></td><td>同上</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section id="cycle">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--flow)"></span>🔁 週次判定フロー — 事前固定、結果を見てから変更しない</h2>
-    <div class="note">読み方: 出力 → 計測 → 判定 → 還流 の 4 段。還流が切れた決定システムはただの静的ルール表。</div>
+    <h2><span class="mark" style="background:var(--concept)"></span>部品のつながり — 「回路」になって初めてアルゴリズム</h2>
+    <div class="note">決定して終わりではなく、結果が入力へ還流するループが本体。ループの回転速度 = アルゴリズムの成長速度。還流が切れた瞬間に学習は止まる。</div>
     <div class="mapwrap">
-      <div class="node c-flow">CEO Run 出力<small>スコア上位 + 探索枠 = 7 テーマ → シート書込</small></div>
+      <div class="node c-concept">入力<small>テーマ別成績・競合・トレンド</small></div>
       <div class="arrows">→</div>
-      <div class="node c-flow">投稿・計測<small>カテゴリ先行指標 (PFV / LC) を蓄積</small></div>
+      <div class="node c-proc">スコアリング<small>score = Σ(特徴量×重み)</small></div>
       <div class="arrows">→</div>
-      <div class="node c-rule">最低条件ゲート<small>軸ごと 3 投稿 かつ 7 日経過。未満 = 判定持ち越し</small></div>
+      <div class="node c-ex">出力<small>今週の 7 テーマ</small></div>
       <div class="arrows">→</div>
-      <div class="node c-rule">週次判定<small>上位 30% = 勝ち / 下位 30% ×2 サイクル連続 = 負け</small></div>
-      <div class="loopback">↩ 勝ち負け両方をスコア表へ還流 (探索枠の外れも「この軸×この数値」として必ず記録) ／ 月次: 先行指標×CV の相関を較正 — 崩れたら物差し自体を見直す</div>
+      <div class="node c-do">計測・判定<small>事前固定した物差しで勝敗</small></div>
+      <div class="loopback">↩ 勝ち負け両方をスコア表へ還流 (翌週の「入力」になる) — この一周が 1 サイクル</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="mark" style="background:var(--concept)"></span>育て方の定石 — 小さく始めてループ速度で育てる 4 段階</h2>
+    <div class="pad">
+      <div class="tstep"><div class="tdate">STEP 1</div><div class="tbody"><b>ルールベースで書く</b> — 人間の勘の明文化。精度より「全判断がログに残る」ことが価値</div></div>
+      <div class="tstep"><div class="tdate">STEP 2</div><div class="tbody"><b>評価指標を先に固定</b> — 物差しがない改善は全部「気がする」になる</div></div>
+      <div class="tstep"><div class="tdate">STEP 3</div><div class="tbody"><b>仮説 → 1 変更 → 測定</b> — 1 サイクル 1 箇所。同時に 2 つ変えるとどちらが効いたか永久に不明</div></div>
+      <div class="tstep"><div class="tdate">STEP 4</div><div class="tbody"><b>データが溜まってから学習ベースへ</b> — 最初から ML が最頻出の失敗。ルール期のログが教師データになる</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 2 ============ -->
+<section id="s2">
+  <p class="stitle">Section 2 — 各項目の深堀</p>
+
+  <div class="card">
+    <h2><span class="mark" style="background:var(--proc)"></span>深堀 A: スコアリング設計 — 4 工程 + 質を分ける 3 補正</h2>
+    <div class="note">基本形は「候補ごとに score = Σ(特徴量×重み) → 上位 N 採用」。ただし実務の質は足し算そのものより「補正」で決まる。</div>
+    <div class="pad grid4">
+      <div class="cell c-proc"><b>工程1: 特徴量列挙</b>判断に効く要素を出す
+        <span class="def">実績 / 伸び率 / 競合頻度 / 採用履歴…</span></div>
+      <div class="cell c-proc"><b>工程2: 正規化</b>全て 0〜1 に揃える
+        <span class="def">桁の大きい項の支配を防ぐ。定番 = percentile 化</span></div>
+      <div class="cell c-proc"><b>工程3: 重み付け</b>直感を数字にする
+        <span class="def">合計 1 にすると調整しやすい</span></div>
+      <div class="cell c-proc"><b>工程4: 出力規則</b>上位 N + 探索枠
+        <span class="def">N 個中 1〜2 個はスコア無視の新テーマ枠</span></div>
     </div>
     <div class="pad grid3" style="padding-top:0">
-      <div class="cell c-rule"><b>サイクル = 週次</b>CEO Run に同期
-        <span class="def">3 日サイクルは PFV/LC が薄すぎ見送り (§決定ログ 6)</span></div>
-      <div class="cell c-rule"><b>1 投稿判定の禁止</b>3 投稿 7 日ミニマム
-        <span class="def">薄いデータ判定の罠 (2026-06-17 SOP) の構造的回避</span></div>
-      <div class="cell c-rule"><b>判定は相対評価</b>絶対値でなく percentile
-        <span class="def">プラットフォーム全体の波に左右されない</span></div>
+      <div class="cell c-do"><b>補正1: 標本数補正</b>少数サンプルは平均側へ縮小
+        <span class="def">1 本 10 万再生 &lt; 10 本平均 5 万。まぐれに釣られない</span></div>
+      <div class="cell c-do"><b>補正2: 時間減衰</b>古い実績ほど軽く
+        <span class="def">30 日半減で開始。トレンドが速いほど速く</span></div>
+      <div class="cell c-do"><b>補正3: 飽和ペナルティ</b>連投テーマに減点
+        <span class="def">勝ちテーマの使い潰しを防ぐ</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="mark" style="background:var(--do)"></span>深堀 B: 評価指標の決め方 — 4 原則</h2>
+    <div class="pad grid4">
+      <div class="cell c-do"><b>1. 北極星は 1 本</b>最大化する指標を 1 つに絞る
+        <span class="def">下げてはいけない指標は「ガードレール枠」に分離</span></div>
+      <div class="cell c-do"><b>2. 先行指標で回す</b>遅行指標で答え合わせ
+        <span class="def">CV は遅い → 速い相関指標で日次判定、月次で較正</span></div>
+      <div class="cell c-do"><b>3. 判定ルール事前固定</b>何投稿・何日・何超えで勝ちか
+        <span class="def">結果を見てから基準を動かした実験は実験でない</span></div>
+      <div class="cell c-warn"><b>4. グッドハートの法則</b>指標が目標になると歪む
+        <span class="def">再生数を追うと釣り化する等。ガードレール = 歪み検知装置</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="mark" style="background:var(--do)"></span>深堀 C: 探索と活用の配分 — 4 ルール</h2>
+    <div class="note">勝ちパターンだけ回すと学習が止まる。一定割合は意図的に外し球を打つのが普遍原則。</div>
+    <div class="pad grid4">
+      <div class="cell c-do"><b>1. 固定割合の探索枠</b>採用枠の 10〜20%
+        <span class="def">環境変化が速いショート動画系は高め (20% 前後)</span></div>
+      <div class="cell c-do"><b>2. 不確実性の大きい候補へ</b>ランダムより情報価値
+        <span class="def">データが薄く実力不明の軸を優先 (UCB の発想)</span></div>
+      <div class="cell c-do"><b>3. 失敗も必ず還流</b>「試して外れた」を記録
+        <span class="def">記録しないと同じ外れ球を何度も打つ</span></div>
+      <div class="cell c-do"><b>4. 配分は状況で動かす</b>安定 → 下げる / 急落 → 上げる
+        <span class="def">環境変化検知時は探索を増やす</span></div>
     </div>
   </div>
 </section>
 
-<section id="explore">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--exp)"></span>🎲 探索枠ルール — 3 本</h2>
-    <div class="note">探索枠が無いと新テーマが構造的に入れず、環境変化に気づけない。</div>
-    <div class="pad grid3">
-      <div class="cell c-exp"><b>枠数はカテゴリ別</b>エンタメ・生活 1 / 教育 2
-        <span class="def">拡張期カテゴリは探索多め (≈14% / ≈28%)</span></div>
-      <div class="cell c-exp"><b>候補は不確実性優先</b>標本数最少の軸から
-        <span class="def">昇順、同数なら競合頻度が高い順。ランダム不可 (UCB 的選択)</span></div>
-      <div class="cell c-exp"><b>急落で探索 +1</b>動的ルール
-        <span class="def">先行指標が 2 サイクル連続 30% 超急落 → +1、回復で戻す</span></div>
-    </div>
-  </div>
-</section>
+<!-- ============ SECTION 3 ============ -->
+<section id="s3">
+  <p class="stitle">Section 3 — V5 に当てはめた時の組み方 (設計セッション 2026-07-06 の確定 6 決定)</p>
 
-<section id="data">
   <div class="card">
-    <h2><span class="mark" style="background:var(--part)"></span>🗂 データソース対応表</h2>
-    <div class="pad" style="overflow-x:auto">
+    <h2><span class="mark" style="background:var(--do)"></span>使うデータの全一覧と重みづけ</h2>
+    <div class="note">5 特徴量スキーマで確定。外部トレンド項は外部 DB (構築中) の稼働まで重み 0 で空回し — 稼働日にスキーマ変更なしで有効化。稼働前は外部の 0.2 を実績へ振替 (0.4 → 0.6)。</div>
+    <div class="pad scroll">
       <table>
-        <thead><tr><th>データ</th><th>ソース</th></tr></thead>
+        <thead><tr><th>データ</th><th>特徴量への変換</th><th class="r">重み (DB 稼働後)</th><th class="r">重み (現在)</th><th>ソース</th><th>補正</th></tr></thead>
         <tbody>
-          <tr><td class="lever">PFV</td><td>IG Performance DB</td></tr>
-          <tr><td class="lever">LC / CV</td><td>社内アフィリエイト Tracker — Acc Based Summary (CV の正)</td></tr>
-          <tr><td class="lever">競合出現頻度</td><td>Agent1 (CEO) 競合分析パス</td></tr>
-          <tr><td class="lever">外部トレンド</td><td>外部 DB (構築中) — placeholder</td></tr>
-          <tr><td class="lever">計測 gap</td><td>API 外アカは自動判定対象外 — 手動判定 or 除外</td></tr>
+          <tr><td><b>自アカ同軸の過去成績</b></td><td>実績 = 同軸投稿の先行指標平均 → percentile</td><td class="r">0.4</td><td class="r"><b>0.6</b></td><td>投稿インサイト (API 自動収集)</td><td>標本数補正 (n&lt;5 は 0.5 へ縮小) + 時間減衰 (30 日半減)</td></tr>
+          <tr><td><b>直近の勢い</b></td><td>伸び率 = 直近 14 日 ÷ その前 14 日 → percentile</td><td class="r">0.2</td><td class="r">0.2</td><td>同上</td><td>—</td></tr>
+          <tr><td><b>競合の動き</b></td><td>競合出現頻度 → percentile</td><td class="r">0.2</td><td class="r">0.2</td><td>競合分析パス (ラベル+競合 単一パス)</td><td>—</td></tr>
+          <tr class="warncell"><td><b>外部トレンド</b></td><td>トレンドシグナル → percentile</td><td class="r">0.2</td><td class="r">0 (空回し)</td><td>外部トレンド DB (構築中)</td><td>—</td></tr>
+          <tr><td><b>自分の採用履歴</b></td><td>飽和 = min(0.05 × 直近 4 サイクル採用回数, 0.15)</td><td class="r" colspan="2">減点項 (最大 −0.15)</td><td>CEO Run 選定ログ</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="mark" style="background:var(--do)"></span>データのつながり方 — 週 1 サイクルの全体フロー</h2>
+    <div class="mapwrap">
+      <div class="node c-concept">① データ収集<small>投稿インサイト + 競合 + 採用ログ</small></div>
+      <div class="arrows">→</div>
+      <div class="node c-proc">② 軸ごとにスコア計算<small>5 特徴量 × 重み − 飽和</small></div>
+      <div class="arrows">→</div>
+      <div class="node c-ex">③ 7 枠に配分<small>活用 6 (スコア順) + 探索 1〜2</small></div>
+      <div class="arrows">→</div>
+      <div class="node c-do">④ 週次判定<small>3 投稿 7 日で勝敗確定</small></div>
+      <div class="loopback">↩ ⑤ 勝敗を実績項へ還流 → 翌週の ② が賢くなる ／ 月次で「先行指標 ⇄ CV」の相関を較正 (物差し自体の答え合わせ)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="mark" style="background:var(--do)"></span>確定 6 決定の一覧</h2>
+    <div class="pad scroll">
+      <table>
+        <thead><tr><th>#</th><th>決めたこと</th><th>採用案</th><th>理由 (1 行)</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>目的関数の構造</td><td><b>カテゴリ別 3 インスタンス</b> (エンタメ/生活/教育)、北極星 CV は共通</td><td>Imp-CV 逆相関の実測 + カテゴリ 3 分類 lock と整合</td></tr>
+          <tr><td>2</td><td>先行指標 (日次の物差し)</td><td><b>funnel 段割り当て</b>: エンタメ=プロフ来訪 / 生活=リンククリック / 教育=当面プロフ来訪</td><td>カテゴリの役割と同じ段を測る。CV は疎すぎて日次判定不可</td></tr>
+          <tr><td>3</td><td>特徴量セット</td><td><b>外部 DB 込み 5 本</b> (稼働まで重み 0 空回し)</td><td>背景知識リッチ路線と整合、着手はブロックしない</td></tr>
+          <tr><td>4</td><td>重みの初期値</td><td><b>実績重視型</b> (実績 0.4 / 伸び 0.2 / 競合 0.2 / 外部 0.2)</td><td>補正済み自アカ実績が最も信頼できるシグナル。勝ち型先行の順序と整合</td></tr>
+          <tr><td>5</td><td>探索・活用の配分</td><td><b>カテゴリ別</b>: エンタメ・生活 = 7 中 1 探索 / 教育 (拡張期) = 7 中 2。急落 2 サイクル連続で +1</td><td>拡張期ほど探索を厚く。探索専任アカは非拡大方針と衝突するため不採用</td></tr>
+          <tr><td>6</td><td>判定ルールとサイクル</td><td><b>週次・最低 3 投稿 7 日</b>。勝ち = 同カテゴリ上位 30% / 負け = 下位 30% × 2 連続</td><td>1 投稿判定 = まぐれ判定。薄いデータ判定の罠を構造的に回避</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </section>
 
-<section id="log">
+<!-- ============ SECTION 4 ============ -->
+<section id="s4">
+  <p class="stitle">Section 4 — 実走デモ: 江戸裏話 (IG) の実測データでアルゴリズムを組んでみる</p>
+
   <div class="card">
-    <h2><span class="mark" style="background:var(--rule)"></span>📝 決定理由ログ — 6 決定 (2026-07-06)</h2>
-    <div class="pad" style="overflow-x:auto">
+    <h2><span class="mark" style="background:var(--ex)"></span>STEP 1: 元データ — 26 投稿を「テーマ軸」に分類して集計</h2>
+    <div class="note">実測値: 江戸裏話の 2026-04-16 〜 05-24 の全 26 投稿 (視聴数は 5/26 時点スナップショット)。※本デモは先行指標に視聴数を使用 (投稿単位のプロフ来訪が API 項目外のため)。カテゴリ設計とは独立に、アルゴリズムの機構だけを実走させる。</div>
+    <div class="pad scroll">
       <table>
-        <thead><tr><th>#</th><th>決定</th><th>理由</th></tr></thead>
+        <thead><tr><th>テーマ軸</th><th class="r">投稿数 n</th><th class="r">平均視聴数</th><th class="r">直近14日平均</th><th class="r">前14日平均</th><th class="r">伸び率</th><th class="r">直近4週の採用</th><th>代表投稿 (実キャプション)</th></tr></thead>
         <tbody>
-          <tr><td>1</td><td class="lever">カテゴリ別目的関数</td><td>Imp-CV 逆相関の実測 + カテゴリ 3 分類 lock との整合</td></tr>
-          <tr><td>2</td><td class="lever">funnel 段割り当て</td><td>カテゴリの役割と同じ段を測る。CV は疎すぎて日次判定不可</td></tr>
-          <tr><td>3</td><td class="lever">外部 DB 込み 5 特徴量</td><td>背景知識リッチ路線と揃える。重み 0 空回しで着手ブロック回避</td></tr>
-          <tr><td>4</td><td class="lever">実績重視型の重み</td><td>標本数補正つき自アカ実績が最も信頼できるシグナル。勝ち型先行の順序転換 (2026-06-16) と整合</td></tr>
-          <tr><td>5</td><td class="lever">カテゴリ別探索枠</td><td>拡張期の教育系は探索多め。探索専任アカは非拡大方針 (2026-06-12) と衝突するため不採用</td></tr>
-          <tr><td>6</td><td class="lever">週次・3 投稿 7 日</td><td>3 日サイクル (2026-05-08) は PFV/LC が薄すぎ、まぐれ判定多発の懸念で見送り</td></tr>
+          <tr><td><b>遊郭・遊女</b></td><td class="r">5</td><td class="r">637,268</td><td class="r">790,126</td><td class="r">—</td><td class="r">—</td><td class="r">4 回</td><td>「湯女・風呂屋の二階」214 万 / 「局見世・蕎麦4杯分の女」81 万</td></tr>
+          <tr><td><b>男色・陰間</b></td><td class="r">3</td><td class="r">379,416</td><td class="r">971,350</td><td class="r">56,803</td><td class="r"><b>×17.1</b></td><td class="r">2 回</td><td>「江戸の男娼、陰間の闇」97 万 (5/14 再投稿で爆発)</td></tr>
+          <tr><td><b>夜這い・恋愛風習</b></td><td class="r">6</td><td class="r">253,969</td><td class="r">0 (投稿なし)</td><td class="r">43,591</td><td class="r">×0</td><td class="r">1 回</td><td>「混浴禁止の本当の理由」80 万 / 「夜這い、村の恋愛ルール」52 万</td></tr>
+          <tr><td><b>大奥・将軍家</b></td><td class="r">6</td><td class="r">119,565</td><td class="r">125,078</td><td class="r">91,998</td><td class="r">×1.36</td><td class="r"><b>6 回 (連投)</b></td><td>「大奥三千人、生涯処女で死んだ女」19 万</td></tr>
+          <tr><td><b>雑学・その他</b></td><td class="r">3</td><td class="r">51,551</td><td class="r">64,382</td><td class="r">25,889</td><td class="r">×2.49</td><td class="r">3 回</td><td>「オカメとひょっとこ仮面の本当の意味」9.4 万</td></tr>
+          <tr><td><b>美容・身だしなみ</b></td><td class="r">3</td><td class="r">32,704</td><td class="r">32,704</td><td class="r">—</td><td class="r">—</td><td class="r">3 回</td><td>「江戸の化粧品商人」1.5 万 / 「黒髪を香で焚きしめた女」3.4 万</td></tr>
+        </tbody>
+      </table>
+      <p class="lo" style="font-size:12px;margin:10px 0 0">「—」= 前 14 日に投稿がなく伸び率を計算できない軸 (STEP 2 で中央値 0.5 扱い)。この時点で既に見えること: 大奥は成績 4 位なのに直近 6 連投、美容は 3 連投して最下位 — 人間の選定は「作りやすい軸」に寄っていた。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="mark" style="background:var(--proc)"></span>STEP 2: 正規化 + 補正 — 実数を 0〜1 の特徴量に変換</h2>
+    <div class="note">percentile = 6 軸中の順位を 0〜1 化。標本数補正: n&lt;5 の軸は「補正値 = (n×素点 + (5−n)×0.5) ÷ 5」で平均 0.5 側へ縮小 — まぐれ 1 本に釣られないための機構。</div>
+    <div class="pad scroll">
+      <table>
+        <thead><tr><th>テーマ軸</th><th class="r">実績 素点</th><th class="r">→ 標本数補正後</th><th class="r">伸び率</th><th class="r">競合 (仮値)</th><th class="r">飽和減点</th></tr></thead>
+        <tbody>
+          <tr><td><b>遊郭・遊女</b></td><td class="r">1.00</td><td class="r">1.00 <span class="lo">(n=5 補正なし)</span></td><td class="r">0.50 <span class="lo">(計算不能→中央値)</span></td><td class="r">0.70</td><td class="r">−0.15 <span class="lo">(4 回×0.05, 上限)</span></td></tr>
+          <tr><td><b>男色・陰間</b></td><td class="r">0.80</td><td class="r"><b>0.68</b> <span class="lo">(n=3 で縮小)</span></td><td class="r">1.00</td><td class="r">0.30</td><td class="r">−0.10</td></tr>
+          <tr><td><b>夜這い・恋愛風習</b></td><td class="r">0.60</td><td class="r">0.60 <span class="lo">(n=6 補正なし)</span></td><td class="r">0.00</td><td class="r">0.50</td><td class="r">−0.05</td></tr>
+          <tr><td><b>大奥・将軍家</b></td><td class="r">0.40</td><td class="r">0.40</td><td class="r">0.60</td><td class="r">0.90</td><td class="r"><b>−0.15</b> <span class="lo">(6 連投で満額)</span></td></tr>
+          <tr><td><b>雑学・その他</b></td><td class="r">0.20</td><td class="r">0.32 <span class="lo">(n=3 で 0.5 側へ)</span></td><td class="r">0.80</td><td class="r">0.60</td><td class="r">−0.15</td></tr>
+          <tr><td><b>美容・身だしなみ</b></td><td class="r">0.00</td><td class="r">0.20 <span class="lo">(n=3 で 0.5 側へ)</span></td><td class="r">0.50</td><td class="r">0.40</td><td class="r">−0.15</td></tr>
+        </tbody>
+      </table>
+      <p class="lo" style="font-size:12px;margin:10px 0 0"><b style="color:var(--warn)">競合列は仮値</b> (競合分析パスの実測値は本デモの対象外)。他の列は全て実測値からの計算。補正の効きどころ: 男色は素点 0.80 → 0.68 に縮小 (97 万の 1 本がまぐれの可能性をまだ排除できない)、逆に成績最下位の美容は 0.00 → 0.20 に引き上げ (3 本ではまだ実力と断定しない)。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="mark" style="background:var(--proc)"></span>STEP 3: スコア計算 — score = 0.6×実績 + 0.2×伸び + 0.2×競合 − 飽和</h2>
+    <div class="note">外部 DB 稼働前の重み構成 (実績 0.6)。計算は全て上表の値の代入のみ。</div>
+    <div class="pad scroll">
+      <table>
+        <thead><tr><th class="r">順位</th><th>テーマ軸</th><th>計算式 (代入)</th><th class="r">スコア</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td class="r">1</td><td>遊郭・遊女</td><td>0.6×1.00 + 0.2×0.50 + 0.2×0.70 − 0.15</td><td class="r">0.69</td></tr>
+          <tr class="hl"><td class="r">2</td><td>男色・陰間</td><td>0.6×0.68 + 0.2×1.00 + 0.2×0.30 − 0.10</td><td class="r">0.57</td></tr>
+          <tr class="hl"><td class="r">3</td><td>夜這い・恋愛風習</td><td>0.6×0.60 + 0.2×0.00 + 0.2×0.50 − 0.05</td><td class="r">0.41</td></tr>
+          <tr class="hl"><td class="r">4</td><td>大奥・将軍家</td><td>0.6×0.40 + 0.2×0.60 + 0.2×0.90 − 0.15</td><td class="r">0.39</td></tr>
+          <tr><td class="r">5</td><td class="lo">雑学・その他</td><td class="lo">0.6×0.32 + 0.2×0.80 + 0.2×0.60 − 0.15</td><td class="r lo">0.32</td></tr>
+          <tr><td class="r">6</td><td class="lo">美容・身だしなみ</td><td class="lo">0.6×0.20 + 0.2×0.50 + 0.2×0.40 − 0.15</td><td class="r lo">0.15</td></tr>
         </tbody>
       </table>
     </div>
   </div>
-</section>
 
-<section id="tbd">
   <div class="card">
-    <h2><span class="mark" style="background:var(--tbd)"></span>🔭 未決・拡張パス — 3 件</h2>
+    <h2><span class="mark" style="background:var(--ex)"></span>STEP 4: 7 枠への配分 — 今週このアカが投稿すべきテーマ</h2>
     <div class="pad grid3">
-      <div class="cell c-tbd"><b>教育系 PFV→LC 切替</b>商材導線の設置後に判断
-        <span class="def">先行指標を CV の 1 段手前へ詰める</span></div>
-      <div class="cell c-tbd"><b>3 日サイクル復帰</b>投稿頻度・データ密度の向上時
-        <span class="def">最低条件 (3 投稿 7 日) を満たせる密度が前提</span></div>
-      <div class="cell c-tbd"><b>重みの学習化</b>週次判定ログが溜まってから
-        <span class="def">back-test で重みを 1 つずつ動かす手動チューニングが先</span></div>
+      <div class="cell c-ex"><b>活用 6 枠 (スコア順に比例配分)</b>遊郭×2 ／ 男色×2 ／ 夜這い×1 ／ 大奥×1
+        <span class="def">上位 2 軸に 2 枠ずつ、3〜4 位に 1 枠ずつ</span></div>
+      <div class="cell c-warn"><b>探索 1 枠 (スコア無視)</b>新軸「江戸の食」など実績ゼロの軸
+        <span class="def">スコアでは永遠に選ばれない軸に、意図的に 1 枠</span></div>
+      <div class="cell c-do"><b>来週の判定 (事前固定)</b>3 投稿 7 日 → 上位 30% で勝ち
+        <span class="def">結果は勝ち負け両方 STEP 1 の表へ還流</span></div>
+    </div>
+    <div class="pad" style="padding-top:0">
+      <div class="cell c-ex" style="display:block"><b>このアルゴリズムが人間の選定と違う判断をした点 (実データで見える価値)</b>
+        <span class="def" style="font-size:12.5px;line-height:1.7">
+        ① <b>大奥を 6 連投 → 1 枠に絞った</b>: 成績 4 位なのに直近最多投稿だった軸を、飽和ペナルティ満額 (−0.15) が自動で「一旦休ませる」判定に。
+        ② <b>男色を 2 枠に引き上げた</b>: 5/14 の 97 万再生 (5/4 の同種投稿の 17 倍) を伸び率項が捉えた。ただし標本数補正で「まだ 3 本」の慎重さも同時に効いている。
+        ③ <b>夜這いを切らさなかった</b>: 直近 2 週投稿ゼロで人間なら忘れる軸だが、平均 25 万の実績が枠を確保。
+        ④ <b>美容を 0 枠にした</b>: 直近 3 連投していたが最下位。下位 30% を 2 サイクル連続なら来週さらに減点。</span></div>
     </div>
   </div>
 </section>
 
 <footer>
-  作成 2026-07-06 ／ 正本: <code>~/claude/output/v5-theme-algorithm-spec-2026-07-06.md</code> ／ 設計原則の出典: <a href="https://badhan978.github.io/Output/algorithm-design-guide.html">アルゴリズムの作り方 (教材)</a> ／ 内部 ID・認証情報は除去済み
+  設計セッション 2026-07-06 ／ 正本 spec: <code>~/claude/output/v5-theme-algorithm-spec-2026-07-06.md</code> ／ 教材編: <a href="https://badhan978.github.io/Output/algorithm-design-guide.html">algorithm-design-guide.html</a><br>
+  Section 4 の視聴数・投稿日・キャプションは実測値 (2026-05-26 時点スナップショット、公開投稿のみ)。競合列のみ仮値。内部 ID・認証情報・シート ID は不記載。
 </footer>
 
 </body>
