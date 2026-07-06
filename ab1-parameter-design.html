@@ -131,6 +131,7 @@
   <a href="#params">🎛 パラメーター 25個</a>
   <a href="#playbook">📘 Playbook境界</a>
   <a href="#example">📝 実例 2商材で通す</a>
+  <a href="#learning">🔁 学習サイクルとDB</a>
 </nav>
 
 <div class="legend">
@@ -491,6 +492,49 @@
 
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
       <b>2商材の対比で見えること:</b> 認知が高いサブスク（Audible）は「比較検討中×正直レビューで疑いを潰す」、認知が低い物販（真空シーラー）は「課題認知×Before/Afterで問題ごと教える」— テーマ座標が変わるとシナリオとパラメーターが連動して変わる。フレームワークは同じ、埋まる中身だけが商材で変わる。<b>ABの回し方</b>はどちらも同じ: 1本目からH1やH4など2〜3変数だけ差し替えた2本目・3本目を並走し、層別KPIチェーン（フック率→完視聴→CTR→CVR）で落ちた層だけを疑う。
+    </div>
+  </div>
+</section>
+
+<section id="learning">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--off)"></span>🔁 学習サイクルとDB — このモデルをどう学習させるか</h2>
+    <div class="note">自社投稿の前に市場から学ぶ。ただし投稿を「覚える」のではなく、<b>このフレームワークの語彙（25パラメーター＋12類型）にデコードして事前分布を作る</b>。体系は投稿を作る道具であると同時に、市場の投稿を読むラベリングスキーマでもある。</div>
+    <div class="flowrow" style="grid-template-columns:1fr 36px 1fr 36px 1fr">
+      <div class="fbox n-on">① 市場学習（コールドスタート）<small>競合・類似商材の勝ち投稿をデコード → 水準×proxy KPIの勝率表＝事前分布。類型の重み・Playbook凍結値・初弾の台本初期値をここから初期化</small></div>
+      <div class="farr">→</div>
+      <div class="fbox n-run">② 自社PDCA学習<small>市場からは再生・いいね等の上流KPIしか見えない。リンクCTR・CVRは自社投稿だけが持つ → ABの弾は市場が教えてくれないCTA層〜CV接続に優先配分</small></div>
+      <div class="farr">→</div>
+      <div class="fbox n-done">③ 継続ウォッチ<small>市場の定点観測。新しい打ち出し方は証拠×語り口マトリクスでセル判定して類型更新、勝率のズレはアルゴ変化のシグナルとして検知</small></div>
+    </div>
+    <div class="note" style="border-top:1px solid var(--line)">商材が増えたら毎回フル学習が要るか？ → <b>学習資産は3層に分かれ、大半は転移する</b>。フル市場学習は初回と新カテゴリ参入時のみ、同カテゴリ内の商材追加は差分学習で済む。蓄積単位は商材でなく<b>カテゴリ</b>で持つ。</div>
+    <div class="grid3">
+      <div>
+        <div class="colhead">転移する層（1回で流用）</div>
+        <div class="pdef">フレームワーク語彙そのもの／12類型の有効性／Hook層の勝ち水準の大半（文型・トーン・呼びかけの効き方はジャンル横断で普遍）／Playbook凍結値</div>
+      </div>
+      <div>
+        <div class="colhead">カテゴリ単位で転移する層</div>
+        <div class="pdef">Body層のインサイトの効き方／シナリオ選定の重み。「認知高サブスク」「認知低の低単価物販」「高単価検討財」などカテゴリが同じなら流用可（Audible→Kindle Unlimitedはほぼそのまま効く）</div>
+      </div>
+      <div>
+        <div class="colhead">商材固有の層（毎回必要）</div>
+        <div class="pdef">商材理解5項目／ターゲット仮説とペルソナ／直接競合の投稿／オファーの翻訳（C2）— ここだけが新商材ごとの差分学習</div>
+      </div>
+    </div>
+    <div class="note" style="border-top:1px solid var(--line)">この決め事の外に持つDB — フレームワークと1対1対応する4つ:</div>
+    <table>
+      <thead><tr><th style="width:150px">DB</th><th style="width:180px">フレームワーク上の対応</th><th>中身</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">商材DB</td><td>テーマ座標1</td><td>商材理解5項目（オファー/CV導線/価値/競合/規制）がそのままスキーマ。カテゴリタグを持たせて転移学習の単位にする</td></tr>
+        <tr><td class="lever">ペルソナDB</td><td>テーマ座標2</td><td>仮説→ペルソナ→CV路線実績。<b>商材DBから独立させる</b> — ペルソナは商材をまたいで再利用でき、テーマ候補は「商材DB × ペルソナDB の交差」で機械生成できる</td></tr>
+        <tr><td class="lever">市場投稿DB</td><td>全層の事前分布</td><td>市場投稿を25パラメーター＋12類型でデコードして格納。水準×proxy KPIの勝率表はこのDBのビュー</td></tr>
+        <tr><td class="lever">自社投稿DB</td><td>実測KPIチェーン</td><td>市場投稿DBと同一スキーマ＋実測KPI（フック率〜CVR）。実装は同テーブルに source=market/own フラグでも可 — 市場はproxy KPIのみ・自社だけが完全KPIという非対称をスキーマで表現</td></tr>
+      </tbody>
+    </table>
+    <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
+      <b>学習コストの軽量化5原則:</b> ①テールだけ学ぶ（上位50〜100本で事前分布は足りる） ②収束したら止める（勝率表が動かなくなった時点で打ち切り） ③新商材はカテゴリ判定＋差分に還元 ④Just-in-time化（初弾生成時にその場でデコード、DBは副産物として蓄積） ⑤市場から観測できない層（CTA〜CVR）には収集コストを払わない。<br>
+      <b>資本効率の位置づけ:</b> 市場学習の対価はスクレイプインフラ＋トークン代（自動・限界費用ほぼゼロ）。これを省いた代替は自社投稿での探索＝制作費＋投稿枠の機会損失＋アカウント信用の消耗であり、桁で高い。市場学習とは「<b>他人が広告費と実弾で回したPDCAの結果をトークン代だけで吸収する</b>」行為で、これより安い学習チャネルは構造上存在しない。重いのは初回のパイプライン構築だけ。
     </div>
   </div>
 </section>
