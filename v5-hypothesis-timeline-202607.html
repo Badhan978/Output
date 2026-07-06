@@ -21,7 +21,7 @@
   header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:26px 28px}
   header .kicker{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7dd3fc;font-weight:800;margin:0 0 6px}
   header h1{margin:0;font-size:30px;line-height:1.25}
-  header .lead{margin:10px 0 14px;color:#cbd5e1;font-size:13px;max-width:860px}
+  header .lead{margin:10px 0 14px;color:#cbd5e1;font-size:13px;max-width:880px}
   .pill{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
     border-radius:99px;padding:4px 14px;font-size:11.5px;margin-right:8px;color:#e2e8f0}
 
@@ -41,8 +41,6 @@
   .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
     border-bottom:1px solid var(--line)}
 
-  .chip{font-size:10px;font-weight:800;padding:3px 10px;border-radius:5px;color:#fff}
-
   .legend{display:flex;gap:16px;flex-wrap:wrap;padding:12px 20px;background:#fff;
     border:1px solid var(--line);border-radius:12px;font-size:12px;align-items:center}
   .lg{display:flex;align-items:center;gap:6px;font-weight:600}
@@ -59,12 +57,12 @@
   .lever{font-weight:700}
   .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
 
-  /* ガント (CSS Grid 自製) */
+  /* ガント (CSS Grid 自製・日次 7/7-7/21) */
   .gwrap{overflow-x:auto;padding:18px 20px}
-  .gantt{display:grid;grid-template-columns:200px repeat(42,minmax(9px,1fr));
-    gap:3px 0;min-width:840px;font-size:11px}
-  .g-axis{grid-row:1;font-weight:800;color:var(--sub);font-size:10.5px;
-    border-left:1.5px solid var(--line);padding:0 0 6px 4px}
+  .gantt{display:grid;grid-template-columns:210px repeat(15,minmax(34px,1fr));
+    gap:3px 0;min-width:860px;font-size:11px}
+  .g-axis{grid-row:1;font-weight:800;color:var(--sub);font-size:10px;
+    border-left:1px solid var(--line);padding:0 0 6px 3px}
   .g-label{grid-column:1;font-weight:700;font-size:12px;padding:3px 10px 3px 0;
     display:flex;flex-direction:column;justify-content:center;line-height:1.35}
   .g-label small{color:var(--sub);font-weight:600;font-size:10.5px}
@@ -73,14 +71,14 @@
   .b-prep{background:var(--onbg);border-color:var(--on);color:#1d4ed8}
   .b-run{background:var(--runbg);border-color:var(--run);color:#6d28d9}
   .b-base{background:var(--offbg);border-color:var(--off);color:#0f766e}
-  .g-judge{align-self:center;color:var(--done);font-size:13px;font-weight:900;line-height:17px}
+  .b-cycle{background:#fff;border-color:var(--run);border-style:dashed;color:#7c3aed}
+  .g-judge{align-self:center;color:var(--done);font-size:11px;font-weight:900;line-height:17px;white-space:nowrap}
   .g-ms{align-self:center;font-size:10px;font-weight:800;color:#15803d;white-space:nowrap}
   .g-sep{grid-column:1 / -1;border-top:1px dashed var(--line);height:0;margin:4px 0}
 
   footer{max-width:1220px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
   @media(max-width:980px){
     header h1{font-size:22px}
-    .cols{grid-template-columns:1fr !important}
   }
 </style>
 </head>
@@ -89,10 +87,10 @@
 <header>
   <p class="kicker">V5 · Hypothesis Sprint · 2026-07</p>
   <h1>v5 汎用仮説 検証タイムライン</h1>
-  <p class="lead">汎用6本を同時多発PDCAで走らせる。走行期間は判定シグナルの速度で決める — 生成ブレ系 ≈ 1-2週（投稿不要）／ Imp系 ≈ 2週初速・4週本判定 ／ CV・精度系 ≈ 4週以上。ジャンル特化4本は一旦 Stay。</p>
-  <span class="pill">作成 2026-07-06</span>
-  <span class="pill">対象 汎用6本（リソース: 駿冴・Tomo）</span>
-  <span class="pill">刈り込み 7月末 → 8月中旬の2段</span>
+  <p class="lead">汎用6本を爆速PDCAで同時多発に回す — <b>実装 1〜1.5日 → 成果計測 2〜3日 → 即判定 → 3日サイクルで次へ</b>。7/9〜7/15 に全6本の初回判定が出揃う。的中率・売上などの遅いシグナルは判定を待たず、回しながら毎サイクル答え合わせを積む。ジャンル特化4本は一旦 Stay。</p>
+  <span class="pill">作成 2026-07-06 / 更新 2026-07-07</span>
+  <span class="pill">リソース: 駿冴・Tomo（設計 = Badhan）</span>
+  <span class="pill">節目 7/15 初回判定出揃い → 7/20 一次刈り込み</span>
 </header>
 
 <nav>
@@ -105,69 +103,83 @@
 <section>
   <div class="legend">
     <span style="font-weight:800;color:var(--sub);font-size:11px">凡例</span>
-    <span class="lg"><span class="sw" style="background:var(--onbg);border-color:var(--on)"></span>準備</span>
-    <span class="lg"><span class="sw" style="background:var(--runbg);border-color:var(--run)"></span>検証走行</span>
+    <span class="lg"><span class="sw" style="background:var(--onbg);border-color:var(--on)"></span>準備・実装</span>
+    <span class="lg"><span class="sw" style="background:var(--runbg);border-color:var(--run)"></span>成果計測</span>
+    <span class="lg"><span class="sw" style="background:#fff;border-color:var(--run);border-style:dashed"></span>PDCAサイクル継続</span>
     <span class="lg"><span class="sw" style="background:var(--offbg);border-color:var(--off)"></span>基盤構築</span>
     <span class="lg" style="color:var(--done)">◆ 判定</span>
-    <span class="lg"><span class="sw" style="background:var(--todobg);border-color:var(--todo)"></span>Stay（未着手）</span>
   </div>
 </section>
 
 <section id="gantt">
   <div class="card">
-    <h2><span class="mark" style="background:var(--run)"></span>ガントチャート — 7/7 着火 → 8月中旬 最終判定</h2>
-    <div class="note">基盤2本（FBループ・実績配管）は仮説ではなく全PDCAの回転速度を上げる先行投資 — W1-W2 に最優先。7月中旬以降は5本が同時走行。</div>
+    <h2><span class="mark" style="background:var(--run)"></span>ガントチャート — 7/7〜7/21（日次）</h2>
+    <div class="note">初回判定は「続行/方向転換」の判断。#5 的中率・#6 売上進捗の最終評価はサイクルを重ねて累積で確認（CV・売上イベントは遅行のため）。</div>
     <div class="gwrap">
       <div class="gantt">
-        <!-- 週軸 (7日刻み) -->
+        <!-- 日軸 -->
         <div class="g-label" style="grid-row:1"></div>
-        <div class="g-axis" style="grid-column:2/9">7/7</div>
-        <div class="g-axis" style="grid-column:9/16">7/14</div>
-        <div class="g-axis" style="grid-column:16/23">7/21</div>
-        <div class="g-axis" style="grid-column:23/30">7/28</div>
-        <div class="g-axis" style="grid-column:30/37">8/4</div>
-        <div class="g-axis" style="grid-column:37/44">8/11</div>
+        <div class="g-axis" style="grid-column:2">7/7</div>
+        <div class="g-axis" style="grid-column:3">8</div>
+        <div class="g-axis" style="grid-column:4">9</div>
+        <div class="g-axis" style="grid-column:5">10</div>
+        <div class="g-axis" style="grid-column:6">11</div>
+        <div class="g-axis" style="grid-column:7">12</div>
+        <div class="g-axis" style="grid-column:8">13</div>
+        <div class="g-axis" style="grid-column:9">7/14</div>
+        <div class="g-axis" style="grid-column:10">15</div>
+        <div class="g-axis" style="grid-column:11">16</div>
+        <div class="g-axis" style="grid-column:12">17</div>
+        <div class="g-axis" style="grid-column:13">18</div>
+        <div class="g-axis" style="grid-column:14">19</div>
+        <div class="g-axis" style="grid-column:15">20</div>
+        <div class="g-axis" style="grid-column:16">21</div>
 
-        <!-- 1 自走エージェント: run 7/7-7/27, 判定 7/28 -->
-        <div class="g-label" style="grid-row:2">自走エージェント（小太郎）<small>駿冴 · 3日×6サイクル</small></div>
-        <div class="g-bar b-run" style="grid-row:2;grid-column:2/23">走行 7/7→7/27</div>
-        <div class="g-judge" style="grid-row:2;grid-column:23/25">◆7/28</div>
+        <!-- 1 自走 -->
+        <div class="g-label" style="grid-row:2">#1 自走エージェント（小太郎）<small>駿冴 · Running中 · 3日サイクル確認</small></div>
+        <div class="g-bar b-run" style="grid-row:2;grid-column:2/15">Running中（3日サイクルごと確認）</div>
+        <div class="g-judge" style="grid-row:2;grid-column:15/17">◆7/20 継続/停止</div>
 
-        <!-- 2 プレイブック: prep 7/7-7/8, run 7/8-7/16, 判定 7/17 -->
-        <div class="g-label" style="grid-row:3">プレイブック要件揃え<small>駿冴 · 生成比較・投稿不要</small></div>
-        <div class="g-bar b-prep" style="grid-row:3;grid-column:2/4"></div>
-        <div class="g-bar b-run" style="grid-row:3;grid-column:4/12">走行 7/8→7/16</div>
-        <div class="g-judge" style="grid-row:3;grid-column:12/14">◆7/17</div>
+        <!-- 2 プレイブック -->
+        <div class="g-label" style="grid-row:3">#2 プレイブック要件揃え<small>Tomo · 内外決定=駿冴・Badhan</small></div>
+        <div class="g-bar b-prep" style="grid-row:3;grid-column:3/4">確定+修正</div>
+        <div class="g-bar b-run" style="grid-row:3;grid-column:4/6">生成→観測</div>
+        <div class="g-judge" style="grid-row:3;grid-column:6/7">◆7/10</div>
+        <div class="g-bar b-cycle" style="grid-row:3;grid-column:7/15">PDCA 3日サイクル → 全Playbook反映</div>
+        <div class="g-judge" style="grid-row:3;grid-column:15/17">◆7/20</div>
 
-        <!-- 3 市場アカウント分析: prep 7/7-7/8, run 7/9-8/3, 判定 8/4 -->
-        <div class="g-label" style="grid-row:4">市場アカウント分析<small>Tomo · 収集→採用→実測</small></div>
-        <div class="g-bar b-prep" style="grid-row:4;grid-column:2/4"></div>
-        <div class="g-bar b-run" style="grid-row:4;grid-column:4/30">走行 7/9→8/3</div>
-        <div class="g-judge" style="grid-row:4;grid-column:30/32">◆8/4</div>
+        <!-- 3 市場分析 -->
+        <div class="g-label" style="grid-row:4">#3 市場アカウント分析<small>Tomo · 既存システム磨き込み</small></div>
+        <div class="g-bar b-prep" style="grid-row:4;grid-column:4/7">磨き込み 7/9-11</div>
+        <div class="g-bar b-run" style="grid-row:4;grid-column:7/8">品質レビュー</div>
+        <div class="g-judge" style="grid-row:4;grid-column:8/10">◆7/12</div>
+        <div class="g-bar b-cycle" style="grid-row:4;grid-column:10/17">採用テーマの実測を毎サイクル答え合わせ</div>
 
-        <!-- 4 FBループ: build 7/8-7/14, 稼働確認 7/14 -->
-        <div class="g-label" style="grid-row:5">FBループ生成（窓口統合）<small>駿冴 · 基盤（走行なし）</small></div>
-        <div class="g-bar b-base" style="grid-row:5;grid-column:3/10">構築 7/8→7/14</div>
-        <div class="g-judge" style="grid-row:5;grid-column:10/12">◆7/14</div>
+        <!-- 4 FBループ -->
+        <div class="g-label" style="grid-row:5">#4 FBループ生成（窓口統合）<small>駿冴 · 基盤</small></div>
+        <div class="g-bar b-base" style="grid-row:5;grid-column:3/5">構築 7/8-9</div>
+        <div class="g-judge" style="grid-row:5;grid-column:5/8">◆7/9 稼働確認</div>
 
-        <!-- 5 予測学習: prep 7/15-7/17, run 7/20-8/13, 判定 8/14 -->
-        <div class="g-label" style="grid-row:6">予測精度の学習システム<small>駿冴 · 実績配管→週次照合×4</small></div>
-        <div class="g-bar b-prep" style="grid-row:6;grid-column:10/13"></div>
-        <div class="g-bar b-run" style="grid-row:6;grid-column:15/40">走行 7/20→8/13</div>
-        <div class="g-judge" style="grid-row:6;grid-column:40/42">◆8/14</div>
+        <!-- 5 予測学習 -->
+        <div class="g-label" style="grid-row:6">#5 予測精度の学習システム<small>Badhan設計 + 駿冴実装</small></div>
+        <div class="g-bar b-prep" style="grid-row:6;grid-column:3/6">設計7/8 → 実装7/9-10</div>
+        <div class="g-bar b-run" style="grid-row:6;grid-column:6/9">予測⇄実測 7/11-13</div>
+        <div class="g-judge" style="grid-row:6;grid-column:9/10">◆7/13</div>
+        <div class="g-bar b-cycle" style="grid-row:6;grid-column:10/17">週次で較正・的中率を累積</div>
 
-        <!-- 6 AB①: prep 7/17-7/21, run 7/21-8/16, 判定 8/17 -->
-        <div class="g-label" style="grid-row:7">型別分類＋パラメーター（AB①）<small>駿冴 · 定例判定後に実装</small></div>
-        <div class="g-bar b-prep" style="grid-row:7;grid-column:12/17"></div>
-        <div class="g-bar b-run" style="grid-row:7;grid-column:17/43">走行 7/21→8/16</div>
-        <div class="g-judge" style="grid-row:7;grid-column:43/44">◆</div>
+        <!-- 6 AB① -->
+        <div class="g-label" style="grid-row:7">#6 型別分類＋パラメーター（AB①）<small>Badhan設計 + 駿冴実装</small></div>
+        <div class="g-bar b-prep" style="grid-row:7;grid-column:3/8">1型詰め7/8 → 実装〜7/12</div>
+        <div class="g-bar b-run" style="grid-row:7;grid-column:8/11">計測+PDCA設計 7/13-15</div>
+        <div class="g-judge" style="grid-row:7;grid-column:11/12">◆7/15</div>
+        <div class="g-bar b-cycle" style="grid-row:7;grid-column:12/17">3日サイクルPDCA・売上を累積確認</div>
 
         <div class="g-sep" style="grid-row:8"></div>
 
-        <!-- 刈り込みマイルストーン -->
-        <div class="g-label" style="grid-row:9"><small>刈り込み 2段</small></div>
-        <div class="g-ms" style="grid-row:9;grid-column:26/33">◆ 7/31 一次刈り込み（生成系・自走）</div>
-        <div class="g-ms" style="grid-row:9;grid-column:40/44">◆ 8/14〜 最終判定</div>
+        <!-- 節目 -->
+        <div class="g-label" style="grid-row:9"><small>節目</small></div>
+        <div class="g-ms" style="grid-row:9;grid-column:10/15">◆ 7/15 全6本 初回判定出揃い</div>
+        <div class="g-ms" style="grid-row:9;grid-column:15/17">◆ 7/20 一次刈り込み</div>
       </div>
     </div>
   </div>
@@ -175,16 +187,16 @@
 
 <section id="list">
   <div class="card">
-    <h2><span class="mark" style="background:var(--on)"></span>一覧 — 着火日・走行期間・判定</h2>
+    <h2><span class="mark" style="background:var(--on)"></span>一覧 — 実装・計測・判定・以後のサイクル</h2>
     <table>
-      <thead><tr><th>項目</th><th>owner</th><th>着火日</th><th>走行期間</th><th>判定</th></tr></thead>
+      <thead><tr><th>項目</th><th>owner</th><th>準備・実装</th><th>成果計測</th><th>初回判定</th><th>以後</th></tr></thead>
       <tbody>
-        <tr><td class="lever">自走エージェント（小太郎）<span class="def">3日に1回発火→3日分自動生成・予約投稿。追加開発なし</span></td><td>駿冴</td><td><b>7/7(火)</b></td><td>3日×6サイクル ≈ 3週</td><td>7/28頃</td></tr>
-        <tr><td class="lever">プレイブック要件揃え<span class="def">共通ルールのみで出力ブレが許容範囲か。生成20-30本比較</span></td><td>駿冴</td><td><b>7/7(火)</b></td><td>1-2週（投稿不要）</td><td>7/17頃</td></tr>
-        <tr><td class="lever">市場アカウント分析<span class="def">収集+指示書化→テーマ採用→投稿実測で効果判定</span></td><td>Tomo</td><td><b>7/7(火)</b></td><td>実測2サイクル ≈ 4週</td><td>8/4頃</td></tr>
-        <tr><td class="lever">FBループ生成（窓口統合）<span class="def">3分割窓口の統合。全PDCAの回転速度を上げる基盤</span></td><td>駿冴</td><td><b>7/8(水)</b></td><td>基盤（走行なし）</td><td>7/14 稼働確認</td></tr>
-        <tr><td class="lever">予測精度の学習システム<span class="def">実績配管（実測供給）→予測⇄実測の週次照合×4点</span></td><td>駿冴</td><td><b>7/15(水)</b></td><td>週次照合×4 ≈ 4週</td><td>8月中旬</td></tr>
-        <tr><td class="lever">型別分類＋パラメーター（AB①）<span class="def">型×パラメーター設定→売上進捗（月次1〜2万円）で判定</span></td><td>駿冴</td><td><b>7/17(金)</b></td><td>4週</td><td>8月中旬</td></tr>
+        <tr><td class="lever">#1 自走エージェント（小太郎）<span class="def">3日に1回発火→戦略再構築→生成→予約投稿。追加開発なし</span></td><td>駿冴</td><td>済（Running中）</td><td>3日サイクルごと確認</td><td>—</td><td>〜<b>7/20</b> 駿冴確認で継続/停止</td></tr>
+        <tr><td class="lever">#2 プレイブック要件揃え<span class="def">Playbook内/外の切り分け→修正→生成観測でブレ判定</span></td><td>Tomo<span class="def">内外決定=駿冴・Badhan</span></td><td>確定+修正 〜7/8</td><td>生成→観測 7/9-7/10</td><td><b>7/10</b></td><td>失敗ならPDCA（3日サイクル）→ 全Playbook反映 〜<b>7/20</b></td></tr>
+        <tr><td class="lever">#3 市場アカウント分析<span class="def">既存の市場分析システムの磨き込み</span></td><td>Tomo</td><td>磨き込み 7/9-7/11</td><td>出力品質レビュー 7/11-7/12</td><td><b>7/12</b></td><td>採用テーマの実測を毎サイクル答え合わせ</td></tr>
+        <tr><td class="lever">#4 FBループ生成（窓口統合）<span class="def">全体のFBが回る仕組み。全PDCAの回転速度を上げる基盤</span></td><td>駿冴</td><td>7/8-7/9</td><td>1周流して確認</td><td><b>7/9</b> 稼働確認</td><td>不具合あれば即修正</td></tr>
+        <tr><td class="lever">#5 予測精度の学習システム<span class="def">細か設計(B)→データ・重みづけブラッシュアップ→実装テスト</span></td><td>Badhan+駿冴</td><td>設計 7/8 (B) / 重みづけ 7/8 (駿) / 実装 7/9-7/10 (駿)</td><td>予測⇄実測 7/11-7/13</td><td><b>7/13</b></td><td>週次で較正・的中率を累積</td></tr>
+        <tr><td class="lever">#6 型別分類＋パラメーター（AB①）<span class="def">1型分だけ詳細詰め+パラメーター設計→実装→PDCA設計</span></td><td>Badhan+駿冴</td><td>1型詰め 7/8 (B) / 実装 〜7/12 (駿)</td><td>初回計測 7/13-7/15 + PDCA設計 〜7/15</td><td><b>7/15</b></td><td>3日サイクルPDCA・売上進捗を累積確認</td></tr>
       </tbody>
     </table>
   </div>
@@ -192,17 +204,17 @@
 
 <section id="design">
   <div class="card">
-    <h2><span class="mark" style="background:var(--done)"></span>詳細設計リンク集 — Badhan 構想ページ（〜7/7 で記載）</h2>
-    <div class="note">各仮説の詳細設計は Badhan が構想を書いた HTML ページをここにリンクづける（〜7/7）。リンク確定後にこのページを更新。</div>
+    <h2><span class="mark" style="background:var(--done)"></span>詳細設計リンク集 — Badhan 構想ページを都度追加</h2>
+    <div class="note">各仮説の詳細設計は Badhan が構想HTMLを作成し、完成の都度ここにURLを貼って更新する運用。</div>
     <table>
       <thead><tr><th>項目</th><th>詳細設計ページ</th><th>状態</th></tr></thead>
       <tbody>
-        <tr><td class="lever">自走エージェント（小太郎）</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
-        <tr><td class="lever">プレイブック要件揃え</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
-        <tr><td class="lever">市場アカウント分析</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
-        <tr><td class="lever">FBループ生成（窓口統合）</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
-        <tr><td class="lever">予測精度の学習システム</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
-        <tr><td class="lever">型別分類＋パラメーター（AB①）</td><td>— リンク予定 —</td><td><span class="st st-todo">〜7/7 記載</span></td></tr>
+        <tr><td class="lever">#1 自走エージェント（小太郎）</td><td>— リンク待ち —</td><td><span class="st st-todo">未着</span></td></tr>
+        <tr><td class="lever">#2 プレイブック要件揃え</td><td>— リンク待ち —</td><td><span class="st st-todo">未着</span></td></tr>
+        <tr><td class="lever">#3 市場アカウント分析</td><td>— リンク待ち —</td><td><span class="st st-todo">未着</span></td></tr>
+        <tr><td class="lever">#4 FBループ生成（窓口統合）</td><td>— リンク待ち —</td><td><span class="st st-todo">未着</span></td></tr>
+        <tr><td class="lever">#5 予測精度の学習システム</td><td>— リンク待ち —</td><td><span class="st st-todo">未着</span></td></tr>
+        <tr><td class="lever">#6 型別分類＋パラメーター（AB①）</td><td>— リンク待ち —</td><td><span class="st st-todo">未着</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -210,7 +222,7 @@
 
 <section id="stay">
   <div class="card">
-    <h2><span class="mark" style="background:var(--todo)"></span>Stay — ジャンル特化 4件（再開判断 = 7月末 一次刈り込み後）</h2>
+    <h2><span class="mark" style="background:var(--todo)"></span>Stay — ジャンル特化 4件（再開判断 = 7/20 一次刈り込み後）</h2>
     <table>
       <thead><tr><th>項目</th><th>状態</th></tr></thead>
       <tbody>
@@ -224,7 +236,7 @@
 </section>
 
 <footer>
-  正本: Slack #ai-ad チャンネル 2026-07-06 スレッド（仮説・Todo 最終リスト）＋ 会議議事録 2026-07-03 経営会議 / 2026-06-30 AI AD 定例 ／ 作成 2026-07-06 ／ 内部 ID・認証情報は除去済み
+  正本: Slack #ai-ad チャンネル 2026-07-06 スレッド（仮説・Todo 最終リスト）＋ Badhan 調整 2026-07-07 ／ 会議議事録 2026-07-03 経営会議 / 2026-06-30 AI AD 定例 ／ 内部 ID・認証情報は除去済み
 </footer>
 
 </body>
