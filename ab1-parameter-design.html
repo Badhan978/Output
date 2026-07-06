@@ -112,14 +112,13 @@
 <header>
   <div class="kicker">Proposal v2 — AB Test ① Content Design / for AI AD 定例</div>
   <h1>【提案】CV直結型 コンテンツ設計 v2</h1>
-  <p class="lead">投稿タイプを「インプ最大化 / ターゲット獲得」に2分岐させず、<b style="color:#fff">1投稿の中で Hook＝関心層の母体最大化 / Body＝購買衝動 / CTA＝摩擦ゼロの刈り取り、と層分担</b>させ、層別KPIでパラメーターPDCAを回す設計案。ジャンルに依存しない汎用フレームワーク（実例はAudible／真空シーラーの2商材で並走）。</p>
+  <p class="lead"><b style="color:#fff">1投稿の中で Hook＝関心層の母体最大化 / Body＝購買衝動 / CTA＝摩擦ゼロの刈り取り、と層分担</b>し、層別KPIでパラメーターPDCAを回す。ジャンルに依存しない汎用フレームワーク（実例: Audible／真空シーラー）。</p>
   <div class="pills">
     <span class="pill pill-warn">⚠ ステータス: チーム議論前の提案 — 意思決定はTeam議論後（第一弾: 2026-07-06 AI AD定例）</span>
   </div>
   <div class="pills">
     <span class="pill">📅 2026-07-06 v2.1</span>
     <span class="pill">実例商材: Audible（サブスク）／ 真空シーラー（物販）</span>
-    <span class="pill">対: Session3 AB②と対で比較</span>
   </div>
 </header>
 
@@ -158,7 +157,7 @@
       <div class="fterm">導線の綺麗さ<small>CTA層</small></div>
     </div>
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
-      <b>Hook方針 = (a) 商材関心層内で母体最大化。</b>(b) エンタメ寄せの絶対数最大化は不採用 — 生インプは伸びるがCVRが希釈され、アルゴの学習も濁るため。（※アカウント運用としてエンタメ投稿を混ぜて流入確保すべきかは別論点 — アカウント戦略レイヤーで議論）
+      <b>Hook方針 = (a) 商材関心層内で母体最大化。</b>(b) エンタメ寄せの絶対数最大化は不採用 — インプは伸びてもCVRが希釈され、アルゴの学習が濁る。
     </div>
   </div>
 </section>
@@ -166,7 +165,7 @@
 <section id="layers">
   <div class="card">
     <h2><span class="mark" style="background:var(--done)"></span>🗺 全体の枠組み — 1コンテンツ＝4層での仮説検証</h2>
-    <div class="note">1本のコンテンツは「テーマ→シナリオ→パラメーター→分析」という<b>4層の意思決定の積み上げ</b>で作られる。各層がそれぞれ仮説検証の単位になっており、層ごとに検証の回転速度が違う — 上の層ほど「選んで固定」（遅い検証）、下の層ほど「振って試す」（速い検証）。速い実験は全部下の層に押し付ける。</div>
+    <div class="note">1本のコンテンツは「テーマ→シナリオ→パラメーター→分析」という<b>4層の意思決定の積み上げ</b>。各層が仮説検証の単位で、上の層ほど遅く（選んで固定）、下の層ほど速く（振って試す）回す。</div>
     <div class="flowrow">
       <div class="fbox n-done">1. テーマ層<small>何を・誰に売るか<br>遅い検証（週次〜月次）</small></div>
       <div class="farr">→</div>
@@ -177,7 +176,7 @@
       <div class="fbox n-on">4. 分析<small>どの層で落ちたかを特定し<br>その層だけ振り直す</small></div>
     </div>
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
-      <b>分析の決定ロジック:</b> フック率 → 完視聴率 → リンクCTR → CVR の層別KPIチェーンでどの層で落ちたかを特定し、その層のパラメーターだけ差し替えて次の投稿へ。全層同時に振らない（変数分離）。
+      <b>層別KPIチェーン:</b> フック率 → 完視聴率 → リンクCTR → CVR。落ちた層だけ差し替え、全層同時に振らない（変数分離）。
     </div>
   </div>
 </section>
@@ -185,7 +184,7 @@
 <section id="theme">
   <div class="card">
     <h2><span class="mark" style="background:var(--done)"></span>🎯 テーマ層 — 3座標 × 決定ロジック3段</h2>
-    <div class="note">テーマは1語ではなく3座標の掛け合わせ。例:「Audible × 朝1時間の通勤があるコンサル勤務の20代 × 比較検討中」で1テーマ。<b>仮説の発散はLLM（CEO Agent）の思考に委ね、ここでは「考える順序」と「採点基準」だけを固定する</b>（Playbookと同じブレ排除の思想）。</div>
+    <div class="note">テーマは3座標の掛け合わせ。例:「Audible × 朝1時間の通勤があるコンサル勤務の20代 × 比較検討中」。<b>仮説の発散はLLMに委ね、ここでは考える順序と採点基準だけを固定する。</b></div>
     <div class="grid3">
       <div>
         <div class="colhead">座標1: 商材</div>
@@ -199,17 +198,17 @@
       <div>
         <div class="colhead">座標2: ターゲット</div>
         <div class="pdef" style="margin-bottom:8px">決め方は4段で狭めていく:</div>
-        <div class="param"><div class="pname">① コアか潜在か</div><div class="pdef">商材の飽和度で判断。認知が高い商材はコアが取り切られているので潜在顧客層を救い上げる</div></div>
+        <div class="param"><div class="pname">① コアか潜在か</div><div class="pdef">商材の飽和度で判断。認知高ならコアは取り切られている → 潜在層を救い上げる</div></div>
         <div class="param"><div class="pname">② ターゲット仮説を複数出す</div><div class="pdef">方向性の違う候補を並べる（下の例参照）</div></div>
         <div class="param"><div class="pname">③ ペルソナまで落とす</div><div class="pdef">「20代通勤社会人」では不十分。生活動線・職業・利用シーンまで具体化</div></div>
         <div class="param"><div class="pname">④ CV路線で絞り配分</div><div class="pdef">「今もっともCV路線の高いターゲット」に絞り込み、仮説ごとに試す投稿量を決める</div></div>
       </div>
       <div>
         <div class="colhead">座標3: 購買スタイル</div>
-        <div class="pdef">課題認知 / 比較検討中 / 行動直前 — 視聴者が今どの段階か。<br><br>商材の認知度と連動する: 認知が高い商材（Audible）は比較検討中〜行動直前が厚く、認知が低い商材（真空シーラー）はまず課題認知から作る必要がある。</div>
+        <div class="pdef">課題認知 / 比較検討中 / 行動直前 — 視聴者が今どの段階か。<br><br>商材の認知度と連動: 認知高（Audible）は比較検討中が厚く、認知低（真空シーラー）は課題認知から作る。</div>
       </div>
     </div>
-    <div class="note" style="border-top:1px solid var(--line)">ターゲット仮説の例（Audible）— 同じ商材でも路線が複数あり、CV路線の高い順に投稿量を配分する:</div>
+    <div class="note" style="border-top:1px solid var(--line)">ターゲット仮説の例（Audible）— 路線は複数あり、CV路線の高い順に投稿量を配分:</div>
     <div class="grid3">
       <div>
         <div class="colhead">仮説A: 通勤コンサル</div>
@@ -234,7 +233,7 @@
         </tbody>
       </table>
     </div>
-    <div class="note" style="border-top:1px solid var(--line)">段3の採点基準 — AIが読み手なので、軸ごとに「問い」と高低のアンカーを固定してブレを排除する:</div>
+    <div class="note" style="border-top:1px solid var(--line)">段3の採点基準 — 軸ごとに問いと高低アンカーを固定してブレを排除:</div>
     <table>
       <thead><tr><th style="width:140px">軸</th><th style="width:280px">採点の問い</th><th>高スコアの姿</th><th>低スコアの姿</th></tr></thead>
       <tbody>
@@ -250,7 +249,7 @@
 <section id="scenario">
   <div class="card">
     <h2><span class="mark" style="background:var(--done)"></span>🎬 シナリオ層 — 実在カタログ12類型 × 決定軸4つ</h2>
-    <div class="note">SNSで実際に回っているPRコンテンツの打ち出し方を集約したカタログ。<b>検証期は事前に1類型を固定</b>（探索の初期値・整合性制約・ABの変数分離）。量産期は実測の勝ち束が型を再定義し、カタログは分類タグに格下げ。制作適合（AI KOLで証拠映像を作れるか・偽体験/ステマの線引き）は<b>Playbook側の事前ゲートに移管</b>済み — シナリオ選定時には判断しない。</div>
+    <div class="note">SNSで実際に回っているPRの打ち出し方を集約したカタログ。<b>検証期は1類型を事前固定</b>（探索の初期値・整合性制約・変数分離）、量産期は実測の勝ち束が型を再定義。制作適合（作れるか・言っていいか）は<b>Playbookゲートで裁定</b> — 選定時には判断しない。</div>
     <div class="grid2">
       <div>
         <div class="colhead">カタログ（12類型）</div>
@@ -275,7 +274,7 @@
         <div class="param"><div class="pname">③ Hook接続性</div><div class="pdef">関心層内最大化のHookを自然に切り出せるか</div></div>
         <div class="param"><div class="pname">④ 量産再現性</div><div class="pdef">勝ち類型として掛け合わせ量産に耐えるか</div></div>
         <div class="colhead" style="margin-top:18px">裏道具</div>
-        <div class="pdef">証拠×語り口マトリクス（証拠: 自分の体験/他人の声/並置比較/情報網羅/生活文脈/権威 × 語り口: 直接/反論潰し/物語/列挙/埋め込み）を<b>新型の発見器・分類器</b>として保持。新しい打ち出し方が出たらどのセルか確認して13番目以降を判定。</div>
+        <div class="pdef">証拠×語り口マトリクス（証拠6種 × 語り口5種）を<b>新型の発見器</b>として保持。新しい打ち出し方はセル判定して13番目以降を追加。</div>
       </div>
     </div>
   </div>
@@ -284,7 +283,7 @@
 <section id="params">
   <div class="card">
     <h2><span class="mark" style="background:var(--run)"></span>🎛 パラメーター層 — 25個（Hook 8 / Body 7 / CTA 5 / 配信 5）</h2>
-    <div class="note">層ごとにKPIが立つのがこの型の強み。★＝残る資産（PDCAの主軸）、✗＝アルゴ・フォーマット依存の周辺変数 — <b>初期Playbookで凍結し、層KPIが頭打ちした時だけ解凍</b>する候補（凍結後に実際に振るのは16個）。</div>
+    <div class="note">★＝残る資産（PDCAの主軸）、✗＝アルゴ依存の周辺変数 — <b>初期Playbookで凍結し、層KPIが頭打ちの時だけ解凍</b>（実際に振るのは16個）。</div>
     <div class="grid4">
       <div>
         <div class="colhead">Hook層 <span style="font-weight:400;color:var(--sub)">8個</span></div>
@@ -307,7 +306,7 @@
         <div class="param"><div class="pname">B4 信頼要素 <span class="st st-risk">★⚠</span></div><div class="pdef">実数字/実体験⚠/デメリット開示/権威/利用者の声</div></div>
         <div class="param"><div class="pname">B5 商材の出し方 <span class="st st-done">△</span></div><div class="pdef">名指し/ジャンルのみ/伏せ（商材が水準を制約）</div></div>
         <div class="param"><div class="pname">B6 尺配分 <span class="st st-todo">✗</span></div><div class="pdef">Hook後何秒でインサイト着火するか</div></div>
-        <div class="param"><div class="pname">B7 語り口 <span class="st st-done">★新設</span></div><div class="pdef">直接主張/反論処理/問いかけ・共犯/物語り<br>※B2=感情の軌道、B7=論理の進め方で別次元</div></div>
+        <div class="param"><div class="pname">B7 語り口 <span class="st st-done">★</span></div><div class="pdef">直接主張/反論処理/問いかけ・共犯/物語り（B2=感情、B7=論法）</div></div>
       </div>
       <div>
         <div class="colhead">CTA層 <span style="font-weight:400;color:var(--sub)">5個</span></div>
@@ -351,7 +350,7 @@
       </div>
     </div>
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
-      <b>固定する理由は三重:</b> ①読み手・作り手がAIなのでブレを構造的に排除できる ②一定の正解が最初から存在しそうな領域で探索が無駄 ③実行スタイルの揺れはABの差分に混入するノイズ — 固定＝統制変数化することでパラメーター効果の測定自体が成立する。凍結は削除ではなくリスト管理: 層KPIが頭打ちした時だけ解凍して振る。
+      <b>固定する理由:</b> ①作り手・読み手がAI — ブレを構造的に排除 ②正解が既にある領域の探索は無駄 ③実行の揺れはABのノイズ — 固定＝統制変数化。凍結は削除ではなくリスト管理: 層KPIが頭打ちの時だけ解凍。
     </div>
   </div>
 </section>
@@ -364,7 +363,7 @@
         <button class="tabbtn" id="btn-sealer" onclick="showEx('sealer')">🥩 真空シーラー（物販）</button>
       </span>
     </h2>
-    <div class="note">テーマ（3座標＋採点4軸）→ シナリオ（決定軸4つで類型選定）→ パラメーター（台本に水準を埋める）まで、フレームワーク全段を適用した例。ボタンで商材を切り替え — 認知の高いサブスクと認知の低い物販で、<b>座標が変わるとシナリオとパラメーターが連動して変わる</b>のを比較できる。</div>
+    <div class="note">フレームワーク全段（テーマ→シナリオ→パラメーター）を適用した例。ボタンで商材切替 — <b>座標が変わるとシナリオとパラメーターが連動して変わる</b>。</div>
 
     <!-- ============ Audible ============ -->
     <div class="excase" id="ex-audible">
@@ -491,7 +490,7 @@
     </div>
 
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
-      <b>2商材の対比で見えること:</b> 認知が高いサブスク（Audible）は「比較検討中×正直レビューで疑いを潰す」、認知が低い物販（真空シーラー）は「課題認知×Before/Afterで問題ごと教える」— テーマ座標が変わるとシナリオとパラメーターが連動して変わる。フレームワークは同じ、埋まる中身だけが商材で変わる。<b>ABの回し方</b>はどちらも同じ: 1本目からH1やH4など2〜3変数だけ差し替えた2本目・3本目を並走し、層別KPIチェーン（フック率→完視聴→CTR→CVR）で落ちた層だけを疑う。
+      <b>2商材の対比:</b> 認知が高いサブスクは「比較検討中 × 正直レビューで疑いを潰す」、認知が低い物販は「課題認知 × Before/Afterで問題ごと教える」。フレームワークは同じ、埋まる中身だけが商材で変わる。ABは1本目から2〜3変数だけ差し替えて並走。
     </div>
   </div>
 </section>
@@ -499,27 +498,27 @@
 <section id="learning">
   <div class="card">
     <h2><span class="mark" style="background:var(--off)"></span>🔁 学習サイクルとDB — このモデルをどう学習させるか</h2>
-    <div class="note">自社投稿の前に市場から学ぶ。ただし投稿を「覚える」のではなく、<b>このフレームワークの語彙（25パラメーター＋12類型）にデコードして事前分布を作る</b>。体系は投稿を作る道具であると同時に、市場の投稿を読むラベリングスキーマでもある。</div>
+    <div class="note">自社投稿の前に市場から学ぶ。投稿を「覚える」のではなく<b>25パラメーター＋12類型にデコードして事前分布を作る</b> — 体系は作る道具であり、市場を読むスキーマでもある。</div>
     <div class="flowrow" style="grid-template-columns:1fr 36px 1fr 36px 1fr">
-      <div class="fbox n-on">① 市場学習（コールドスタート）<small>競合・類似商材の勝ち投稿をデコード → 水準×proxy KPIの勝率表＝事前分布。類型の重み・Playbook凍結値・初弾の台本初期値をここから初期化</small></div>
+      <div class="fbox n-on">① 市場学習（コールドスタート）<small>勝ち投稿をデコード → 水準×proxy KPIの勝率表。類型の重み・凍結値・初弾の初期水準を初期化</small></div>
       <div class="farr">→</div>
-      <div class="fbox n-run">② 自社PDCA学習<small>市場からは再生・いいね等の上流KPIしか見えない。リンクCTR・CVRは自社投稿だけが持つ → ABの弾は市場が教えてくれないCTA層〜CV接続に優先配分</small></div>
+      <div class="fbox n-run">② 自社PDCA学習<small>CTR・CVRは自社投稿だけが持つ → ABの弾は市場が教えてくれないCTA層〜CVに優先配分</small></div>
       <div class="farr">→</div>
-      <div class="fbox n-done">③ 継続ウォッチ<small>市場の定点観測。新しい打ち出し方は証拠×語り口マトリクスでセル判定して類型更新、勝率のズレはアルゴ変化のシグナルとして検知</small></div>
+      <div class="fbox n-done">③ 継続ウォッチ<small>市場の定点観測。新型はマトリクスで判定して類型更新、勝率のズレ＝アルゴ変化のシグナル</small></div>
     </div>
-    <div class="note" style="border-top:1px solid var(--line)">商材が増えたら毎回フル学習が要るか？ → <b>学習資産は3層に分かれ、大半は転移する</b>。フル市場学習は初回と新カテゴリ参入時のみ、同カテゴリ内の商材追加は差分学習で済む。蓄積単位は商材でなく<b>カテゴリ</b>で持つ。</div>
+    <div class="note" style="border-top:1px solid var(--line)"><b>学習資産は3層に分かれ、大半は転移する</b>。フル学習は初回と新カテゴリ参入時のみ、同カテゴリ内は差分学習。蓄積単位は<b>カテゴリ</b>。</div>
     <div class="grid3">
       <div>
         <div class="colhead">転移する層（1回で流用）</div>
-        <div class="pdef">フレームワーク語彙そのもの／12類型の有効性／Hook層の勝ち水準の大半（文型・トーン・呼びかけの効き方はジャンル横断で普遍）／Playbook凍結値</div>
+        <div class="pdef">フレームワーク語彙／12類型の有効性／Hook層の勝ち水準の大半（ジャンル横断で普遍）／Playbook凍結値</div>
       </div>
       <div>
         <div class="colhead">カテゴリ単位で転移する層</div>
-        <div class="pdef">Body層のインサイトの効き方／シナリオ選定の重み。「認知高サブスク」「認知低の低単価物販」「高単価検討財」などカテゴリが同じなら流用可（Audible→Kindle Unlimitedはほぼそのまま効く）</div>
+        <div class="pdef">Body層のインサイトの効き方／シナリオ選定の重み。カテゴリ（認知高サブスク/認知低物販/高単価検討財…）が同じなら流用可（Audible→Kindle Unlimited）</div>
       </div>
       <div>
         <div class="colhead">商材固有の層（毎回必要）</div>
-        <div class="pdef">商材理解5項目／ターゲット仮説とペルソナ／直接競合の投稿／オファーの翻訳（C2）— ここだけが新商材ごとの差分学習</div>
+        <div class="pdef">商材理解5項目／ターゲット仮説とペルソナ／直接競合の投稿／オファーの翻訳（C2）</div>
       </div>
     </div>
     <div class="note" style="border-top:1px solid var(--line)">この決め事の外に持つDB — フレームワークと1対1対応する4つ:</div>
@@ -527,14 +526,14 @@
       <thead><tr><th style="width:150px">DB</th><th style="width:180px">フレームワーク上の対応</th><th>中身</th></tr></thead>
       <tbody>
         <tr><td class="lever">商材DB</td><td>テーマ座標1</td><td>商材理解5項目（オファー/CV導線/価値/競合/規制）がそのままスキーマ。カテゴリタグを持たせて転移学習の単位にする</td></tr>
-        <tr><td class="lever">ペルソナDB</td><td>テーマ座標2</td><td>仮説→ペルソナ→CV路線実績。<b>商材DBから独立させる</b> — ペルソナは商材をまたいで再利用でき、テーマ候補は「商材DB × ペルソナDB の交差」で機械生成できる</td></tr>
+        <tr><td class="lever">ペルソナDB</td><td>テーマ座標2</td><td>仮説→ペルソナ→CV路線実績。<b>商材DBから独立</b> — ペルソナは商材をまたいで再利用、テーマ候補は商材DB×ペルソナDBの交差で機械生成</td></tr>
         <tr><td class="lever">市場投稿DB</td><td>全層の事前分布</td><td>市場投稿を25パラメーター＋12類型でデコードして格納。水準×proxy KPIの勝率表はこのDBのビュー</td></tr>
-        <tr><td class="lever">自社投稿DB</td><td>実測KPIチェーン</td><td>市場投稿DBと同一スキーマ＋実測KPI（フック率〜CVR）。実装は同テーブルに source=market/own フラグでも可 — 市場はproxy KPIのみ・自社だけが完全KPIという非対称をスキーマで表現</td></tr>
+        <tr><td class="lever">自社投稿DB</td><td>実測KPIチェーン</td><td>市場投稿DBと同一スキーマ＋実測KPI（フック率〜CVR）。実装は同テーブルに source=market/own フラグでも可</td></tr>
       </tbody>
     </table>
     <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
-      <b>学習コストの軽量化5原則:</b> ①テールだけ学ぶ（上位50〜100本で事前分布は足りる） ②収束したら止める（勝率表が動かなくなった時点で打ち切り） ③新商材はカテゴリ判定＋差分に還元 ④Just-in-time化（初弾生成時にその場でデコード、DBは副産物として蓄積） ⑤市場から観測できない層（CTA〜CVR）には収集コストを払わない。<br>
-      <b>資本効率の位置づけ:</b> 市場学習の対価はスクレイプインフラ＋トークン代（自動・限界費用ほぼゼロ）。これを省いた代替は自社投稿での探索＝制作費＋投稿枠の機会損失＋アカウント信用の消耗であり、桁で高い。市場学習とは「<b>他人が広告費と実弾で回したPDCAの結果をトークン代だけで吸収する</b>」行為で、これより安い学習チャネルは構造上存在しない。重いのは初回のパイプライン構築だけ。
+      <b>軽量化5原則:</b> ①テールだけ学ぶ（上位50〜100本） ②収束したら止める ③新商材はカテゴリ判定＋差分に還元 ④Just-in-time化（初弾生成時にデコード、DBは副産物） ⑤市場から観測できない層（CTA〜CVR）に収集コストを払わない。<br>
+      <b>資本効率:</b> 市場学習＝<b>他人が実弾で回したPDCAの結果をトークン代で吸収する</b>最安の学習チャネル。重いのは初回のパイプライン構築のみ。
     </div>
   </div>
 </section>
