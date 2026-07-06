@@ -128,7 +128,7 @@
 </header>
 
 <nav>
-  <a href="#verdict">⚖️ 検証結果: 価値の仕訳</a>
+  <a href="#verdict">⚖️ 最終判断</a>
   <a href="#detail">🔬 検証の中身 6項目</a>
   <a href="#duel">🥊 Fable × Opus 比較表</a>
   <a href="#source">💎 勝ち源泉 3つ</a>
@@ -143,40 +143,34 @@
   <span class="st st-wait">答え合わせ待ち</span>
 </div>
 
-<!-- ============ 1. 検証結果: 価値の仕訳 ============ -->
+<!-- ============ 1. 最終判断 ============ -->
 <section id="verdict">
   <div class="card">
-    <h2><span class="mark" style="background:var(--on)"></span>⚖️ 検証結果 — 価値のあるものと無価値なものの仕訳</h2>
-    <div class="note">v5 が磨くべきもの、価値の高い順。判断基準 = ①上位モデルでも自然発生しなかったか ②モデル昇格でむしろ価値が増すか ③今回の実測・実証に直結しているか。</div>
-
-    <div class="rank"><div class="no">1</div><div class="body"><b>予測の答え合わせ・較正ループ</b>
-      <span class="why">Opus 予想は 4/5 本が実測を 85〜93% 上回る大外れ(平均 2,362 vs 下限 8K)。主因は実績未供給+目標 30k の逆算という設計欠陥で、照合→較正のループはどちらのモデルも自発しなかった=設計でしか生まれない。KPI「予測的中率」の成立条件そのもの。</span></div></div>
-
-    <div class="rank"><div class="no">2</div><div class="body"><b>データ配管と DB 基盤(実績・競合・知見を LLM の目の前に置く仕組み)</b>
-      <span class="why">Fable の全優位(軸転換・実測較正・監査)は「IG Perf DB・全投稿史・知見台帳が配管されていた」ことが発火条件。同じ Opus でも実績供給ありの回は現実的な判断を出しており、配管の有無が知能の差より効く。上位モデルほど配管の限界効用は上がる。</span></div></div>
-
-    <div class="rank"><div class="no">3</div><div class="body"><b>機械 lint・ゲート(規律の確定遵守はコードで)</b>
-      <span class="why">「範囲内に書いた=守られる」は幻想と実証: 禁止トークンは設計に存在するのに Fable が混入させ、Opus は 1 カット 2 話者を混入。漏れ方が違うだけで両モデル漏れる。NGトークン・話者数・タイトル金額・文字化けは機械ゲートでしか 100% にならない。</span></div></div>
-
-    <div class="rank"><div class="no">4</div><div class="body"><b>機械集計層(計算=コード、解釈=モデルの分業)</b>
-      <span class="why">Fable ですら「views 上位 4 本は全て逆張り型」と主張して 3 位(問題提起型 5,240)を黙って除外する選択的引用をした。最良モデルでも集計を騙る以上、上位 N 本抽出・BT 判定・retention 集計はスクリプトが正を持ち、モデルは解釈だけを担う。</span></div></div>
-
-    <div class="rank"><div class="no">5</div><div class="body"><b>固有データ・知見の蓄積そのもの</b>
-      <span class="why">共食い実例(1,429→170)・勝ち Formula・競合 64 件・Playbook 実績は、どのモデルに載せても効く唯一の入力であり他社が持てない。市場競合分析で両モデルの結論が収束した事実は「何を見つけるかはデータと設計が規定する」ことの実証。</span></div></div>
-
-    <div class="rank"><div class="no">6</div><div class="body"><b>気質の蒸留プロセス(良い自発挙動 → checklist / Playbook へ)</b>
-      <span class="why">Opus の測定規律(欠損警告・中央値集計)も Fable の制作粒度(キャラ声コピー・コメント欄装置)も、数行の指示で他方のモデルに移植可能と判定。モデル更新のたびに観察→蒸留する運用自体が、更新のたびに資産が増える仕組みになる。</span></div></div>
-
-    <div class="rank"><div class="no">7</div><div class="body"><b>出力契約・エージェント間 interface</b>
-      <span class="why">スキーマ固定・confirm-before-write・T/V 列保護は両モデルで完全遵守 — この層は既にモデル非依存を達成しており、維持コストだけで価値が持続する。</span></div></div>
-
-    <div class="note" style="border-top:1px solid var(--line)">無価値になるもの — 上位モデルが無償で持ってくるため、作り込むだけ損する領域。</div>
-    <div class="drop">
-      <div class="dropitem"><b>思考手順の細かいプロンプト指示</b><span>Fable は無指示で上回った(細パラメーター型の敗北)</span></div>
-      <div class="dropitem"><b>戦略判断のルール化</b><span>軸消耗の検知→転換はモデルが上から解決</span></div>
-      <div class="dropitem"><b>テーマ発想の厚い設計</b><span>生活文脈への接地はモデルが無償で持ってくる</span></div>
-      <div class="dropitem"><b>人間スロットの一部</b><span>Layer 1 戦略・20→7 選定を今回モデルが代行できた</span></div>
-      <div class="dropitem"><b>型の中身の語り口</b><span>器(Playbook 構造)は資産、文言はモデルが更新し続ける</span></div>
+    <h2><span class="mark" style="background:var(--on)"></span>⚖️ 最終判断 — v5 が磨くべきもの / モデルが解決するもの</h2>
+    <div class="note">6 項目の検証と実測答え合わせから導いた仕訳。判断基準 = 上位モデルでも自然発生しなかったか / モデル昇格でむしろ価値が増すか。</div>
+    <div class="grid3" style="grid-template-columns:1fr 1fr">
+      <div class="src">
+        <div class="shead">🏛 v5 が磨くべきもの</div>
+        <ul style="padding-top:12px">
+          <li><b>実績・知見データの配管</b><span class="def">賢い判断の発火条件。モデルは配管を代替できない</span></li>
+          <li><b>予測の答え合わせ・較正ループ</b><span class="def">どのモデルも自発しなかった。KPI「予測的中率」の成立条件</span></li>
+          <li><b>機械 lint・出力ゲート</b><span class="def">規律遵守は上位モデルでも確率的。事故ゼロはコードでしか作れない</span></li>
+          <li><b>機械集計層</b><span class="def">最良モデルでも集計を騙る。計算=コード、解釈=モデル</span></li>
+          <li><b>固有データの蓄積(投稿史・競合・出典値)</b><span class="def">どのモデルに載せても効く、他社が持てない入力</span></li>
+          <li><b>良い自発挙動の蒸留運用</b><span class="def">モデル更新のたびに気質を checklist 化して資産に変える</span></li>
+        </ul>
+      </div>
+      <div class="src" style="border-color:var(--done)">
+        <div class="shead" style="background:var(--done)">💨 モデルが解決するもの</div>
+        <ul style="padding-top:12px">
+          <li><b>戦略のメタ判断(消耗検知・軸転換)</b><span class="def">無指示で発生し、実測で正しさが実証された</span></li>
+          <li><b>ターゲットの生活文脈接地</b><span class="def">属性→文脈の解像度は無償で上がる</span></li>
+          <li><b>語りの技術(フック・構成・物語装置)</b><span class="def">最も早く一蹴される層</span></li>
+          <li><b>予測の較正手法</b><span class="def">分布さえ渡せば勝手に較正する</span></li>
+          <li><b>データ監査・異常検知の自発性</b><span class="def">上位モデルのデフォルト挙動になった</span></li>
+          <li><b>人間スロットの一部</b><span class="def">Layer 1 戦略・20→7 選定を代行できたと実証</span></li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
