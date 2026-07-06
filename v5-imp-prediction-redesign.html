@@ -136,6 +136,7 @@
   <a href="#evidence">🧪 実証 505件</a>
   <a href="#prep">🏗️ 事前準備 5本</a>
   <a href="#phases">🗓️ フェーズ 0-3</a>
+  <a href="#milestones">🎯 マイルストーン M0-M3</a>
 </nav>
 
 <div class="legend">
@@ -374,6 +375,81 @@ P10 = P50 ÷ 10^(1.28·σ_a)   P90 = P50 × 10^(1.28·σ_a)   <span class="cm">#
       <div class="tstep">
         <div class="tdate">Phase 3</div>
         <div class="tbody"><span class="tt">弁別力への挑戦</span> — PF知識・Hook実証値・競合anchor・few-shot bank を乗率判断に注入し、ρ −0.01 → 0.3+ を狙う。乗率解雇ルール (4週連続ρ≤0でM=1固定) で価値を毎週検証。<span class="st st-off">LLM層</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. マイルストーン ============ -->
+<section id="milestones">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--done)"></span>🎯 数値マイルストーン — 精度は「データ量」でなく「乗率イテレーション」で伸びる</h2>
+    <div class="note">505件で学習曲線バックテストとオラクル分解 (誤差上限の測定) を実施。結論: ベースライン層は既に理論上限 — 以降の成長は全てテーマ弁別 (乗率の質) から来る。判定は月次粒度 (週次はノイズ±6pp)。</div>
+
+    <div class="pad">
+      <div class="grid3">
+        <div class="mcard" style="border-color:var(--done)">
+          <div class="lab">学習曲線の飽和点</div>
+          <div class="big" style="color:var(--done)">5本</div>
+          <div class="sub">ACC履歴3-4本で46%、5-7本で55%、以降は横ばい — <b>データ量はボトルネックではない</b></div>
+        </div>
+        <div class="mcard" style="border-color:var(--done)">
+          <div class="lab">アカウント情報の理論上限 (オラクル)</div>
+          <div class="big" style="color:var(--done)">53%</div>
+          <div class="sub">実力を完全に知っていても Hit@2x 53%。ベースライン52%は<b>既に上限到達</b> — 残りはテーマ弁別と運</div>
+        </div>
+        <div class="mcard" style="border-color:var(--on)">
+          <div class="lab">蓄積ペース (実測)</div>
+          <div class="big" style="color:var(--on)">290<span style="font-size:15px">件/月</span></div>
+          <div class="sub">23 ACC・9.7件/日。ACCあたり ≈13件/月 — 乗率の生死判定 (85件) は<b>2週間</b>で足りる</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:13px;margin:20px 0 10px">学習曲線 (実測) — ACC履歴サイズ別のベースライン Hit@2x</h3>
+      <div class="bar"><div class="blab">履歴 3-4本</div><div class="btrack"><div class="bfill" style="width:77%;background:var(--on)"></div></div><div class="bval">46%</div></div>
+      <div class="bar"><div class="blab">履歴 5-7本</div><div class="btrack"><div class="bfill" style="width:92%;background:var(--on)"></div></div><div class="bval">55%</div></div>
+      <div class="bar"><div class="blab">履歴 8-19本</div><div class="btrack"><div class="bfill" style="width:79%;background:var(--on)"></div></div><div class="bval">47-48%</div></div>
+      <div class="bar"><div class="blab">履歴 20本+</div><div class="btrack"><div class="bfill" style="width:80%;background:var(--on)"></div></div><div class="bval">48%</div></div>
+      <p style="font-size:11.5px;color:var(--sub);margin:8px 0 0">5本で飽和 = コールドスタートは短い。成長カーブは「投稿が貯まる」ではなく「乗率プロンプトを何回改善したか」で決まる。</p>
+    </div>
+
+    <div class="pad" style="border-top:1px solid var(--line)">
+      <h3 style="font-size:13px;margin:0 0 10px">月次マイルストーン (蓄積 ~290件/月 前提)</h3>
+      <table>
+        <thead><tr><th style="width:110px">時点</th><th style="width:130px">Hit@2x</th><th>この月に判定できること</th></tr></thead>
+        <tbody>
+          <tr><td class="lever">M0 導入直後</td><td><span class="st st-done">50±3%</span></td><td>バックフィル済みのため初日からこの水準<span class="def">Bias 0.8-1.25 と Coverage80 は2週間 (n≈140) で確認</span></td></tr>
+          <tr><td class="lever">M1 1ヶ月目末</td><td><span class="st st-run">50-55%</span></td><td>乗率 v0 の初判定 — ρ=0.3 検出に必要な85件は2週間で貯まり、月末には ±0.1 精度で ρ が測れる<span class="def">Hit@3x はこの時点で ~70%</span></td></tr>
+          <tr><td class="lever">M2 2ヶ月目末</td><td><span class="st st-run">55-58%</span></td><td>乗率改善2イテレーション消化。ρ≥0.3 なら左の水準へ / 届かなければ乗率解雇 → 52%運用 (それでも現行の2倍)<span class="def">分岐をKPIで機械判定 — 感覚で延命しない</span></td></tr>
+          <tr><td class="lever">M3 3ヶ月目末</td><td><span class="st st-run">58-62% (天井圏)</span></td><td>ACC別σ確立 (13件/月×2ヶ月≈n26)。以降は横ばい — 天井は2倍以内定義で <b>60-65%</b><span class="def">Hit@3x は 72-75% に到達</span></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:11.5px;color:var(--sub);margin:10px 0 0">週次の Hit@2x は n≈68 でノイズ±6pp — <b>マイルストーン判定は月次 (n≈290, ±3pp) で行う</b>。週次はパラメータ更新のみに使い、数字に一喜一憂しない。</p>
+    </div>
+
+    <div class="pad" style="border-top:1px solid var(--line)">
+      <div class="grid2">
+        <div>
+          <h3 style="font-size:13px;margin:0 0 10px">必要データ量の早見表</h3>
+          <table>
+            <thead><tr><th>用途</th><th>必要量</th><th>到達期間</th></tr></thead>
+            <tbody>
+              <tr><td class="lever">B_a ベースライン稼働</td><td>3本/ACC (5本で飽和)</td><td>即〜1週</td></tr>
+              <tr><td class="lever">乗率の生死判定 (ρ=0.3検出)</td><td>85件 (全体)</td><td>2週間</td></tr>
+              <tr><td class="lever">C_a・σ_a のACC別化</td><td>25-30件/ACC</td><td>2ヶ月</td></tr>
+              <tr><td class="lever">月次KPIの判定精度 ±3pp</td><td>290件 (全体)</td><td>1ヶ月</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 style="font-size:13px;margin:0 0 10px">KPI定義の注意 (7/8 前に握る)</h3>
+          <table>
+            <tbody>
+              <tr><td class="lever">「精度75-80%」は定義次第</td><td>2倍以内定義では天井60-65%で<b>届かない</b>。3倍以内 (Hit@3x) なら初月70%・3ヶ月で72-75%に到達<span class="def">対外KPIにするならどちらの定義かを先に合意する</span></td></tr>
+              <tr><td class="lever">さらに上を狙う場合</td><td>ML回帰 (テーマembedding×時間×フォーマット→view) はデータ量が効く領域 — ジャンルあたり数百件が目安で、3-6ヶ月後に検討可能<span class="def">v5-agents backlog の「重」案に相当。Phase 4 候補</span></td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
