@@ -147,28 +147,27 @@
 <section id="verdict">
   <div class="card">
     <h2><span class="mark" style="background:var(--on)"></span>⚖️ 最終判断 — v5 が磨くべきもの / モデルが解決するもの</h2>
-    <div class="note">6 項目の検証と実測答え合わせから導いた仕訳。判断基準 = 上位モデルでも自然発生しなかったか / モデル昇格でむしろ価値が増すか。</div>
+    <div class="note">6 項目の検証と実測答え合わせから導いた仕訳。左 = 作り込むほど価値が積み上がるもの。右 = モデルが勝手に持ってくるので、作り込むだけ無駄になるもの。</div>
     <div class="grid3" style="grid-template-columns:1fr 1fr">
       <div class="src">
         <div class="shead">🏛 v5 が磨くべきもの</div>
         <ul style="padding-top:12px">
-          <li><b>実績・知見データの配管</b><span class="def">賢い判断の発火条件。モデルは配管を代替できない</span></li>
-          <li><b>予測の答え合わせ・較正ループ</b><span class="def">どのモデルも自発しなかった。KPI「予測的中率」の成立条件</span></li>
-          <li><b>機械 lint・出力ゲート</b><span class="def">規律遵守は上位モデルでも確率的。事故ゼロはコードでしか作れない</span></li>
-          <li><b>機械集計層</b><span class="def">最良モデルでも集計を騙る。計算=コード、解釈=モデル</span></li>
-          <li><b>固有データの蓄積(投稿史・競合・出典値)</b><span class="def">どのモデルに載せても効く、他社が持てない入力</span></li>
-          <li><b>良い自発挙動の蒸留運用</b><span class="def">モデル更新のたびに気質を checklist 化して資産に変える</span></li>
+          <li><b>予想と実績の自動答え合わせ</b><span class="def">「予想→投稿→実測→外れ幅を次の予想に反映」の仕組み。どちらのモデルも自分からはやらず、二世代で進化ゼロだった</span></li>
+          <li><b>プログラムによる品質チェック</b><span class="def">禁止表現・話者数・タイトル要件は、プロンプトに書いても両モデルとも破った。100% 守らせられるのはコードだけ</span></li>
+          <li><b>実績・競合・知見をモデルに見せる仕組み</b><span class="def">Fable の賢い判断は、データが手元にある場面でしか起きなかった。集計自体もモデル任せにせずプログラムで(Fable も集計をごまかした)</span></li>
+          <li><b>「どの商品が誰に買われるか」のデータ化</b><span class="def">SNS に書かれない購買側の知識はモデルの中に存在しない。自社の CV 実測でしか作れない、最も真似されない資産</span></li>
+          <li><b>新モデルの良い動きを指示書に写す運用</b><span class="def">今回 Fable が勝手にやった工夫(検算・投稿順ルール等)を手順化すれば、どのモデルでも再現できる資産になる</span></li>
         </ul>
       </div>
       <div class="src" style="border-color:var(--done)">
         <div class="shead" style="background:var(--done)">💨 モデルが解決するもの</div>
         <ul style="padding-top:12px">
-          <li><b>戦略のメタ判断(消耗検知・軸転換)</b><span class="def">無指示で発生し、実測で正しさが実証された</span></li>
-          <li><b>ターゲットの生活文脈接地</b><span class="def">属性→文脈の解像度は無償で上がる</span></li>
-          <li><b>語りの技術(フック・構成・物語装置)</b><span class="def">最も早く一蹴される層</span></li>
-          <li><b>予測の較正手法</b><span class="def">分布さえ渡せば勝手に較正する</span></li>
-          <li><b>データ監査・異常検知の自発性</b><span class="def">上位モデルのデフォルト挙動になった</span></li>
-          <li><b>人間スロットの一部</b><span class="def">Layer 1 戦略・20→7 選定を代行できたと実証</span></li>
+          <li><b>戦略の方向転換の判断</b><span class="def">「このネタはもう擦り切れた」を無指示で検知し、転換先も実測で正しかった</span></li>
+          <li><b>生活系のターゲット理解</b><span class="def">主婦の 7 月の生活文脈など、SNS で大量に語られる分野の知識は無償で付いてくる(商品・購買系は持っていない → 左リストへ)</span></li>
+          <li><b>動画の語り方(フック・構成)</b><span class="def">反転・引きなどの技術は指示なしで持ち込まれた。教え込む価値が最も早く消える</span></li>
+          <li><b>予想の出し方</b><span class="def">実績データさえ見せれば、現実的なレンジを自分で組む(的中の実証は 7/14 の答え合わせ待ち)</span></li>
+          <li><b>数字の検算・異常の発見</b><span class="def">記録の間違いやデータの欠けに自分で気づくのが、上位モデルの標準挙動になった</span></li>
+          <li><b>人間がやっていた選定の一部</b><span class="def">戦略の提供・テーマ 7 本の選定を代行できると今回実証された</span></li>
         </ul>
       </div>
     </div>
