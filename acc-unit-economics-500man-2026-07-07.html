@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AI KOL — アフィ型500万への道筋 (2026-07-07)</title>
+<style>
+  :root{
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    --done:#16a34a; --donebg:#f0fdf4;
+    --run:#7c3aed;  --runbg:#f5f3ff;
+    --on:#2563eb;   --onbg:#eff6ff;
+    --off:#0d9488;  --offbg:#f0fdfa;
+    --todo:#94a3b8; --todobg:#f1f5f9;
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
+
+  header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:30px 28px 26px}
+  .kicker{font-size:11px;letter-spacing:.18em;color:#7dd3fc;font-weight:800;text-transform:uppercase}
+  header h1{margin:8px 0 10px;font-size:30px;line-height:1.3}
+  header .lead{margin:0;color:#cbd5e1;font-size:13.5px;max-width:960px}
+  .pills{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    padding:4px 14px;border-radius:99px;font-size:12px;font-weight:700}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:12px;border:1px solid var(--line)}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  section{max-width:1200px;margin:26px auto;padding:0 20px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .mark{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
+    border-bottom:1px solid var(--line)}
+
+  .legend{max-width:1200px;margin:18px auto 0;padding:0 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:11.5px;color:var(--sub)}
+  .st{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px}
+  .st-done{background:#dcfce7;color:#15803d}
+  .st-run{background:#ede9fe;color:#6d28d9}
+  .st-on{background:#dbeafe;color:#1d4ed8}
+  .st-off{background:#ccfbf1;color:#0f766e}
+  .st-todo{background:#f1f5f9;color:#64748b}
+
+  .grid{display:grid;gap:12px;padding:16px 20px}
+  .g6{grid-template-columns:repeat(6,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .metric{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#f8fafc}
+  .metric .num{font-size:26px;font-weight:800;line-height:1.2}
+  .metric .lbl{font-size:11px;color:var(--sub);font-weight:700;margin-top:2px}
+  .neg .num{color:#dc2626}.pos .num{color:#16a34a}
+
+  .tier{border-radius:10px;padding:12px 14px;border:1.5px solid}
+  .tier h3{margin:0 0 8px;font-size:13px;display:flex;gap:8px;align-items:center}
+  .tier ul{margin:0;padding-left:0;list-style:none;font-size:12px}
+  .tier li{margin-bottom:5px}
+  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700;white-space:nowrap}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  .lever{font-weight:700}
+  .big{font-size:15px;font-weight:800}
+
+  .funnel{display:grid;grid-template-columns:1fr 34px 1fr 34px 1fr 34px 1fr 34px 1fr;
+    gap:8px;padding:18px 20px;align-items:stretch}
+  .fnode{border-radius:9px;padding:10px 12px;font-size:12px;border:1.5px solid;text-align:center}
+  .fnode b{display:block;font-size:16px}
+  .farrow{display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:20px;font-weight:700}
+
+  .tstep{display:flex;gap:14px;margin-bottom:14px;padding:0 20px}
+  .tstep:first-of-type{margin-top:16px}
+  .tstep:last-of-type{padding-bottom:16px}
+  .tdate{flex:0 0 110px;font-weight:800;font-size:12px;color:#4f46e5;text-align:right}
+  .tbody{flex:1;border-left:3px solid #e0e7ff;padding-left:14px;font-size:12.5px}
+
+  footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
+  @media(max-width:980px){
+    .g6,.g4,.g3{grid-template-columns:1fr 1fr}
+    .funnel{grid-template-columns:1fr}
+    .farrow{transform:rotate(90deg)}
+    .wide{overflow-x:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">AI KOL · Unit Economics · 2026-07-07</div>
+  <h1>赤字を止め、型を固め、育成でアフィ500万へ</h1>
+  <p class="lead">アフィ型で利益500万/月は「アカ量産の面積戦」では届かない。<b>出血停止 (12→2〜3acc) → 型の final 化 → 量産 → フォロワー育成で上限層比率を上げる</b>の4段。時間軸の支配項は launch 数ではなく「判定通過率 × 成熟6ヶ月」。</p>
+  <div class="pills">
+    <span class="pill">6月実測: 収支 −¥83,104/月</span>
+    <span class="pill">縮小後コスト: ¥19,350〜29,670/月</span>
+    <span class="pill">目標: 利益 ¥500万/月 (M15〜M24)</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#now">📉 6月実測</a>
+  <a href="#decision">🧭 意思決定 12acc</a>
+  <a href="#funnel">🔬 ファネル設計 2acc</a>
+  <a href="#ceiling">🧊 冷静上限 8指標</a>
+  <a href="#compose">🧮 500万の構成</a>
+  <a href="#timeline">📆 タイムライン 24M</a>
+  <a href="#risk">⚠️ リスク 3</a>
+</nav>
+
+<div class="legend">
+  凡例:
+  <span class="st st-done">黒字・確定</span>
+  <span class="st st-run">検証中・判定待ち</span>
+  <span class="st st-on">設計値層 (立ち上げ)</span>
+  <span class="st st-off">上限層 (成熟)</span>
+  <span class="st st-todo">停止・未検証</span>
+</div>
+
+<section id="now">
+  <div class="card">
+    <h2><span class="mark" style="background:#dc2626"></span>6月実測 — 全アカ横断 (IG Performance DB + Affiliate Tracker)</h2>
+    <div class="note">12 acc 中 CV が出たのは 4 acc・計13件。黒字は ACC_0193 の1つだけ。9 acc が「view か転換のどちらか (または両方)」で失敗。</div>
+    <div class="grid g6">
+      <div class="metric"><div class="num">12</div><div class="lbl">稼働 acc</div></div>
+      <div class="metric"><div class="num">145本</div><div class="lbl">月間投稿 (×¥645)</div></div>
+      <div class="metric"><div class="num">1.74M</div><div class="lbl">Reels Imp/月</div></div>
+      <div class="metric"><div class="num">13</div><div class="lbl">CV (売上 ¥10,421)</div></div>
+      <div class="metric"><div class="num">¥93,525</div><div class="lbl">生成コスト/月</div></div>
+      <div class="metric neg"><div class="num">−¥83,104</div><div class="lbl">月次収支</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="decision">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>意思決定 — 縮小と選択集中 (2026-07-07 Badhan 決定)</h2>
+    <div class="note">ファネル改善は 1〜3 acc で十分、他は全停止。浮いた生成費用は人材系・他ジャンルへ。残存 View baseline = 100万/月。</div>
+    <div class="grid g4">
+      <div class="tier" style="border-color:var(--done);background:var(--donebg)">
+        <h3><span class="st st-done">継続 2</span></h3>
+        <ul>
+          <li class="lever">ACC_0223 江戸裏話<span class="def">Audible 黒字化運用 · 15本体制</span></li>
+          <li class="lever">ACC_0001 あかね<span class="def">歴史vlog · サブスク収益化検証</span></li>
+        </ul>
+      </div>
+      <div class="tier" style="border-color:var(--run);background:var(--runbg)">
+        <h3><span class="st st-run">1週間判定 2</span></h3>
+        <ul>
+          <li class="lever">ACC_0226 闇ファイル<span class="def">Audible 設置 → 7日 CV 0 で停止</span></li>
+          <li class="lever">ACC_0229 江戸vs令和<span class="def">同上</span></li>
+        </ul>
+      </div>
+      <div class="tier" style="border-color:var(--on);background:var(--onbg)">
+        <h3><span class="st st-run">検証終了まで 1</span></h3>
+        <ul>
+          <li class="lever">ACC_0190 こたろう<span class="def">検証終了次第クローズ</span></li>
+          <li class="lever" style="color:#b45309">⚠ ACC_0193 はると = 未裁定<span class="def">唯一の黒字 (+¥2,565) だがルール上は停止対象</span></li>
+        </ul>
+      </div>
+      <div class="tier" style="border-color:var(--todo);background:var(--todobg)">
+        <h3><span class="st st-todo">即停止 5 (+済2)</span></h3>
+        <ul>
+          <li class="lever">LH系 0007 / 0013 / 0037 / 0040<span class="def">ジャンルごと全停止</span></li>
+          <li class="lever">0112 AI妄想ラボ<span class="def">ジャンル非該当</span></li>
+          <li class="lever">0232 / 0268<span class="def">停止済み (6/8 cull · STOP判定)</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid g3" style="padding-top:0">
+      <div class="metric"><div class="num">¥93,525</div><div class="lbl">現状コスト/月</div></div>
+      <div class="metric"><div class="num">¥29,670</div><div class="lbl">判定月コスト</div></div>
+      <div class="metric pos"><div class="num">−68〜79%</div><div class="lbl">定常 ¥19,350〜29,025</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="funnel">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>ファネル設計 — ACC_0223 (現状 → 理想15本)</h2>
+    <div class="note">最太レバー = Story 導線 (1回の改修で全投稿に効く)。F1 母数は「フォロワー × 12.4%/日 × Story日数」で決まり、平均View は直接 CV に効かない。</div>
+    <div class="funnel">
+      <div class="fnode" style="border-color:var(--on);background:var(--onbg)">Reels View<b>631,436</b><span class="def">現状 20本 · avg 31.6k</span><b style="color:var(--off)">630,000</b><span class="def">理想 15本 · avg 42k</span></div>
+      <div class="farrow">→</div>
+      <div class="fnode" style="border-color:var(--on);background:var(--onbg)">Story F1<b>25,488 <small>(4.04%)</small></b><span class="def">現状</span><b style="color:var(--off)">37,800 <small>(6.0%)</small></b><span class="def">理想: Story予告CTA + 同期投稿</span></div>
+      <div class="farrow">→</div>
+      <div class="fnode" style="border-color:var(--on);background:var(--onbg)">Link Click<b>291 <small>(1.14%)</small></b><span class="def">現状</span><b style="color:var(--off)">756 <small>(2.0%)</small></b><span class="def">理想: 導線テンプレ移植</span></div>
+      <div class="farrow">→</div>
+      <div class="fnode" style="border-color:var(--on);background:var(--onbg)">CV (Audible ¥1,500)<b>4 <small>(0.63/100k)</small></b><span class="def">現状</span><b style="color:var(--off)">11 <small>(1.8/100k)</small></b><span class="def">理想: 無料明示</span></div>
+      <div class="farrow">→</div>
+      <div class="fnode" style="border-color:#dc2626;background:#fef2f2">収支<b style="color:#dc2626">−¥6,900</b><span class="def">現状 (コスト ¥12,900)</span><b style="color:var(--done)">+¥6,825</b><span class="def">理想 (コスト ¥9,675)</span></div>
+    </div>
+    <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
+      <b>ACC_0226 (黒字化ミニマム設計):</b> view は合格圏 (avg 22.9k)。Story 日数 3→20 + 導線テンプレ + Audible 切替のみで CV 7 = <b style="color:var(--done)">+¥825/月</b>。テーマ改善は下位5本カットで平均 25k 到達 (実測: 上位15本平均 29.4k)。
+    </div>
+  </div>
+</section>
+
+<section id="ceiling">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--off)"></span>指標別の冷静上限 — アフィ型の物理限界 (0223 実測ベース)</h2>
+    <div class="note">売上/acc は「Imp × 率」で頭打ち。天井を破る変数は<b>フォロワー資産</b>のみ (F1 母数が毎月自動成長する唯一の複利指標)。</div>
+    <div class="wide"><table>
+      <thead><tr><th>指標</th><th class="n">現状実測</th><th class="n">設計値</th><th class="n">冷静上限</th><th>根拠</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">平均View/本</td><td class="n">31,572</td><td class="n">40,000</td><td class="n">45,000</td><td>0223 上位10本平均 = 45,456。水平コピーは減衰</td></tr>
+        <tr><td class="lever">F1 View/月</td><td class="n">25,488</td><td class="n">37,800</td><td class="n big">70,000+</td><td>フォロワー22.8k × 12.4%/日 × 25日。<b>唯一の複利</b></td></tr>
+        <tr><td class="lever">CTR (F1→Click)</td><td class="n">1.14%</td><td class="n">2.0%</td><td class="n">3.0%</td><td>導線テンプレ + 商材関連性。2%超は未実証</td></tr>
+        <tr><td class="lever">Click→CV</td><td class="n">1.37%</td><td class="n">1.5%</td><td class="n">2.0%</td><td>無料成果地点のみ。単価↑で必ず低下</td></tr>
+        <tr><td class="lever">商材単価</td><td class="n">¥1,500</td><td class="n">¥1,500</td><td class="n">¥2,500〜3,000</td><td>マッチング/金融ミックス (CV率低下と相殺)</td></tr>
+        <tr><td class="lever">通しCVR (ReelView→CV)</td><td class="n">0.63/100k</td><td class="n">1.8/100k</td><td class="n">3.0/100k</td><td>全レバー同時成立時のみ</td></tr>
+        <tr><td class="lever big">売上/acc/月</td><td class="n">¥2,700〜6,000</td><td class="n big">¥16,200</td><td class="n big">¥50k〜75k</td><td>成熟 = フォロワー40k 到達後 (F1 124k → CV 30〜37)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="compose">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>利益500万の構成 — 95/5 設計と感度</h2>
+    <div class="note">利益/acc は設計値層 ¥6.5k vs 上限層 ¥54.6k で <b>8.4倍差</b>。500万は acc 数ではなく<b>上限層の比率</b>で決まる。</div>
+    <div class="wide"><table>
+      <thead><tr><th>層</th><th class="n">acc数</th><th class="n">投稿/acc</th><th class="n">平均View</th><th class="n">Imp/acc</th><th class="n">通しCVR</th><th class="n">CV/acc</th><th class="n">単価</th><th class="n">売上/acc</th><th class="n">利益/acc</th><th class="n">層計利益</th></tr></thead>
+      <tbody>
+        <tr><td><span class="st st-on">設計値層 95%</span></td><td class="n">532</td><td class="n">15</td><td class="n">40,000</td><td class="n">600k</td><td class="n">1.8/100k</td><td class="n">10.8</td><td class="n">¥1,500</td><td class="n">¥16,200</td><td class="n">¥6,525</td><td class="n">¥3.47M</td></tr>
+        <tr><td><span class="st st-off">冷静上限層 5%</span></td><td class="n">28</td><td class="n">20</td><td class="n">45,000</td><td class="n">900k</td><td class="n">3.0/100k</td><td class="n">27</td><td class="n">¥2,500</td><td class="n">¥67,500</td><td class="n">¥54,600</td><td class="n">¥1.53M</td></tr>
+        <tr><td class="big">合計</td><td class="n big">560</td><td class="n">8,540本/月</td><td class="n">—</td><td class="n big">344M</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">¥10.51M</td><td class="n">—</td><td class="n big">¥5.00M</td></tr>
+      </tbody>
+    </table></div>
+    <div class="grid g3">
+      <div class="metric"><div class="num">560 acc</div><div class="lbl">95/5 のまま (面積戦 = 非現実)</div></div>
+      <div class="metric"><div class="num">164 acc</div><div class="lbl">50/50 まで育成した場合</div></div>
+      <div class="metric pos"><div class="num">92 acc</div><div class="lbl">全acc成熟 (0/100) の理論下限</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>タイムライン — BAN・立ち上げ失敗を織り込んだ推移</h2>
+    <div class="note">前提 (6月実測由来): 判定通過率 33% (4/12) / BAN 5%/月 (1/12) / 成熟 = 6ヶ月後に60%が上限層へ / 判定落ちコスト ¥2,580/acc 計上。</div>
+    <div class="wide"><table>
+      <thead><tr><th>シナリオ</th><th class="n">M3</th><th class="n">M6</th><th class="n">M9</th><th class="n">M12</th><th class="n">M15</th><th class="n">M18</th><th class="n">M24</th><th class="n">500万到達</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">A: 50体/月<span class="def">acc構成 (設計/上限)</span></td>
+          <td class="n">¥1.2万<span class="def">10/0</span></td><td class="n">¥24万<span class="def">49/0</span></td><td class="n">¥70万<span class="def">85/4</span></td><td class="n">¥177万<span class="def">102/22</span></td><td class="n">¥281万<span class="def">114/40</span></td><td class="n">¥370万<span class="def">124/55</span></td><td class="n">¥512万<span class="def">140/79</span></td><td class="n big">M24</td></tr>
+        <tr><td class="lever">B: 100体/月<span class="def">acc構成 (設計/上限)</span></td>
+          <td class="n">¥2.3万<span class="def">19/0</span></td><td class="n">¥47万<span class="def">99/0</span></td><td class="n">¥141万<span class="def">170/9</span></td><td class="n">¥354万<span class="def">204/44</span></td><td class="n big">¥562万<span class="def">227/79</span></td><td class="n">¥740万<span class="def">248/109</span></td><td class="n">¥1,025万<span class="def">280/157</span></td><td class="n big">M15</td></tr>
+      </tbody>
+    </table></div>
+    <div class="tstep"><div class="tdate">Phase 0<br>M1–2</div><div class="tbody"><b>縮小 + 型 final 化。</b>月¥3万体制。0223 導線改修 + 0226/0229 判定。量産しない — 型未確定の量産は判定落ち67%のコストだけ膨らむ。</div></div>
+    <div class="tstep"><div class="tdate">Phase 1<br>M3–8</div><div class="tbody"><b>量産 + 育成。利益はほぼ出ない期間</b> (M6 でも ¥24〜47万)。KPI = 判定通過率・フォロワー成長率 (利益ではない)。単価ミックス検証を並走。</div></div>
+    <div class="tstep"><div class="tdate">Phase 2<br>M9–</div><div class="tbody"><b>成熟 cohort 到達で利益が非線形に立ち上がる。</b>通過率を 33→50% に上げられれば A 案でも M18-19 に短縮 (launch 数よりレバレッジ大)。</div></div>
+  </div>
+</section>
+
+<section id="risk">
+  <div class="card">
+    <h2><span class="mark" style="background:#dc2626"></span>リスク — 前提が崩れる場所</h2>
+    <div class="grid g3">
+      <div class="tier" style="border-color:#fca5a5;background:#fef2f2">
+        <h3>垢BAN</h3>
+        <ul><li>実測 5%/月 (6月 1/12 事例あり)<span class="def">シミュレーション織込済。量産局面はアカ分散設計が別途必要</span></li></ul>
+      </div>
+      <div class="tier" style="border-color:#fca5a5;background:#fef2f2">
+        <h3>Audible 単一依存</h3>
+        <ul><li>M15 で月350+ CV を単一広告主に依存<span class="def">掲載停止・単価改定が単一障害点。Phase 1 で単価ミックス (マッチング/金融) 検証必須</span></li></ul>
+      </div>
+      <div class="tier" style="border-color:#fca5a5;background:#fef2f2">
+        <h3>オペキャパ</h3>
+        <ul><li>B案定常 = 380 acc・生成190本/日<span class="def">+ Story 掲載オペ。「人件費無視」前提が最も崩れる場所</span></li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  正本: <code>~/claude/output/acc-unit-economics-design-2026-07-07.md</code> ／ データ: IG Performance DB + Affiliate Tracker 2026-06 実測 ／ 作成 2026-07-07 ／ 内部 ID・認証情報は除去済み
+</footer>
+
+</body>
+</html>
