@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AI KOL — アフィ型の冷静上限と利益100万/500万の必要構成</title>
+<style>
+  :root{
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    --done:#16a34a; --donebg:#f0fdf4;
+    --run:#7c3aed;  --runbg:#f5f3ff;
+    --on:#2563eb;   --onbg:#eff6ff;
+    --off:#0d9488;  --offbg:#f0fdfa;
+    --todo:#94a3b8; --todobg:#f1f5f9;
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
+
+  header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:30px 28px 26px}
+  .kicker{font-size:11px;letter-spacing:.18em;color:#7dd3fc;font-weight:800;text-transform:uppercase}
+  header h1{margin:8px 0 10px;font-size:29px;line-height:1.3}
+  header .lead{margin:0;color:#cbd5e1;font-size:13.5px;max-width:960px}
+  .pills{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    padding:4px 14px;border-radius:99px;font-size:12px;font-weight:700}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:12px;border:1px solid var(--line)}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  section{max-width:1200px;margin:26px auto;padding:0 20px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .mark{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
+    border-bottom:1px solid var(--line)}
+
+  .legend{max-width:1200px;margin:18px auto 0;padding:0 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:11.5px;color:var(--sub)}
+  .st{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px}
+  .st-on{background:#dbeafe;color:#1d4ed8}
+  .st-off{background:#ccfbf1;color:#0f766e}
+  .st-todo{background:#f1f5f9;color:#64748b}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700;white-space:nowrap}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .lever{font-weight:700}
+  .big{font-size:15px;font-weight:800}
+  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
+  .wide{overflow-x:auto}
+
+  .grid{display:grid;gap:12px;padding:16px 20px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .metric{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#f8fafc}
+  .metric .num{font-size:26px;font-weight:800;line-height:1.2}
+  .metric .lbl{font-size:11px;color:var(--sub);font-weight:700;margin-top:2px}
+  .pos .num{color:#16a34a}
+
+  .thesis{margin:0 20px 16px;padding:14px 18px;border-radius:10px;background:var(--onbg);
+    border:1.5px solid var(--on);font-size:14px;font-weight:700}
+
+  footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
+  @media(max-width:980px){.g3,.g2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">AI KOL · Affiliate Unit Economics · 2026-07-07</div>
+  <h1>アフィ型の物理限界と、利益100万 / 500万の必要構成</h1>
+  <p class="lead">売上/acc は「Imp × 率」で頭打ちし、天井を破る変数は<b>フォロワー資産</b>のみ。目標利益は acc 数ではなく<b>上限層(成熟acc)の比率</b>で決まる — 100万は育成戦のまま届く通過点、500万はその延長線。</p>
+  <div class="pills">
+    <span class="pill">利益 = 売上 − API生成コスト (人件費除く)</span>
+    <span class="pill">¥100万 → 成熟19〜33 acc</span>
+    <span class="pill">¥500万 → 成熟92〜164 acc</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#ceiling">🧊 冷静上限 8指標</a>
+  <a href="#m1">🧮 利益100万の構成</a>
+  <a href="#m5">🧮 利益500万の構成</a>
+  <a href="#sens">📐 感度比較</a>
+</nav>
+
+<div class="legend">
+  凡例:
+  <span class="st st-on">設計値層 (立ち上げ・0223設計ファネル再現)</span>
+  <span class="st st-off">冷静上限層 (成熟・フォロワー40k級)</span>
+  <span class="st st-todo">未実証の前提</span>
+</div>
+
+<section id="ceiling">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--off)"></span>指標別の冷静上限 — アフィ型の物理限界 (ACC_0223 実測ベース)</h2>
+    <div class="note">「設計値」= 0223 の黒字化設計 (実測裏付けあり)。「冷静上限」= 全レバーが同時成立した場合の天井 — 2%超 CTR・3.0/100k CVR は<b>未実証</b>。</div>
+    <div class="wide"><table>
+      <thead><tr><th>指標</th><th class="n">現状実測 (0223)</th><th class="n">設計値</th><th class="n">冷静上限</th><th>根拠</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">平均View/本</td><td class="n">31,572</td><td class="n">40,000</td><td class="n">45,000</td><td>0223 上位10本平均 = 45,456。これ以上はテーマ開拓の持続次第</td></tr>
+        <tr><td class="lever">投稿数/acc</td><td class="n">20</td><td class="n">15</td><td class="n">15〜20</td><td>Imp 上限 600k〜800k/acc</td></tr>
+        <tr><td class="lever">F1 View/月</td><td class="n">25,488</td><td class="n">37,800</td><td class="n big">70,000+</td><td>フォロワー × 12.4%/日 × Story 25日。<b>唯一の複利指標</b> (フォロワー増で毎月自動成長)</td></tr>
+        <tr><td class="lever">CTR (F1→Click)</td><td class="n">1.14%</td><td class="n">2.0%</td><td class="n">3.0%</td><td>2%超は未実証</td></tr>
+        <tr><td class="lever">Click→CV</td><td class="n">1.37%</td><td class="n">1.5%</td><td class="n">2.0%</td><td>単価を上げると必ず低下 (トレードオフ)</td></tr>
+        <tr><td class="lever">商材単価</td><td class="n">¥1,500</td><td class="n">¥1,500</td><td class="n">¥2,500〜3,000</td><td>マッチング/金融ミックス。CV率低下と相殺で期待値は微増</td></tr>
+        <tr><td class="lever">通しCVR (ReelView→CV)</td><td class="n">0.63/100k</td><td class="n">1.8/100k</td><td class="n">3.0/100k</td><td>全レバー同時成立時のみ</td></tr>
+        <tr><td class="lever big">売上/acc/月</td><td class="n">¥2,700〜6,000</td><td class="n big">¥16,200</td><td class="n big">立ち上げ ¥27k / 成熟 ¥50〜75k</td><td>成熟 = フォロワー40k後 (F1 124k/月 → CV 30〜37)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="m1">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>利益 ¥100万/月 の構成 (95/5 設計)</h2>
+    <div class="note">タイムライン上は A案 (50体/月 launch) で約 M10、B案 (100体/月) で約 M8 に相当。500万への通過点として自然に発生 — 専用のスケール設計は不要。</div>
+    <div class="wide"><table>
+      <thead><tr><th>層</th><th class="n">acc数</th><th class="n">投稿/acc</th><th class="n">平均View</th><th class="n">Imp/acc</th><th class="n">通しCVR</th><th class="n">CV/acc</th><th class="n">単価</th><th class="n">売上/acc</th><th class="n">APIコスト/acc</th><th class="n">利益/acc</th><th class="n">層計利益</th></tr></thead>
+      <tbody>
+        <tr><td><span class="st st-on">設計値層 95%</span></td><td class="n">106</td><td class="n">15</td><td class="n">40,000</td><td class="n">600,000</td><td class="n">1.8/100k</td><td class="n">10.8</td><td class="n">¥1,500</td><td class="n">¥16,200</td><td class="n">¥9,675</td><td class="n">¥6,525</td><td class="n">¥0.69M</td></tr>
+        <tr><td><span class="st st-off">冷静上限層 5%</span></td><td class="n">6</td><td class="n">20</td><td class="n">45,000</td><td class="n">900,000</td><td class="n">3.0/100k</td><td class="n">27</td><td class="n">¥2,500</td><td class="n">¥67,500</td><td class="n">¥12,900</td><td class="n">¥54,600</td><td class="n">¥0.33M</td></tr>
+        <tr><td class="big">合計</td><td class="n big">112</td><td class="n">1,710本/月 (57本/日)</td><td class="n">—</td><td class="n big">69M Imp/月</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">¥2.12M</td><td class="n">¥1.10M</td><td class="n">—</td><td class="n big">¥1.02M</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="m5">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>利益 ¥500万/月 の構成 (95/5 設計)</h2>
+    <div class="note">95/5 のままだと 560 acc・生成285本/日・月間 3.4億 Imp = 面積戦で非現実。到達は上限層比率の引き上げ (育成) で: A案 M24 / B案 M15。</div>
+    <div class="wide"><table>
+      <thead><tr><th>層</th><th class="n">acc数</th><th class="n">投稿/acc</th><th class="n">平均View</th><th class="n">Imp/acc</th><th class="n">通しCVR</th><th class="n">CV/acc</th><th class="n">単価</th><th class="n">売上/acc</th><th class="n">APIコスト/acc</th><th class="n">利益/acc</th><th class="n">層計利益</th></tr></thead>
+      <tbody>
+        <tr><td><span class="st st-on">設計値層 95%</span></td><td class="n">532</td><td class="n">15</td><td class="n">40,000</td><td class="n">600,000</td><td class="n">1.8/100k</td><td class="n">10.8</td><td class="n">¥1,500</td><td class="n">¥16,200</td><td class="n">¥9,675</td><td class="n">¥6,525</td><td class="n">¥3.47M</td></tr>
+        <tr><td><span class="st st-off">冷静上限層 5%</span></td><td class="n">28</td><td class="n">20</td><td class="n">45,000</td><td class="n">900,000</td><td class="n">3.0/100k</td><td class="n">27</td><td class="n">¥2,500</td><td class="n">¥67,500</td><td class="n">¥12,900</td><td class="n">¥54,600</td><td class="n">¥1.53M</td></tr>
+        <tr><td class="big">合計</td><td class="n big">560</td><td class="n">8,540本/月 (285本/日)</td><td class="n">—</td><td class="n big">344M Imp/月</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">¥10.51M</td><td class="n">¥5.51M</td><td class="n">—</td><td class="n big">¥5.00M</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="sens">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--done)"></span>感度比較 — 上限層比率が全てを決める</h2>
+    <div class="thesis" style="margin-top:16px">利益/acc は設計値層 ¥6.5k vs 上限層 ¥54.6k = <u>8.4倍差</u>。同じ利益目標でも、育成率次第で必要 acc 数は 3〜6 分の 1 になる。</div>
+    <div class="grid g2" style="padding-top:0">
+      <div>
+        <div class="note" style="border:1px solid var(--line);border-radius:8px;margin-bottom:10px"><b>¥100万/月</b></div>
+        <div class="grid g3" style="padding:0">
+          <div class="metric"><div class="num">112</div><div class="lbl">95/5 (立ち上げ偏重)</div></div>
+          <div class="metric"><div class="num">33</div><div class="lbl">50/50</div></div>
+          <div class="metric pos"><div class="num">19</div><div class="lbl">0/100 (全acc成熟)</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="note" style="border:1px solid var(--line);border-radius:8px;margin-bottom:10px"><b>¥500万/月</b></div>
+        <div class="grid g3" style="padding:0">
+          <div class="metric"><div class="num">560</div><div class="lbl">95/5 (面積戦 = 非現実)</div></div>
+          <div class="metric"><div class="num">164</div><div class="lbl">50/50</div></div>
+          <div class="metric pos"><div class="num">92</div><div class="lbl">0/100 (全acc成熟)</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  正本: <code>~/claude/output/acc-unit-economics-design-2026-07-07.md</code> ／ データ: IG Performance DB + Affiliate Tracker 2026-06 実測 ／ 作成 2026-07-07 ／ 内部 ID・認証情報は除去済み ／ 全体版: acc-unit-economics-500man-2026-07-07.html
+</footer>
+
+</body>
+</html>
