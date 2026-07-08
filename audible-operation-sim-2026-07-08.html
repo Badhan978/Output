@@ -95,6 +95,7 @@
   <a href="#people">👥 人ごとの分担 5人+Claude</a>
   <a href="#flow">🔁 全体ワークフロー 10 Step</a>
   <a href="#angles">💡 アングル案 10本</a>
+  <a href="#risks">🧱 前提と課題 11+14+API</a>
 </nav>
 
 <div class="legend">
@@ -221,6 +222,130 @@
     <div class="pad" style="border-top:1px solid var(--line)">
       <b>優先順位の目安 (Claude 仮説):</b> ①② を先行2アングルとして実証 → ③⑤⑥ を第2波 → ④は現行継続 → ⑦⑧⑨⑩ は第2波の結果を見て取捨。
       同一 playbook 内はテーマをずらす (同テーマ2本目急減衰の実測)。
+    </div>
+  </div>
+</section>
+
+<section id="risks">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--warn)"></span>🧱 前提条件と想定課題 — 土台11 × 問題14 × API制限</h2>
+    <div class="note">このオペの固有リスク型: 単体アカ運用では「起きても1体の損」だった問題が、playbook×API×量産では<b>全て相関故障</b> (10体〜全艦に同時波及) に変わる。対応の共通形 = 工程への標準組み込み + 週次判定への canary 指標追加。</div>
+
+    <div class="pad" style="border-bottom:1px solid var(--line)"><b>A. 土台になっている前提条件</b> <span class="def">これが立っている限りで体制・数字の絵が成立する。未検証のまま scale すると相関故障の母体になる。</span></div>
+    <table>
+      <thead><tr><th>前提</th><th>内容</th><th>状態</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">市場分析機能</td><td>アングル決定後、人間がアカ収集 → Claude が分析・マッピングしコンテンツの土台化</td><td><span class="st st-todo">未整備 (これから作る)</span></td></tr>
+        <tr><td class="lever">勝てる設計書の型</td><td>外してはいけない要素のテンプレ化</td><td><span class="st st-on">半分 (江戸系に原型・新アングル未検証)</span></td></tr>
+        <tr><td class="lever">Story の API 投稿</td><td>20日/月 配信の自動化</td><td><span class="st st-on">半分 (方針確定・大規模未検証)</span></td></tr>
+        <tr><td class="lever">Reels の API 日次投稿</td><td>本体投稿の自動化。リーチ不利・凍結誘発がないこと</td><td><span class="st st-on">半分 (一部実績・大規模未検証)</span></td></tr>
+        <tr><td class="lever">計測パイプライン</td><td>CV のアカ帰属 + funnel 4点 (View/F1/CTR/CV) の自動取得</td><td><span class="st st-on">半分 (既知の計測穴あり・要修繕)</span></td></tr>
+        <tr><td class="lever">BAN 率 5%/月 以内</td><td>1端末1アカ + ラベリング対応で収まる想定</td><td><span class="st st-warn">未検証 (最大の外生リスク)</span></td></tr>
+        <tr><td class="lever">ASP の量産許容</td><td>50 acc/週のリンク発行が審査・規約上回ること</td><td><span class="st st-warn">未確認 (ゲート前に要確認)</span></td></tr>
+        <tr><td class="lever">Audible 案件の継続</td><td>単価 ¥1,500 維持・提携継続</td><td><span class="st st-warn">外生 (商材2本目が保険)</span></td></tr>
+        <tr><td class="lever">cohort 挙動の再現</td><td>打率33%・成熟6ヶ月・60%昇格が新アングルでも成立</td><td><span class="st st-todo">未実証 (江戸実測由来)</span></td></tr>
+        <tr><td class="lever">フォロワー複利</td><td>F1 母数 = フォロワー × Story 日数。唯一の複利指標</td><td><span class="st st-on">半分 (実測1アカ・横展開は仮説)</span></td></tr>
+        <tr><td class="lever">人の可用性</td><td>トモ・早川の時間が 2B に食われない / Badhan 8-16h 確保</td><td><span class="st st-run">毎週守る運用条件</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="pad" style="border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><b>B. 起こりうる問題と対応策</b> <span class="def">▲ = 対応策。太字バッジは影響の型。</span></div>
+
+    <div class="pad" style="padding-bottom:0"><b>運用が静かに壊れる系</b></div>
+    <div class="grid3">
+      <div class="node" style="background:var(--warnbg);border-color:var(--warn)">
+        <b>判定のボトルネック化 <span class="st st-warn">赤字継続</span></b>
+        kill/scale が Badhan 1点集中。飛ぶと赤字アカが2週走る。<br>▲ 判定SLA (曜日固定) + 自動 kill 条件の事前合意
+      </div>
+      <div class="node">
+        <b>生成品質のドリフト <span class="st st-todo">検知遅れ</span></b>
+        750本/週では抜き取り率が数%まで低下。<br>▲ canary 指標 (48h view 中央値) を週次判定に常設
+      </div>
+      <div class="node">
+        <b>設計書の品質ばらつき <span class="st st-todo">型の希釈</span></b>
+        思った通りの設計書を全員が書けない。<br>▲ 勝ち型テンプレ + レビュー基準の明文化 (前提A-2)
+      </div>
+      <div class="node" style="background:var(--warnbg);border-color:var(--warn)">
+        <b>リンク・オファー表記の一括腐敗 <span class="st st-warn">法令注意</span></b>
+        7/15 で3ヶ月無料終了 → 全アカ Story に旧表記残存。<br>▲ 一括更新を工程化 / 発生・確定リンク台帳と連動
+      </div>
+      <div class="node">
+        <b>アカ資産台帳の破綻 <span class="st st-todo">引継不能</span></b>
+        端末×SIM×メアド×ログインが量産速度に追いつかない。<br>▲ 台帳整備を #1 工程に標準組み込み
+      </div>
+      <div class="node">
+        <b>V5 への playbook 投入バグ <span class="st st-todo">立ち上げ遅延</span></b>
+        立ち上げ後は V5 運用のため投入時の不具合が直撃。<br>▲ 投入前テスト・1体で試してから10体展開
+      </div>
+    </div>
+
+    <div class="pad" style="padding-bottom:0;padding-top:0"><b>お金の見え方が狂う系</b></div>
+    <div class="grid3">
+      <div class="node">
+        <b>CV ≠ 入金 <span class="st st-todo">下振れ1-2割</span></b>
+        確定報酬は30-60日遅れ + 否認 (即解約・重複却下)。<br>▲ 発生/確定の2本立て計測を最初から
+      </div>
+      <div class="node" style="background:var(--warnbg);border-color:var(--warn)">
+        <b>scale / kill の早撃ち <span class="st st-warn">相関拡大</span></b>
+        n=1 の初速で go → 失敗ごと拡大。薄いデータ kill も同罪。<br>▲ go/kill とも最低データ量を数値で固定
+      </div>
+      <div class="node">
+        <b>CVR が向上しない <span class="st st-todo">根本仮説の棄却</span></b>
+        導線テンプレ + intent 適合でも 2%+ に届かない場合。<br>▲ 2ヶ月実証に撤退線を事前設定 (アングル差し替えへ)
+      </div>
+    </div>
+
+    <div class="pad" style="padding-bottom:0;padding-top:0"><b>構造・プラットフォーム系</b></div>
+    <div class="grid3">
+      <div class="node">
+        <b>アングルの共食い・飽和 <span class="st st-todo">リーチ低下</span></b>
+        同構図 Reels の大量供給 + 当たれば外部模倣。<br>▲ playbook 内テーマずらし + 投稿間隔の分散
+      </div>
+      <div class="node" style="background:var(--warnbg);border-color:var(--warn)">
+        <b>相関 BAN・同時凍結 <span class="st st-warn">10体連鎖</span></b>
+        同 playbook 10体は失敗も10体連動。AI ラベリング再発含む。<br>▲ ラベル付与を生成工程に標準組み込み + 系統分散
+      </div>
+      <div class="node">
+        <b>V5 の容量・レーン競合 <span class="st st-todo">枠が無い</span></b>
+        V5 は改修中 + 2B 優先。150体級の容量は未確認。<br>▲ 投入枠の事前確認 (バグ以前に「入るか」が先)
+      </div>
+    </div>
+
+    <div class="pad" style="padding-bottom:0;padding-top:0"><b>人・組織系</b></div>
+    <div class="grid3">
+      <div class="node" style="background:var(--warnbg);border-color:var(--warn)">
+        <b>早川くん離脱 <span class="st st-warn">#5/#9 停止</span></b>
+        崩れるのは投稿PDCA・判定叩き台と現場知識。<br>▲ 手順の SOP 化 + 集計は Claude 化済み → Badhan/トモ一時吸収
+      </div>
+      <div class="node">
+        <b>AB①型 PDCA との不整合 <span class="st st-todo">変数が割れる</span></b>
+        CV = Theme×Hook×Body×CTA の変数体系と週次判定の突合。<br>▲ 判定 KPI の変数パラメータを AB①型に揃えて設置
+      </div>
+      <div class="node">
+        <b>トモさんの 2B 食い合い <span class="st st-todo">playbook 律速</span></b>
+        playbook 枠が 2B 業務に侵食される。<br>▲ 採用でなく Badhan 設計書比率を下げて再配分
+      </div>
+    </div>
+
+    <div class="pad" style="border-top:1px solid var(--line)">
+      <b>C. Meta API のアカウント数制限 (アプリ層 = BAN と別系統の単一障害点)</b>
+      <span class="def">アプリ凍結 = 全接続アカの同時投稿停止。開発モードはロール保有アカのみ (実質数十体)、本番化後は明示上限よりレート制限とアプリ信頼スコアが実効制限。現アプリのモード・実測接続上限の確認が設計の前提。</span>
+      <table>
+        <thead><tr><th>選択肢</th><th>位置づけ</th><th>評価</th></tr></thead>
+        <tbody>
+          <tr><td class="lever">① 複数アプリへのシャーディング</td><td><span class="st st-run">本命</span></td><td>50-70体/アプリで分散。スケールと凍結リスク対策を同時解決</td></tr>
+          <tr><td class="lever">② 増量申請 (App Review・本番化)</td><td><span class="st st-run">①の前提工程</span></td><td>必須。ただし「1アプリに全量」はやらない</td></tr>
+          <tr><td class="lever">③ 外部投稿ツール</td><td><span class="st st-todo">溢れバッファ</span></td><td>実コスト月 ¥1-2k/acc = 利益の15-30%。TOS リスクあり・つなぎまで</td></tr>
+          <tr><td class="lever">④ 手動投稿</td><td><span class="st st-todo">非常用のみ</span></td><td>人時モデルが崩壊するため不採用。上位アカの障害時 fallback</td></tr>
+        </tbody>
+      </table>
+      <div class="pad" style="padding-left:0;padding-bottom:0">
+        <b>scale go ゲートは4点に拡張:</b>
+        <span class="st st-run">① 通しCVR 3+/100k 実証</span>
+        <span class="st st-run">② 経営裁定の決着</span>
+        <span class="st st-run">③ 端末兵站の値段</span>
+        <span class="st st-warn">④ API 兵站の実測値 (接続上限・本番化・シャーディング設計)</span>
+      </div>
     </div>
   </div>
 </section>
