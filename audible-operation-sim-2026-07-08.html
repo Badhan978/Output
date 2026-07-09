@@ -4,355 +4,179 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Audible オペレーション設計 — 分担×ワークフロー×アングル (2026-07-08)</title>
+<title>AI KOL 量産オペ — 立ち上げガントチャート (2026-07)</title>
 <style>
   :root{
     --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
-    --done:#16a34a; --donebg:#f0fdf4;
-    --run:#7c3aed;  --runbg:#f5f3ff;
     --on:#2563eb;   --onbg:#eff6ff;
     --off:#0d9488;  --offbg:#f0fdfa;
-    --todo:#94a3b8; --warn:#dc2626; --warnbg:#fef2f2;
+    --run:#7c3aed;  --runbg:#f5f3ff;
+    --warn:#dc2626; --warnbg:#fef2f2;
+    --wait:#94a3b8;
   }
   *{box-sizing:border-box}
   body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
     color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
 
-  .hero{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:34px 28px 28px}
-  .hero .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#7dd3fc;font-weight:800;margin:0 0 8px}
-  .hero h1{margin:0 0 10px;font-size:30px;line-height:1.3}
-  .hero p{margin:0;max-width:900px;color:#cbd5e1;font-size:13.5px}
-  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-  .pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
-    border-radius:99px;padding:4px 14px;font-size:12px;font-weight:700}
+  .hero{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:26px 28px 22px}
+  .hero .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#7dd3fc;font-weight:800;margin:0 0 6px}
+  .hero h1{margin:0 0 6px;font-size:24px;line-height:1.3}
+  .hero p{margin:0;max-width:900px;color:#cbd5e1;font-size:12.5px}
 
-  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
-    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
-  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
-    font-size:12px;border:1px solid var(--line)}
-  nav a:hover{background:#f1f5f9;color:var(--ink)}
-
-  section{max-width:1200px;margin:26px auto;padding:0 20px}
-
+  section{max-width:1200px;margin:22px auto;padding:0 20px}
   .card{background:#fff;border:1px solid var(--line);border-radius:12px;
     overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
-    display:flex;align-items:center;gap:10px}
-  .mark{width:12px;height:12px;border-radius:4px;display:inline-block}
-  .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
-    border-bottom:1px solid var(--line)}
-  .card .note.warn{background:var(--warnbg);color:#b91c1c;font-weight:700}
-  .pad{padding:18px 20px}
+  .card h2{margin:0;padding:14px 20px;font-size:16px;border-bottom:1px solid var(--line)}
+  .card .note{padding:9px 20px;background:#f8fafc;color:var(--sub);font-size:12px;border-bottom:1px solid var(--line)}
 
-  .st{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px}
-  .st-done{background:#dcfce7;color:#15803d}
-  .st-run{background:#ede9fe;color:#6d28d9}
-  .st-on{background:#dbeafe;color:#1d4ed8}
-  .st-off{background:#ccfbf1;color:#0f766e}
-  .st-todo{background:#f1f5f9;color:#64748b}
-  .st-warn{background:#fee2e2;color:#b91c1c}
-  .legend{display:flex;gap:8px;flex-wrap:wrap;align-items:center;max-width:1200px;margin:18px auto 0;padding:0 20px;font-size:11px;color:var(--sub)}
+  /* ---- gantt ---- */
+  .gwrap{overflow-x:auto;padding:14px 16px 6px}
+  .gantt{min-width:980px}
+  .grow{display:grid;grid-template-columns:230px repeat(13,1fr);align-items:center;min-height:30px}
+  .grow.head{border-bottom:1px solid var(--line);font-size:10.5px;color:var(--sub);font-weight:700;text-align:center;min-height:34px}
+  .grow.head .lbl{text-align:left}
+  .grow+.grow:not(.head){border-top:1px dashed #f1f5f9}
+  .lbl{font-size:12px;padding:3px 10px 3px 0;line-height:1.35}
+  .lbl b{font-size:12px}
+  .lbl .who{color:var(--sub);font-size:10.5px;display:block}
+  .cell{height:100%;position:relative}
+  .bar{height:16px;border-radius:5px;margin:2px 1px;position:relative}
+  .bar.on{background:var(--on)}
+  .bar.off{background:var(--off)}
+  .bar.run{background:var(--run)}
+  .bar.prep{background:var(--onbg);border:2px solid var(--on)}
+  .bar.wait{background:repeating-linear-gradient(45deg,#e2e8f0,#e2e8f0 4px,#f8fafc 4px,#f8fafc 8px);border:1px solid #cbd5e1;height:10px;margin-top:5px}
+  .bar.cont{background:linear-gradient(90deg,var(--off),rgba(13,148,136,.25))}
+  .ms{width:16px;height:16px;background:var(--warn);transform:rotate(45deg);border-radius:3px;margin:2px auto}
+  .ms.run{background:var(--run)}
+  .btxt{position:absolute;left:6px;top:-1px;font-size:10px;color:#fff;font-weight:700;white-space:nowrap}
+  .prep .btxt{color:var(--on)}
 
-  table{width:100%;border-collapse:collapse;font-size:12.5px}
-  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
-  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700}
-  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
-  .lever{font-weight:700}
-  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;padding:10px 20px 14px;font-size:11px;color:var(--sub);align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .sw{width:22px;height:12px;border-radius:4px;display:inline-block}
 
-  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:18px 20px}
-  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:18px 20px}
-  .node{border-radius:9px;padding:10px 12px;font-size:12px;border:1.5px solid var(--line);background:#fff}
-  .node b{display:block;font-size:12.5px;margin-bottom:2px}
-  .node .who{font-size:10.5px;font-weight:700;margin-top:4px}
-
-  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:18px 20px}
-  .fstep{border-radius:9px;padding:9px 11px;font-size:11.5px;border:1.5px solid var(--line)}
-  .fstep .no{font-size:10px;font-weight:800;color:var(--sub)}
-  .fstep b{display:block;font-size:12.5px}
-  .fstep .who{font-size:10.5px;font-weight:700;margin-top:3px}
-
-  footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
-  @media(max-width:980px){.grid3,.grid5,.flow{grid-template-columns:1fr}}
+  .notes{padding:0 20px 16px;font-size:12px;color:var(--ink)}
+  .notes li{margin:3px 0}
+  .notes .warn{color:var(--warn);font-weight:700}
+  footer{max-width:1200px;margin:10px auto 30px;padding:0 20px;color:var(--sub);font-size:11px}
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <p class="kicker">AI KOL — Audible Operation Design</p>
-  <h1>Audible 量産オペ設計 — 分担 × ワークフロー × アングル候補</h1>
-  <p>商材 = Audible (無料体験 ¥1,500/CV) 固定。1 playbook ≒ 10体の複製単位で回す。
-     序盤 = 実証フェーズ (週4-6体で CVR の証拠を取る) → 3点ゲート通過後に週50体 (5-7 playbook/週) へ。</p>
-  <div class="pills">
-    <span class="pill">作成 2026-07-08</span>
-    <span class="pill">単価前提 ¥1,500/CV (7/15改定後)</span>
-    <span class="pill">B案: 10.8 CV/acc = 利益¥6,525/acc</span>
-    <span class="pill">2ヶ月ゴール: 通しCVR 3+/100k 実証</span>
-  </div>
+  <p class="kicker">AI KOL — Audible 量産オペ</p>
+  <h1>立ち上げガントチャート（7/9 → 量産開始）</h1>
+  <p>7月 70体・300 CV 計画の立ち上げ2週間。並行幅を最大化し、キックオフ = 7/13 (月)・cohort1 投稿開始 = 7/16 (木)。このページは今後セクションを追加して更新する。</p>
 </div>
 
-<nav>
-  <a href="#people">👥 人ごとの分担 5人+Claude</a>
-  <a href="#flow">🔁 全体ワークフロー 10 Step</a>
-  <a href="#angles">💡 アングル案 10本</a>
-  <a href="#risks">🧱 前提と課題 11+14+API</a>
-</nav>
-
-<div class="legend">
-  <b>凡例:</b>
-  <span class="st st-on">人の稼働</span>
-  <span class="st st-off">Claude/自動</span>
-  <span class="st st-run">判定・意思決定</span>
-  <span class="st st-done">実測・確定</span>
-  <span class="st st-todo">仮説・未実証</span>
-</div>
-
-<section id="people">
+<section>
   <div class="card">
-    <h2><span class="mark" style="background:var(--on)"></span>👥 人ごとの分担 — 稼働時間 × 業務 × 週次の数値目標</h2>
-    <div class="note">数値目標は「序盤 (実証・週4-6体) → スケール時 (週50体)」の2段表記。生成系の実作業は Claude が持ち、人はレビュー・判断・物理作業に限定する。</div>
-    <table>
-      <thead><tr><th>担当</th><th>週次稼働</th><th>業務内容</th><th>数値目標 (週次)</th></tr></thead>
-      <tbody>
-        <tr>
-          <td class="lever">Badhan <span class="def">toB 主軸と兼務</span></td>
-          <td><span class="st st-on">8-11h → 12-16h</span></td>
-          <td>設計書生成 (全体の半分) / playbook 方向性確認 (トモさんと) / go・no-go と kill・scale 裁定 / リンク発行 (固有権限) / 端末分担</td>
-          <td>設計書 <b>2-3本 → 25-35本</b><br>裁定 <b>週1回</b> (判定会)<br>リンク発行 <b>都度 → 50本/週</b><br>端末 <b>→ 15-17台/週</b></td>
-        </tr>
-        <tr>
-          <td class="lever">トモさん</td>
-          <td><span class="st st-on">8-13h</span></td>
-          <td>Playbook化のオーナー: 江戸系構造の確認 → 入れる情報の選別 → 方向性確認 (with Badhan) → 実装チェック。分析・実装 draft は Claude / 設計書の残り半分をシェア</td>
-          <td>Playbook <b>1-2本 → 5-7本</b><br>設計書 <b>1-2本 → 12-18本</b></td>
-        </tr>
-        <tr>
-          <td class="lever">早川くん</td>
-          <td><span class="st st-on">7-9h</span></td>
-          <td>投稿PDCA の実務 (テーマ当否判定・差し替え) / 計測週次判定の叩き台作成 (集計は Claude) / 設計書の残り半分をシェア</td>
-          <td>PDCA レビュー <b>全 Live acc 週1周</b><br>判定叩き台 <b>1式/週</b><br>設計書 <b>1-2本 → 12-18本</b></td>
-        </tr>
-        <tr>
-          <td class="lever">駿冴 / Zach <span class="def">V5 / toB 専任は不変</span></td>
-          <td><span class="st st-on">各 〜1h → 3-4h</span></td>
-          <td>端末管理・初期セットアップの分担分のみ (1端末1アカ)</td>
-          <td>端末セットアップ <b>各 → 15-17台/週</b></td>
-        </tr>
-        <tr>
-          <td class="lever">Claude</td>
-          <td><span class="st st-off">人時外 (自動)</span></td>
-          <td>playbook 分析・実装 draft / 設計書 10体分生成 / Reels コンテンツ一括生成 / Story・Highlight 生成 + API 投稿 (アフィ流し 20日/月) / funnel 集計・判定叩き台データ</td>
-          <td>コンテンツ <b>60-90本 → 750本/週</b><br>アフィ Story <b>Live 全 acc × 20日/月</b></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="pad" style="border-top:1px solid var(--line)">
-      <b>スケール時の不足:</b> <span class="st st-warn">機械作業の手 1-2名 (業務委託)</span>
-      <span class="def">端末オペ + PDCA 物量補助。判断層の追加は不要。8月まで採用凍結のため業務委託枠 — 求人の下準備のみゲート前に実施。</span>
-    </div>
-  </div>
-</section>
+    <h2>立ち上げガント — 7/9 (木) 〜 7/19 (日) + 量産週</h2>
+    <div class="note">キックオフ 7/13 (月) までに最低限の設計書 = <b>10体分（cohort1 の1ロット・提案値）</b>を準備し、月曜から全員が作業を開始できる状態にする。</div>
+    <div class="gwrap"><div class="gantt">
 
-<section id="flow">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--off)"></span>🔁 全体ワークフロー — 端末セットアップから分析・次週投稿まで 10 Step</h2>
-    <div class="note">仕込み (#1-8) は cohort 単位で同一週内に完走可 (リンク発行 = 数時間〜1日、育成ラグなし)。判定 (#9-10) は CV データ蓄積で1-2週遅行 — 毎週「今週仕込む cohort」と「先週以前 cohort の判定」の2本を並走させる。</div>
-    <div class="flow">
-      <div class="fstep" style="background:var(--onbg);border-color:var(--on)"><span class="no">#1</span><b>端末・アカ セットアップ</b>端末調達・回線/IP 管理・IG アカ開設 (1端末1アカ)<div class="who" style="color:var(--on)">Badhan・駿冴・Zach</div></div>
-      <div class="fstep" style="background:var(--onbg);border-color:var(--on)"><span class="no">#2</span><b>Playbook化</b>勝ち投稿の分析 (Claude) → 構造確認・情報選別 → 方向性確認 → 実装<div class="who" style="color:var(--on)">トモ + Badhan 確認</div></div>
-      <div class="fstep" style="background:var(--onbg);border-color:var(--on)"><span class="no">#3</span><b>設計書生成</b>バリアント表 (名前/ハンドル/テーマ帯/ビジュアル ×10行) → Claude が10体分生成 → レビュー<div class="who" style="color:var(--on)">Badhan 50% / トモ・早川 50%</div></div>
-      <div class="fstep" style="background:var(--offbg);border-color:var(--off)"><span class="no">#4</span><b>コンテンツ生成</b>設計書確定後、Reels 初期在庫を一括生成 (初期 cohort は早川が抜き取り確認)<div class="who" style="color:var(--off)">Claude</div></div>
-      <div class="fstep" style="background:var(--offbg);border-color:var(--off)"><span class="no">#5</span><b>投稿開始</b>API 経由で日次投稿・数値の自動集計<div class="who" style="color:var(--off)">Claude (API)</div></div>
-      <div class="fstep" style="background:var(--offbg);border-color:var(--off)"><span class="no">#6</span><b>導線設置</b>Story/Highlight テンプレ生成 + API 設置 (投稿開始と同時)<div class="who" style="color:var(--off)">Claude</div></div>
-      <div class="fstep" style="background:var(--onbg);border-color:var(--on)"><span class="no">#7</span><b>リンク発行</b>商材×acc 粒度で ASP 発行、数時間〜1日/バッチ<div class="who" style="color:var(--on)">Badhan (固有権限)</div></div>
-      <div class="fstep" style="background:var(--offbg);border-color:var(--off)"><span class="no">#8</span><b>アフィ Story 流し</b>Story API で 20日/月 配信 → CV 計測開始<div class="who" style="color:var(--off)">Claude</div></div>
-      <div class="fstep" style="background:var(--onbg);border-color:var(--on)"><span class="no">#9</span><b>投稿PDCA・計測分析</b>テーマ当否・funnel (View/F1/CTR/CV) 分析 → 判定叩き台<div class="who" style="color:var(--on)">早川 (集計は Claude)</div></div>
-      <div class="fstep" style="background:var(--runbg);border-color:var(--run)"><span class="no">#10</span><b>週次判定 → 次週へ</b>kill / scale 裁定 → scale なら #3 へ複製 (同 playbook 10体上限) / 上限なら #2 へ新規 → 次週の投稿計画に反映<div class="who" style="color:var(--run)">Badhan (叩き台 = 早川)</div></div>
-    </div>
-  </div>
-</section>
+      <div class="grow head">
+        <div class="lbl">工程（担当）</div>
+        <div>7/9<br>木</div><div>7/10<br>金</div><div>7/11<br>土</div><div>7/12<br>日</div>
+        <div>7/13<br>月</div><div>7/14<br>火</div><div>7/15<br>水</div><div>7/16<br>木</div>
+        <div>7/17<br>金</div><div>7/18<br>土</div><div>7/19<br>日</div>
+        <div>7/20<br>週〜</div><div>8月<br>頭</div>
+      </div>
 
-<section id="angles">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--run)"></span>💡 売れるであろうアングル案 — 10本</h2>
-    <div class="note warn">但し書き: 本セクションは Claude の仮説をそのまま流用したアイデア出しです。CVR・View の数値含め未実証を含みます。実行前に、各アングルの詳細の詰め (ペルソナ・競合・カタログ適合の検証) と戦略的な検討が必要です。</div>
-    <div class="note">共通の選定原理 (実測由来): CV は Imp でなく intent から出る (6月実測: Imp-CV 逆相関)。「コンテンツの続き = Audible」のゼロ距離接続が成立するほど上位。AI faceless の構造制約 (「人柄」型は不利、「世界観」型が正) を各案に織り込み済み。</div>
-    <div class="grid3">
-      <div class="node" style="background:var(--runbg);border-color:var(--run)">
-        <b>① ビジネス書要約・耳活 <span class="st st-run">主軸候補</span></b>
-        積読サラリーマン (28-38・通勤40-60分)。「その積読、耳なら通勤で月3冊」。要約で興味喚起 → 全編は耳で、の最短導線。Audible 最強カタログ領域。
+      <div class="grow">
+        <div class="lbl"><b>1b 外部発射</b><span class="who">Badhan・駿冴 — API 本番化申請 / ASP 照会 / 端末発注</span></div>
+        <div class="cell" style="grid-column:2/3"><div class="bar on"><span class="btxt">発射</span></div></div>
+        <div class="cell" style="grid-column:3/9"><div class="bar wait"></div></div>
       </div>
-      <div class="node" style="background:var(--runbg);border-color:var(--run)">
-        <b>② 怪談・朗読 <span class="st st-run">対抗候補</span></b>
-        深夜の怪談リスナー (20-40)。音声で物語を聴く習慣が形成済み。「この話の完全版 (プロ朗読1時間) を無料で」。江戸の闇の当たり型・資産を転用可。
-      </div>
-      <div class="node">
-        <b>③ 話題小説・ミステリー紹介 <span class="st st-todo">仮説</span></b>
-        読書に戻りたい30代女性。ドラマ化・映画化の原作需要。「あの話題作、家事しながら聴けます」。※漫画は Audible に無いため対象外。
-      </div>
-      <div class="node">
-        <b>④ 歴史・時代小説 <span class="st st-done">実測あり</span></b>
-        現行江戸クラスタの隣接展開。雑学 Reels → 時代小説・歴史書の Audible へ。唯一 CV 実績のある接続 (0223/0193/0190)。
-      </div>
-      <div class="node">
-        <b>⑤ 朝活・習慣術 <span class="st st-todo">仮説</span></b>
-        自己変革願望層 (20-30代)。「朝の30分、スマホを見る代わりに聴く」。習慣化系ベストセラーと接続。①の姉妹型で playbook 共用余地。
-      </div>
-      <div class="node">
-        <b>⑥ お金・投資リテラシー <span class="st st-todo">仮説</span></b>
-        NISA・家計見直し層 (25-45)。マネー本要約 → 「通勤中にお金の勉強」。金融ジャンルは注力実績あり・商材ミックス (金融系高単価案件) への布石にもなる。
-      </div>
-      <div class="node">
-        <b>⑦ 睡眠・寝ながら聴く <span class="st st-todo">仮説</span></b>
-        不眠気味の20-30代。「スリープタイマーで眠れる朗読」。リラックス映像 × AI 生成の相性◎。intent が登録まで届くかが検証点。
-      </div>
-      <div class="node">
-        <b>⑧ 子育てママの「自分時間」 <span class="st st-todo">仮説・要注意</span></b>
-        30代ママ。「家事・寝かしつけ後の耳読書」+ 絵本/育児書カタログ。※ママ系は「人柄」型で AI 構造制約に最も抵触しやすい — 世界観型で組めるかが条件。
-      </div>
-      <div class="node">
-        <b>⑨ 英語・学び直し <span class="st st-todo">仮説・弱め</span></b>
-        キャリア焦燥層 (25-35)。洋書多読・語学コンテンツ。intent は高いが専用アプリ勢と競合し、Audible が最適解になりにくい。
-      </div>
-      <div class="node">
-        <b>⑩ 名作文学・大人の教養 <span class="st st-todo">仮説</span></b>
-        教養志向の30-50代。「読んだふりしてきたあの名作を、耳で完走」。教養層には実在ソースで濃く、の既存原則と整合。④と playbook 共用余地。
-      </div>
-    </div>
-    <div class="pad" style="border-top:1px solid var(--line)">
-      <b>優先順位の目安 (Claude 仮説):</b> ①② を先行2アングルとして実証 → ③⑤⑥ を第2波 → ④は現行継続 → ⑦⑧⑨⑩ は第2波の結果を見て取捨。
-      同一 playbook 内はテーマをずらす (同テーマ2本目急減衰の実測)。
-    </div>
-  </div>
-</section>
 
-<section id="risks">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--warn)"></span>🧱 前提条件と想定課題 — 土台11 × 問題14 × API制限</h2>
-    <div class="note">このオペの固有リスク型: 単体アカ運用では「起きても1体の損」だった問題が、playbook×API×量産では<b>全て相関故障</b> (10体〜全艦に同時波及) に変わる。対応の共通形 = 工程への標準組み込み + 週次判定への canary 指標追加。</div>
+      <div class="grow">
+        <div class="lbl"><b>1 課題潰し・対策準備</b><span class="who">Badhan + Claude — 障壁決定版の解決策埋め</span></div>
+        <div class="cell" style="grid-column:2/4"><div class="bar on"></div></div>
+      </div>
 
-    <div class="pad" style="border-bottom:1px solid var(--line)"><b>A. 土台になっている前提条件</b> <span class="def">これが立っている限りで体制・数字の絵が成立する。未検証のまま scale すると相関故障の母体になる。</span></div>
-    <table>
-      <thead><tr><th>前提</th><th>内容</th><th>状態</th></tr></thead>
-      <tbody>
-        <tr><td class="lever">市場分析機能</td><td>アングル決定後、人間がアカ収集 → Claude が分析・マッピングしコンテンツの土台化</td><td><span class="st st-todo">未整備 (これから作る)</span></td></tr>
-        <tr><td class="lever">勝てる設計書の型</td><td>外してはいけない要素のテンプレ化</td><td><span class="st st-on">半分 (江戸系に原型・新アングル未検証)</span></td></tr>
-        <tr><td class="lever">Story の API 投稿</td><td>20日/月 配信の自動化</td><td><span class="st st-on">半分 (方針確定・大規模未検証)</span></td></tr>
-        <tr><td class="lever">Reels の API 日次投稿</td><td>本体投稿の自動化。リーチ不利・凍結誘発がないこと</td><td><span class="st st-on">半分 (一部実績・大規模未検証)</span></td></tr>
-        <tr><td class="lever">計測パイプライン</td><td>CV のアカ帰属 + funnel 4点 (View/F1/CTR/CV) の自動取得</td><td><span class="st st-on">半分 (既知の計測穴あり・要修繕)</span></td></tr>
-        <tr><td class="lever">BAN 率 5%/月 以内</td><td>1端末1アカ + ラベリング対応で収まる想定</td><td><span class="st st-warn">未検証 (最大の外生リスク)</span></td></tr>
-        <tr><td class="lever">ASP の量産許容</td><td>50 acc/週のリンク発行が審査・規約上回ること</td><td><span class="st st-warn">未確認 (ゲート前に要確認)</span></td></tr>
-        <tr><td class="lever">Audible 案件の継続</td><td>単価 ¥1,500 維持・提携継続</td><td><span class="st st-warn">外生 (商材2本目が保険)</span></td></tr>
-        <tr><td class="lever">cohort 挙動の再現</td><td>打率33%・成熟6ヶ月・60%昇格が新アングルでも成立</td><td><span class="st st-todo">未実証 (江戸実測由来)</span></td></tr>
-        <tr><td class="lever">フォロワー複利</td><td>F1 母数 = フォロワー × Story 日数。唯一の複利指標</td><td><span class="st st-on">半分 (実測1アカ・横展開は仮説)</span></td></tr>
-        <tr><td class="lever">人の可用性</td><td>トモ・早川の時間が 2B に食われない / Badhan 8-16h 確保</td><td><span class="st st-run">毎週守る運用条件</span></td></tr>
-      </tbody>
-    </table>
+      <div class="grow">
+        <div class="lbl"><b>2 アングル決定・市場分析</b><span class="who">決定・収集 = Badhan / 分析 = Claude</span></div>
+        <div class="cell" style="grid-column:3/5"><div class="bar on"></div></div>
+      </div>
 
-    <div class="pad" style="border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><b>B. 起こりうる問題と対応策</b> <span class="def">▲ = 対応策。太字バッジは影響の型。</span></div>
+      <div class="grow">
+        <div class="lbl"><b>3a 準備: 成果物の型・Workspace 構築</b><span class="who">Badhan + Claude — スプシ群 (台帳一体)・ワークフロー配置</span></div>
+        <div class="cell" style="grid-column:3/5"><div class="bar prep"><span class="btxt">準備</span></div></div>
+      </div>
 
-    <div class="pad" style="padding-bottom:0"><b>運用が静かに壊れる系</b></div>
-    <div class="grid3">
-      <div class="node" style="background:var(--warnbg);border-color:var(--warn)">
-        <b>判定のボトルネック化 <span class="st st-warn">赤字継続</span></b>
-        kill/scale が Badhan 1点集中。飛ぶと赤字アカが2週走る。<br>▲ 判定SLA (曜日固定) + 自動 kill 条件の事前合意
+      <div class="grow">
+        <div class="lbl"><b>3b 伝達・お試しテスト</b><span class="who">全員 — Workspace を実際に触って確認</span></div>
+        <div class="cell" style="grid-column:5/6"><div class="bar prep"><span class="btxt">準備</span></div></div>
       </div>
-      <div class="node">
-        <b>生成品質のドリフト <span class="st st-todo">検知遅れ</span></b>
-        750本/週では抜き取り率が数%まで低下。<br>▲ canary 指標 (48h view 中央値) を週次判定に常設
+
+      <div class="grow">
+        <div class="lbl"><b>6 設計書の型づくり</b><span class="who">Badhan — 勝ち型テンプレ + レビュー基準</span></div>
+        <div class="cell" style="grid-column:3/5"><div class="bar on"></div></div>
       </div>
-      <div class="node">
-        <b>設計書の品質ばらつき <span class="st st-todo">型の希釈</span></b>
-        思った通りの設計書を全員が書けない。<br>▲ 勝ち型テンプレ + レビュー基準の明文化 (前提A-2)
+
+      <div class="grow">
+        <div class="lbl"><b>8a 最低限の設計書 10体分</b><span class="who">Badhan — キックオフまでに完了</span></div>
+        <div class="cell" style="grid-column:5/6"><div class="bar on"></div></div>
       </div>
-      <div class="node" style="background:var(--warnbg);border-color:var(--warn)">
-        <b>リンク・オファー表記の一括腐敗 <span class="st st-warn">法令注意</span></b>
-        7/15 で3ヶ月無料終了 → 全アカ Story に旧表記残存。<br>▲ 一括更新を工程化 / 発生・確定リンク台帳と連動
+
+      <div class="grow">
+        <div class="lbl"><b>4 キックオフ</b><span class="who">全員 (Owner Badhan) — 認識揃え + 週次サイクルの決め事</span></div>
+        <div class="cell" style="grid-column:6/7"><div class="ms"></div></div>
       </div>
-      <div class="node">
-        <b>アカ資産台帳の破綻 <span class="st st-todo">引継不能</span></b>
-        端末×SIM×メアド×ログインが量産速度に追いつかない。<br>▲ 台帳整備を #1 工程に標準組み込み
+
+      <div class="grow">
+        <div class="lbl"><b>5 v5 情報追加 + 投入テスト</b><span class="who">Tomo・駿冴 — ペルソナ DB → 1体テスト (7/14 通過判定)</span></div>
+        <div class="cell" style="grid-column:3/8"><div class="bar run"></div></div>
       </div>
-      <div class="node">
-        <b>V5 への playbook 投入バグ <span class="st st-todo">立ち上げ遅延</span></b>
-        立ち上げ後は V5 運用のため投入時の不具合が直撃。<br>▲ 投入前テスト・1体で試してから10体展開
+
+      <div class="grow">
+        <div class="lbl"><b>7 アカウント・端末準備</b><span class="who">Badhan・駿冴・Lala — 5アカ/端末 × 14台・API 接続</span></div>
+        <div class="cell" style="grid-column:3/10"><div class="bar off"></div></div>
       </div>
+
+      <div class="grow">
+        <div class="lbl"><b>8b 設計書量産 + コンテンツ生成</b><span class="who">設計 = Badhan 80/早川 20 / 生成 = Oz・早川・Badhan</span></div>
+        <div class="cell" style="grid-column:6/9"><div class="bar off"></div></div>
+      </div>
+
+      <div class="grow">
+        <div class="lbl"><b>投稿開始 — cohort1 + 導線A/B</b><span class="who">全員 — プロフ直行 / キャプション / ハイライトの3形比較</span></div>
+        <div class="cell" style="grid-column:9/10"><div class="ms run"></div></div>
+        <div class="cell" style="grid-column:10/14"><div class="bar cont"></div></div>
+      </div>
+
+      <div class="grow">
+        <div class="lbl"><b>量産週 — cohort2〜 (週50体)</b><span class="who">週次サイクル 12工程で運転 → 7月末 70体</span></div>
+        <div class="cell" style="grid-column:13/14"><div class="bar run"></div></div>
+      </div>
+
+      <div class="grow">
+        <div class="lbl"><b>150体 go 判定</b><span class="who">Badhan・Zach — CVR・打率・API 上限・端末コストの実測</span></div>
+        <div class="cell" style="grid-column:14/15"><div class="ms"></div></div>
+      </div>
+
+    </div></div>
+
+    <div class="legend">
+      <span><i class="sw" style="background:var(--on)"></i>人の実作業</span>
+      <span><i class="sw" style="background:var(--off)"></i>兵站・生成系</span>
+      <span><i class="sw" style="background:var(--run)"></i>v5・量産系</span>
+      <span><i class="sw" style="background:var(--onbg);border:2px solid var(--on)"></i>準備（型・Workspace）</span>
+      <span><i class="sw" style="background:repeating-linear-gradient(45deg,#e2e8f0,#e2e8f0 4px,#f8fafc 4px,#f8fafc 8px);border:1px solid #cbd5e1"></i>外部待ち（審査・配送）</span>
+      <span><i class="sw" style="background:var(--warn);width:12px;height:12px;transform:rotate(45deg)"></i>マイルストーン</span>
     </div>
 
-    <div class="pad" style="padding-bottom:0;padding-top:0"><b>お金の見え方が狂う系</b></div>
-    <div class="grid3">
-      <div class="node">
-        <b>CV ≠ 入金 <span class="st st-todo">下振れ1-2割</span></b>
-        確定報酬は30-60日遅れ + 否認 (即解約・重複却下)。<br>▲ 発生/確定の2本立て計測を最初から
-      </div>
-      <div class="node" style="background:var(--warnbg);border-color:var(--warn)">
-        <b>scale / kill の早撃ち <span class="st st-warn">相関拡大</span></b>
-        n=1 の初速で go → 失敗ごと拡大。薄いデータ kill も同罪。<br>▲ go/kill とも最低データ量を数値で固定
-      </div>
-      <div class="node">
-        <b>CVR が向上しない <span class="st st-todo">根本仮説の棄却</span></b>
-        導線テンプレ + intent 適合でも 2%+ に届かない場合。<br>▲ 2ヶ月実証に撤退線を事前設定 (アングル差し替えへ)
-      </div>
-    </div>
-
-    <div class="pad" style="padding-bottom:0;padding-top:0"><b>構造・プラットフォーム系</b></div>
-    <div class="grid3">
-      <div class="node">
-        <b>アングルの共食い・飽和 <span class="st st-todo">リーチ低下</span></b>
-        同構図 Reels の大量供給 + 当たれば外部模倣。<br>▲ playbook 内テーマずらし + 投稿間隔の分散
-      </div>
-      <div class="node" style="background:var(--warnbg);border-color:var(--warn)">
-        <b>相関 BAN・同時凍結 <span class="st st-warn">10体連鎖</span></b>
-        同 playbook 10体は失敗も10体連動。AI ラベリング再発含む。<br>▲ ラベル付与を生成工程に標準組み込み + 系統分散
-      </div>
-      <div class="node">
-        <b>V5 の容量・レーン競合 <span class="st st-todo">枠が無い</span></b>
-        V5 は改修中 + 2B 優先。150体級の容量は未確認。<br>▲ 投入枠の事前確認 (バグ以前に「入るか」が先)
-      </div>
-    </div>
-
-    <div class="pad" style="padding-bottom:0;padding-top:0"><b>人・組織系</b></div>
-    <div class="grid3">
-      <div class="node" style="background:var(--warnbg);border-color:var(--warn)">
-        <b>早川くん離脱 <span class="st st-warn">#5/#9 停止</span></b>
-        崩れるのは投稿PDCA・判定叩き台と現場知識。<br>▲ 手順の SOP 化 + 集計は Claude 化済み → Badhan/トモ一時吸収
-      </div>
-      <div class="node">
-        <b>AB①型 PDCA との不整合 <span class="st st-todo">変数が割れる</span></b>
-        CV = Theme×Hook×Body×CTA の変数体系と週次判定の突合。<br>▲ 判定 KPI の変数パラメータを AB①型に揃えて設置
-      </div>
-      <div class="node">
-        <b>トモさんの 2B 食い合い <span class="st st-todo">playbook 律速</span></b>
-        playbook 枠が 2B 業務に侵食される。<br>▲ 採用でなく Badhan 設計書比率を下げて再配分
-      </div>
-    </div>
-
-    <div class="pad" style="border-top:1px solid var(--line)">
-      <b>C. Meta API のアカウント数制限 (アプリ層 = BAN と別系統の単一障害点)</b>
-      <span class="def">アプリ凍結 = 全接続アカの同時投稿停止。開発モードはロール保有アカのみ (実質数十体)、本番化後は明示上限よりレート制限とアプリ信頼スコアが実効制限。現アプリのモード・実測接続上限の確認が設計の前提。</span>
-      <table>
-        <thead><tr><th>選択肢</th><th>位置づけ</th><th>評価</th></tr></thead>
-        <tbody>
-          <tr><td class="lever">① 複数アプリへのシャーディング</td><td><span class="st st-run">本命</span></td><td>50-70体/アプリで分散。スケールと凍結リスク対策を同時解決</td></tr>
-          <tr><td class="lever">② 増量申請 (App Review・本番化)</td><td><span class="st st-run">①の前提工程</span></td><td>必須。ただし「1アプリに全量」はやらない</td></tr>
-          <tr><td class="lever">③ 外部投稿ツール</td><td><span class="st st-todo">溢れバッファ</span></td><td>実コスト月 ¥1-2k/acc = 利益の15-30%。TOS リスクあり・つなぎまで</td></tr>
-          <tr><td class="lever">④ 手動投稿</td><td><span class="st st-todo">非常用のみ</span></td><td>人時モデルが崩壊するため不採用。上位アカの障害時 fallback</td></tr>
-        </tbody>
-      </table>
-      <div class="pad" style="padding-left:0;padding-bottom:0">
-        <b>scale go ゲートは4点に拡張:</b>
-        <span class="st st-run">① 通しCVR 3+/100k 実証</span>
-        <span class="st st-run">② 経営裁定の決着</span>
-        <span class="st st-run">③ 端末兵站の値段</span>
-        <span class="st st-warn">④ API 兵站の実測値 (接続上限・本番化・シャーディング設計)</span>
-      </div>
-    </div>
+    <ul class="notes">
+      <li><span class="warn">クリティカルパス = 端末配送と Meta API 審査（1b）。</span>遅延時は cohort1 を既存端末・既存アプリ枠で先に立ち上げ、投稿開始 7/16 を守る。</li>
+      <li>各 Step は最短固定・並行幅優先。遅れた Step は延長でなくスコープ削減で同日着地（スピード優先原則）。</li>
+      <li>「最低限の設計書 10体分」は提案値 — キックオフで月曜から Oz・早川が生成を始められる最小ロット。</li>
+    </ul>
   </div>
 </section>
 
 <footer>
-  正本: <code>~/claude/output/audible-angle-simulation-2026-07-08.md</code> / <code>~/claude/output/audible-ops-resource-design-2026-07-08.md</code> / 前段: <code>acc-unit-economics-design-2026-07-07.md</code> (B案)。
-  作成 2026-07-08 (同日改訂: 3セクション構成) · 内部 ID / 認証情報は除去済み · 単価前提 ¥1,500/CV (7/15 改定後)。
+  作成 2026-07-09 · 正本: Notion「この先2ヶ月間のAI KOL事業の動き設計」カード（計画表 / 障壁決定版 / 週次ワークフロー / タイムライン）· 本ページは今後セクション追加で更新
 </footer>
 
 </body>
