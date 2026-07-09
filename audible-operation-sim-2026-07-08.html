@@ -39,6 +39,12 @@
   .grow.head .hd{padding:1px 0}
   .grow.head .we{background:#f1f5f9;border-radius:3px;color:#94a3b8}
   .grow+.grow:not(.head):not(.lane){border-top:1px dashed #f8fafc}
+  .gantt .grow:not(.head){
+    background-image:repeating-linear-gradient(to right,#e9eef5 0 1px,transparent 1px calc(100%/23));
+    background-size:calc(100% - 240px) 100%;background-position:240px 0;background-repeat:no-repeat}
+  .gantt.aug .grow:not(.head){
+    background-image:repeating-linear-gradient(to right,#e9eef5 0 1px,transparent 1px calc(100%/31))}
+  .gantt .lane{background-image:none}
   .lane{display:block;padding:4px 12px;font-size:11.5px;font-weight:800;letter-spacing:.04em;margin-top:6px;border-radius:6px}
   .lane.mkl{background:var(--warnbg);color:var(--warn)}
   .lane.mgl{background:var(--onbg);color:var(--on)}
@@ -110,7 +116,7 @@
       </div>
       <div class="grow">
         <div class="lbl">投入・判定の節目</div>
-        <div class="cell" style="grid-column:13/14"><div class="ms"></div><div class="mstext">cohort2<br>投入</div></div>
+        <div class="cell" style="grid-column:13/14"><div class="ms"></div><div class="mstext">2週目ロット<br>投入 (50体)</div></div>
         <div class="cell" style="grid-column:17/18"><div class="ms"></div><div class="mstext">週次<br>判定</div></div>
         <div class="cell" style="grid-column:24/25"><div class="ms"></div><div class="mstext">週次<br>判定</div></div>
       </div>
@@ -137,7 +143,8 @@
         <div class="cell" style="grid-column:5/7"><div class="bar mg"></div></div>
       </div>
       <div class="grow">
-        <div class="lbl">週次モニタリング・翌週計画<span class="who">Badhan (定例で全員)</span></div>
+        <div class="lbl">週次モニタリング・翌週計画<span class="who">Badhan (定例で全員) — 7/17 は稼働確認 (投稿反映・API・初速)、判定は 7/24 から</span></div>
+        <div class="cell" style="grid-column:10/11"><div class="bar mg"></div></div>
         <div class="cell" style="grid-column:17/18"><div class="bar mg"></div></div>
         <div class="cell" style="grid-column:24/25"><div class="bar mg"></div></div>
       </div>
