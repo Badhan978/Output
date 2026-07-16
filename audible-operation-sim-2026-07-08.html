@@ -101,37 +101,63 @@
 
 <div class="hero">
   <p class="kicker">AI KOL — Audible 量産オペ</p>
-  <h1>全体設計 — Goal・ワークフロー・ガント・障壁・Action</h1>
-  <p>マイルストーン = 7月 300 CV + 8月 1,350 CV（2ヶ月累計 1,650 CV）。キックオフ = 7/13 (月)・cohort1 投稿開始 = 7/16 (木)。正本は Notion カード「この先2ヶ月間のAI KOL事業の動き設計」。</p>
+  <h1>全体設計 — フェーズ・Goal・ワークフロー・ガント・障壁・Action</h1>
+  <p>マイルストーン = 150体 × 11 CV/月体制の構築。7月 = アングル検証 49 CV → 8月 = 横展開 700 CV → 9月 = 150体 1,500 CV。Phase 0 準備 〜7/21 / Phase 1 検証 〜7/30 / Phase 2 展開準備 8/1〜8/4 / Phase 3 大量展開 8/5〜。正本は Notion カード「Audible 企画」。</p>
 </div>
 
 <nav>
-  <a href="#goal">1. Goal 数値表</a>
-  <a href="#flow">2. 全体ワークフロー</a>
-  <a href="#gantt">3. ガントチャート</a>
-  <a href="#angles">4. 試すアングル</a>
-  <a href="#barriers">5. 障壁決定版</a>
-  <a href="#actions">6. Action Items</a>
+  <a href="#phases">1. フェーズ整理</a>
+  <a href="#goal">2. Goal 数値表</a>
+  <a href="#flow">3. 全体ワークフロー</a>
+  <a href="#gantt">4. ガントチャート</a>
+  <a href="#angles">5. 試すアングル</a>
+  <a href="#barriers">6. 障壁決定版</a>
+  <a href="#actions">7. Action Items</a>
 </nav>
+
+<section id="phases">
+  <div class="card">
+    <h2>1. フェーズ整理 — 全体タイムライン</h2>
+    <div class="note">当たりアングル = Reel view・Story view・CVR が最低値以上(突破ラインは §2 参照)。7/13 キックオフ・7/16 投稿開始は消化済み。</div>
+    <div class="twrap"><table>
+      <thead><tr><th>フェーズ</th><th style="width:110px">期間</th><th>やること</th></tr></thead>
+      <tbody>
+        <tr><td>Phase 0 <span class="tag main">事前準備</span></td><td>〜7/21</td><td>環境セットアップ / 試すアングル10〜15個の決定 / 初期サイクルの設計書・コンテンツ生成 / アカウント準備・プロフセットアップ / 導線の仮説検証を既存アカで(Story 到達率・LC 率)</td></tr>
+        <tr><td>Phase 1 <span class="tag main">仮説検証</span></td><td>〜7/30</td><td>投稿開始(各アカ 5〜7本) / パフォーマンスを見ながら微修正(希望のないアカは微修正せず kill)</td></tr>
+        <tr><td>Phase 2 <span class="tag sub2">大量展開準備</span></td><td>8/1〜8/4</td><td>当たりアングルの横展開用設計+コンテンツ生成(各アングル最低10体) / アカウント・デバイス準備 / 各パイプラインの Playbook 化 / v5 への統合+テスト</td></tr>
+        <tr><td>Phase 3 <span class="tag sub2">大量展開</span></td><td>8/5〜</td><td>確定アングルで横展開 → 9月末 150体体制へ</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
 
 <section id="goal">
   <div class="card">
-    <h2>1. 全体の Goal 数値表</h2>
-    <div class="note">前提レート: Stories閲覧/Imp 3.7% × CTR 2.0% × CV率 1.5% × 単価 ¥1,500 × 生成 ¥645/本・15本/acc。マイルストーン = <b>2ヶ月累計 1,650 CV</b>（7月 300 + 8月 1,350）。</div>
+    <h2>2. 全体の Goal 数値表</h2>
+    <div class="note">前提レート: Stories閲覧/Imp 4.0% × CTR 3.0% × CV率 1.5% × 単価 ¥1,500。生成コスト = ¥755/本(7月実測)→ ¥500/本(8月〜・Hailuo/512p化前提)。Goal = <b>150アカウント × 11 CV/月</b>。</div>
     <div class="twrap"><table>
       <thead><tr><th>月</th><th class="num">アカウント数</th><th class="num">コンテンツ数</th><th class="num">Reel合計Imp</th><th class="num">Stories閲覧数</th><th class="num">LinkClick数</th><th class="num">CV数</th><th class="num">売上合計</th><th class="num">コスト合計</th><th class="num">利益</th></tr></thead>
       <tbody>
-        <tr><td>7月</td><td class="num">70</td><td class="num">1,150</td><td class="num">27,000,000</td><td class="num">1,000,000</td><td class="num">20,000</td><td class="num">300</td><td class="num">¥450,000</td><td class="num">¥741,750</td><td class="num">−¥291,750</td></tr>
-        <tr><td>8月</td><td class="num">150</td><td class="num">2,250</td><td class="num">150,000,000</td><td class="num">5,500,000</td><td class="num">110,000</td><td class="num">1,350</td><td class="num">¥2,025,000</td><td class="num">¥1,451,250</td><td class="num">+¥573,750</td></tr>
-        <tr style="background:#f8fafc;font-weight:700"><td>2ヶ月合計</td><td class="num">—</td><td class="num">3,400</td><td class="num">177,000,000</td><td class="num">6,500,000</td><td class="num">130,000</td><td class="num"><b>1,650</b></td><td class="num">¥2,475,000</td><td class="num">¥2,193,000</td><td class="num">+¥282,000</td></tr>
+        <tr><td>7月</td><td class="num">30〜40(10アングル×2〜3体)</td><td class="num">180(5〜7本/acc)</td><td class="num">2,700,000</td><td class="num">108,000</td><td class="num">3,240</td><td class="num">49</td><td class="num">¥73,500</td><td class="num">¥136,000</td><td class="num">−¥62,500</td></tr>
+        <tr><td>8月</td><td class="num">頭50-80 → 月末100(実効70)</td><td class="num">1,050(15本/acc)</td><td class="num">38,850,000</td><td class="num">1,554,000</td><td class="num">46,620</td><td class="num">700</td><td class="num">¥1,049,000</td><td class="num">¥525,000</td><td class="num">+¥524,000</td></tr>
+        <tr><td>9月</td><td class="num">150</td><td class="num">2,250(15本/acc)</td><td class="num">83,250,000</td><td class="num">3,330,000</td><td class="num">99,900</td><td class="num">1,500</td><td class="num">¥2,248,000</td><td class="num">¥1,125,000</td><td class="num">+¥1,123,000</td></tr>
+        <tr style="background:#f8fafc;font-weight:700"><td>3ヶ月合計</td><td class="num">—</td><td class="num">3,480</td><td class="num">124,800,000</td><td class="num">4,992,000</td><td class="num">149,760</td><td class="num"><b>2,249</b></td><td class="num">¥3,370,500</td><td class="num">¥1,786,000</td><td class="num">+¥1,584,500</td></tr>
       </tbody>
     </table></div>
     <div class="pad" style="border-top:1px solid var(--line)"><b>アカウント単位のバー（/acc・月次）</b></div>
     <div class="twrap"><table>
-      <thead><tr><th>(/acc)</th><th class="num">コンテンツ数</th><th class="num">Reel合計Imp</th><th class="num">Stories閲覧数</th><th class="num">LinkClick数</th><th class="num">CV数</th></tr></thead>
+      <thead><tr><th>(/acc)</th><th class="num">コンテンツ数</th><th class="num">Reel合計Imp</th><th class="num">Stories閲覧数</th><th class="num">LinkClick数</th><th class="num">CV数</th><th class="num">売上</th><th class="num">生成コスト</th><th class="num">粗利</th></tr></thead>
       <tbody>
-        <tr><td>理想値</td><td class="num">15</td><td class="num">1,000,000</td><td class="num">37,000</td><td class="num">740</td><td class="num">11</td></tr>
-        <tr><td>現状値（0223 6月実測）</td><td class="num">20</td><td class="num">630,000</td><td class="num">25,500</td><td class="num">291</td><td class="num">4</td></tr>
+        <tr><td>理想値</td><td class="num">15</td><td class="num">1,000,000</td><td class="num">37,000</td><td class="num">740</td><td class="num">11</td><td class="num">¥15,000(=¥1,500×10)</td><td class="num">¥7,500(=¥500×15本)</td><td class="num">¥7,500</td></tr>
+        <tr><td>現状値（0223 6月実測）</td><td class="num">20</td><td class="num">630,000</td><td class="num">25,500</td><td class="num">291</td><td class="num">4</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+      </tbody>
+    </table></div>
+    <div class="pad" style="border-top:1px solid var(--line)"><b>アングル別 最低突破ライン（生存・横展開ゲート）</b></div>
+    <div class="twrap"><table>
+      <thead><tr><th>(アングル累積 = 2〜3acc 合算)</th><th class="num">Story View</th><th class="num">Link Click</th><th class="num">CV</th></tr></thead>
+      <tbody>
+        <tr><td>最低値</td><td class="num">5,000</td><td class="num">150</td><td class="num">3</td></tr>
+        <tr><td>意味</td><td>LC150 ÷ CTR 3.0%。未満は露出不足で判定不成立</td><td>CV 裁定の発動条件（未満で CV を語らない）</td><td>LC150 時点で ≥3 = 突破・横展開 / 1〜2 = 継続観察 / 0 = kill</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -139,17 +165,17 @@
 
 <section id="flow">
   <div class="card">
-    <h2>2. 全体の週次ワークフロー — 12工程</h2>
+    <h2>3. 全体の週次ワークフロー — 12工程</h2>
     <div class="note">仕込み（#1〜6）と判定（#11〜12）の2レーンを毎週並走。#11〜12 は定例で全員、Owner は Badhan。</div>
     <div class="twrap"><table>
       <thead><tr><th style="width:36px">#</th><th>工程</th><th style="width:320px">担当</th></tr></thead>
       <tbody>
-        <tr><td>1</td><td>端末 Setup</td><td>Badhan・駿冴・Lala</td></tr>
+        <tr><td>1</td><td>端末 Setup</td><td>Badhan・駿冴</td></tr>
         <tr><td>2</td><td>API セット</td><td>駿冴・Lala</td></tr>
         <tr><td>3</td><td>設計書作り</td><td>Badhan (80%)・早川 (20%)</td></tr>
         <tr><td>4</td><td>コンテンツ生成</td><td>Oz・早川・Badhan</td></tr>
         <tr><td>5</td><td>アカウントプロフセット（アフィリンク発行・導線設置を含む）・Reel 投稿 API 接続</td><td>Lala（リンク発行のみ Badhan 固有権限）</td></tr>
-        <tr><td>6</td><td>投稿［Reels = API 経由 / Stories = 手動］</td><td>Stories 手動分 = Badhan・駿冴・Zach?</td></tr>
+        <tr><td>6</td><td>投稿［Reels = API 経由 / Stories = 手動］</td><td>Stories 手動分 = Badhan・駿冴・バイト(タイミー)</td></tr>
         <tr><td>7</td><td>パフォーマンスを見ながら必要に応じてコンテンツ調整</td><td>設計/生成担当者</td></tr>
         <tr><td>8</td><td>Playbook 化</td><td>Tomo</td></tr>
         <tr><td>9</td><td>v5 への統合</td><td>Tomo + 駿冴</td></tr>
@@ -163,12 +189,30 @@
       <li>早川は日次 4〜5時間の稼働 — それに合う作業量のみを割り当てる</li>
       <li>API トークン周りの挙動チェック（認証切れ等）は Lala が週次で実施</li>
     </ul>
+    <div class="pad" style="border-top:1px solid var(--line)"><b>生成キャパ週次試算（7/14）</b></div>
+    <div class="note">前提: 1本 = 実働2h（生成1h + シナリオ確認・修正1h）/ Badhan 6本/日・早川/Oz 各2.5本/日 = チーム約11本/日・55本/週（営業日5日）/ 立ち上げバッチ = 6本/acc、立ち上げ後の15本/月は全量 v5 移管のため人力計算から除外。</div>
+    <div class="twrap"><table>
+      <thead><tr><th>週</th><th>フェーズ</th><th>必要本数/週</th><th>割付（B/早/Oz）</th><th>成否</th></tr></thead>
+      <tbody>
+        <tr><td>7/14-20</td><td>Phase 0: 10アングル×2体・初速3本/acc</td><td>60本</td><td>30/15/15</td><td>○ ギリ成立</td></tr>
+        <tr><td>7/21-27</td><td>Phase 1: 残り3本/acc rolling</td><td>60本</td><td>30/15/15</td><td>○ 同上</td></tr>
+        <tr><td>7/28-8/3</td><td>判定週 + Phase 2 開始（人力は補修・追い生成）</td><td>〜40本</td><td>20/10/10</td><td>○（横展開は v5）</td></tr>
+        <tr><td>8月各週</td><td>Phase 3: 掘り30体/月の立ち上げ</td><td>45本</td><td>25/10/10</td><td>○ 余力〜10本/週</td></tr>
+        <tr><td>9月各週</td><td>新規増分50体を人力の場合</td><td>70本</td><td>35/17/17</td><td>△ 5〜15本/週超過</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="notes">
+      <li>7月は「10アングル×<b>2体</b>」なら一斉並列が成立（120本 ≦ キャパ110〜130本）。3体だと180本 = 18本/日で不成立。2体でもゲートは通る（Story View 試算 7,200 > 最低値5,000）→「×2体」に確定</li>
+      <li>Phase 2 横展開（240〜300本/週）は人力55本/週では埋まらない → <span class="warn">v5 生成が前提。v5 統合の 8/1 完了がクリティカルパス</span></li>
+      <li>9月は微超過 → 新規を40体に抑えるか、掘りの立ち上げにも v5 を部分投入</li>
+      <li>減速ルール: 週60本ペースが崩れた週は「アングル数でなく体数を削る」（判定成立を守る）</li>
+    </ul>
   </div>
 </section>
 
 <section id="gantt">
   <div class="card">
-    <h2>3. ガントチャート — 7月 立ち上げ〜量産（7/9 木 〜 7/31 金）</h2>
+    <h2>4. ガントチャート — 7月 立ち上げ〜検証（7/9 木 〜 7/31 金）</h2>
     <div class="note">キックオフ 7/13 (月) までに最低限の設計書 = <b>10体分（cohort1・提案値）</b>を準備し、月曜から全員が作業を開始できる状態にする。v5 の「ペルソナDB」「競合ポストDB」は最初の3日で片付ける。</div>
     <div class="gwrap"><div class="gantt">
 
@@ -185,10 +229,10 @@
       <div class="grow" style="min-height:44px">
         <div class="cell" style="grid-column:5/6"><div class="ms"></div><div class="mstext">キック<br>オフ</div></div>
         <div class="cell" style="grid-column:8/9"><div class="ms"></div><div class="mstext">投稿<br>開始</div></div>
-        <div class="cell" style="grid-column:23/24"><div class="ms"></div><div class="mstext">70体<br>稼働</div></div>
+        <div class="cell" style="grid-column:23/24"><div class="ms"></div><div class="mstext">Phase 1<br>判定</div></div>
       </div>
       <div class="grow" style="min-height:44px">
-        <div class="cell" style="grid-column:12/13"><div class="ms"></div><div class="mstext">2週目ロット<br>投入 (50体)</div></div>
+        <div class="cell" style="grid-column:12/13"><div class="ms"></div><div class="mstext">Phase 0<br>完了 (7/21)</div></div>
         <div class="cell" style="grid-column:16/17"><div class="ms"></div><div class="mstext">週次<br>判定</div></div>
         <div class="cell" style="grid-column:23/24"><div class="ms"></div><div class="mstext">週次<br>判定</div></div>
       </div>
@@ -215,7 +259,7 @@
         <div class="cell" style="grid-column:8/24"><div class="bt">投稿運用 <span class="w">Reels=API / Stories=手動 (B・駿・Z?)</span></div><div class="bar op cont"></div></div>
       </div>
       <div class="grow">
-        <div class="cell" style="grid-column:3/9"><div class="bt">端末セットアップ・アカ開設 <span class="w">5アカ/端末 × 14台、B・駿・Lala</span></div><div class="bar op"></div></div>
+        <div class="cell" style="grid-column:3/9"><div class="bt">端末セットアップ・アカ開設 <span class="w">5アカ/端末・7月ロット分、B・駿・Lala</span></div><div class="bar op"></div></div>
         <div class="cell" style="grid-column:15/17"><div class="bt">インサイト収集</div><div class="bar op"></div></div>
         <div class="cell" style="grid-column:22/24"><div class="bt">インサイト収集</div><div class="bar op"></div></div>
       </div>
@@ -227,7 +271,7 @@
       <div class="grow">
         <div class="cell" style="grid-column:2/4"><div class="bt">設計書の型づくり</div><div class="bar pr"></div></div>
         <div class="cell" style="grid-column:4/5"><div class="bt">10体分</div><div class="bar pr"></div></div>
-        <div class="cell" style="grid-column:6/11"><div class="bt">設計書量産 (週50体ペース) <span class="w">B80/早20</span></div><div class="bar pr"></div></div>
+        <div class="cell" style="grid-column:6/11"><div class="bt">設計書量産 (週50本ペース) <span class="w">B80/早20</span></div><div class="bar pr"></div></div>
         <div class="cell" style="grid-column:13/18"><div class="bar pr"></div></div>
         <div class="cell" style="grid-column:20/24"><div class="bar pr"></div></div>
       </div>
@@ -272,7 +316,7 @@
 <section>
   <div class="card">
     <h2>ガントチャート — 8月 150体 go 判定〜スケール（8/1 土 〜 8/31 月）</h2>
-    <div class="note">7月の実測（CVR・打率・API 上限・端末コスト）を受けて中身を記入する。レーン構成は7月と同一。</div>
+    <div class="note">7月の実測（CVR・打率・API 上限・端末コスト）を受けて中身を記入する。Phase 2 = 8/1〜8/4 展開準備 / Phase 3 = 8/5〜 大量展開。</div>
     <div class="augwrap">
       <div class="augoverlay"><div class="pill">後から追加</div></div>
       <div class="gwrap"><div class="gantt aug">
@@ -286,19 +330,19 @@
         </div>
 
         <div class="lane mkl">マイルストーン系</div>
-        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">150体 go 判定 ほか</div></div></div>
+        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">8/4 Phase 2 完了 → 8/5 Phase 3 点火 / 150体 go 判定</div></div></div>
 
         <div class="lane mgl">マネジメント系</div>
         <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">週次モニタリング・翌週計画</div></div></div>
 
         <div class="lane opl">ops系</div>
-        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">端末・アカ増設（150体分）/ 投稿運用 / インサイト収集</div></div></div>
+        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">端末・アカ増設（150体へ）/ 投稿運用 / インサイト収集</div></div></div>
 
         <div class="lane prl">制作系（設計書・コンテンツ）</div>
-        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">設計書量産 / コンテンツ生成・調整</div></div></div>
+        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">当たりアングル横展開の設計+生成（各10体〜）— v5 主導</div></div></div>
 
         <div class="lane v5l">v5系</div>
-        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">サイクル分析 / 予測精度調整 / Playbook 追加投入</div></div></div>
+        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">Playbook 化 → v5 統合（〜8/1）→ テスト / 予測精度調整</div></div></div>
 
       </div></div>
     </div>
@@ -307,17 +351,45 @@
 
 <section id="angles">
   <div class="card">
-    <h2>4. 試すアングル — 種・テスト期間・打ち出しスケジュール</h2>
-    <div class="note">選定原理（実測由来）: CV は Imp でなく intent から出る。「コンテンツの続き = Audible」のゼロ距離接続が成立するほど上位。種は随時追記。</div>
+    <h2>5. 試すアングル — 25種（7/14 選定）</h2>
+    <div class="note">選定原理（実測由来）: CV は Imp でなく intent から出る。「コンテンツの続き = Audible」のゼロ距離接続が成立するほど上位。<span class="tag kari">有力</span> = 実測あり or intent 強度・競合空白。7月はここから 10〜12 ロットを選抜。</div>
+    <div class="pad"><b>ペルソナ5人:</b> ①歴史好きの部長（48・通勤電車・実測CV層）/ ②耳活サラリーマン（34・移動多・積読）/ ③ながらワーママ（38・手は塞がるが耳は空く）/ ④怪談ナイトリスナー（26・寝る前朗読習慣）/ ⑤コンサル内定者・1年目（26・必読書不安・自己投資）+ 掘り枠: QOL 自己最適化層</div>
+    <div class="pad" style="padding-top:0"><b>パターン1: Imp型 — 大量露出で Page View を稼ぎ、Story で刈る</b></div>
     <div class="twrap"><table>
-      <thead><tr><th style="width:190px">アングル</th><th>種（ペルソナ × 接続）</th><th style="width:150px">テスト期間</th><th>うまくいった場合の打ち出し</th></tr></thead>
+      <thead><tr><th style="width:36px">#</th><th style="width:260px">アングル</th><th>Story での商材接続</th></tr></thead>
       <tbody>
-        <tr><td>ビジネス書・耳活 <span class="tag main">主軸</span></td><td>積読サラリーマン（28-38・通勤40-60分）。「その積読、耳なら通勤で月3冊」— 要約で興味喚起 → 全編は耳で、の最短導線</td><td>7/16〜31（cohort1）</td><td>8月ロットの主軸に複製（同 playbook 10体上限 → バリアント展開）</td></tr>
-        <tr><td>怪談・朗読 <span class="tag main">対抗</span></td><td>深夜の怪談リスナー（20-40）。音声で物語を聴く習慣が形成済み。「完全版（プロ朗読1時間）を無料で」。江戸の闇の当たり型・資産を転用</td><td>7/16〜31（cohort1）</td><td>耳活型と成績比較 → 8月ロットの配分を決定</td></tr>
-        <tr><td>話題小説・ミステリー <span class="tag sub2">第2波</span></td><td>読書に戻りたい30代女性。ドラマ化・映画化の原作需要。「あの話題作、家事しながら聴けます」</td><td>8月（2週目ロット〜）</td><td>週50体ロットに追加投入</td></tr>
-        <tr><td>朝活・習慣術 <span class="tag sub2">第2波</span></td><td>自己変革願望層（20-30代）。「朝の30分、スマホの代わりに聴く」。耳活の姉妹型で playbook 共用</td><td>8月（2週目ロット〜）</td><td>週50体ロットに追加投入</td></tr>
-        <tr><td>お金・投資リテラシー <span class="tag sub2">第2波</span></td><td>NISA・家計見直し層（25-45）。マネー本要約 → 「通勤中にお金の勉強」。金融系高単価案件へのミックス布石</td><td>8月（2週目ロット〜）</td><td>追加投入 + 商材単価ミックス検証</td></tr>
-        <tr><td>歴史・時代小説 <span class="tag cont2">継続</span></td><td>現行江戸クラスタ（0223/0193）。唯一 CV 実績のある接続 — baseline として維持</td><td>継続中</td><td>導線改修 + Story 20日化で設計値到達を実証（CTR 検証の母艦）</td></tr>
+        <tr><td>1</td><td>江戸雑学 <span class="tag kari">有力・実測CV5</span></td><td>「今日の話の元ネタ本、聴けます」</td></tr>
+        <tr><td>2</td><td>戦国・幕末の武将雑学</td><td>歴史解説・歴史小説</td></tr>
+        <tr><td>3</td><td>世界史ミステリー（未解決・陰謀）</td><td>歴史ノンフィクション</td></tr>
+        <tr><td>4</td><td>事件・犯罪ノンフィク解説</td><td>ルポ・ノンフィク</td></tr>
+        <tr><td>5</td><td>怪談・実話怖い話 <span class="tag kari">有力</span></td><td>怪談朗読（長尺・広告なし版）</td></tr>
+        <tr><td>6</td><td>都市伝説・オカルト考察</td><td>オカルト・超常本</td></tr>
+        <tr><td>7</td><td>心理学・人間観察ネタ（「こういう人は○○」）</td><td>心理学書</td></tr>
+        <tr><td>8</td><td>お金の雑学（年収・税金・値上げニュース）</td><td>マネー本</td></tr>
+        <tr><td>9</td><td>偉人の逸話・名言</td><td>自伝・自己啓発</td></tr>
+        <tr><td>10</td><td>昭和・平成ノスタルジー雑学</td><td>エッセイ・時代小説</td></tr>
+        <tr><td>11</td><td>名作小説のあらすじ・考察 <span class="tag kari">有力</span></td><td>試し聴きフック「買う前に冒頭を無料で」</td></tr>
+        <tr><td>12</td><td>雑学総合（「知らないと損」系）</td><td>雑学・教養本</td></tr>
+        <tr><td>—</td><td>今話題のニュース系（Imp が10倍級で取れないと不成立 — 慎重に）</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <div class="pad"><b>パターン2: ペイン型 — 刺してそのまま CV</b></div>
+    <div class="twrap"><table>
+      <thead><tr><th style="width:36px">#</th><th style="width:260px">アングル（ペイン）</th><th>対応ペルソナ</th></tr></thead>
+      <tbody>
+        <tr><td>13</td><td>耳活で読書量10倍（時間がない） <span class="tag kari">有力</span></td><td>耳活サラリーマン</td></tr>
+        <tr><td>14</td><td>コンサル/ハイキャリア新卒の必読書（入社前不安） <span class="tag kari">有力</span></td><td>コンサル内定者・1年目</td></tr>
+        <tr><td>15</td><td>「本が読めなくなった大人」（スマホで集中力が死んだ）</td><td>30〜40代全般</td></tr>
+        <tr><td>16</td><td>積読解消（「積んでる本、耳なら終わる」）</td><td>耳活サラリーマン変形</td></tr>
+        <tr><td>17</td><td>家事育児で手が塞がる（ながら読書） <span class="tag kari">有力</span></td><td>ながらワーママ</td></tr>
+        <tr><td>18</td><td>寝れない夜の入眠朗読（睡眠ペイン）</td><td>怪談層の裏面・広い</td></tr>
+        <tr><td>19</td><td>英語・語学の多聴（勉強が続かない）</td><td>学び直し層</td></tr>
+        <tr><td>20</td><td>資格勉強のスキマ時間（机に向かえない）</td><td>学び直し層</td></tr>
+        <tr><td>21</td><td>QOL 自己最適化（通勤をアップグレード）</td><td>QOL 層（掘り枠）</td></tr>
+        <tr><td>22</td><td>運転時間が長い（営業車・地方通勤） <span class="tag kari">有力</span></td><td>空白層 — IG 上ほぼ無競合の疑い</td></tr>
+        <tr><td>23</td><td>筋トレ・ランニング中の学び</td><td>QOL 隣接</td></tr>
+        <tr><td>24</td><td>老眼・目の疲れで読めない（50〜60代の読書回帰）</td><td>歴史部長の上位年齢帯</td></tr>
+        <tr><td>25</td><td>読み聞かせ・子育て（子ども向け朗読）</td><td>ワーママ変形</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -325,9 +397,9 @@
 
 <section id="barriers">
   <div class="card">
-    <h2>5. 障壁決定版</h2>
-    <div class="note">5-1 は解決策を反映済み（2026-07-10 時点）。5-2・5-3 は対応策・防止策が記入中（正本 = Notion 障壁決定版トグル）。埋まり次第このページに反映。</div>
-    <div class="pad" style="padding-bottom:4px"><b>5-1. 走る前に先に解くべき課題点</b></div>
+    <h2>6. 障壁決定版</h2>
+    <div class="note">5-1 = 解決済み（7/10 反映）。5-2 = 現在オープンの課題（7/14）。5-3 = 起こりうる問題点（実測ベース）。5-4 = 計画棄却リスク。正本 = Notion「Audible 企画」カード。</div>
+    <div class="pad" style="padding-bottom:4px"><b>5-1. 解決済み — 走る前に解いた課題</b></div>
     <div class="twrap"><table>
       <thead><tr><th>項目</th><th style="width:45%">解決策</th></tr></thead>
       <tbody>
@@ -344,17 +416,31 @@
         <tr><td>インサイト収集の自動化リサーチ（駿冴進行中。無いと工数コスト大）</td><td>駿冴進行中</td></tr>
       </tbody>
     </table></div>
-    <div class="pad" style="padding-bottom:4px;border-top:1px solid var(--line)"><b>5-2. 起こりうるリスク</b></div>
+    <div class="pad" style="padding-bottom:4px;border-top:1px solid var(--line)"><b>5-2. 事前に詰めるべき課題（オープン・7/14）</b></div>
     <div class="twrap"><table>
-      <thead><tr><th>問題</th><th style="width:32%">対応策</th><th style="width:26%">昇格ライン（5-3へ）</th></tr></thead>
+      <thead><tr><th>課題</th><th style="width:55%">状況・方針</th></tr></thead>
       <tbody>
-        <tr><td>Imp が理想値（1M/acc = 平均66.7k/本）に届かない</td><td></td><td></td></tr>
-        <tr><td>打率33%の下振れ</td><td></td><td></td></tr>
-        <tr><td>人のパフォーマンス低下</td><td></td><td></td></tr>
-        <tr><td>垢 Ban が大量</td><td></td><td></td></tr>
+        <tr><td>導線テンプレの最終仕様</td><td>エンタメ層: Reel→Story→CV / ペイン解決層: Reel→Highlights 誘導→CV</td></tr>
+        <tr><td>API 上限対策</td><td>駿冴が調査中</td></tr>
+        <tr><td>Story 手動投稿の体制</td><td>Link 付きは手動投稿必須。Claude 操作不可なら Lala・インターン・Badhan・駿冴で分担</td></tr>
+        <tr><td>生成単価削減（¥755→¥500）</td><td>Hailuo・512p 化。担当未定 — Phase 3 のコスト前提。新規は可、既存江戸系の下げ方は模索中</td></tr>
+        <tr><td>各自の週次 KPI 割付</td><td>設計書 30〜50個/週 — リファアカのみ人が用意し Claude 生成 + Review 方式</td></tr>
       </tbody>
     </table></div>
-    <div class="pad" style="padding-bottom:4px;border-top:1px solid var(--line)"><b>5-3. この計画自体が棄却されうるリスク</b></div>
+    <div class="pad" style="padding-bottom:4px;border-top:1px solid var(--line)"><b>5-3. 起こりうる問題点（実測ベース）</b></div>
+    <div class="twrap"><table>
+      <thead><tr><th>問題</th><th style="width:55%">中身・対応</th></tr></thead>
+      <tbody>
+        <tr><td>CTR 3.0% 未達</td><td>実測 1.14% — Imp を引き上げるアングルに軸足を置く</td></tr>
+        <tr><td>CV率 1.5% 未達</td><td>実測最高 1.02〜1.37% — 未達なら acc あたり 7 CV 止まり</td></tr>
+        <tr><td>BAN・凍結</td><td>連鎖 BAN 実績（6/19）・AI 生成ラベリング要件未決着（6/15 凍結）。1端末1アカ徹底でも新規30体一斉は検知リスク</td></tr>
+        <tr><td>新規 acc の初速不足</td><td>view 15k/本が出ないとロット判定自体が不成立 → アングル確定が後ろ倒し・Phase 3 点火遅延</td></tr>
+        <tr><td>リトライ課金の上振れ</td><td>実請求 = 理論値 +25%（7月監査実測）。コスト計画に未算入</td></tr>
+        <tr><td>報酬単価の再下落</td><td>2,000→1,500 に続く引き下げリスク。単価依存の収益構造</td></tr>
+        <tr><td>V2 コミットとのギャップ</td><td>2ヶ月 CV 1,300 vs 本計画 7+8月 約750 → 8/5 定例前に期間読み替えの合意形成が必要</td></tr>
+      </tbody>
+    </table></div>
+    <div class="pad" style="padding-bottom:4px;border-top:1px solid var(--line)"><b>5-4. この計画自体が棄却されうるリスク</b></div>
     <div class="twrap"><table>
       <thead><tr><th>失敗要因</th><th style="width:32%">防止策</th><th style="width:26%">起きた時の対応</th></tr></thead>
       <tbody>
@@ -370,29 +456,23 @@
 
 <section id="actions">
   <div class="card">
-    <h2>6. Action Items — 走り出す前のやること</h2>
-    <div class="note">期限はガントと同期。並行ルール: Step 1・1b・2・3 は同時並行 / Step 5 と 6・7 も並行。</div>
+    <h2>7. Action Items — Phase 0 残タスク（〜7/21）</h2>
+    <div class="note">7/13 キックオフ・7/16 投稿開始は消化済み。以下 = Phase 0 完了までの残り。</div>
     <div class="twrap"><table>
-      <thead><tr><th style="width:70px">Step</th><th>やること</th><th style="width:220px">担当</th><th style="width:110px">期限</th></tr></thead>
+      <thead><tr><th>やること</th><th style="width:220px">担当</th><th style="width:110px">期限</th></tr></thead>
       <tbody>
-        <tr><td>1b</td><td>外部発射: Meta API 本番化申請 / ASP 事前照会 / 端末発注</td><td>Badhan・駿冴</td><td>7/9（即日）</td></tr>
-        <tr><td>1</td><td>課題潰し・対策準備（障壁決定版の解決策埋め・フォロワー非依存導線含む）</td><td>Badhan</td><td>7/10</td></tr>
-        <tr><td>2</td><td>アングル決定・市場分析（70体構成 → 参照アカ収集 → マッピング）</td><td>Badhan（分析は Claude）</td><td>7/11</td></tr>
-        <tr><td>6</td><td>設計書の型づくり（勝ち型テンプレ + レビュー基準）</td><td>Badhan</td><td>7/11</td></tr>
-        <tr><td>3</td><td>成果物の型・Workspace 構築 → 伝達・お試しテスト</td><td>Badhan → 全員</td><td>7/12</td></tr>
-        <tr><td>8a</td><td>最低限の設計書 10体分（cohort1）</td><td>Badhan</td><td>7/12</td></tr>
-        <tr><td>4</td><td>キックオフ: 認識揃え + 週次サイクルの決め事（誰が何曜までに何を）</td><td>全員（Owner Badhan）</td><td>7/13（月）</td></tr>
-        <tr><td>5</td><td>v5 情報追加（ペルソナ DB 等）+ 1体投入テスト（無駄 API 費用の検証含む）</td><td>Tomo・駿冴</td><td>7/14</td></tr>
-        <tr><td>8b</td><td>設計書量産 + コンテンツ生成（cohort1 分）</td><td>Badhan・早川・Oz</td><td>7/15</td></tr>
-        <tr><td>7</td><td>アカウント・端末準備（5アカ/端末 × 14台・API 接続・導線設置）</td><td>Badhan・駿冴・Lala</td><td>7/16</td></tr>
-        <tr><td>—</td><td>投稿開始（cohort1 + 導線 A/B 3形）→ 週次サイクルへ移行</td><td>全員</td><td>7/16（木）</td></tr>
+        <tr><td>アングルロット確定（25種から 10アングル×2体を選抜）</td><td>Badhan</td><td>〜7/21</td></tr>
+        <tr><td>初期サイクルの設計書・コンテンツ生成（60本/週ペース維持）</td><td>Badhan・早川・Oz</td><td>7/14-20 週</td></tr>
+        <tr><td>アカウント準備・プロフセットアップ・導線設置</td><td>Lala（リンク発行は Badhan）</td><td>〜7/21</td></tr>
+        <tr><td>導線の仮説検証を既存アカで（Story 到達率・LC 率）</td><td>Badhan</td><td>〜7/21</td></tr>
+        <tr><td>オープン課題 5件（5-2）の担当・期限切り</td><td>Badhan</td><td>〜7/21</td></tr>
       </tbody>
     </table></div>
   </div>
 </section>
 
 <footer>
-  作成 2026-07-09 · 更新 2026-07-10（障壁決定版 5-1 解決策を反映）· 正本: Notion「この先2ヶ月間のAI KOL事業の動き設計」カード（計画表 / 障壁決定版 / 週次ワークフロー / タイムライン）· 5-2/5-3 の対応策・防止策・8月ガントは追記予定
+  作成 2026-07-09 · 更新 2026-07-16（Notion「Audible 企画」7/14 計画を反映 — KPI 3ヶ月化・フェーズ整理・アングル25種・生成キャパ試算・障壁更新）· 正本: Notion「Audible 企画」カード
 </footer>
 
 </body>
