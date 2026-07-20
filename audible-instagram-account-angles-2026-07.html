@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audible IG アングル10案 — 2026-07</title>
+<style>
+  :root{
+    --bg:#ffffff; --card:#ffffff; --ink:#1a1a1a; --sub:#6b6b6b;
+    --line:#dcdcd8; --accent:#0f62fe;
+    --run:#0e8345; --runbg:#e6f4ec;
+    --lab:#0f62fe; --labbg:#eef4ff;
+    --build:#b45309; --buildbg:#fdf3e3;
+    --wait:#6b6b6b; --waitbg:#f1f1ee;
+    --risk:#b42318; --riskbg:#fdecea;
+    --apexbg:#101828;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",sans-serif;
+       padding:36px 20px;line-height:1.6}
+  .wrap{max-width:980px;margin:0 auto}
+  h1{font-size:20px;font-weight:700;margin-bottom:4px}
+  .date{font-size:12px;color:var(--sub);margin-bottom:6px}
+  .principle{font-size:13px;background:var(--waitbg);border:1px solid var(--line);
+             border-radius:10px;padding:10px 16px;margin:14px 0 22px}
+  .principle b{color:var(--accent)}
+
+  h2{font-size:16px;font-weight:700;margin:34px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+  h2 small{font-weight:400;font-size:12px;color:var(--sub);margin-left:8px}
+
+  /* 選定ロジック */
+  .logic{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+  .logic .box{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;font-size:12.5px}
+  .logic .box b{display:block;font-size:13px;margin-bottom:6px;color:var(--accent)}
+
+  /* ファネル前提 */
+  .funnel{background:var(--apexbg);color:#fff;border-radius:14px;padding:16px 22px;margin:14px 0 4px;
+          display:flex;flex-wrap:wrap;gap:10px 26px;align-items:center;font-size:12.5px}
+  .funnel .f{opacity:.9}
+  .funnel .f b{display:block;font-size:16px;font-weight:700}
+  .funnel .arrow{opacity:.4}
+  .gate{font-size:12px;color:var(--sub);margin:8px 0 0}
+  .gate b{color:var(--ink)}
+
+  /* アングルカード */
+  .angles{display:flex;flex-direction:column;gap:16px;margin-top:14px}
+  .angle{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:18px 22px}
+  .angle.hon{border-color:var(--run)}
+  .angle.tai{border-color:var(--lab)}
+  .angle.ana{border-color:var(--build)}
+  .ahead{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:6px}
+  .anum{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.08em}
+  .angle h3{font-size:15.5px;font-weight:700}
+  .tier{display:inline-block;font-size:11px;font-weight:700;border-radius:20px;padding:3px 11px;margin-left:auto}
+  .t-hon{background:var(--runbg);color:var(--run)}
+  .t-tai{background:var(--labbg);color:var(--lab)}
+  .t-ana{background:var(--buildbg);color:var(--build)}
+  .persona{font-size:12.5px;color:var(--sub);margin-bottom:10px}
+  .persona b{color:var(--ink);font-weight:600}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;font-size:12.5px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+  .grid2 .cell b{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--sub);margin-bottom:2px}
+  .neta{margin-top:10px;font-size:12.5px;background:var(--waitbg);border-radius:10px;padding:9px 14px}
+  .neta b{font-size:11px;letter-spacing:.06em;color:var(--sub)}
+  .why{margin-top:8px;font-size:12px}
+  .why .plus{color:var(--run);font-weight:600}
+  .why .minus{color:var(--risk);font-weight:600}
+
+  /* ポートフォリオ表 */
+  table{border-collapse:collapse;width:100%;font-size:12.5px;margin-top:10px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--waitbg);font-size:11.5px;letter-spacing:.04em}
+  td.c,th.c{text-align:center}
+
+  .foot{margin-top:28px;font-size:12px;color:var(--sub);border-top:1px solid var(--line);padding-top:14px}
+  .foot li{margin:4px 0 4px 18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Audible 企画 — 新規IGアカウント アングル10案</h1>
+  <div class="date">2026-07-20 作成 · AI KOL BU · Phase 0「試すアングル10〜15個の決定」対応 · 前提資料: audible-operation-sim-2026-07-08 / toc-category-strategy-2026-07</div>
+  <div class="principle">選定思想 = ゼロ発想ではなく<b>実証済みパターンからの距離で選ぶ</b>。6月実測で 教育系(Audible×書籍) が CV/10万Imp <b>11.84</b>（エンタメの50倍）・PFV率23%で全段勝ちしており、10案は「① 実証型のバリエーション ② 保存されるリスト型 ③ Audibleの利用文脈（ながら聴き）に刺さる」の3条件で構成。</div>
+
+  <h2>ファネル前提と生存ゲート<small>全アングル共通・オペ設計書の値</small></h2>
+  <div class="funnel">
+    <div class="f"><b>Reel Imp</b>母集団獲得</div><div class="arrow">→</div>
+    <div class="f"><b>Stories 4.0%</b>閲覧/Imp</div><div class="arrow">→</div>
+    <div class="f"><b>LinkClick 3.0%</b>CTR</div><div class="arrow">→</div>
+    <div class="f"><b>CV 1.5%</b>無料体験登録</div><div class="arrow">→</div>
+    <div class="f"><b>¥1,500</b>/CV</div>
+  </div>
+  <div class="gate">生存ゲート（アングル累積・2acc合算）: Story View <b>5,000</b> → LC <b>150</b> → CV <b>≥3</b> で突破・横展開 / 1〜2 = 継続観察 / 0 = kill。CVはLC150到達まで語らない。</div>
+
+  <h2>選定ロジック — 3つの必須条件</h2>
+  <div class="logic">
+    <div class="box"><b>① 実証型との距離が近い</b>関西型（書籍紹介×教育）の構成・Hook・CTAを流用できること。ゼロから型を発明するアングルは7月には持ち込まない。</div>
+    <div class="box"><b>② 保存されるリスト型に落ちる</b>Saves/1k ≥2.0 がCVと相関（ゆうた1.91・宮2 2.43）。全アングル「保存版・◯選」フォーマットに変換可能なこと。</div>
+    <div class="box"><b>③ Audibleの利用文脈と一致</b>CVは「本に興味がある」ではなく「<b>耳が空いている時間がある</b>」人が踏む。通勤・家事・寝る前・運動などの「ながら文脈」を持つターゲットを優先。</div>
+  </div>
+
+  <h2>アングル10案<small>本命4 / 対抗4 / 大穴2 — 各アングル×2体で展開</small></h2>
+  <div class="angles">
+
+    <div class="angle hon">
+      <div class="ahead"><span class="anum">#01</span><h3>ビジネス書 3分要約 — 「読まずに要点だけ」</h3><span class="tier t-hon">本命（関西型クローン）</span></div>
+      <div class="persona">ペルソナ案: <b>20代後半・若手コンサル風の男性KOL</b>。標準語・ロジカル・スーツ。関西型の直系クローンを別ペルソナ×別地域感で。</div>
+      <div class="grid2">
+        <div class="cell"><b>REEL HOOK型</b>「『7つの習慣』、実は1つしか要らない」— 有名書の常識を1点否定して要点3つで回収</div>
+        <div class="cell"><b>CVロジック</b>「全部読む時間はないよね→通勤で聴けば月4冊」。要約で興味を作り、読了ハードルの解決策としてAudibleを置く</div>
+        <div class="cell"><b>STORY CTA</b>「今月聴いた5冊+Audible対象リスト（保存版）」→ リンク</div>
+        <div class="cell"><b>ネタ例</b>①エッセンシャル思考は結局1行 ②イシューからはじめよ・上司に怒られない技術 ③金持ち父さんの嘘と本当</div>
+      </div>
+      <div class="why"><span class="plus">強み:</span> 実証済み型に最も近く、Audible対象タイトルが最多のジャンル。<span class="minus">リスク:</span> 競合最多。ペルソナの顔と語りの差別化が生命線。</div>
+    </div>
+
+    <div class="angle hon">
+      <div class="ahead"><span class="anum">#02</span><h3>積読・読書コンプレックス — 「本が読めない人」の味方</h3><span class="tier t-hon">本命（共感→解決直結）</span></div>
+      <div class="persona">ペルソナ案: <b>27歳・普通の会社員女性KOL</b>。「昔から読書が続かない側」を公言。優等生ではなく等身大。</div>
+      <div class="grid2">
+        <div class="cell"><b>REEL HOOK型</b>「本買って満足して終わる人、集合」— 積読あるある共感 → 「読むのをやめたら年50冊いけた」</div>
+        <div class="cell"><b>CVロジック</b>共感の受け皿が製品そのもの（読めない→聴けばいい）。10案中、悩みと商材の距離が最短</div>
+        <div class="cell"><b>STORY CTA</b>「読書挫折した私が完走できた10冊（保存版）」→ 無料体験リンク</div>
+        <div class="cell"><b>ネタ例</b>①積読が消える3ルール ②活字ダメでも頭に入る「聴く読書」の使い方 ③読書家に見える人が裏でやってること</div>
+      </div>
+      <div class="why"><span class="plus">強み:</span> 訴求＝Audible公式の主戦場で、CVR最上位が狙える。<span class="minus">リスク:</span> 母数（Imp）が要約系より出にくい可能性 → Hookをあるある系に寄せて補う。</div>
+    </div>
+
+    <div class="angle hon">
+      <div class="ahead"><span class="anum">#03</span><h3>通勤1時間を年収に変える — サラリーマン時間術</h3><span class="tier t-hon">本命（ながら文脈ど真ん中）</span></div>
+      <div class="persona">ペルソナ案: <b>30代前半・営業職男性KOL</b>。満員電車・車通勤の描写を多用。「通勤×自己投資」だけを語る単一テーマacc。</div>
+      <div class="grid2">
+        <div class="cell"><b>REEL HOOK型</b>「通勤1時間×年240日 = 240時間。これを捨ててる人が年収で負ける」— 損失数値で殴るHook</div>
+        <div class="cell"><b>CVロジック</b>「耳が空いている時間」を最初から持っている層だけを集める設計。CTA文脈が自然（今の通勤から使える）</div>
+        <div class="cell"><b>STORY CTA</b>「通勤用に最適な"1.5倍速で聴ける"ビジネス書7選」→ リンク</div>
+        <div class="cell"><b>ネタ例</b>①通勤で聴くだけで会議で一目置かれる本3冊 ②スマホゲーやめた同期との3年後 ③車通勤は最強の書斎</div>
+      </div>
+      <div class="why"><span class="plus">強み:</span> 選定条件③の最純度。平日朝夜に投稿時間を固定でき、Storyの生活導線も作りやすい。<span class="minus">リスク:</span> 説教臭くなるとPFVが落ちる → 自虐・共感を混ぜる。</div>
+    </div>
+
+    <div class="angle hon">
+      <div class="ahead"><span class="anum">#04</span><h3>家事ながら学びママ — 「手が塞がってる、耳は空いてる」</h3><span class="tier t-hon">本命（生活系実証との融合）</span></div>
+      <div class="persona">ペルソナ案: <b>30代・ワーママKOL</b>。生活系（宮・ゆうた）の「生活の金と手間を減らす」ドメインの語り口を書籍・学びに転用。</div>
+      <div class="grid2">
+        <div class="cell"><b>REEL HOOK型</b>「皿洗い15分で1章終わる。ママの勉強時間は作るものじゃなく"重ねる"もの」</div>
+        <div class="cell"><b>CVロジック</b>可処分時間ゼロ層に「時間を新規に作らない」解を提示。子育て書・お金の本・小説の3面で訴求</div>
+        <div class="cell"><b>STORY CTA</b>「家事中に聴ける・子育てがラクになる本8選（保存版）」→ リンク</div>
+        <div class="cell"><b>ネタ例</b>①寝かしつけ後の30分の使い方 ②「モンテッソーリ」聴いて子への声かけが変わった ③家計の本を聴いてから固定費−2万</div>
+      </div>
+      <div class="why"><span class="plus">強み:</span> 生活系のCTR 4.77%実証層と同一クラスタ。保存率が構造的に高い。<span class="minus">リスク:</span> AI生成の子供描写は炎上リスク → 子供は映さず手元・家事描写のみで構成。</div>
+    </div>
+
+    <div class="angle tai">
+      <div class="ahead"><span class="anum">#05</span><h3>眠れない夜の朗読・睡眠導入</h3><span class="tier t-tai">対抗（夜帯の独占）</span></div>
+      <div class="persona">ペルソナ案: <b>低音ボイスの男性 or 落ち着いた女性KOL</b>。夜22時以降に投稿固定。画は暗め・雨音・間接照明。</div>
+      <div class="grid2">
+        <div class="cell"><b>REEL HOOK型</b>「スマホ見ながら寝落ちできないの、光のせいです」— 睡眠雑学 → 「目を閉じて聴く」提案</div>
+        <div class="cell"><b>CVロジック</b>Audibleのスリープタイマー・小説/エッセイ朗読という機能訴求が唯一無二。競合がYouTube睡眠系に偏っておりIGは空白</div>
+        <div class="cell"><b>STORY CTA</b>「寝落ち用に最高だった朗読5選（タイマー設定法つき）」→ リンク</div>
+        <div class="cell"><b>ネタ例</b>①寝る前の脳に効く音の話 ②「星の王子さま」朗読で泣いた夜 ③平日を回復させる日曜夜のルーティン</div>
+      </div>
+      <div class="why"><span class="plus">強み:</span> 利用シーンが毎日発生し、LTV文脈も強い。夜帯はフィード競合が緩い。<span class="minus">リスク:</span> 「静かなコンテンツ」はImp初速が読めない → Hookは雑学で立てて後半を静かに。</div>
+    </div>
+
+    <div class="angle tai">
+      <div class="ahead"><span class="anum">#06</span><h3>闇の心理学・人間関係の裏側 → 心理本へ送客</h3><span class="tier t-tai">対抗（恐怖フック実証の書籍転用）</span></div>
+      <div class="persona">ペルソナ案: <b>ミステリアスな語り手KOL</b>。アレックスで実証済みの「恐怖フック×保存」構造を、食の安全→心理学に載せ替え。</div>
+      <div class="grid2">
+        <div class="cell"><b>REEL HOOK型</b>「あなたを操ってる人がやってる3つのサイン」— 恐怖・防衛本能Hook → 出典は心理学書</div>
+        <div class="cell"><b>CVロジック</b>恐怖でViewを取り、「詳しくは本1冊分ある→聴けば2時間」で転換。エンタメのImp力と教育のCVRのハイブリッド</div>
+        <div class="cell"><b>STORY CTA</b>「人間関係で消耗しない心理学の本6選（保存版）」→ リンク</div>
+        <div class="cell"><b>ネタ例</b>①「影響力の武器」悪用パターン3つ ②サイコパスの職場での見分け方 ③謝らない人の頭の中</div>
+      </div>
+      <div class="why"><span class="plus">強み:</span> 当たり構造（恐怖→保存→プロフ）が既に社内実証済み。Imp上限が教育系より高い。<span class="minus">リスク:</span> 煽り過ぎると書籍文脈が飛びエンタメ化（=リンクを踏まない層化）→ 毎本必ず出典書名で締める型を固定。</div>
+    </div>
+
+    <div class="angle tai">
+      <div class="ahead"><span class="anum">#07</span><h3>人生変えた1冊 Before/After — 自己啓発ストーリー</h3><span class="tier t-tai">対抗（物語型CVR）</span></div>
+      <div class="persona">ペルソナ案: <b>20代半ば・元どん底系KOL</b>（借金/無気力/転職失敗など1軸を固定）。1冊×1変化の物語を連載形式で。</div>
+      <div class="grid2">
+        <div class="cell"><b>REEL HOOK型</b>「貯金3万だった俺を変えた、たった1冊」— Before描写→書籍→Afterの30秒ナラティブ</div>
+        <div class="cell"><b>CVロジック</b>「この本を今すぐ摂取したい」という単一書籍への強い欲求を作り、最速手段としてAudible（DL即・通勤で今日から）を提示</div>
+        <div class="cell"><b>STORY CTA</b>「俺を変えた順に並べた7冊（時系列保存版）」→ リンク</div>
+        <div class="cell"><b>ネタ例</b>①「嫌われる勇気」で辞めた3つの習慣 ②「DIE WITH ZERO」で貯金観が壊れた日 ③夢をかなえるゾウを笑ってた頃の自分へ</div>
+      </div>
+      <div class="why"><span class="plus">強み:</span> 視聴維持が長いナラティブ構造（エンタメ系28〜31s実証と同型）で、かつ書籍が主役。<span class="minus">リスク:</span> ペルソナの一貫した過去設定が必要 → 設計書で人生年表を先に固定。</div>
+    </div>
+
+    <div class="angle tai">
+      <div class="ahead"><span class="anum">#08</span><h3>英語は耳から — 洋書・英語学習リスニング</h3><span class="tier t-tai">対抗（学習投資層）</span></div>
+      <div class="persona">ペルソナ案: <b>帰国子女ではない「独学でTOEIC900」系KOL</b>。挫折経験ベースで語る、意識高すぎない学習acc。</div>
+      <div class="grid2">
+        <div class="cell"><b>REEL HOOK型</b>「英語聞き流し、9割が無駄になってるやり方してる」— 常識否定 → 正しい多聴の条件</div>
+        <div class="cell"><b>CVロジック</b>学習目的層は無料体験CVRが構造的に高い（自己投資に金を出す前提の層）。洋書×日本語書の二段訴求が可能</div>
+        <div class="cell"><b>STORY CTA</b>「レベル別・挫折しない洋書オーディオブック6選」→ リンク</div>
+        <div class="cell"><b>ネタ例</b>①中学英語で聴ける洋書3冊 ②「シャドーイング用に最強」の速度設定 ③単語帳を捨てた日からが本番</div>
+      </div>
+      <div class="why"><span class="plus">強み:</span> 「聴く」が学習法そのもので製品文脈が完全一致。保存率が高いジャンル。<span class="minus">リスク:</span> 英語学習IGは競合が厚い → 「洋書多聴」への一点特化で差別化。</div>
+    </div>
+
+    <div class="angle ana">
+      <div class="ahead"><span class="anum">#09</span><h3>ネタバレ寸止め小説・ミステリー紹介</h3><span class="tier t-ana">大穴（エンタメImp×小説CV）</span></div>
+      <div class="persona">ペルソナ案: <b>ミステリーオタク女性KOL</b>。「犯人は言わない」を徹底する語り部。考察系の空気感。</div>
+      <div class="grid2">
+        <div class="cell"><b>REEL HOOK型</b>「最後の1行で全部ひっくり返る小説、これです」— 冒頭のどんでん返し予告→あらすじを核心手前で切る</div>
+        <div class="cell"><b>CVロジック</b>「続きが気になる」の解消先をAudibleに設定（今夜から聴ける）。衝動性が最も高い転換設計</div>
+        <div class="cell"><b>STORY CTA</b>「眠れなくなるミステリー、朗読が神な5作」→ リンク</div>
+        <div class="cell"><b>ネタ例</b>①イヤミスで胃を痛めたい人へ ②「このセリフ、2回目に読むと意味が変わる」③声優朗読で化ける小説ランキング</div>
+      </div>
+      <div class="why"><span class="plus">強み:</span> エンタメ級のフック強度を持ちながら商材が主役。小説はAudible制作が厚い領域。<span class="minus">リスク:</span> ネタバレ配慮の脚本難度が高く量産効率が未知 → 2体でなく1体+様子見も可。</div>
+    </div>
+
+    <div class="angle ana">
+      <div class="ahead"><span class="anum">#10</span><h3>歴史・偉人の意外な裏話 → 歴史書へ送客</h3><span class="tier t-ana">大穴（江戸系Imp実証の受け皿内製）</span></div>
+      <div class="persona">ペルソナ案: <b>歴史好きの若い語り手KOL</b>。江戸系エンタメ（108k PV/月実証）の視聴層と同文脈で、書籍CTAまでを1accで完結させる版。</div>
+      <div class="grid2">
+        <div class="cell"><b>REEL HOOK型</b>「織田信長、実は◯◯だった説が教科書から消えた理由」— 教科書と違う系Hook</div>
+        <div class="cell"><b>CVロジック</b>送客設計「江戸系→関西の歴史書10選」で検証中のルートを、最初から1acc内に実装。歴史書・歴史小説はAudibleと相性良</div>
+        <div class="cell"><b>STORY CTA</b>「歴史の見方が変わる本・保存版10選」→ リンク</div>
+        <div class="cell"><b>ネタ例</b>①家康の健康オタク経営論 ②「サピエンス全史」を聴くと日本史も変わる ③大河より面白い実話3つ</div>
+      </div>
+      <div class="why"><span class="plus">強み:</span> Impの取り方が社内で実証済み（江戸系）で、母数リスクが最小の大穴。<span class="minus">リスク:</span> 歴史興味→無料体験の転換率が未検証。まさにこのアングルの検証がPhase 1の答え合わせになる。</div>
+    </div>
+
+  </div>
+
+  <h2>ポートフォリオ一覧<small>優先度・検証したい仮説・kill条件の早見</small></h2>
+  <table>
+    <tr><th class="c">#</th><th>アングル</th><th class="c">位置づけ</th><th>このアングルで検証する仮説</th><th>ターゲットの「ながら時間」</th></tr>
+    <tr><td class="c">01</td><td>ビジネス書3分要約</td><td class="c">本命</td><td>関西型はペルソナを替えても再現するか（型の移植性）</td><td>通勤</td></tr>
+    <tr><td class="c">02</td><td>積読・読書コンプレックス</td><td class="c">本命</td><td>悩み共感直結型はCVRで要約型を上回るか</td><td>全般</td></tr>
+    <tr><td class="c">03</td><td>通勤×時間術</td><td class="c">本命</td><td>「ながら文脈」先行ターゲティングはCTRを引き上げるか</td><td>通勤（電車・車）</td></tr>
+    <tr><td class="c">04</td><td>家事ながらママ</td><td class="c">本命</td><td>生活系の高CTR層は書籍商材でも踏むか</td><td>家事・寝かしつけ後</td></tr>
+    <tr><td class="c">05</td><td>睡眠導入・朗読</td><td class="c">対抗</td><td>夜帯×機能訴求（スリープタイマー）は独自CVを作るか</td><td>就寝前</td></tr>
+    <tr><td class="c">06</td><td>闇の心理学</td><td class="c">対抗</td><td>恐怖フック×書籍出典はエンタメ化せずCVを保てるか</td><td>全般</td></tr>
+    <tr><td class="c">07</td><td>人生変えた1冊</td><td class="c">対抗</td><td>ナラティブ型の視聴維持は書籍単品CVに転換するか</td><td>全般</td></tr>
+    <tr><td class="c">08</td><td>英語×洋書多聴</td><td class="c">対抗</td><td>学習投資層は無料体験CVRが構造的に高いか</td><td>通勤・運動</td></tr>
+    <tr><td class="c">09</td><td>ネタバレ寸止め小説</td><td class="c">大穴</td><td>「続きが気になる」衝動は即時CVを生むか</td><td>就寝前・休日</td></tr>
+    <tr><td class="c">10</td><td>歴史裏話→歴史書</td><td class="c">大穴</td><td>江戸系実証Imp層は書籍CTAまで1accで完結できるか</td><td>通勤・就寝前</td></tr>
+  </table>
+
+  <div class="foot">
+    <b>運用メモ</b>
+    <ul>
+      <li>全アングル共通の固定要素（関西型準拠・試行錯誤しない）: Reel→Story CTA導線 / 「保存版◯選」Storyフォーマット / 毎本の締めに書名提示 / プロフの一行目に「聴く読書」文脈。回す変数はアングル内の<b>ネタ選定のみ</b>。</li>
+      <li>展開は各アングル×2体（キャパ試算で確定済み）。#09のみ脚本難度次第で1体スタート可。</li>
+      <li>判定は週次・アングル累積で LC150 到達 → CV≥3 突破 / 0 kill。個別accの微修正はせず、死んだaccはアングルごと畳む。</li>
+      <li>ペルソナ名・プロフ文・アフィリンクは設計書側で確定（本資料はアングル定義まで）。正本は Notion「Audible 企画」。</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
