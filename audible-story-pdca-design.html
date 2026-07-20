@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Audible Story PDCA — 設計 v1</title>
+<style>
+  :root{
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    --done:#16a34a; --donebg:#f0fdf4;
+    --run:#7c3aed;  --runbg:#f5f3ff;
+    --on:#2563eb;   --onbg:#eff6ff;
+    --off:#0d9488;  --offbg:#f0fdfa;
+    --todo:#94a3b8;
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
+
+  .hero{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:34px 28px 28px}
+  .hero .kicker{font-size:11px;letter-spacing:.18em;color:#7dd3fc;font-weight:800;text-transform:uppercase}
+  .hero h1{margin:8px 0 10px;font-size:30px;line-height:1.3}
+  .hero .lead{max-width:900px;color:#cbd5e1;font-size:13.5px;margin:0 0 14px}
+  .pill{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    border-radius:99px;padding:4px 14px;font-size:12px;margin-right:8px;margin-bottom:6px}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:12px;border:1px solid var(--line)}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  section{max-width:1200px;margin:26px auto;padding:0 20px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .card h2 .mark{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
+    border-bottom:1px solid var(--line)}
+  .pad{padding:18px 20px}
+
+  .chip{font-size:10px;font-weight:800;padding:3px 10px;border-radius:5px;color:#fff}
+
+  .st{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px}
+  .st-done{background:var(--donebg);color:var(--done)}
+  .st-run{background:var(--runbg);color:var(--run)}
+  .st-on{background:var(--onbg);color:var(--on)}
+  .st-off{background:var(--offbg);color:var(--off)}
+  .st-todo{background:#f1f5f9;color:#64748b}
+
+  .legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+    max-width:1200px;margin:18px auto 0;padding:0 20px;font-size:11.5px;color:var(--sub)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700}
+  .lever{font-weight:700}
+  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
+
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:18px 20px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:18px 20px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px 20px}
+
+  .metric{border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff}
+  .metric .big{font-size:28px;font-weight:800;line-height:1.1}
+  .metric .lab{font-size:11px;color:var(--sub);font-weight:700;margin-top:4px}
+
+  .mapwrap{padding:24px 20px;display:grid;
+    grid-template-columns:1fr 34px 1fr 34px 1fr 34px 1fr;gap:8px;align-items:stretch}
+  .node{border-radius:9px;padding:10px 12px;font-size:12px;border:1.5px solid;height:100%}
+  .node b{font-size:13px}
+  .arrows{display:flex;justify-content:center;align-items:center;color:#94a3b8;font-size:20px;font-weight:700}
+  .lv{display:inline-block;font-size:10.5px;background:#f1f5f9;color:#475569;border-radius:5px;
+    padding:1px 7px;margin:2px 3px 0 0}
+
+  .tstep{display:flex;gap:14px;margin-bottom:12px}
+  .tdate{flex:0 0 90px;font-weight:800;font-size:12px;color:#4f46e5;text-align:right;padding-top:2px}
+  .tbody{flex:1;border-left:3px solid #e0e7ff;padding-left:14px}
+
+  pre{background:#0f172a;color:#e2e8f0;border-radius:9px;padding:14px 16px;font-size:11.5px;
+    overflow-x:auto;margin:0;line-height:1.5}
+
+  footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
+  @media(max-width:980px){
+    .mapwrap,.grid4,.grid3,.grid2{grid-template-columns:1fr}
+    .arrows{transform:rotate(90deg);padding:4px 0}
+    .hero h1{font-size:24px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="kicker">Audible Story — Weekly PDCA · Design v1</div>
+  <h1>実測分布から引き直した「実際に回る」週次PDCA</h1>
+  <p class="lead">配布済み全Storyの実測 (105 story / 率計算 n=68) をもとに、4層ファネルの判定基準を絶対閾値から <b>アカ相対判定</b> に置き換え、層ごとに判定速度の異なるPDCAとして設計した。本ページは設計レビュー用 — 実装は Go 後。</p>
+  <span class="pill">📅 2026-07-20</span>
+  <span class="pill">🚦 設計フェーズ (実装は Go 待ち)</span>
+  <span class="pill">🎯 対象: Audible 4アカ</span>
+  <span class="pill">🔬 実測 n=68 / subset n=29</span>
+</div>
+
+<nav>
+  <a href="#funnel">🧭 4層ファネル</a>
+  <a href="#evidence">📊 実測が変えた判断 6件</a>
+  <a href="#rules">⚖️ 層別判定ルール 4層</a>
+  <a href="#env">🗂 環境系 (裁定済み)</a>
+  <a href="#run">🔁 週次Runの型 7ステップ</a>
+  <a href="#caveat">⚠️ 初回の交絡 3件 + 未裁定 3点</a>
+</nav>
+
+<div class="legend">
+  <b>凡例:</b>
+  <span class="st st-done">確定・合意済み</span>
+  <span class="st st-run">検証中・継続観測</span>
+  <span class="st st-on">learn (学習アカ)</span>
+  <span class="st st-off">apply (適用アカ)</span>
+  <span class="st st-todo">未裁定</span>
+</div>
+
+<section id="funnel">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>🧭 4層ファネル — 指標・扱い・レバー</h2>
+    <div class="note">左から右へユーザーが流れる。層ごとに「扱い」と判定速度が違うのがこの設計の核。PDCAが回るのは完走層とタップ層のみ。</div>
+    <div class="mapwrap">
+      <div class="node" style="border-color:var(--off);background:var(--offbg)">
+        <b>視聴層</b> <span class="st st-off">監視のみ</span>
+        <span class="def">指標: 週次 ΣF1 reach</span>
+        <span class="def">不調=打ち手でなくアカ×商材の不適合。改善しないが、全実験の分母なので監視は必須</span>
+      </div>
+      <div class="arrows">→</div>
+      <div class="node" style="border-color:var(--done);background:var(--donebg)">
+        <b>完走層</b> <span class="st st-done">週次判定</span>
+        <span class="def">指標: F1→F2残存率(主) / 完走率</span>
+        <span class="lv">hook_type</span><span class="lv">文字量</span><span class="lv">引き</span><span class="lv">frame数</span><span class="lv">Reel連動</span>
+      </div>
+      <div class="arrows">→</div>
+      <div class="node" style="border-color:var(--run);background:var(--runbg)">
+        <b>タップ層</b> <span class="st st-run">2-3週累積</span>
+        <span class="def">指標: 型別累積 tap率</span>
+        <span class="lv">リード文型</span><span class="lv">CTA型</span><span class="lv">リンク箱</span><span class="lv">書影</span>
+      </div>
+      <div class="arrows">→</div>
+      <div class="node" style="border-color:var(--todo);background:#f8fafc">
+        <b>CV層</b> <span class="st st-todo">遅行・月次</span>
+        <span class="def">指標: acc×月 CV</span>
+        <span class="lv">book選定</span><span class="lv">期待調整</span>
+        <span class="def">CVRは測定不能 → 設計制約で代替</span>
+      </div>
+    </div>
+    <div class="note">⚠ タップ層の罠: フリクション軽減で軽いタップを増やすと tap率↑でも CVR↓。「本を読みたくなる心理が先、軽減は後」を生成時の lint にする。</div>
+  </div>
+</section>
+
+<section id="evidence">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>📊 実測が変えた設計判断 6件</h2>
+    <div class="note">2026-07-20 実測。全Story 105件 → 率計算対象 n=68 → Audible 4アカ×3フレーム以上 subset n=29。</div>
+    <div class="grid4">
+      <div class="metric"><div class="big">54%</div><div class="lab">完走率分散のうちアカ間差 (F比9.9)</div><span class="def">→ 絶対閾値を廃止、アカ相対判定へ</span></div>
+      <div class="metric"><div class="big">19/21</div><div class="lab">最大離脱が F1→F2 の story 数 (4F)</div><span class="def">→ F1→F2残存率を主要指標に昇格</span></div>
+      <div class="metric"><div class="big">±4pt</div><div class="lab">週次判定バンド (story間sd 0.05→se≈2pt)</div><span class="def">→ baseline比 ±4pt 超で ↗/↘</span></div>
+      <div class="metric"><div class="big">≥4,000</div><div class="lab">タップ層の結論に必要な型別 Σreach</div><span class="def">→ 2倍差検出の必要n。2-3週で到達</span></div>
+    </div>
+    <table>
+      <thead><tr><th>実測</th><th>設計への反映</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">旧閾値 &lt;0.4 は該当0件<span class="def">68 story の完走率 min=0.491</span></td><td>死に閾値として廃止<span class="def">判定はアカ自身の直近4週 baseline 相対に</span></td></tr>
+        <tr><td class="lever">tap率ゼロが約半数<span class="def">subset 中央値0.11% / 月次実測0.6%台</span></td><td>週次判定を廃止<span class="def">型別累積プールで判定。微差A/Bは禁止</span></td></tr>
+        <tr><td class="lever">F1 reach 中央値に24倍差<span class="def">1,880 / 441 / 95 / 76</span></td><td>実験母数閾値 = 300<span class="def">learn 2アカ / apply 2アカの分担と実測が一致</span></td></tr>
+        <tr><td class="lever">旧閾値 &gt;0.02 は上位10%相当<span class="def">tap率 p75=0.9%</span></td><td>「勝ち宣言」専用に降格<span class="def">有望ライン0.9% / 勝ち2.0%の2段に</span></td></tr>
+        <tr><td class="lever">nav_forward は能動タップのみ<span class="def">次frame reachの44-65%しか捕捉しない</span></td><td>完走率は reach ベースで確定<span class="def">nav系列は完走指標に使わない</span></td></tr>
+        <tr><td class="lever">CV は acc×月・分子1〜2<span class="def">週次・book別の分解不能</span></td><td>CVR は設計制約で代替<span class="def">事後検証の代わりに生成時 lint</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--done)"></span>⚖️ 層別判定ルール 4層</h2>
+    <div class="note">baseline = そのアカの直近4週 reach 加重値。初期値: 完走率 0.60 / 0.58 / 0.65 / 0.62 (アカ別実測中央値)。</div>
+    <div class="grid4">
+      <div class="metric" style="border-color:var(--off)">
+        <b>視聴層</b> <span class="st st-off">監視のみ</span>
+        <span class="def"><b>疲弊フラグ:</b> 4週中央値比 −30% が2週連続</span>
+        <span class="def"><b>母数除外:</b> 2週中央値 F1 reach &lt;300 → 実験対象外</span>
+        <span class="def">フラグ時は完走層分析に「差がノイズに沈む」と注記</span>
+      </div>
+      <div class="metric" style="border-color:var(--done)">
+        <b>完走層</b> <span class="st st-done">週次</span>
+        <span class="def"><b>判定:</b> F1→F2残存率が baseline ±4pt 超で ↗/↘</span>
+        <span class="def"><b>n:</b> 週4 story 未満 or ΣF1 reach &lt;1,000 → 継続観測</span>
+        <span class="def">週に動かす変数は1つだけ</span>
+      </div>
+      <div class="metric" style="border-color:var(--run)">
+        <b>タップ層</b> <span class="st st-run">累積</span>
+        <span class="def"><b>結論:</b> 2型とも Σreach ≥4,000 かつ tap率差2倍以上</span>
+        <span class="def"><b>未達:</b> 「継続観測」と明記して持ち越し</span>
+        <span class="def">有望 0.9% / 勝ち宣言 2.0%</span>
+      </div>
+      <div class="metric" style="border-color:var(--todo)">
+        <b>CV層</b> <span class="st st-todo">月次</span>
+        <span class="def"><b>急落時:</b> ①軽いタップ罠 ②bookミスマッチの順に検査</span>
+        <span class="def"><b>lint:</b> 心理が先・軽減は後 / F最終で「無料で1冊」明示</span>
+        <span class="def">book別は定性判定と明記</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="env">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>🗂 環境系 — 裁定済み</h2>
+    <div class="note">解釈・仮説・知見 = skill リポジトリの analysis/。数値スナップショット = 新規シート。配布Opsシートは以後不可侵。</div>
+    <div class="grid2">
+      <div>
+        <b>リポジトリ側 (skill と同居)</b> <span class="st st-done">確定</span>
+        <pre>analysis/
+  weekly/2026-W29.md   scoreboard+答え合わせ+今週の1変数
+  accounts/ACC_*.md    4アカ全部 (role: learn|apply)
+  cumulative.json      タップ層の型別累積プール
+  learnings.md         [verified YYYY-MM-DD n=N] 知見</pre>
+      </div>
+      <div>
+        <b>シート側</b> <span class="st st-done">構成確定・作成は Go 後</span>
+        <table>
+          <tbody>
+            <tr><td class="lever">新規「Audible Story PDCA」<span class="def">タブ①打ち手台帳 (story_key + タグ + lead/cta型新設) ②週次スナップショット</span></td></tr>
+            <tr><td class="lever">配布Opsシート (Lala 管理)<span class="def">配布専用として維持。PDCA関連の書き込みは以後しない。既存タグは新シートへ転記</span></td></tr>
+            <tr><td class="lever">tap数の取得<span class="def">Performance DB の link_clicks (空欄=0)。未収集週は週次Runで Badhan に確認</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="run">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>🔁 週次 Run の型 7ステップ</h2>
+    <div class="note">0〜5 は週次、6 は隔週。出力は weekly ファイル1枚に3点固定: scoreboard / 前週仮説の答え合わせ / 今週の律速と1変数。</div>
+    <div class="pad">
+      <div class="tstep"><div class="tdate">0 準備</div><div class="tbody"><b>JOIN + ガード</b><span class="def">打ち手台帳 × Performance DB を story_key で結合。未収集率 &gt;30% の週はスキップと明記。重複行は posted_at で dedup</span></div></div>
+      <div class="tstep"><div class="tdate">1 視聴</div><div class="tbody"><b>監視のみ</b><span class="def">ΣF1 reach 推移 → 疲弊フラグ / 実験母数除外の2判定だけ</span></div></div>
+      <div class="tstep"><div class="tdate">2 完走</div><div class="tbody"><b>週次判定</b><span class="def">F1→F2残存カーブ → 前週仮説の答え合わせ → 勝ち筋を design に固定 → 今週の1変数を決定</span></div></div>
+      <div class="tstep"><div class="tdate">3 タップ</div><div class="tbody"><b>累積プール更新</b><span class="def">型別に reach/tap を積み、結論ルール到達分のみ判定。未達は継続観測</span></div></div>
+      <div class="tstep"><div class="tdate">4 CV</div><div class="tbody"><b>月次確認</b><span class="def">CVR急落の検査と設計制約 lint の遵守確認</span></div></div>
+      <div class="tstep"><div class="tdate">5 裁定</div><div class="tbody"><b>scoreboard + 律速宣言</b><span class="def">前週比で最も落ちた層を今週の律速として1つ宣言 → 実験変数1つ → design 生成へ反映</span></div></div>
+      <div class="tstep"><div class="tdate">6 適合</div><div class="tbody"><b>隔週・learn アカのみ</b><span class="def">8週レバーを回し切って累積 tap率 0.9% 未達かつ CV=0 → 停止 or 商材替えを提案</span></div></div>
+    </div>
+    <table>
+      <thead><tr><th>scoreboard 列 (weekly ファイル固定書式)</th><th>acc</th><th>ΣF1 reach (Δ4wk)</th><th>完走率 (Δbase)</th><th>F1→F2 (Δbase)</th><th>累積tap率 (n)</th><th>判定</th></tr></thead>
+      <tbody><tr><td class="def">例</td><td>ACC_0223 <span class="st st-on">learn</span></td><td>9,400 (−4%)</td><td>0.61 (+1pt)</td><td>0.79 (+2pt)</td><td>0.66% (n=2,600)</td><td><span class="st st-run">継続観測</span></td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="caveat">
+  <div class="grid2" style="padding:0;gap:16px;display:grid;grid-template-columns:1fr 1fr">
+    <div class="card">
+      <h2><span class="mark" style="background:#dc2626"></span>⚠️ 初回 Run の交絡 3件</h2>
+      <div class="pad">
+        <table><tbody>
+          <tr><td class="lever">7/13週の打ち手は4アカ別々<span class="def">sei×myth_break は1アカのみ。「一斉実験」ではない</span></td></tr>
+          <tr><td class="lever">5F→4F の構造変更と交絡<span class="def">6月分はタグなし+5フレーム。タグ効果と分離不能と明記して開始</span></td></tr>
+          <tr><td class="lever">7/16〜19 に収集ギャップ<span class="def">4日分の reach が未収集。初回 Run 前に解消要否を確認</span></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="mark" style="background:var(--todo)"></span>❓ 未裁定 3点</h2>
+      <div class="pad">
+        <table><tbody>
+          <tr><td class="lever"><span class="st st-todo">未裁定</span> 疲弊フラグの水準<span class="def">提案: 4週中央値比 −30% × 2週連続</span></td></tr>
+          <tr><td class="lever"><span class="st st-todo">未裁定</span> 適合判定の期間<span class="def">提案: 8週 (累積判定2〜3回分を回し切る長さ)</span></td></tr>
+          <tr><td class="lever"><span class="st st-todo">未裁定</span> tap未収集週の補完頻度<span class="def">提案: 週次 Run 時にまとめて確認</span></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  正本: <code>~/claude/output/2026-07-20_audible-story-pdca-design-draft.md</code> ／ 作成: 2026-07-20 ／
+  内部 ID・シート ID・認証情報は除去済み ／ 実装 (skill 書き換え・シート作成・analysis/ 作成) は Go 後に着手
+</footer>
+
+</body>
+</html>
