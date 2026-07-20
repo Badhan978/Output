@@ -96,16 +96,18 @@
 <div class="hero">
   <div class="kicker">Audible Story — Weekly PDCA · Design v1</div>
   <h1>実測分布から引き直した「実際に回る」週次PDCA</h1>
-  <p class="lead">配布済み全Storyの実測 (105 story / 率計算 n=68) をもとに、4層ファネルの判定基準を絶対閾値から <b>アカ相対判定</b> に置き換え、層ごとに判定速度の異なるPDCAとして設計した。本ページは設計レビュー用 — 実装は Go 後。</p>
-  <span class="pill">📅 2026-07-20</span>
+  <p class="lead">配布済み全Storyの実測 (105 story / 率計算 n=68) と業界ベンチマーク実査 (3系統) をもとに、判定を <b>2軸</b> で設計した — 週次の改善検知は<b>アカ相対 (軸A)</b>、伸び代と見切りは<b>業界絶対レンジ (軸B)</b>。原則: 完走・タップは毎週判定、CVは隔週。本ページは設計レビュー用 — 実装は Go 後。</p>
+  <span class="pill">📅 2026-07-20 (v2)</span>
   <span class="pill">🚦 設計フェーズ (実装は Go 待ち)</span>
   <span class="pill">🎯 対象: Audible 4アカ</span>
   <span class="pill">🔬 実測 n=68 / subset n=29</span>
+  <span class="pill">🌐 業界ベンチ 3系統実査</span>
 </div>
 
 <nav>
   <a href="#funnel">🧭 4層ファネル</a>
   <a href="#evidence">📊 実測が変えた判断 6件</a>
+  <a href="#bench">🌐 業界ベンチ対照 5行</a>
   <a href="#rules">⚖️ 層別判定ルール 4層</a>
   <a href="#env">🗂 環境系 (裁定済み)</a>
   <a href="#run">🔁 週次Runの型 7ステップ</a>
@@ -139,14 +141,14 @@
       </div>
       <div class="arrows">→</div>
       <div class="node" style="border-color:var(--run);background:var(--runbg)">
-        <b>タップ層</b> <span class="st st-run">2-3週累積</span>
-        <span class="def">指標: 型別累積 tap率</span>
+        <b>タップ層</b> <span class="st st-run">週次・2週で確定</span>
+        <span class="def">指標: tap率 (週次) + 型別累積</span>
         <span class="lv">リード文型</span><span class="lv">CTA型</span><span class="lv">リンク箱</span><span class="lv">書影</span>
       </div>
       <div class="arrows">→</div>
       <div class="node" style="border-color:var(--todo);background:#f8fafc">
-        <b>CV層</b> <span class="st st-todo">遅行・月次</span>
-        <span class="def">指標: acc×月 CV</span>
+        <b>CV層</b> <span class="st st-todo">隔週判定</span>
+        <span class="def">指標: acc CV (隔週の差分読み)</span>
         <span class="lv">book選定</span><span class="lv">期待調整</span>
         <span class="def">CVRは測定不能 → 設計制約で代替</span>
       </div>
@@ -179,10 +181,53 @@
   </div>
 </section>
 
+<section id="bench">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--off)"></span>🌐 業界ベンチ対照 5行 — 軸B (絶対レンジ)</h2>
+    <div class="note">2026-07-20 Web 実査3系統。自社データだけでは業界との乖離が見えない (FB) ため追加。検索要約に混入した捏造数値2件は一次ページ実査で検出・除外済み — 採用値は一次 or 追跡可能ソースのみ。層ごとにデータの存在濃淡が激しいため benchmark_status を明記して運用する。</div>
+    <table>
+      <thead><tr><th>層 × 指標</th><th>うちの実測</th><th>業界基準 (出典・n)</th><th>status / 使い方</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="lever">視聴層 reach rate<span class="def">F1 reach ÷ フォロワー</span></td>
+          <td><b>5.9%</b> / 3.2% / 6.6% / 17.6%<span class="def">learn 2アカは自規模帯の2〜3倍上</span></td>
+          <td>規模別: 1-5K=9.6-10.4% / 5-10K=3.5-4.2% / <b>10-50K=1.4-2.0%</b><span class="def">Socialinsider 2025, n=161,180 Stories</span></td>
+          <td><span class="st st-done">available</span><span class="def">適合判定の分離器に使う (視聴層が業界内か否かで商材問題/アカ問題を切り分け)</span></td>
+        </tr>
+        <tr>
+          <td class="lever">完走層 F1→F2 離脱<span class="def">初動の離脱幅</span></td>
+          <td><b>22%</b><span class="def">F2以降 11%/7% は業界より良い</span></td>
+          <td>frame1 exit <b>23.8%</b> が普遍的に最大・以降単調減少<span class="def">Socialinsider 2025 + Rival IQ 23/24 (n=965/1,470アカ) で一致</span></td>
+          <td><span class="st st-done">available</span><span class="def">初動離脱は業界普遍 — うちは標準幅。目標=業界より浅くする</span></td>
+        </tr>
+        <tr>
+          <td class="lever">完走層 完走率</td>
+          <td><b>0.61</b> (中央値)</td>
+          <td>Dash ≈70% (一次未検証) / Flick 87% — 定義非互換で割れ。exit カーブ逆算 ≈49%<span class="def">絶対値の横比較は不能</span></td>
+          <td><span class="st st-run">partial</span><span class="def">「業界レンジ内」とだけ言える。判定は軸Aで</span></td>
+        </tr>
+        <tr>
+          <td class="lever">タップ層 tap率</td>
+          <td><b>0.6〜0.8%</b></td>
+          <td>方法論つき公開ベンチ<b>不存在を実査確定</b>。実アカ事例のみ: 0.5% (2021) / 1.25%・2.92% (2023セール時)<span class="def">逸話値1-5%は分母定義不明</span></td>
+          <td><span class="st st-todo">none</span><span class="def">実アカ事例と同水準 — 「異常に低い」証拠なし。軸Aのみで回す</span></td>
+        </tr>
+        <tr>
+          <td class="lever">CV層 CVR</td>
+          <td>測定不能<span class="def">acc×月・分子1〜2</span></td>
+          <td>Audible 単独 CVR/EPC は<b>公開データ不存在を実査確定</b><span class="def">成果=無料体験登録1,500円は公式確認。汎用「無料登録系10-30%」は信頼度中の遠い参考値</span></td>
+          <td><span class="st st-todo">none</span><span class="def">「業界データが市場にない」ケース — 設計制約アプローチで確定</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note">定義互換の注意: うちの reach はフォロワー外込み (未補正) → 視聴層の業界比較は保守側に見る。業界 completion は viewer 単位・うちは reach 比 — 比較可能なのは離脱カーブの形のみ。出典 URL 一覧は実装時に analysis/benchmarks.md へ固定。</div>
+  </div>
+</section>
+
 <section id="rules">
   <div class="card">
     <h2><span class="mark" style="background:var(--done)"></span>⚖️ 層別判定ルール 4層</h2>
-    <div class="note">baseline = そのアカの直近4週 reach 加重値。初期値: 完走率 0.60 / 0.58 / 0.65 / 0.62 (アカ別実測中央値)。</div>
+    <div class="note">原則 (FB 2026-07-20): 全層、毎週の scoreboard で「予想どおり動いたか」を判定。完走・タップ = 週次 / CV = 隔週。baseline = そのアカの直近4週 reach 加重値 (完走率初期値: 0.60 / 0.58 / 0.65 / 0.62)。</div>
     <div class="grid4">
       <div class="metric" style="border-color:var(--off)">
         <b>視聴層</b> <span class="st st-off">監視のみ</span>
@@ -197,13 +242,13 @@
         <span class="def">週に動かす変数は1つだけ</span>
       </div>
       <div class="metric" style="border-color:var(--run)">
-        <b>タップ層</b> <span class="st st-run">累積</span>
-        <span class="def"><b>結論:</b> 2型とも Σreach ≥4,000 かつ tap率差2倍以上</span>
-        <span class="def"><b>未達:</b> 「継続観測」と明記して持ち越し</span>
-        <span class="def">有望 0.9% / 勝ち宣言 2.0%</span>
+        <b>タップ層</b> <span class="st st-run">週次</span>
+        <span class="def"><b>週次判定:</b> baseline ±2se (n連動 ≈±0.3pt)。バンド内=「→予想圏内」</span>
+        <span class="def"><b>型の確定:</b> 2週連続同方向。累積プール (2型 Σreach≥4,000・差2倍) が裏付け台帳</span>
+        <span class="def">微差A/B禁止。有望 0.9% / 勝ち宣言 2.0%</span>
       </div>
       <div class="metric" style="border-color:var(--todo)">
-        <b>CV層</b> <span class="st st-todo">月次</span>
+        <b>CV層</b> <span class="st st-todo">隔週</span>
         <span class="def"><b>急落時:</b> ①軽いタップ罠 ②bookミスマッチの順に検査</span>
         <span class="def"><b>lint:</b> 心理が先・軽減は後 / F最終で「無料で1冊」明示</span>
         <span class="def">book別は定性判定と明記</span>
@@ -222,7 +267,8 @@
         <pre>analysis/
   weekly/2026-W29.md   scoreboard+答え合わせ+今週の1変数
   accounts/ACC_*.md    4アカ全部 (role: learn|apply)
-  cumulative.json      タップ層の型別累積プール
+  cumulative.json      タップ層累積プール (=確定判定の裏付け台帳)
+  benchmarks.md        業界ベンチの出典つき正本 (四半期更新)
   learnings.md         [verified YYYY-MM-DD n=N] 知見</pre>
       </div>
       <div>
@@ -247,14 +293,14 @@
       <div class="tstep"><div class="tdate">0 準備</div><div class="tbody"><b>JOIN + ガード</b><span class="def">打ち手台帳 × Performance DB を story_key で結合。未収集率 &gt;30% の週はスキップと明記。重複行は posted_at で dedup</span></div></div>
       <div class="tstep"><div class="tdate">1 視聴</div><div class="tbody"><b>監視のみ</b><span class="def">ΣF1 reach 推移 → 疲弊フラグ / 実験母数除外の2判定だけ</span></div></div>
       <div class="tstep"><div class="tdate">2 完走</div><div class="tbody"><b>週次判定</b><span class="def">F1→F2残存カーブ → 前週仮説の答え合わせ → 勝ち筋を design に固定 → 今週の1変数を決定</span></div></div>
-      <div class="tstep"><div class="tdate">3 タップ</div><div class="tbody"><b>累積プール更新</b><span class="def">型別に reach/tap を積み、結論ルール到達分のみ判定。未達は継続観測</span></div></div>
-      <div class="tstep"><div class="tdate">4 CV</div><div class="tbody"><b>月次確認</b><span class="def">CVR急落の検査と設計制約 lint の遵守確認</span></div></div>
+      <div class="tstep"><div class="tdate">3 タップ</div><div class="tbody"><b>週次判定 + プール更新</b><span class="def">毎週 ↗/→/↘ を付け (バンド ±2se)、2週連続同方向で型の勝敗を確定。型別累積 reach/tap が裏付け</span></div></div>
+      <div class="tstep"><div class="tdate">4 CV</div><div class="tbody"><b>隔週確認</b><span class="def">Tracker を隔週で読み前回との差分で判定。CVR急落検査と設計制約 lint の遵守確認</span></div></div>
       <div class="tstep"><div class="tdate">5 裁定</div><div class="tbody"><b>scoreboard + 律速宣言</b><span class="def">前週比で最も落ちた層を今週の律速として1つ宣言 → 実験変数1つ → design 生成へ反映</span></div></div>
-      <div class="tstep"><div class="tdate">6 適合</div><div class="tbody"><b>隔週・learn アカのみ</b><span class="def">8週レバーを回し切って累積 tap率 0.9% 未達かつ CV=0 → 停止 or 商材替えを提案</span></div></div>
+      <div class="tstep"><div class="tdate">6 適合</div><div class="tbody"><b>隔週・learn アカのみ (業界軸で分離)</b><span class="def">8週回し切って tap率 0.9% 未達・CV=0 のとき: 視聴層が業界レンジ内なら「Audible 不適合→商材替え」、業界レンジ未達なら「アカ自体の問題→商材替えでは直らない」と裁定</span></div></div>
     </div>
     <table>
-      <thead><tr><th>scoreboard 列 (weekly ファイル固定書式)</th><th>acc</th><th>ΣF1 reach (Δ4wk)</th><th>完走率 (Δbase)</th><th>F1→F2 (Δbase)</th><th>累積tap率 (n)</th><th>判定</th></tr></thead>
-      <tbody><tr><td class="def">例</td><td>ACC_0223 <span class="st st-on">learn</span></td><td>9,400 (−4%)</td><td>0.61 (+1pt)</td><td>0.79 (+2pt)</td><td>0.66% (n=2,600)</td><td><span class="st st-run">継続観測</span></td></tr></tbody>
+      <thead><tr><th>scoreboard 列 (weekly ファイル固定書式)</th><th>acc</th><th>ΣF1 reach (Δ4wk)</th><th>完走率 (Δbase)</th><th>F1→F2 (Δbase)</th><th>tap率 (Δbase ±band)</th><th>CV (隔週差分)</th><th>判定</th></tr></thead>
+      <tbody><tr><td class="def">例</td><td>ACC_0223 <span class="st st-on">learn</span></td><td>9,400 (−4%)</td><td>0.61 (+1pt)</td><td>0.79 (+2pt)</td><td>0.66% (+0.1pt / ±0.3pt)</td><td>+1</td><td><span class="st st-run">→ 予想圏内</span></td></tr></tbody>
     </table>
   </div>
 </section>
