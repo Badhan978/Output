@@ -1,478 +1,504 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>AI KOL 量産オペ — 全体設計 (2026-07)</title>
+<title>Audible 企画 — 実行計画 (2026-07-21版)</title>
 <style>
   :root{
-    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
-    --on:#2563eb;   --onbg:#eff6ff;
-    --off:#0d9488;  --offbg:#f0fdfa;
-    --run:#7c3aed;  --runbg:#f5f3ff;
-    --mk:#d97706;   --mkbg:#fffbeb;
-    --warn:#dc2626; --warnbg:#fef2f2;
+    /* 構造トークン */
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0; --bg:#f1f5f9;
+    /* 状態トークン (5値のみ) */
+    --done:#16a34a; --donebg:#f0fdf4;
+    --run:#2563eb;  --runbg:#eff6ff;
+    --warn:#d97706; --warnbg:#fffbeb; --warnbg-strong:#fef3c7;
+    --todo:#94a3b8; --todobg:#f8fafc;
+    --accent:#0f766e; --accentbg:#f0fdfa;
   }
   *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
   body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
-    color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
+    color:var(--ink);margin:0;background:var(--bg);font-size:13px;line-height:1.58}
 
-  .hero{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:26px 28px 22px}
-  .hero .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#7dd3fc;font-weight:800;margin:0 0 6px}
-  .hero h1{margin:0 0 6px;font-size:24px;line-height:1.3}
-  .hero p{margin:0;max-width:900px;color:#cbd5e1;font-size:12.5px}
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:34px 28px 26px}
+  .hero-inner{max-width:1180px;margin:0 auto}
+  .kicker{font-size:11px;letter-spacing:.14em;font-weight:800;color:#a7f3d0;text-transform:uppercase;margin-bottom:10px}
+  .hero h1{margin:0 0 12px;font-size:31px;font-weight:800;letter-spacing:-.01em}
+  .hero .lead{font-size:16px;font-weight:600;color:#e2e8f0;max-width:820px;margin:0 0 18px;line-height:1.6}
+  .pills{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#f1f5f9;
+    padding:6px 13px;border-radius:99px;font-size:12px;font-weight:600}
+  .pill b{color:#fff;font-weight:800}
 
+  /* LEGEND */
+  .legend-wrap{background:#fff;border-bottom:1px solid var(--line)}
+  .legend{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;gap:10px;flex-wrap:wrap}
+  .lg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);font-weight:600}
+  .lg-dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+  /* NAV */
   nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
-    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
-  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
-    font-size:12px;border:1px solid var(--line)}
-  nav a:hover{background:#f1f5f9;color:var(--ink)}
+    padding:9px 20px;z-index:10;display:flex;gap:6px;flex-wrap:wrap;max-width:1180px;margin:0 auto}
+  nav a{text-decoration:none;color:var(--sub);padding:6px 13px;border-radius:99px;
+    font-size:12px;font-weight:600;border:1px solid var(--line);white-space:nowrap}
+  nav a:hover{background:var(--bg);color:var(--ink)}
 
-  section{max-width:1240px;margin:22px auto;padding:0 20px}
-  .card{background:#fff;border:1px solid var(--line);border-radius:12px;
-    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-  .card h2{margin:0;padding:14px 20px;font-size:16px;border-bottom:1px solid var(--line)}
-  .card .note{padding:9px 20px;background:#f8fafc;color:var(--sub);font-size:12px;border-bottom:1px solid var(--line)}
-  .card .note.warn{background:var(--warnbg);color:#b91c1c;font-weight:700}
-  .pad{padding:14px 20px}
+  section{max-width:1180px;margin:22px auto;padding:0 20px}
 
-  table{width:100%;border-collapse:collapse;font-size:12.5px}
-  th,td{padding:8px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
-  th:first-child,td:first-child{padding-left:20px}
-  th:last-child,td:last-child{padding-right:20px}
-  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700}
-  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .twrap{overflow-x:auto}
-  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 9px;border-radius:99px}
-  .tag.main{background:var(--runbg);color:var(--run)}
-  .tag.sub2{background:#f1f5f9;color:var(--sub)}
-  .tag.kari{background:var(--warnbg);color:var(--warn)}
-  .tag.cont2{background:var(--offbg);color:var(--off)}
+  /* 1. card */
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:16px}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .card .note{padding:11px 20px;background:#f8fafc;color:var(--sub);font-size:12px;
+    border-bottom:1px solid var(--line);line-height:1.6}
 
-  /* ---- gantt ---- */
-  .gwrap{overflow-x:auto;padding:14px 16px 6px}
-  .gantt{min-width:1150px}
-  .grow{display:grid;grid-template-columns:repeat(23,1fr);align-items:stretch;min-height:36px;
-    background-image:repeating-linear-gradient(to right,#e9eef5 0 1px,transparent 1px calc(100%/23))}
-  .gantt.aug .grow{grid-template-columns:repeat(31,1fr);
-    background-image:repeating-linear-gradient(to right,#e9eef5 0 1px,transparent 1px calc(100%/31))}
-  .grow.head{border-bottom:1px solid var(--line);font-size:10px;color:var(--sub);font-weight:700;text-align:center;min-height:34px;align-items:center}
-  .grow.head .hd{padding:1px 0}
-  .grow.head .we{background:#f1f5f9;border-radius:3px;color:#94a3b8}
-  .lane{display:block;padding:4px 12px;font-size:11.5px;font-weight:800;letter-spacing:.04em;margin-top:8px;border-radius:6px}
-  .lane.mkl{background:var(--warnbg);color:var(--warn)}
-  .lane.mgl{background:var(--onbg);color:var(--on)}
-  .lane.opl{background:var(--offbg);color:var(--off)}
-  .lane.prl{background:var(--mkbg);color:var(--mk)}
-  .lane.v5l{background:var(--runbg);color:var(--run)}
+  /* section mark (12px 角丸四角) */
+  .mark{width:12px;height:12px;border-radius:3px;display:inline-block;flex:0 0 auto}
 
-  .cell{position:relative;height:100%}
-  .bt{position:absolute;top:1px;left:3px;font-size:9.5px;font-weight:700;color:var(--ink);white-space:nowrap;z-index:2;line-height:1.2}
-  .bt .w{color:var(--sub);font-weight:600}
-  .bar{height:13px;border-radius:4px;margin:18px 1px 0}
-  .bar.mg{background:var(--on)}
-  .bar.op{background:var(--off)}
-  .bar.pr{background:var(--mk)}
-  .bar.v5{background:var(--run)}
-  .bar.prep{background:var(--onbg);border:2px solid var(--on)}
-  .bar.wait{background:repeating-linear-gradient(45deg,#e2e8f0,#e2e8f0 4px,#f8fafc 4px,#f8fafc 8px);border:1px solid #cbd5e1;height:9px;margin-top:20px}
-  .bar.cont{opacity:.55}
-  .ms{width:14px;height:14px;background:var(--warn);transform:rotate(45deg);border-radius:3px;margin:4px auto 0}
-  .mstext{font-size:9.5px;color:var(--warn);font-weight:700;text-align:center;white-space:nowrap;line-height:1.15}
-  .ghost{position:absolute;top:9px;left:4px;font-size:9.5px;color:#94a3b8;white-space:nowrap;font-weight:600}
+  /* 2. chip */
+  .chip{font-size:10px;font-weight:800;padding:3px 9px;border-radius:5px;color:#fff;
+    background:var(--sub);display:inline-block;white-space:nowrap}
+  .chip-accent{background:var(--accent)}
 
-  .legend{display:flex;gap:14px;flex-wrap:wrap;padding:10px 20px 14px;font-size:11px;color:var(--sub);align-items:center}
-  .legend span{display:inline-flex;align-items:center;gap:5px}
-  .sw{width:20px;height:11px;border-radius:4px;display:inline-block}
+  /* 3. 状態バッジ */
+  .st{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:99px;white-space:nowrap}
+  .st-done{background:var(--donebg);color:var(--done)}
+  .st-run{background:var(--runbg);color:var(--run)}
+  .st-warn{background:var(--warnbg-strong);color:var(--warn)}
+  .st-todo{background:var(--todobg);color:var(--todo)}
 
-  .notes{padding:0 20px 16px;font-size:12px;color:var(--ink)}
-  .notes li{margin:3px 0}
-  .notes .warn{color:var(--warn);font-weight:700}
+  /* 4. table */
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{padding:9px 11px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:10.5px;font-weight:800}
+  .lever{font-weight:700}
+  .def{color:var(--sub);font-size:11px;display:block;margin-top:2px;font-weight:400}
+  .tbl-wrap{overflow-x:auto}
+  td.dash{color:#cbd5e1;text-align:center}
+  .cellbadge{display:block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px;margin-bottom:3px}
+  .cellbadge-thin{opacity:.55;font-weight:700}
 
-  .augwrap{position:relative}
-  .augoverlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5}
-  .augoverlay .pill{backdrop-filter:blur(4px);background:rgba(241,245,249,.55);border:1px solid var(--line);
-    border-radius:12px;padding:14px 40px;font-size:16px;font-weight:800;color:var(--sub);box-shadow:0 2px 8px rgba(0,0,0,.06)}
-  footer{max-width:1240px;margin:10px auto 30px;padding:0 20px;color:var(--sub);font-size:11px}
+  /* 5. mapwrap (因果/フロー図。CSS Gridのみ・mermaid禁止) */
+  .mapwrap{padding:22px 20px;display:grid;
+    grid-template-columns:1.1fr 40px 1fr 40px 1fr;gap:8px;align-items:center}
+  .node{border-radius:9px;padding:10px 13px;font-size:12px;font-weight:700;border:1.5px solid;text-align:center}
+  .arrows{display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:20px;font-weight:800}
+  .node-stack{display:flex;flex-direction:column;gap:8px}
+
+  /* 6. timeline (フェーズ用に横4列へ変形) */
+  .phasegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:18px 20px}
+  .phase{border-left:3px solid var(--line);padding-left:12px;position:relative}
+  .phase-name{font-weight:800;font-size:13px;margin-bottom:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .phase-date{font-size:11px;color:var(--sub);font-weight:700;margin-bottom:8px}
+  .phase-items{font-size:11.5px;color:var(--ink);margin:0 0 8px;padding-left:14px}
+  .phase-items li{margin-bottom:4px}
+  .phase-exit{font-size:11px;color:var(--accent);font-weight:700;background:var(--accentbg);
+    padding:5px 8px;border-radius:6px}
+
+  /* stat card grids */
+  .statgrid{display:grid;gap:12px;padding:18px 20px}
+  .statgrid.c3{grid-template-columns:repeat(3,1fr)}
+  .statgrid.c6{grid-template-columns:repeat(6,1fr)}
+  .statcard{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-align:center}
+  .statcard .num{font-size:20px;font-weight:800;color:var(--ink);line-height:1.2}
+  .statcard .lbl{font-size:11px;font-weight:700;color:var(--sub);margin-top:3px}
+  .statcard .sub{font-size:10.5px;color:var(--sub);margin-top:5px;line-height:1.4}
+
+  .numcards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px 20px}
+  .numcard{border:1.5px solid var(--line);border-radius:12px;padding:14px 16px}
+  .numcard .month{font-size:12px;font-weight:800;color:var(--sub);margin-bottom:6px}
+  .numcard .cv{font-size:24px;font-weight:800}
+  .numcard .row{font-size:12px;margin-top:6px;display:flex;justify-content:space-between}
+  .numcard .row .v{font-weight:700}
+  .numcard.deficit{border-color:var(--warn);background:var(--warnbg)}
+  .numcard.profit{border-color:var(--done);background:var(--donebg)}
+  .numcard.growth{border-color:var(--accent);background:var(--accentbg)}
+
+  .persongrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:18px 20px}
+  .pcard{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fafcff}
+  .pcard .name{font-weight:800;font-size:12.5px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:start;gap:6px}
+  .pcard .def{font-size:11px;color:var(--sub)}
+
+  .prem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px 20px}
+  .decision-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:0 20px 18px}
+  .decision{border:1.5px solid var(--line);border-radius:10px;padding:13px 15px}
+  .decision.warnborder{border-color:var(--warn);background:var(--warnbg)}
+  .decision .t{font-weight:800;font-size:12.5px;margin-bottom:6px}
+  .decision .d{font-size:11.5px;color:var(--sub);line-height:1.5}
+
+  .riskgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px 20px}
+  .riskcol h3{font-size:12.5px;margin:0 0 10px;display:flex;align-items:center;gap:7px}
+  .riskcard{border-radius:9px;padding:10px 12px;margin-bottom:8px;font-size:11.5px;line-height:1.5;border:1px solid}
+  .risk-strong{background:var(--warnbg-strong);border-color:var(--warn);color:#78350f}
+  .risk-weak{background:var(--warnbg);border-color:#fde68a;color:#92400e}
+  .risk-todo{background:var(--todobg);border-color:var(--line);color:var(--ink)}
+
+  .boundary{background:linear-gradient(90deg,#e0e7ff,#f0fdfa);border-top:2px dashed var(--accent);
+    border-bottom:2px dashed var(--accent)}
+  .boundary td{padding:6px 11px;font-size:10.5px;font-weight:800;color:var(--accent);text-align:center}
+
+  footer{max-width:1180px;margin:26px auto 50px;padding:0 20px;color:var(--sub);font-size:11px;line-height:1.7}
+  footer a{color:var(--accent)}
+
+  @media(max-width:980px){
+    .phasegrid{grid-template-columns:1fr}
+    .statgrid.c3{grid-template-columns:1fr}
+    .statgrid.c6{grid-template-columns:repeat(3,1fr)}
+    .numcards{grid-template-columns:1fr}
+    .persongrid{grid-template-columns:1fr}
+    .prem-grid{grid-template-columns:1fr}
+    .decision-grid{grid-template-columns:1fr}
+    .riskgrid{grid-template-columns:1fr}
+    .mapwrap{grid-template-columns:1fr}
+    .arrows{transform:rotate(90deg);padding:6px 0}
+  }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <p class="kicker">AI KOL — Audible 量産オペ</p>
-  <h1>全体設計 — フェーズ・Goal・ワークフロー・ガント・障壁・Action</h1>
-  <p>マイルストーン = 150体 × 11 CV/月体制の構築。7月 = アングル検証 49 CV → 8月 = 横展開 700 CV → 9月 = 150体 1,500 CV。Phase 0 準備 〜7/21 / Phase 1 検証 〜7/30 / Phase 2 展開準備 8/1〜8/4 / Phase 3 大量展開 8/5〜。正本は Notion カード「Audible 企画」。</p>
+  <div class="hero-inner">
+    <div class="kicker">Audible Affiliate Operation</div>
+    <h1>Audible 企画 — 実行計画</h1>
+    <p class="lead">7月で当たりアングルを確定し、8月からv5で150体×月11CVへ</p>
+    <div class="pills">
+      <span class="pill">現在地 <b>Phase 0(〜7/23)</b></span>
+      <span class="pill">判定週 <b>7/28〜</b></span>
+      <span class="pill">最終形 <b>150体×月11CV</b></span>
+      <span class="pill">更新日 <b>2026-07-21</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="legend-wrap">
+  <div class="legend">
+    <span class="lg-item"><span class="lg-dot" style="background:var(--done)"></span>実測済み・確定</span>
+    <span class="lg-item"><span class="lg-dot" style="background:var(--run)"></span>検証中・進行中</span>
+    <span class="lg-item"><span class="lg-dot" style="background:var(--warn)"></span>watch・リスク</span>
+    <span class="lg-item"><span class="lg-dot" style="background:var(--todo)"></span>未着手・空き</span>
+  </div>
 </div>
 
 <nav>
-  <a href="#phases">1. フェーズ整理</a>
-  <a href="#goal">2. Goal 数値表</a>
-  <a href="#flow">3. 全体ワークフロー</a>
-  <a href="#gantt">4. ガントチャート</a>
-  <a href="#angles">5. 試すアングル</a>
-  <a href="#barriers">6. 障壁決定版</a>
-  <a href="#actions">7. Action Items</a>
+  <a href="#plan">📈 全体計画 3ヶ月</a>
+  <a href="#phase">🗓 フェーズ 4段階</a>
+  <a href="#gate">🚦 判定ゲート 3指標</a>
+  <a href="#matrix">🎯 ペルソナ×カテゴリー 6×6</a>
+  <a href="#capacity">⚙️ 生成キャパ 判断3</a>
+  <a href="#flow">🔁 実務フロー 12工程</a>
+  <a href="#risk">⚠️ リスク台帳 11件</a>
 </nav>
 
-<section id="phases">
+<!-- Section 1: 全体計画 -->
+<section id="plan">
   <div class="card">
-    <h2>1. フェーズ整理 — 全体タイムライン</h2>
-    <div class="note">当たりアングル = Reel view・Story view・CVR が最低値以上(突破ラインは §2 参照)。7/13 キックオフ・7/16 投稿開始は消化済み。</div>
-    <div class="twrap"><table>
-      <thead><tr><th>フェーズ</th><th style="width:110px">期間</th><th>やること</th></tr></thead>
-      <tbody>
-        <tr><td>Phase 0 <span class="tag main">事前準備</span></td><td>〜7/21</td><td>環境セットアップ / 試すアングル10〜15個の決定 / 初期サイクルの設計書・コンテンツ生成 / アカウント準備・プロフセットアップ / 導線の仮説検証を既存アカで(Story 到達率・LC 率)</td></tr>
-        <tr><td>Phase 1 <span class="tag main">仮説検証</span></td><td>〜7/30</td><td>投稿開始(各アカ 5〜7本) / パフォーマンスを見ながら微修正(希望のないアカは微修正せず kill)</td></tr>
-        <tr><td>Phase 2 <span class="tag sub2">大量展開準備</span></td><td>8/1〜8/4</td><td>当たりアングルの横展開用設計+コンテンツ生成(各アングル最低10体) / アカウント・デバイス準備 / 各パイプラインの Playbook 化 / v5 への統合+テスト</td></tr>
-        <tr><td>Phase 3 <span class="tag sub2">大量展開</span></td><td>8/5〜</td><td>確定アングルで横展開 → 9月末 150体体制へ</td></tr>
-      </tbody>
-    </table></div>
+    <h2><span class="mark" style="background:var(--accent)"></span>全体計画 — 月別の到達数値</h2>
+    <div class="numcards">
+      <div class="numcard deficit">
+        <div class="month">7月</div>
+        <div class="cv">CV 49</div>
+        <div class="row"><span>売上</span><span class="v">¥73,500</span></div>
+        <div class="row"><span>コスト</span><span class="v">¥136,000</span></div>
+        <div class="row"><span class="st st-warn">赤字 — 検証投資</span></div>
+      </div>
+      <div class="numcard profit">
+        <div class="month">8月</div>
+        <div class="cv">CV 700</div>
+        <div class="row"><span>売上</span><span class="v">¥1,049,000</span></div>
+        <div class="row"><span>コスト</span><span class="v">¥525,000</span></div>
+        <div class="row"><span class="st st-done">黒字化</span></div>
+      </div>
+      <div class="numcard growth">
+        <div class="month">9月</div>
+        <div class="cv">CV 1,500</div>
+        <div class="row"><span>売上</span><span class="v">¥2,248,000</span></div>
+        <div class="row"><span>コスト</span><span class="v">¥1,125,000</span></div>
+        <div class="row"><span class="st st-run">拡大継続</span></div>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>月</th><th>アカウント数</th><th>コンテンツ数</th><th>Reel合計Imp</th><th>Story View</th><th>Link Click</th><th>CV</th></tr></thead>
+        <tbody>
+          <tr><td class="lever">7月</td><td>30〜40</td><td>180</td><td>270万</td><td>10.8万</td><td>3,240</td><td>49</td></tr>
+          <tr><td class="lever">8月</td><td>頭50-80→月末100<span class="def">実効70</span></td><td>1,050</td><td>3,885万</td><td>155.4万</td><td>46,620</td><td>700</td></tr>
+          <tr><td class="lever">9月</td><td>150</td><td>2,250</td><td>8,325万</td><td>333万</td><td>99,900</td><td>1,500</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">前提レート — Story到達率 4〜5.5% / CTR 計画3.0%(初期1.6〜2.0%許容) / CV率 1.5%</div>
   </div>
 </section>
 
-<section id="goal">
+<!-- Section 2: フェーズ -->
+<section id="phase">
   <div class="card">
-    <h2>2. 全体の Goal 数値表</h2>
-    <div class="note">前提レート: Stories閲覧/Imp 4.0% × CTR 3.0% × CV率 1.5% × 単価 ¥1,500。生成コスト = ¥755/本(7月実測)→ ¥500/本(8月〜・Hailuo/512p化前提)。Goal = <b>150アカウント × 11 CV/月</b>。</div>
-    <div class="twrap"><table>
-      <thead><tr><th>月</th><th class="num">アカウント数</th><th class="num">コンテンツ数</th><th class="num">Reel合計Imp</th><th class="num">Stories閲覧数</th><th class="num">LinkClick数</th><th class="num">CV数</th><th class="num">売上合計</th><th class="num">コスト合計</th><th class="num">利益</th></tr></thead>
-      <tbody>
-        <tr><td>7月</td><td class="num">30〜40(10アングル×2〜3体)</td><td class="num">180(5〜7本/acc)</td><td class="num">2,700,000</td><td class="num">108,000</td><td class="num">3,240</td><td class="num">49</td><td class="num">¥73,500</td><td class="num">¥136,000</td><td class="num">−¥62,500</td></tr>
-        <tr><td>8月</td><td class="num">頭50-80 → 月末100(実効70)</td><td class="num">1,050(15本/acc)</td><td class="num">38,850,000</td><td class="num">1,554,000</td><td class="num">46,620</td><td class="num">700</td><td class="num">¥1,049,000</td><td class="num">¥525,000</td><td class="num">+¥524,000</td></tr>
-        <tr><td>9月</td><td class="num">150</td><td class="num">2,250(15本/acc)</td><td class="num">83,250,000</td><td class="num">3,330,000</td><td class="num">99,900</td><td class="num">1,500</td><td class="num">¥2,248,000</td><td class="num">¥1,125,000</td><td class="num">+¥1,123,000</td></tr>
-        <tr style="background:#f8fafc;font-weight:700"><td>3ヶ月合計</td><td class="num">—</td><td class="num">3,480</td><td class="num">124,800,000</td><td class="num">4,992,000</td><td class="num">149,760</td><td class="num"><b>2,249</b></td><td class="num">¥3,370,500</td><td class="num">¥1,786,000</td><td class="num">+¥1,584,500</td></tr>
-      </tbody>
-    </table></div>
-    <div class="pad" style="border-top:1px solid var(--line)"><b>アカウント単位のバー（/acc・月次）</b></div>
-    <div class="twrap"><table>
-      <thead><tr><th>(/acc)</th><th class="num">コンテンツ数</th><th class="num">Reel合計Imp</th><th class="num">Stories閲覧数</th><th class="num">LinkClick数</th><th class="num">CV数</th><th class="num">売上</th><th class="num">生成コスト</th><th class="num">粗利</th></tr></thead>
-      <tbody>
-        <tr><td>理想値</td><td class="num">15</td><td class="num">1,000,000</td><td class="num">37,000</td><td class="num">740</td><td class="num">11</td><td class="num">¥15,000(=¥1,500×10)</td><td class="num">¥7,500(=¥500×15本)</td><td class="num">¥7,500</td></tr>
-        <tr><td>現状値（0223 6月実測）</td><td class="num">20</td><td class="num">630,000</td><td class="num">25,500</td><td class="num">291</td><td class="num">4</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
-      </tbody>
-    </table></div>
-    <div class="pad" style="border-top:1px solid var(--line)"><b>アングル別 最低突破ライン（生存・横展開ゲート）</b></div>
-    <div class="twrap"><table>
-      <thead><tr><th>(アングル累積 = 2〜3acc 合算)</th><th class="num">Story View</th><th class="num">Link Click</th><th class="num">CV</th></tr></thead>
-      <tbody>
-        <tr><td>最低値</td><td class="num">5,000</td><td class="num">150</td><td class="num">3</td></tr>
-        <tr><td>意味</td><td>LC150 ÷ CTR 3.0%。未満は露出不足で判定不成立</td><td>CV 裁定の発動条件（未満で CV を語らない）</td><td>LC150 時点で ≥3 = 突破・横展開 / 1〜2 = 継続観察 / 0 = kill</td></tr>
-      </tbody>
-    </table></div>
+    <h2><span class="mark" style="background:var(--run)"></span>フェーズ — Phase 0→3</h2>
+    <div class="phasegrid">
+      <div class="phase">
+        <div class="phase-name">Phase 0 準備 <span class="st st-run">現在地</span></div>
+        <div class="phase-date">〜7/23</div>
+        <ul class="phase-items">
+          <li>環境セットアップ</li>
+          <li>アングル決定</li>
+          <li>設計書/生成</li>
+          <li>導線仮説検証</li>
+        </ul>
+        <div class="phase-exit">出口: 10アングル×2体の投稿準備完了</div>
+      </div>
+      <div class="phase">
+        <div class="phase-name">Phase 1 仮説検証</div>
+        <div class="phase-date">7/23〜7/30</div>
+        <ul class="phase-items">
+          <li>投稿開始5〜7本/acc</li>
+          <li>見込みないアカは即Kill</li>
+        </ul>
+        <div class="phase-exit">出口: 判定ゲート通過アングル確定</div>
+      </div>
+      <div class="phase">
+        <div class="phase-name">Phase 2 展開準備</div>
+        <div class="phase-date">8/1〜8/4</div>
+        <ul class="phase-items">
+          <li>当たりアングル×10体の横展開設計</li>
+          <li>Playbook化</li>
+          <li>v5統合+テスト</li>
+        </ul>
+        <div class="phase-exit">出口: v5統合完了(クリティカルパス)</div>
+      </div>
+      <div class="phase">
+        <div class="phase-name">Phase 3 大量展開</div>
+        <div class="phase-date">8/5〜</div>
+        <ul class="phase-items">
+          <li>確定アングルで量産</li>
+        </ul>
+        <div class="phase-exit">出口: 月末100体稼働</div>
+      </div>
+    </div>
   </div>
 </section>
 
+<!-- Section 3: 判定ゲート -->
+<section id="gate">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--warn)"></span>判定ゲート — 何をもって突破とするか</h2>
+    <div class="note">アングル別 最低突破ライン(2〜3acc合算)</div>
+    <div class="statgrid c3">
+      <div class="statcard">
+        <div class="num">5,000</div>
+        <div class="lbl">Story View</div>
+        <div class="sub">未満は露出不足で判定不成立</div>
+      </div>
+      <div class="statcard">
+        <div class="num">150</div>
+        <div class="lbl">Link Click</div>
+        <div class="sub">CV裁定の発動条件・未満でCVを語らない</div>
+      </div>
+      <div class="statcard">
+        <div class="num">CV ≥3</div>
+        <div class="lbl">Conversion</div>
+        <div class="sub">LC150時点の裁定値</div>
+      </div>
+    </div>
+    <div class="mapwrap">
+      <div class="node" style="background:var(--runbg);border-color:var(--run);color:var(--run)">LC 150到達</div>
+      <div class="arrows">→</div>
+      <div class="node-stack">
+        <div class="node" style="background:var(--donebg);border-color:var(--done);color:var(--done)">CV≥3<br><span style="font-weight:400;font-size:10.5px">横展開</span></div>
+        <div class="node" style="background:var(--runbg);border-color:var(--run);color:var(--run)">CV1-2<br><span style="font-weight:400;font-size:10.5px">継続観察</span></div>
+        <div class="node" style="background:var(--warnbg-strong);border-color:var(--warn);color:var(--warn)">CV0<br><span style="font-weight:400;font-size:10.5px">Kill</span></div>
+      </div>
+      <div class="arrows">⇒</div>
+      <div class="node" style="background:var(--accentbg);border-color:var(--accent);color:var(--accent)">裁定確定</div>
+    </div>
+    <div class="note">アカウント単位 理想値(当たりアングル確定時)</div>
+    <div class="statgrid c6">
+      <div class="statcard"><div class="num">15本</div><div class="lbl">投稿数</div></div>
+      <div class="statcard"><div class="num">100万</div><div class="lbl">Reel Imp</div></div>
+      <div class="statcard"><div class="num">37,000</div><div class="lbl">Story View</div></div>
+      <div class="statcard"><div class="num">740</div><div class="lbl">Link Click</div></div>
+      <div class="statcard"><div class="num">11</div><div class="lbl">CV</div></div>
+      <div class="statcard"><div class="num">¥7,500</div><div class="lbl">粗利</div></div>
+    </div>
+    <div class="note">当たりアングル定義 = Avg. Reel view 15k + Story View + CVR が最低値以上(アングル累積=2-3acc合算)</div>
+  </div>
+</section>
+
+<!-- Section 4: ペルソナ×カテゴリー -->
+<section id="matrix">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--accent)"></span>ペルソナ × カテゴリー — 誰に何を当てるか</h2>
+    <div class="note">アングル = ペルソナ×カテゴリーの交点で生成。選定基準 = 「Storyに"聴くと相性のいい続き"を置けるか」+ 全カテゴリ聴き放題対象限定。7月は10〜12ロット選抜。</div>
+    <div class="persongrid">
+      <div class="pcard"><div class="name">① 歴史好きの部長 <span class="st st-done">実測</span></div><div class="def">48歳・通勤電車・実測CV層</div></div>
+      <div class="pcard"><div class="name">② 耳活サラリーマン</div><div class="def">34歳・移動多・積読</div></div>
+      <div class="pcard"><div class="name">③ ながらワーママ</div><div class="def">38歳・手は塞がるが耳は空く</div></div>
+      <div class="pcard"><div class="name">④ 怪談ナイトリスナー</div><div class="def">26歳・寝る前朗読習慣</div></div>
+      <div class="pcard"><div class="name">⑤ キャリア自己投資層</div><div class="def">25-35歳・コンサル内定者〜個人事業主・駆け出しインフルエンサー</div></div>
+      <div class="pcard"><div class="name">⑥ 小説好き20-40代女性</div><div class="def">IG読書垢層・設計書から浮上した実働コア</div></div>
+    </div>
+    <div class="persongrid">
+      <div class="pcard"><div class="name">ミステリー</div><div class="def">どんでん返し</div></div>
+      <div class="pcard"><div class="name">時代小説</div><div class="def">歴史</div></div>
+      <div class="pcard"><div class="name">イヤミス</div><div class="def">人間ドラマ</div></div>
+      <div class="pcard"><div class="name">怪談</div><div class="def">オカルト</div></div>
+      <div class="pcard"><div class="name">ビジネス</div><div class="def">自己啓発・学習ハック</div></div>
+      <div class="pcard"><div class="name">ペイン直訴求</div><div class="def">耳活・ながら・運転</div></div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>ペルソナ ＼ カテゴリー</th><th>ミステリー</th><th>時代小説・歴史</th><th>イヤミス・人間ドラマ</th><th>怪談・オカルト</th><th>ビジネス・自己啓発</th><th>ペイン直訴求</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lever">① 歴史好きの部長</td>
+            <td class="dash">—</td>
+            <td><span class="cellbadge" style="background:var(--donebg);color:var(--done)">A002 sengoku_jikenbo</span><span class="def">実測CV層</span></td>
+            <td class="dash">—</td><td class="dash">—</td>
+            <td class="dash">空き</td>
+            <td class="dash">—</td>
+          </tr>
+          <tr>
+            <td class="lever">② 耳活サラリーマン</td>
+            <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
+            <td><span class="cellbadge cellbadge-thin" style="background:var(--todobg);color:var(--todo)">耳活10倍</span><span class="def">候補</span></td>
+          </tr>
+          <tr>
+            <td class="lever">③ ながらワーママ</td>
+            <td><span class="cellbadge cellbadge-thin" style="background:var(--runbg);color:var(--run)">(A001)</span></td>
+            <td class="dash">—</td>
+            <td><span class="cellbadge cellbadge-thin" style="background:var(--runbg);color:var(--run)">(A003)</span></td>
+            <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
+          </tr>
+          <tr>
+            <td class="lever">④ 怪談ナイトリスナー</td>
+            <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
+            <td><span class="cellbadge cellbadge-thin" style="background:var(--todobg);color:var(--todo)">有力候補</span></td>
+            <td class="dash">—</td><td class="dash">—</td>
+          </tr>
+          <tr>
+            <td class="lever">⑤ キャリア自己投資層</td>
+            <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
+            <td><span class="cellbadge cellbadge-thin" style="background:var(--todobg);color:var(--todo)">StudyHacker風</span><span class="def">候補</span></td>
+            <td class="dash">—</td>
+          </tr>
+          <tr>
+            <td class="lever">⑥ 小説好き女性</td>
+            <td><span class="cellbadge" style="background:var(--runbg);color:var(--run)">A001 nazoyomi_novel</span></td>
+            <td class="dash">—</td>
+            <td><span class="cellbadge" style="background:var(--runbg);color:var(--run)">A003 kokoro_yomi</span><span class="def">唯一の同一セッションCV型</span></td>
+            <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">設計書DB = Ceed-dev/v5-agents/audible-designs/(A001〜連番)。設計書が増えるたび交点にバッジ追加。</div>
+  </div>
+</section>
+
+<!-- Section 5: 生成キャパと設計判断 -->
+<section id="capacity">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>生成キャパと設計判断 — 回るのか</h2>
+    <div class="prem-grid">
+      <div class="statcard"><div class="num">2h</div><div class="lbl">1本の実働</div><div class="sub">生成1h+確認修正1h</div></div>
+      <div class="statcard"><div class="num">6 / 2.5 / 2.5</div><div class="lbl">本/日</div><div class="sub">Badhan / 早川 / Oz</div></div>
+      <div class="statcard"><div class="num">約55本</div><div class="lbl">チーム計/週</div><div class="sub">営業日5日ベース</div></div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>週</th><th>フェーズ</th><th>目標本数</th><th>内訳(B/早川/Oz)</th><th>判定</th></tr></thead>
+        <tbody>
+          <tr><td class="lever">7/14-20</td><td>Phase0</td><td>60本</td><td>30/15/15</td><td><span class="st st-run">ギリ成立</span></td></tr>
+          <tr><td class="lever">7/21-27</td><td>Phase1</td><td>60本</td><td>30/15/15</td><td><span class="st st-run">ギリ成立</span></td></tr>
+          <tr><td class="lever">7/28-8/3</td><td>判定週+Phase2</td><td>〜40本</td><td>20/10/10</td><td><span class="st st-done">成立</span><span class="def">横展開はv5</span></td></tr>
+          <tr><td class="lever">8月各週</td><td>Phase3</td><td>45本</td><td>25/10/10</td><td><span class="st st-done">成立</span><span class="def">余力〜10本</span></td></tr>
+          <tr><td class="lever">9月各週</td><td>新規50体(人力の場合)</td><td>70本</td><td>35/17/17</td><td><span class="st st-warn">要注意</span><span class="def">5-15本超過</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="decision-grid">
+      <div class="decision">
+        <div class="t">① アングル×体数を確定</div>
+        <div class="d">10アングル×2体に確定。3体=180本は不成立。2体でもゲート成立(SV試算7,200&gt;5,000)</div>
+      </div>
+      <div class="decision warnborder">
+        <div class="t">② v5統合がクリティカルパス</div>
+        <div class="d">横展開はv5生成前提。v5統合 8/1完了がクリティカルパス</div>
+      </div>
+      <div class="decision">
+        <div class="t">③ 9月は新規数を抑制</div>
+        <div class="d">新規40体に抑制、または掘り立ち上げにv5部分投入</div>
+      </div>
+    </div>
+    <div class="note">減速ルール = 週60本ペースが崩れた週は「アングル数でなく体数を削る」(判定成立を守る)</div>
+  </div>
+</section>
+
+<!-- Section 6: 実務フロー -->
 <section id="flow">
   <div class="card">
-    <h2>3. 全体の週次ワークフロー — 12工程</h2>
-    <div class="note">仕込み（#1〜6）と判定（#11〜12）の2レーンを毎週並走。#11〜12 は定例で全員、Owner は Badhan。</div>
-    <div class="twrap"><table>
-      <thead><tr><th style="width:36px">#</th><th>工程</th><th style="width:320px">担当</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>端末 Setup</td><td>Badhan・駿冴</td></tr>
-        <tr><td>2</td><td>API セット</td><td>駿冴・Lala</td></tr>
-        <tr><td>3</td><td>設計書作り</td><td>Badhan (80%)・早川 (20%)</td></tr>
-        <tr><td>4</td><td>コンテンツ生成</td><td>Oz・早川・Badhan</td></tr>
-        <tr><td>5</td><td>アカウントプロフセット（アフィリンク発行・導線設置を含む）・Reel 投稿 API 接続</td><td>Lala（リンク発行のみ Badhan 固有権限）</td></tr>
-        <tr><td>6</td><td>投稿［Reels = API 経由 / Stories = 手動］</td><td>Stories 手動分 = Badhan・駿冴・バイト(タイミー)</td></tr>
-        <tr><td>7</td><td>パフォーマンスを見ながら必要に応じてコンテンツ調整</td><td>設計/生成担当者</td></tr>
-        <tr><td>8</td><td>Playbook 化</td><td>Tomo</td></tr>
-        <tr><td>9</td><td>v5 への統合</td><td>Tomo + 駿冴</td></tr>
-        <tr><td>10</td><td>投稿パフォーマンスのインサイトスクショ収集</td><td>Badhan・駿冴・Zach 分担</td></tr>
-        <tr><td>11</td><td>週次モニタリング（Kill/scale 判定）</td><td>Badhan</td></tr>
-        <tr><td>12</td><td>翌週の計画・担当者への連絡と期限切り</td><td>Badhan</td></tr>
-      </tbody>
-    </table></div>
-    <ul class="notes" style="padding-top:10px">
-      <li>Oz はコンテンツ生成のみの業務委託（それ以外の業務は行わない）</li>
-      <li>早川は日次 4〜5時間の稼働 — それに合う作業量のみを割り当てる</li>
-      <li>API トークン周りの挙動チェック（認証切れ等）は Lala が週次で実施</li>
-    </ul>
-    <div class="pad" style="border-top:1px solid var(--line)"><b>生成キャパ週次試算（7/14）</b></div>
-    <div class="note">前提: 1本 = 実働2h（生成1h + シナリオ確認・修正1h）/ Badhan 6本/日・早川/Oz 各2.5本/日 = チーム約11本/日・55本/週（営業日5日）/ 立ち上げバッチ = 6本/acc、立ち上げ後の15本/月は全量 v5 移管のため人力計算から除外。</div>
-    <div class="twrap"><table>
-      <thead><tr><th>週</th><th>フェーズ</th><th>必要本数/週</th><th>割付（B/早/Oz）</th><th>成否</th></tr></thead>
-      <tbody>
-        <tr><td>7/14-20</td><td>Phase 0: 10アングル×2体・初速3本/acc</td><td>60本</td><td>30/15/15</td><td>○ ギリ成立</td></tr>
-        <tr><td>7/21-27</td><td>Phase 1: 残り3本/acc rolling</td><td>60本</td><td>30/15/15</td><td>○ 同上</td></tr>
-        <tr><td>7/28-8/3</td><td>判定週 + Phase 2 開始（人力は補修・追い生成）</td><td>〜40本</td><td>20/10/10</td><td>○（横展開は v5）</td></tr>
-        <tr><td>8月各週</td><td>Phase 3: 掘り30体/月の立ち上げ</td><td>45本</td><td>25/10/10</td><td>○ 余力〜10本/週</td></tr>
-        <tr><td>9月各週</td><td>新規増分50体を人力の場合</td><td>70本</td><td>35/17/17</td><td>△ 5〜15本/週超過</td></tr>
-      </tbody>
-    </table></div>
-    <ul class="notes">
-      <li>7月は「10アングル×<b>2体</b>」なら一斉並列が成立（120本 ≦ キャパ110〜130本）。3体だと180本 = 18本/日で不成立。2体でもゲートは通る（Story View 試算 7,200 > 最低値5,000）→「×2体」に確定</li>
-      <li>Phase 2 横展開（240〜300本/週）は人力55本/週では埋まらない → <span class="warn">v5 生成が前提。v5 統合の 8/1 完了がクリティカルパス</span></li>
-      <li>9月は微超過 → 新規を40体に抑えるか、掘りの立ち上げにも v5 を部分投入</li>
-      <li>減速ルール: 週60本ペースが崩れた週は「アングル数でなく体数を削る」（判定成立を守る）</li>
-    </ul>
-  </div>
-</section>
-
-<section id="gantt">
-  <div class="card">
-    <h2>4. ガントチャート — 7月 立ち上げ〜検証（7/9 木 〜 7/31 金）</h2>
-    <div class="note">キックオフ 7/13 (月) までに最低限の設計書 = <b>10体分（cohort1・提案値）</b>を準備し、月曜から全員が作業を開始できる状態にする。v5 の「ペルソナDB」「競合ポストDB」は最初の3日で片付ける。</div>
-    <div class="gwrap"><div class="gantt">
-
-      <div class="grow head">
-        <div class="hd">7/9<br>木</div><div class="hd">10<br>金</div><div class="hd we">11<br>土</div><div class="hd we">12<br>日</div>
-        <div class="hd">13<br>月</div><div class="hd">14<br>火</div><div class="hd">15<br>水</div><div class="hd">16<br>木</div>
-        <div class="hd">17<br>金</div><div class="hd we">18<br>土</div><div class="hd we">19<br>日</div><div class="hd we">20<br>祝</div>
-        <div class="hd">21<br>火</div><div class="hd">22<br>水</div><div class="hd">23<br>木</div><div class="hd">24<br>金</div>
-        <div class="hd we">25<br>土</div><div class="hd we">26<br>日</div><div class="hd">27<br>月</div><div class="hd">28<br>火</div>
-        <div class="hd">29<br>水</div><div class="hd">30<br>木</div><div class="hd">31<br>金</div>
-      </div>
-
-      <div class="lane mkl">マイルストーン系</div>
-      <div class="grow" style="min-height:44px">
-        <div class="cell" style="grid-column:5/6"><div class="ms"></div><div class="mstext">キック<br>オフ</div></div>
-        <div class="cell" style="grid-column:8/9"><div class="ms"></div><div class="mstext">投稿<br>開始</div></div>
-        <div class="cell" style="grid-column:23/24"><div class="ms"></div><div class="mstext">Phase 1<br>判定</div></div>
-      </div>
-      <div class="grow" style="min-height:44px">
-        <div class="cell" style="grid-column:12/13"><div class="ms"></div><div class="mstext">Phase 0<br>完了 (7/21)</div></div>
-        <div class="cell" style="grid-column:16/17"><div class="ms"></div><div class="mstext">週次<br>判定</div></div>
-        <div class="cell" style="grid-column:23/24"><div class="ms"></div><div class="mstext">週次<br>判定</div></div>
-      </div>
-
-      <div class="lane mgl">マネジメント系</div>
-      <div class="grow">
-        <div class="cell" style="grid-column:1/3"><div class="bt">課題潰し・対策準備 <span class="w">B+Claude</span></div><div class="bar mg"></div></div>
-        <div class="cell" style="grid-column:4/6"><div class="bt">走らせ方・週次決め事の確定</div><div class="bar mg"></div></div>
-        <div class="cell" style="grid-column:9/10"><div class="bt">週次モニタ <span class="w">7/17=稼働確認</span></div><div class="bar mg"></div></div>
-        <div class="cell" style="grid-column:16/17"><div class="bt">週次モニタ・判定</div><div class="bar mg"></div></div>
-        <div class="cell" style="grid-column:23/24"><div class="bt">週次判定</div><div class="bar mg"></div></div>
-      </div>
-      <div class="grow">
-        <div class="cell" style="grid-column:2/3"><div class="bt">アングル決定 <span class="w">B</span></div><div class="bar mg"></div></div>
-      </div>
-      <div class="grow">
-        <div class="cell" style="grid-column:2/5"><div class="bt">準備: Workspace 構築 → 伝達・お試しテスト <span class="w">〜7/12、B+Claude → 全員</span></div><div class="bar prep"></div></div>
-      </div>
-
-      <div class="lane opl">ops系</div>
-      <div class="grow">
-        <div class="cell" style="grid-column:1/2"><div class="bt">外部発射: API申請/ASP照会/端末発注 <span class="w">B・駿冴 → 審査・配送待ち</span></div><div class="bar op"></div></div>
-        <div class="cell" style="grid-column:2/8"><div class="bar wait"></div></div>
-        <div class="cell" style="grid-column:8/24"><div class="bt">投稿運用 <span class="w">Reels=API / Stories=手動 (B・駿・Z?)</span></div><div class="bar op cont"></div></div>
-      </div>
-      <div class="grow">
-        <div class="cell" style="grid-column:3/9"><div class="bt">端末セットアップ・アカ開設 <span class="w">5アカ/端末・7月ロット分、B・駿・Lala</span></div><div class="bar op"></div></div>
-        <div class="cell" style="grid-column:15/17"><div class="bt">インサイト収集</div><div class="bar op"></div></div>
-        <div class="cell" style="grid-column:22/24"><div class="bt">インサイト収集</div><div class="bar op"></div></div>
-      </div>
-      <div class="grow">
-        <div class="cell" style="grid-column:6/9"><div class="bt">プロフセット・リンク発行・導線設置・API接続 <span class="w">駿・Lala (リンクは B)</span></div><div class="bar op"></div></div>
-      </div>
-
-      <div class="lane prl">制作系（設計書・コンテンツ）</div>
-      <div class="grow">
-        <div class="cell" style="grid-column:2/4"><div class="bt">設計書の型づくり</div><div class="bar pr"></div></div>
-        <div class="cell" style="grid-column:4/5"><div class="bt">10体分</div><div class="bar pr"></div></div>
-        <div class="cell" style="grid-column:6/11"><div class="bt">設計書量産 (週50本ペース) <span class="w">B80/早20</span></div><div class="bar pr"></div></div>
-        <div class="cell" style="grid-column:13/18"><div class="bar pr"></div></div>
-        <div class="cell" style="grid-column:20/24"><div class="bar pr"></div></div>
-      </div>
-      <div class="grow">
-        <div class="cell" style="grid-column:5/24"><div class="bt">コンテンツ生成 (Reels 在庫) <span class="w">Oz・早川・B</span></div><div class="bar pr cont"></div></div>
-      </div>
-      <div class="grow">
-        <div class="cell" style="grid-column:9/24"><div class="bt">パフォーマンス見ながらコンテンツ調整 <span class="w">設計/生成担当</span></div><div class="bar pr cont"></div></div>
-      </div>
-
-      <div class="lane v5l">v5系</div>
-      <div class="grow">
-        <div class="cell" style="grid-column:1/4"><div class="bt">ペルソナDBの追加 <span class="w">Tomo・駿</span></div><div class="bar v5"></div></div>
-        <div class="cell" style="grid-column:4/8"><div class="bt">新規Playbook投入+テスト運用 <span class="w">7/14 1体判定→10体</span></div><div class="bar v5"></div></div>
-        <div class="cell" style="grid-column:15/18"><div class="bt">1サイクル分析→学び提示</div><div class="bar v5"></div></div>
-      </div>
-      <div class="grow">
-        <div class="cell" style="grid-column:1/4"><div class="bt">競合ポストDB+分析 <span class="w">Tomo+Claude</span></div><div class="bar v5"></div></div>
-        <div class="cell" style="grid-column:17/24"><div class="bt">予測精度の精度調整 <span class="w">駿冴</span></div><div class="bar v5"></div></div>
-      </div>
-
-    </div></div>
-
-    <div class="legend">
-      <span><i class="sw" style="background:var(--on)"></i>マネジメント</span>
-      <span><i class="sw" style="background:var(--off)"></i>ops</span>
-      <span><i class="sw" style="background:var(--mk)"></i>制作</span>
-      <span><i class="sw" style="background:var(--run)"></i>v5</span>
-      <span><i class="sw" style="background:var(--onbg);border:2px solid var(--on)"></i>準備（型・Workspace）</span>
-      <span><i class="sw" style="background:repeating-linear-gradient(45deg,#e2e8f0,#e2e8f0 4px,#f8fafc 4px,#f8fafc 8px);border:1px solid #cbd5e1"></i>外部待ち（審査・配送）</span>
-      <span><i class="sw" style="background:var(--warn);width:11px;height:11px;transform:rotate(45deg)"></i>マイルストーン</span>
-      <span>薄色バー = 継続運用 / B = Badhan・駿 = 駿冴・早 = 早川・Z = Zach</span>
+    <h2><span class="mark" style="background:var(--accent)"></span>実務フロー — 12工程と担当</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>工程</th><th>担当</th></tr></thead>
+        <tbody>
+          <tr><td class="lever">1</td><td>端末Setup</td><td><span class="chip">Badhan</span> <span class="chip">駿冴</span></td></tr>
+          <tr><td class="lever">2</td><td>APIセット</td><td><span class="chip">駿冴</span> <span class="chip">Lala</span></td></tr>
+          <tr><td class="lever">3</td><td>設計書作り</td><td><span class="chip">Badhan 80%</span> <span class="chip">早川 20%</span></td></tr>
+          <tr><td class="lever">4</td><td>コンテンツ生成</td><td><span class="chip">Oz</span> <span class="chip">早川</span> <span class="chip">Badhan</span></td></tr>
+          <tr><td class="lever">5</td><td>プロフセット・アフィリンク・導線設置・Reel API接続</td><td><span class="chip">Lala</span></td></tr>
+          <tr><td class="lever">6</td><td>投稿(Reel=API・Story=手動)</td><td><span class="chip">Badhan</span> <span class="chip">駿冴</span> <span class="chip">バイト</span></td></tr>
+          <tr><td class="lever">7</td><td>パフォーマンス見て調整</td><td><span class="chip">設計/生成担当</span></td></tr>
+          <tr class="boundary"><td colspan="3">人力 → v5移管の境界</td></tr>
+          <tr><td class="lever">8</td><td>Playbook化</td><td><span class="chip chip-accent">Tomo</span></td></tr>
+          <tr><td class="lever">9</td><td>v5統合</td><td><span class="chip chip-accent">Tomo</span> <span class="chip chip-accent">駿冴</span></td></tr>
+          <tr><td class="lever">10</td><td>インサイトスクショ収集</td><td><span class="chip">Badhan</span> <span class="chip">駿冴</span> <span class="chip">Zach</span></td></tr>
+          <tr><td class="lever">11</td><td>週次Kill/Scale判定</td><td><span class="chip">Badhan</span></td></tr>
+          <tr><td class="lever">12</td><td>翌週計画・期限切り</td><td><span class="chip">Badhan</span></td></tr>
+        </tbody>
+      </table>
     </div>
-
-    <ul class="notes">
-      <li><span class="warn">クリティカルパス = 端末配送と Meta API 審査（外部発射）。</span>遅延時は cohort1 を既存端末・既存アプリ枠で先に立ち上げ、投稿開始 7/16 を守る。</li>
-      <li>各作業は最短固定・並行幅優先。遅れた作業は延長でなくスコープ削減で同日着地（スピード優先原則）。</li>
-    </ul>
+    <div class="note">アカウント単位で#1〜#12が走る。一度走ればv5がハンドリングし、人間はStory PDCAとファネル改善に注力</div>
   </div>
 </section>
 
-<section>
+<!-- Section 7: リスク台帳 -->
+<section id="risk">
   <div class="card">
-    <h2>ガントチャート — 8月 150体 go 判定〜スケール（8/1 土 〜 8/31 月）</h2>
-    <div class="note">7月の実測（CVR・打率・API 上限・端末コスト）を受けて中身を記入する。Phase 2 = 8/1〜8/4 展開準備 / Phase 3 = 8/5〜 大量展開。</div>
-    <div class="augwrap">
-      <div class="augoverlay"><div class="pill">後から追加</div></div>
-      <div class="gwrap"><div class="gantt aug">
-
-        <div class="grow head">
-          <div class="hd we">8/1</div><div class="hd we">2</div><div class="hd">3</div><div class="hd">4</div><div class="hd">5</div><div class="hd">6</div><div class="hd">7</div>
-          <div class="hd we">8</div><div class="hd we">9</div><div class="hd">10</div><div class="hd">11</div><div class="hd">12</div><div class="hd">13</div><div class="hd">14</div>
-          <div class="hd we">15</div><div class="hd we">16</div><div class="hd">17</div><div class="hd">18</div><div class="hd">19</div><div class="hd">20</div><div class="hd">21</div>
-          <div class="hd we">22</div><div class="hd we">23</div><div class="hd">24</div><div class="hd">25</div><div class="hd">26</div><div class="hd">27</div><div class="hd">28</div>
-          <div class="hd we">29</div><div class="hd we">30</div><div class="hd">31</div>
-        </div>
-
-        <div class="lane mkl">マイルストーン系</div>
-        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">8/4 Phase 2 完了 → 8/5 Phase 3 点火 / 150体 go 判定</div></div></div>
-
-        <div class="lane mgl">マネジメント系</div>
-        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">週次モニタリング・翌週計画</div></div></div>
-
-        <div class="lane opl">ops系</div>
-        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">端末・アカ増設（150体へ）/ 投稿運用 / インサイト収集</div></div></div>
-
-        <div class="lane prl">制作系（設計書・コンテンツ）</div>
-        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">当たりアングル横展開の設計+生成（各10体〜）— v5 主導</div></div></div>
-
-        <div class="lane v5l">v5系</div>
-        <div class="grow"><div class="cell" style="grid-column:1/12"><div class="ghost">Playbook 化 → v5 統合（〜8/1）→ テスト / 予測精度調整</div></div></div>
-
-      </div></div>
+    <h2><span class="mark" style="background:var(--warn)"></span>リスク台帳 — 実測済みとwatch</h2>
+    <div class="riskgrid">
+      <div class="riskcol">
+        <h3><span class="st st-warn">実測</span>実測済み</h3>
+        <div class="riskcard risk-strong">CTR 1.14% vs 計画3.0%</div>
+        <div class="riskcard risk-strong">CV率 1.02〜1.37% vs 計画1.5%<span class="def">未達ならacc当たり7CV止まり</span></div>
+        <div class="riskcard risk-strong">リトライ課金 +25%<span class="def">7月監査実測・コスト計画未算入</span></div>
+        <div class="riskcard risk-strong">連鎖BAN実績(6/19)+AI生成ラベリング未決着(6/15凍結)</div>
+      </div>
+      <div class="riskcol">
+        <h3>watch</h3>
+        <div class="riskcard risk-weak">新規accの初速不足<span class="def">view15k未達→判定不成立→Phase3後ろ倒し</span></div>
+        <div class="riskcard risk-weak">報酬単価再下落<span class="def">2,000→1,500の次</span></div>
+        <div class="riskcard risk-weak">V2コミットとのギャップ<span class="def">2ヶ月CV1,300 vs 本計画約750—8/5定例前に期間読み替え合意</span></div>
+      </div>
+      <div class="riskcol">
+        <h3>オープン課題</h3>
+        <div class="riskcard risk-todo">導線テンプレ最終仕様<span class="def">エンタメ層=Reel→Story→CV / ペイン層=Reel→Highlights→CV</span></div>
+        <div class="riskcard risk-todo">API上限対策<span class="def">駿冴調査中</span></div>
+        <div class="riskcard risk-todo">Story手動投稿体制<span class="def">Link付きは手動必須・分担制</span></div>
+        <div class="riskcard risk-todo">生成単価¥755→¥500<span class="def">Hailuo・512p化、Phase3コスト前提</span></div>
+      </div>
     </div>
-  </div>
-</section>
-
-<section id="angles">
-  <div class="card">
-    <h2>5. 試すアングル — 25種（7/14 選定）</h2>
-    <div class="note">選定原理（実測由来）: CV は Imp でなく intent から出る。「コンテンツの続き = Audible」のゼロ距離接続が成立するほど上位。<span class="tag kari">有力</span> = 実測あり or intent 強度・競合空白。7月はここから 10〜12 ロットを選抜。</div>
-    <div class="pad"><b>ペルソナ5人:</b> ①歴史好きの部長（48・通勤電車・実測CV層）/ ②耳活サラリーマン（34・移動多・積読）/ ③ながらワーママ（38・手は塞がるが耳は空く）/ ④怪談ナイトリスナー（26・寝る前朗読習慣）/ ⑤コンサル内定者・1年目（26・必読書不安・自己投資）+ 掘り枠: QOL 自己最適化層</div>
-    <div class="pad" style="padding-top:0"><b>パターン1: Imp型 — 大量露出で Page View を稼ぎ、Story で刈る</b></div>
-    <div class="twrap"><table>
-      <thead><tr><th style="width:36px">#</th><th style="width:260px">アングル</th><th>Story での商材接続</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>江戸雑学 <span class="tag kari">有力・実測CV5</span></td><td>「今日の話の元ネタ本、聴けます」</td></tr>
-        <tr><td>2</td><td>戦国・幕末の武将雑学</td><td>歴史解説・歴史小説</td></tr>
-        <tr><td>3</td><td>世界史ミステリー（未解決・陰謀）</td><td>歴史ノンフィクション</td></tr>
-        <tr><td>4</td><td>事件・犯罪ノンフィク解説</td><td>ルポ・ノンフィク</td></tr>
-        <tr><td>5</td><td>怪談・実話怖い話 <span class="tag kari">有力</span></td><td>怪談朗読（長尺・広告なし版）</td></tr>
-        <tr><td>6</td><td>都市伝説・オカルト考察</td><td>オカルト・超常本</td></tr>
-        <tr><td>7</td><td>心理学・人間観察ネタ（「こういう人は○○」）</td><td>心理学書</td></tr>
-        <tr><td>8</td><td>お金の雑学（年収・税金・値上げニュース）</td><td>マネー本</td></tr>
-        <tr><td>9</td><td>偉人の逸話・名言</td><td>自伝・自己啓発</td></tr>
-        <tr><td>10</td><td>昭和・平成ノスタルジー雑学</td><td>エッセイ・時代小説</td></tr>
-        <tr><td>11</td><td>名作小説のあらすじ・考察 <span class="tag kari">有力</span></td><td>試し聴きフック「買う前に冒頭を無料で」</td></tr>
-        <tr><td>12</td><td>雑学総合（「知らないと損」系）</td><td>雑学・教養本</td></tr>
-        <tr><td>—</td><td>今話題のニュース系（Imp が10倍級で取れないと不成立 — 慎重に）</td><td>—</td></tr>
-      </tbody>
-    </table></div>
-    <div class="pad"><b>パターン2: ペイン型 — 刺してそのまま CV</b></div>
-    <div class="twrap"><table>
-      <thead><tr><th style="width:36px">#</th><th style="width:260px">アングル（ペイン）</th><th>対応ペルソナ</th></tr></thead>
-      <tbody>
-        <tr><td>13</td><td>耳活で読書量10倍（時間がない） <span class="tag kari">有力</span></td><td>耳活サラリーマン</td></tr>
-        <tr><td>14</td><td>コンサル/ハイキャリア新卒の必読書（入社前不安） <span class="tag kari">有力</span></td><td>コンサル内定者・1年目</td></tr>
-        <tr><td>15</td><td>「本が読めなくなった大人」（スマホで集中力が死んだ）</td><td>30〜40代全般</td></tr>
-        <tr><td>16</td><td>積読解消（「積んでる本、耳なら終わる」）</td><td>耳活サラリーマン変形</td></tr>
-        <tr><td>17</td><td>家事育児で手が塞がる（ながら読書） <span class="tag kari">有力</span></td><td>ながらワーママ</td></tr>
-        <tr><td>18</td><td>寝れない夜の入眠朗読（睡眠ペイン）</td><td>怪談層の裏面・広い</td></tr>
-        <tr><td>19</td><td>英語・語学の多聴（勉強が続かない）</td><td>学び直し層</td></tr>
-        <tr><td>20</td><td>資格勉強のスキマ時間（机に向かえない）</td><td>学び直し層</td></tr>
-        <tr><td>21</td><td>QOL 自己最適化（通勤をアップグレード）</td><td>QOL 層（掘り枠）</td></tr>
-        <tr><td>22</td><td>運転時間が長い（営業車・地方通勤） <span class="tag kari">有力</span></td><td>空白層 — IG 上ほぼ無競合の疑い</td></tr>
-        <tr><td>23</td><td>筋トレ・ランニング中の学び</td><td>QOL 隣接</td></tr>
-        <tr><td>24</td><td>老眼・目の疲れで読めない（50〜60代の読書回帰）</td><td>歴史部長の上位年齢帯</td></tr>
-        <tr><td>25</td><td>読み聞かせ・子育て（子ども向け朗読）</td><td>ワーママ変形</td></tr>
-      </tbody>
-    </table></div>
-  </div>
-</section>
-
-<section id="barriers">
-  <div class="card">
-    <h2>6. 障壁決定版</h2>
-    <div class="note">5-1 = 解決済み（7/10 反映）。5-2 = 現在オープンの課題（7/14）。5-3 = 起こりうる問題点（実測ベース）。5-4 = 計画棄却リスク。正本 = Notion「Audible 企画」カード。</div>
-    <div class="pad" style="padding-bottom:4px"><b>5-1. 解決済み — 走る前に解いた課題</b></div>
-    <div class="twrap"><table>
-      <thead><tr><th>項目</th><th style="width:45%">解決策</th></tr></thead>
-      <tbody>
-        <tr><td>Meta API 兵站（最大の単一障害点）</td><td><a href="slackMessage://ceed0105.slack.com/C09RBQH0NA2/1783488005.738699/1783488005.738699">API投稿はできない</a>→Reels=API投稿・Stories＝手動投稿。</td></tr>
-        <tr><td>ASP の量産許容</td><td>初期 = 江戸裏話（承認済みメディア）発行済みの Audible リンクを新規アカで共用 → アカが育ち次第（目安フォロワー3k = ASP 閾値）各アカ側でリンク発行し CV を分散。※共用期間は acc/ロット単位の CV 帰属なし → kill 条件③はクリック代理で運用、リンク切替後に CV 判定復帰</td></tr>
-        <tr><td>端末準備（1端末最大5アカウント — 方針転換 7/9: 同 playbook ロットは BAN リスク同一のため同居可、コスト効率優先）</td><td>①台数 = 合計30台（7月分 10〜15台を即日発注、8月に追加購入。owner: Badhan — 調達先・単価確定→発注）②1端末 = 1ロット（同一 playbook 5アカ）固定 — 端末境界 = ロット隔離境界に一致させ BAN 切り分けを単純化 ③セットアップ分担 = Badhan・駿冴（+Zach は初期セットアップのみ）</td></tr>
-        <tr><td>全体のロジック</td><td>計画が一気通貫で回る論理の事前固め = 3つの噛み合わせ確認: ①数値チェーン（Imp→Stories→Click→CV が前提レートで閉じるか）→ 計画表で消化済み ②ワークフロー12工程がチェーンのどの数値を動かすか（どの工程が落ちるとどの数値が死ぬか）→ 週次ワークフロー整合で消化済み ③週次判定ループ（計測→kill/scale→翌週計画）の閉じ → ロット kill 条件の最小数値セット確定（7/9・週次課題検知システム行参照）で閉了。3点とも解消</td></tr>
-        <tr><td>v5 が何かの課題に見舞われるか</td><td>大量のPlaybookを追加するから、そのエラー。市場分析がどこまでワークするのか問題</td></tr>
-        <tr><td>フォロワー非依存導線（7月300 CV の成否を握る）</td><td>標準形 = 三層搭載: ①Reel CTA『プロフから』固定文言 ②bio に A8 直リンク ③ハイライトに 6/23 最終Frameテンプレ常設。リンクを配置別（bio/ハイライト）に発行し初週ロットで実測 → CTA 文言のみ A/B。canary = プロフ来訪率 ≥3%。※bio 直リンクの規約可否は ASP 照会に追加</td></tr>
-        <tr><td>週次の課題検知システム（アングルXの継続バー含む）</td><td>ロット kill 条件（最小セット）: ①初速 = 投稿開始2週でロット view 中央値 15k/本未満 → playbook kill（中央値=単発バズ除外。設計 66.7k/本の約22%水準）②導線 = 3週目にリンククリックが中央値 35件/acc/週 と ロット合計 35×体数/週 の両方割れ → kill、片方割れは導線修理1回→翌週再判定（設計 71件/acc/週の50%線）③CV = リンク稼働後3週でロット合計 CV 0 → kill（CV リードタイム約1ヶ月織り込み。既存アカの7日ルールとは別）※15k・35件は既存アカ実測からの外挿 — 初回ロット2週実測で1回較正 ④フォロワー到達ペース（watch 指標・kill ではない）= 週次でロット中央値フォロワーを計測、目安 375/週（8週で 3k = per-acc リンク発行と F1 複利の前提）。2週連続で半分以下なら共用リンク期間の延長を計画に反映 + 導線見直し</td></tr>
-        <tr><td>Stories 手動投稿の兵站確定（70体で約47件/日、150体で約100件/日。分担と Zach 参加の可否、Stories API 対応可否）</td><td>①Lala が『リンクスタンプの API 付与可否』を 7/11 までに実確認（投稿可否でなくスタンプ可否が肝）②手動前提: 70体 = 約47件/日 ≈ 2h/日、早川メイン（日次4-5h 枠内）・バックアップ Lala ③150体 = 約100件/日 ≈ 5h/日 → 2〜3人分担で1.5〜2h/人 = 許容範囲 ④Zach 不参加（7/9 Q2 Recap のコア4人エグゼキューション外し lock に整合）※1件2〜3分は仮置き — 初週に早川実測で置き直し</td></tr>
-        <tr><td>Playbook 化への受け渡しロジック（生成担当から Tomo に何を渡すか）</td><td>渡すもの: ・SessionLog ・コード類</td></tr>
-        <tr><td>v5 統合のリスク管理（ミス生成・バグによる無駄な API 費用を発生させない検証手順）</td><td>生成費用を中央管理（利益がメインファクター化）: ①各バッチ前に『そのバッチで変えるもの』を事前設定（例: CTA を〇〇に変更 / テーマ変更）— 変更要求は全て中央集権的に集約し、意思決定後に生成を走らせる ②新規 Playbook は過去のミス生成要因の有無を Check → テスト生成1本 → 通過後に本走</td></tr>
-        <tr><td>インサイト収集の自動化リサーチ（駿冴進行中。無いと工数コスト大）</td><td>駿冴進行中</td></tr>
-      </tbody>
-    </table></div>
-    <div class="pad" style="padding-bottom:4px;border-top:1px solid var(--line)"><b>5-2. 事前に詰めるべき課題（オープン・7/14）</b></div>
-    <div class="twrap"><table>
-      <thead><tr><th>課題</th><th style="width:55%">状況・方針</th></tr></thead>
-      <tbody>
-        <tr><td>導線テンプレの最終仕様</td><td>エンタメ層: Reel→Story→CV / ペイン解決層: Reel→Highlights 誘導→CV</td></tr>
-        <tr><td>API 上限対策</td><td>駿冴が調査中</td></tr>
-        <tr><td>Story 手動投稿の体制</td><td>Link 付きは手動投稿必須。Claude 操作不可なら Lala・インターン・Badhan・駿冴で分担</td></tr>
-        <tr><td>生成単価削減（¥755→¥500）</td><td>Hailuo・512p 化。担当未定 — Phase 3 のコスト前提。新規は可、既存江戸系の下げ方は模索中</td></tr>
-        <tr><td>各自の週次 KPI 割付</td><td>設計書 30〜50個/週 — リファアカのみ人が用意し Claude 生成 + Review 方式</td></tr>
-      </tbody>
-    </table></div>
-    <div class="pad" style="padding-bottom:4px;border-top:1px solid var(--line)"><b>5-3. 起こりうる問題点（実測ベース）</b></div>
-    <div class="twrap"><table>
-      <thead><tr><th>問題</th><th style="width:55%">中身・対応</th></tr></thead>
-      <tbody>
-        <tr><td>CTR 3.0% 未達</td><td>実測 1.14% — Imp を引き上げるアングルに軸足を置く</td></tr>
-        <tr><td>CV率 1.5% 未達</td><td>実測最高 1.02〜1.37% — 未達なら acc あたり 7 CV 止まり</td></tr>
-        <tr><td>BAN・凍結</td><td>連鎖 BAN 実績（6/19）・AI 生成ラベリング要件未決着（6/15 凍結）。1端末1アカ徹底でも新規30体一斉は検知リスク</td></tr>
-        <tr><td>新規 acc の初速不足</td><td>view 15k/本が出ないとロット判定自体が不成立 → アングル確定が後ろ倒し・Phase 3 点火遅延</td></tr>
-        <tr><td>リトライ課金の上振れ</td><td>実請求 = 理論値 +25%（7月監査実測）。コスト計画に未算入</td></tr>
-        <tr><td>報酬単価の再下落</td><td>2,000→1,500 に続く引き下げリスク。単価依存の収益構造</td></tr>
-        <tr><td>V2 コミットとのギャップ</td><td>2ヶ月 CV 1,300 vs 本計画 7+8月 約750 → 8/5 定例前に期間読み替えの合意形成が必要</td></tr>
-      </tbody>
-    </table></div>
-    <div class="pad" style="padding-bottom:4px;border-top:1px solid var(--line)"><b>5-4. この計画自体が棄却されうるリスク</b></div>
-    <div class="twrap"><table>
-      <thead><tr><th>失敗要因</th><th style="width:32%">防止策</th><th style="width:26%">起きた時の対応</th></tr></thead>
-      <tbody>
-        <tr><td>CVR 根本仮説の棄却（通し 11 CV/1M Imp 届かず）</td><td></td><td></td></tr>
-        <tr><td>Audibleからの成果否認（否認率不明）</td><td></td><td></td></tr>
-        <tr><td>Audible単体依存</td><td></td><td></td></tr>
-        <tr><td>金繰り×判定タイミングの事故</td><td></td><td></td></tr>
-        <tr><td>Badhan律速＋計測が全部手動</td><td></td><td></td></tr>
-      </tbody>
-    </table></div>
-  </div>
-</section>
-
-<section id="actions">
-  <div class="card">
-    <h2>7. Action Items — Phase 0 残タスク（〜7/21）</h2>
-    <div class="note">7/13 キックオフ・7/16 投稿開始は消化済み。以下 = Phase 0 完了までの残り。</div>
-    <div class="twrap"><table>
-      <thead><tr><th>やること</th><th style="width:220px">担当</th><th style="width:110px">期限</th></tr></thead>
-      <tbody>
-        <tr><td>アングルロット確定（25種から 10アングル×2体を選抜）</td><td>Badhan</td><td>〜7/21</td></tr>
-        <tr><td>初期サイクルの設計書・コンテンツ生成（60本/週ペース維持）</td><td>Badhan・早川・Oz</td><td>7/14-20 週</td></tr>
-        <tr><td>アカウント準備・プロフセットアップ・導線設置</td><td>Lala（リンク発行は Badhan）</td><td>〜7/21</td></tr>
-        <tr><td>導線の仮説検証を既存アカで（Story 到達率・LC 率）</td><td>Badhan</td><td>〜7/21</td></tr>
-        <tr><td>オープン課題 5件（5-2）の担当・期限切り</td><td>Badhan</td><td>〜7/21</td></tr>
-      </tbody>
-    </table></div>
   </div>
 </section>
 
 <footer>
-  作成 2026-07-09 · 更新 2026-07-16（Notion「Audible 企画」7/14 計画を反映 — KPI 3ヶ月化・フェーズ整理・アングル25種・生成キャパ試算・障壁更新）· 正本: Notion「Audible 企画」カード
+  正本: Notion「Audible 企画」(<a href="https://app.notion.com/p/badhan/Audible-39dd16117cc780e59fa8c3ec26d1dfb6">app.notion.com/p/badhan/Audible</a>) ／
+  設計書DB: github.com/Ceed-dev/v5-agents audible-designs/<br>
+  作成 2026-07-21・内部ID/認証情報は除去済み
 </footer>
 
 </body>
