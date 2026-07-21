@@ -294,24 +294,22 @@
       <div class="statcard">
         <div class="num">150</div>
         <div class="lbl">Link Click</div>
-        <div class="sub">CV裁定の発動条件・未満でCVを語らない</div>
+        <div class="sub">ここに達して初めてCVを判定(未満では判定しない)</div>
       </div>
       <div class="statcard">
         <div class="num">CV ≥3</div>
         <div class="lbl">Conversion</div>
-        <div class="sub">LC150時点の裁定値</div>
+        <div class="sub">LC150到達時点のCV数で合否を決める</div>
       </div>
     </div>
-    <div class="mapwrap">
-      <div class="node" style="background:var(--runbg);border-color:var(--run);color:var(--run)">LC 150到達</div>
+    <div class="mapwrap" style="grid-template-columns:1fr 40px 1.8fr">
+      <div class="node" style="background:var(--runbg);border-color:var(--run);color:var(--run)">Link Click 150に到達<br><span style="font-weight:400;font-size:10.5px">ここでアングルの合否を決める</span></div>
       <div class="arrows">→</div>
       <div class="node-stack">
-        <div class="node" style="background:var(--donebg);border-color:var(--done);color:var(--done)">CV≥3<br><span style="font-weight:400;font-size:10.5px">横展開</span></div>
-        <div class="node" style="background:var(--runbg);border-color:var(--run);color:var(--run)">CV1-2<br><span style="font-weight:400;font-size:10.5px">継続観察</span></div>
-        <div class="node" style="background:var(--warnbg-strong);border-color:var(--warn);color:var(--warn)">CV0<br><span style="font-weight:400;font-size:10.5px">Kill</span></div>
+        <div class="node" style="background:var(--donebg);border-color:var(--done);color:var(--done)">CV≥3 = 当たり<br><span style="font-weight:400;font-size:10.5px">同じアングルで10体に量産(横展開)</span></div>
+        <div class="node" style="background:var(--runbg);border-color:var(--run);color:var(--run)">CV1-2 = 保留<br><span style="font-weight:400;font-size:10.5px">投稿を続けてもう少し様子を見る</span></div>
+        <div class="node" style="background:var(--warnbg-strong);border-color:var(--warn);color:var(--warn)">CV0 = 撤退<br><span style="font-weight:400;font-size:10.5px">このアングルは止める(Kill)</span></div>
       </div>
-      <div class="arrows">⇒</div>
-      <div class="node" style="background:var(--accentbg);border-color:var(--accent);color:var(--accent)">裁定確定</div>
     </div>
     <div class="note">アカウント単位 理想値(当たりアングル確定時)</div>
     <div class="statgrid c6">
