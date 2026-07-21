@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>オントロジー分解図解 — AIに「業務世界の構造」を渡す</title>
+</head>
+<body>
+<style>
+  :root {
+    --ink: #232a33;
+    --ink-soft: #4c565f;
+    --ink-faint: #7b858c;
+    --ground: #f7f9f8;
+    --paper: #ffffff;
+    --line: #dde4e1;
+    --accent: #0e7c6b;
+    --accent-soft: #e3f0ec;
+    --c-class: #0e7c6b;
+    --c-attr: #4a6fa5;
+    --c-rel: #c08a2e;
+    --c-rule: #ad5a44;
+    --c-inst: #5f6b76;
+    --code-bg: #eef2f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e8ecea;
+      --ink-soft: #b4bdb9;
+      --ink-faint: #87918c;
+      --ground: #171c1b;
+      --paper: #1f2624;
+      --line: #343d3a;
+      --accent: #4fb8a4;
+      --accent-soft: #24352f;
+      --c-class: #4fb8a4;
+      --c-attr: #7d9fd0;
+      --c-rel: #d4a856;
+      --c-rule: #cf8570;
+      --c-inst: #97a3ad;
+      --code-bg: #242c2a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e8ecea;
+    --ink-soft: #b4bdb9;
+    --ink-faint: #87918c;
+    --ground: #171c1b;
+    --paper: #1f2624;
+    --line: #343d3a;
+    --accent: #4fb8a4;
+    --accent-soft: #24352f;
+    --c-class: #4fb8a4;
+    --c-attr: #7d9fd0;
+    --c-rel: #d4a856;
+    --c-rule: #cf8570;
+    --c-inst: #97a3ad;
+    --code-bg: #242c2a;
+  }
+  :root[data-theme="light"] {
+    --ink: #232a33;
+    --ink-soft: #4c565f;
+    --ink-faint: #7b858c;
+    --ground: #f7f9f8;
+    --paper: #ffffff;
+    --line: #dde4e1;
+    --accent: #0e7c6b;
+    --accent-soft: #e3f0ec;
+    --c-class: #0e7c6b;
+    --c-attr: #4a6fa5;
+    --c-rel: #c08a2e;
+    --c-rule: #ad5a44;
+    --c-inst: #5f6b76;
+    --code-bg: #eef2f0;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic Medium", "Yu Gothic", Meiryo, sans-serif;
+    font-size: 16px;
+    line-height: 1.9;
+    font-feature-settings: "palt";
+  }
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  .prose { max-width: 42em; }
+
+  h1, h2, h3 {
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+    font-weight: 600;
+    line-height: 1.5;
+    text-wrap: balance;
+  }
+  h1 { font-size: 1.9rem; margin: 0.4em 0 0.3em; }
+  h2 { font-size: 1.4rem; margin: 3.2em 0 0.8em; }
+  h3 { font-size: 1.1rem; margin: 2em 0 0.6em; }
+  p { margin: 0 0 1.2em; }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+  .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .lede { color: var(--ink-soft); font-size: 1.02rem; }
+
+  .chapter {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7em;
+    border-top: 1px solid var(--line);
+    padding-top: 2.4em;
+    margin-top: 3.6em;
+  }
+  .chapter h2 { margin: 0; }
+  .chapter .no {
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    color: var(--accent);
+    font-size: 1.1rem;
+    min-width: 1.6em;
+  }
+
+  .note {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 1.6em 0;
+  }
+  .note strong { color: var(--ink); }
+
+  figure {
+    margin: 2em 0;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    overflow-x: auto;
+  }
+  figcaption {
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+    margin-top: 12px;
+    letter-spacing: 0.04em;
+  }
+  figcaption b { color: var(--ink-soft); }
+  svg { display: block; max-width: 100%; height: auto; }
+  svg text {
+    font-family: "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+  }
+
+  /* 図1 構成要素カード */
+  .elements { display: grid; gap: 12px; margin: 1.6em 0; }
+  .el {
+    display: grid;
+    grid-template-columns: 108px 1fr;
+    gap: 16px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    align-items: start;
+  }
+  .el .tag {
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+  .el .tag small { display: block; font-weight: 500; font-size: 0.72rem; color: var(--ink-faint); letter-spacing: 0.06em; }
+  .el .desc { font-size: 0.92rem; color: var(--ink-soft); }
+  .el .desc b { color: var(--ink); }
+  .el .ex {
+    display: inline-block;
+    background: var(--code-bg);
+    border-radius: 5px;
+    padding: 1px 8px;
+    font-size: 0.84rem;
+    margin: 2px 4px 2px 0;
+    white-space: nowrap;
+  }
+  .el[data-k="class"] { border-left: 4px solid var(--c-class); }
+  .el[data-k="attr"]  { border-left: 4px solid var(--c-attr); }
+  .el[data-k="rel"]   { border-left: 4px solid var(--c-rel); }
+  .el[data-k="rule"]  { border-left: 4px solid var(--c-rule); }
+  .el[data-k="inst"]  { border-left: 4px solid var(--c-inst); }
+  .el[data-k="class"] .tag { color: var(--c-class); }
+  .el[data-k="attr"]  .tag { color: var(--c-attr); }
+  .el[data-k="rel"]   .tag { color: var(--c-rel); }
+  .el[data-k="rule"]  .tag { color: var(--c-rule); }
+  .el[data-k="inst"]  .tag { color: var(--c-inst); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.8rem; color: var(--ink-soft); margin-top: 10px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  /* ステップ */
+  .steps { counter-reset: step; display: grid; gap: 14px; margin: 1.6em 0; padding: 0; list-style: none; max-width: 46em; }
+  .steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 14px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .steps li::before {
+    content: counter(step);
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+    line-height: 1.2;
+    text-align: center;
+  }
+  .steps b { display: block; margin-bottom: 2px; }
+  .steps p { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    overflow-x: auto;
+    font-size: 0.84rem;
+    line-height: 1.75;
+  }
+  code { font-family: "SF Mono", ui-monospace, "Cascadia Code", Consolas, monospace; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+  th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 10px 14px 10px 0; vertical-align: top; }
+  th { font-size: 0.78rem; letter-spacing: 0.08em; color: var(--ink-faint); font-weight: 600; }
+
+  ul.refs { font-size: 0.88rem; color: var(--ink-soft); padding-left: 1.2em; }
+  ul.refs li { margin-bottom: 0.5em; }
+
+  @media (max-width: 560px) {
+    .el { grid-template-columns: 1fr; gap: 6px; }
+    h1 { font-size: 1.55rem; }
+  }
+</style>
+
+<div class="page">
+  <header class="prose">
+    <div class="eyebrow">ONTOLOGY, DECOMPOSED</div>
+    <h1>オントロジーを分解する<br>— AIに「業務世界の構造」を渡すという考え方</h1>
+    <p class="lede">
+      2026年夏、日本のAI実務界隈で「オントロジー」が一気に注目語になりました。火付け役のひとつが、Algomatic AX Company CTO 山中さん(@gura105)の発信 —「Claude Codeでの業務自動化が半年間成果ゼロ。業務の知識を構造化して渡した瞬間、全てが動き始めた」という実体験です。このページでは、そこで語られている“オントロジー”を構成要素まで分解し、図解しながら、考え方そのものを解説します。
+    </p>
+    <div class="note">
+      <strong>出典について:</strong> 元ポスト(x.com/gura105/status/2077153028982133080)はXの閲覧制限のため本文を直接参照できませんでした。本ページは同氏のnote記事『Claude Codeの業務自動化で半年間成果ゼロだった話と、そこから全てが動き始めた話』および当時の一連の議論(末尾の参考文献)から内容を再構成しています。
+    </div>
+  </header>
+
+  <section>
+    <div class="chapter"><span class="no">一</span><h2>なぜ「オントロジー」が刺さったのか</h2></div>
+    <div class="prose">
+      <p>
+        LLMは一般知識の塊ですが、<b>あなたの会社に固有の語彙・構造・判断基準は一切知りません</b>。「案件」と言ったとき何を指すのか、「確度B」がどういう状態か、停滞した商談を誰がいつフォローするのか — こうした前提が渡されないと、AIは毎回<b>推測(guesswork)</b>で穴を埋めます。推測は誤りを生み、確認のやり取りでトークンと時間を浪費します。
+      </p>
+      <p>
+        山中さんの半年間は、この「前提が渡っていない状態」でAIに業務全体を任せようとした期間でした。転機は、顧客の発言メモ・提案資料・社内議論といった<b>散在する一次情報を1つのフォルダにMarkdownで集約し、業務の構造ごと渡した</b>こと。つまり、プロンプトを磨くのではなく<b>「世界」を渡した</b>のです。この「AIが参照できる形に明示化された業務世界の定義」こそがオントロジーです。
+      </p>
+      <p>
+        追試も相次ぎました。「Claudeにオントロジーを持たせたらコスト半分・約3倍速になった」「会社の地図を渡したら3年目社員のように働き始めた」— 効果の理屈はシンプルで、<b>推測が減るから速く・安く・正確になる</b>のです。
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="chapter"><span class="no">二</span><h2>分解 — オントロジーの5つの構成要素</h2></div>
+    <div class="prose">
+      <p>
+        オントロジーは難しそうな響きに反して、部品はたった5つです。①〜④が「世界の設計図(スキーマ)」で、⑤の実データが流れ込むと「ナレッジグラフ」になります。
+      </p>
+    </div>
+
+    <div class="elements">
+      <div class="el" data-k="class">
+        <div class="tag">① クラス<small>CLASS / 概念</small></div>
+        <div class="desc"><b>業務に登場する「モノ・コトの型」。</b>名詞を拾えば見つかる。
+          <div><span class="ex">顧客</span><span class="ex">案件</span><span class="ex">商談</span><span class="ex">提案</span><span class="ex">担当者</span></div>
+        </div>
+      </div>
+      <div class="el" data-k="attr">
+        <div class="tag">② 属性<small>ATTRIBUTE / 性質</small></div>
+        <div class="desc"><b>各クラスが持つ性質・項目。</b>「〜の何を管理している?」で見つかる。
+          <div><span class="ex">顧客.業界</span><span class="ex">案件.受注確度</span><span class="ex">商談.実施日</span></div>
+        </div>
+      </div>
+      <div class="el" data-k="rel">
+        <div class="tag">③ 関係<small>RELATION / つながり</small></div>
+        <div class="desc"><b>クラス同士の意味的なつながり。</b>動詞を拾えば見つかる。上下関係(is-a)・部分関係(part-of)も含む。
+          <div><span class="ex">顧客 ─発注する→ 案件</span><span class="ex">提案 ─提示される→ 商談</span></div>
+        </div>
+      </div>
+      <div class="el" data-k="rule">
+        <div class="tag">④ 制約・ルール<small>AXIOM / 決まりごと</small></div>
+        <div class="desc"><b>世界で常に成り立つ条件と、業務上の判断基準。</b>ベテランの頭の中にある暗黙知はここに置く。
+          <div><span class="ex">案件は必ず1顧客に属する</span><span class="ex">確度はA/B/Cのみ</span><span class="ex">確度Bで2週間停滞→フォロー</span></div>
+        </div>
+      </div>
+      <div class="el" data-k="inst">
+        <div class="tag">⑤ インスタンス<small>INSTANCE / 個体</small></div>
+        <div class="desc"><b>型に流し込まれた実データ。</b>ここまで来ると「ナレッジグラフ」と呼ばれる。
+          <div><span class="ex">株式会社Acme</span><span class="ex">基幹システム刷新案件</span><span class="ex">7/15 定例商談</span></div>
+        </div>
+      </div>
+    </div>
+
+    <figure>
+      <svg viewBox="0 0 800 300" role="img" aria-label="オントロジーの階層図: スキーマ層(クラス・属性・関係・制約)とインスタンス層">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--ink-faint)"/>
+          </marker>
+        </defs>
+        <!-- スキーマ層 -->
+        <rect x="30" y="28" width="740" height="150" rx="12" fill="none" stroke="var(--line)" stroke-dasharray="5 5"/>
+        <text x="52" y="56" font-size="13" font-weight="700" fill="var(--ink-soft)">スキーマ層 = 世界の設計図(①〜④)</text>
+        <rect x="60" y="80" width="150" height="66" rx="9" fill="var(--accent-soft)" stroke="var(--c-class)" stroke-width="1.5"/>
+        <text x="135" y="107" text-anchor="middle" font-size="14" font-weight="700" fill="var(--c-class)">① クラス</text>
+        <text x="135" y="128" text-anchor="middle" font-size="11" fill="var(--ink-soft)">顧客 / 案件 / 商談</text>
+        <rect x="250" y="80" width="150" height="66" rx="9" fill="none" stroke="var(--c-attr)" stroke-width="1.5"/>
+        <text x="325" y="107" text-anchor="middle" font-size="14" font-weight="700" fill="var(--c-attr)">② 属性</text>
+        <text x="325" y="128" text-anchor="middle" font-size="11" fill="var(--ink-soft)">業界 / 確度 / 実施日</text>
+        <rect x="440" y="80" width="150" height="66" rx="9" fill="none" stroke="var(--c-rel)" stroke-width="1.5"/>
+        <text x="515" y="107" text-anchor="middle" font-size="14" font-weight="700" fill="var(--c-rel)">③ 関係</text>
+        <text x="515" y="128" text-anchor="middle" font-size="11" fill="var(--ink-soft)">発注する / 属する</text>
+        <rect x="620" y="80" width="130" height="66" rx="9" fill="none" stroke="var(--c-rule)" stroke-width="1.5"/>
+        <text x="685" y="107" text-anchor="middle" font-size="14" font-weight="700" fill="var(--c-rule)">④ 制約</text>
+        <text x="685" y="128" text-anchor="middle" font-size="11" fill="var(--ink-soft)">判断基準 / 公理</text>
+        <!-- 矢印 -->
+        <line x1="400" y1="178" x2="400" y2="218" stroke="var(--ink-faint)" stroke-width="1.5" marker-end="url(#ar)"/>
+        <text x="415" y="203" font-size="11.5" fill="var(--ink-faint)">実データを流し込む</text>
+        <!-- インスタンス層 -->
+        <rect x="30" y="222" width="740" height="58" rx="12" fill="var(--code-bg)" stroke="var(--c-inst)"/>
+        <text x="52" y="248" font-size="13" font-weight="700" fill="var(--ink-soft)">インスタンス層(⑤) = ナレッジグラフ</text>
+        <text x="52" y="268" font-size="11.5" fill="var(--ink-faint)">株式会社Acme / 基幹システム刷新案件 / 7月15日 定例商談 …</text>
+      </svg>
+      <figcaption><b>図1</b> — オントロジーの二層構造。①〜④が「型」、⑤が「実体」。型だけを渡してもAIは業務語彙を正しく扱えるようになる。</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="chapter"><span class="no">三</span><h2>図解 — 営業業務をオントロジーにすると</h2></div>
+    <div class="prose">
+      <p>
+        山中さんの実践フィールドだったエンタープライズ営業を例に、5つの部品を1枚のグラフに組み上げるとこうなります。ノードがクラス(とそのインスタンス)、矢印が関係、注記が制約です。
+      </p>
+    </div>
+
+    <figure>
+      <svg viewBox="0 0 840 430" role="img" aria-label="営業業務のオントロジー例のナレッジグラフ">
+        <defs>
+          <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--c-rel)"/>
+          </marker>
+        </defs>
+        <!-- edges -->
+        <line x1="185" y1="110" x2="355" y2="110" stroke="var(--c-rel)" stroke-width="1.5" marker-end="url(#ar2)"/>
+        <text x="270" y="100" text-anchor="middle" font-size="11.5" fill="var(--c-rel)">発注を検討する</text>
+        <line x1="120" y1="150" x2="120" y2="240" stroke="var(--c-rel)" stroke-width="1.5" marker-end="url(#ar2)"/>
+        <text x="128" y="200" font-size="11.5" fill="var(--c-rel)">所属する</text>
+        <line x1="450" y1="150" x2="450" y2="240" stroke="var(--c-rel)" stroke-width="1.5" marker-end="url(#ar2)"/>
+        <text x="458" y="200" font-size="11.5" fill="var(--c-rel)">の場で進む</text>
+        <line x1="620" y1="280" x2="530" y2="280" stroke="var(--c-rel)" stroke-width="1.5" marker-end="url(#ar2)"/>
+        <text x="575" y="268" text-anchor="middle" font-size="11.5" fill="var(--c-rel)">で提示される</text>
+        <line x1="660" y1="110" x2="530" y2="110" stroke="var(--c-rel)" stroke-width="1.5" marker-end="url(#ar2)"/>
+        <text x="597" y="100" text-anchor="middle" font-size="11.5" fill="var(--c-rel)">を担当する</text>
+        <!-- nodes -->
+        <g>
+          <rect x="55" y="70" width="130" height="80" rx="12" fill="var(--accent-soft)" stroke="var(--c-class)" stroke-width="1.8"/>
+          <text x="120" y="100" text-anchor="middle" font-size="14.5" font-weight="700" fill="var(--c-class)">顧客</text>
+          <text x="120" y="121" text-anchor="middle" font-size="11" fill="var(--ink-soft)">株式会社Acme</text>
+          <text x="120" y="138" text-anchor="middle" font-size="10.5" fill="var(--c-attr)">業界: 製造</text>
+        </g>
+        <g>
+          <rect x="355" y="70" width="175" height="80" rx="12" fill="var(--accent-soft)" stroke="var(--c-class)" stroke-width="1.8"/>
+          <text x="442" y="100" text-anchor="middle" font-size="14.5" font-weight="700" fill="var(--c-class)">案件</text>
+          <text x="442" y="121" text-anchor="middle" font-size="11" fill="var(--ink-soft)">基幹システム刷新</text>
+          <text x="442" y="138" text-anchor="middle" font-size="10.5" fill="var(--c-attr)">受注確度: B / 停滞: 12日</text>
+        </g>
+        <g>
+          <rect x="660" y="70" width="130" height="80" rx="12" fill="none" stroke="var(--c-inst)" stroke-width="1.6"/>
+          <text x="725" y="100" text-anchor="middle" font-size="14.5" font-weight="700" fill="var(--c-inst)">担当者</text>
+          <text x="725" y="121" text-anchor="middle" font-size="11" fill="var(--ink-soft)">山田(FS)</text>
+        </g>
+        <g>
+          <rect x="55" y="240" width="130" height="70" rx="12" fill="none" stroke="var(--c-inst)" stroke-width="1.6"/>
+          <text x="120" y="268" text-anchor="middle" font-size="14.5" font-weight="700" fill="var(--c-inst)">業界</text>
+          <text x="120" y="289" text-anchor="middle" font-size="11" fill="var(--ink-soft)">製造業</text>
+        </g>
+        <g>
+          <rect x="365" y="240" width="165" height="80" rx="12" fill="var(--accent-soft)" stroke="var(--c-class)" stroke-width="1.8"/>
+          <text x="447" y="268" text-anchor="middle" font-size="14.5" font-weight="700" fill="var(--c-class)">商談</text>
+          <text x="447" y="289" text-anchor="middle" font-size="11" fill="var(--ink-soft)">7/15 定例</text>
+          <text x="447" y="306" text-anchor="middle" font-size="10.5" fill="var(--c-attr)">議事録: あり</text>
+        </g>
+        <g>
+          <rect x="620" y="240" width="150" height="80" rx="12" fill="var(--accent-soft)" stroke="var(--c-class)" stroke-width="1.8"/>
+          <text x="695" y="268" text-anchor="middle" font-size="14.5" font-weight="700" fill="var(--c-class)">提案</text>
+          <text x="695" y="289" text-anchor="middle" font-size="11" fill="var(--ink-soft)">提案書 v3</text>
+          <text x="695" y="306" text-anchor="middle" font-size="10.5" fill="var(--c-attr)">状態: 検討中</text>
+        </g>
+        <!-- 制約注記 -->
+        <rect x="55" y="352" width="715" height="52" rx="9" fill="none" stroke="var(--c-rule)" stroke-dasharray="4 4"/>
+        <text x="75" y="374" font-size="12" font-weight="700" fill="var(--c-rule)">④ 制約・判断基準</text>
+        <text x="75" y="393" font-size="11.5" fill="var(--ink-soft)">案件は必ず1顧客に属する / 確度はA・B・Cのみ / 「確度Bかつ停滞10日以上」→ 次回定例で懸念を再ヒアリング</text>
+      </svg>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--c-class)"></span>クラス(中核)</span>
+        <span><span class="dot" style="background:var(--c-inst)"></span>クラス(周辺)</span>
+        <span><span class="dot" style="background:var(--c-attr)"></span>属性</span>
+        <span><span class="dot" style="background:var(--c-rel)"></span>関係</span>
+        <span><span class="dot" style="background:var(--c-rule)"></span>制約・判断基準</span>
+      </div>
+      <figcaption><b>図2</b> — 営業ドメインのオントロジー例。このグラフを読めるAIは「Acme社の案件が確度Bのまま12日停滞している → ルールによりフォローすべき」と<b>推論</b>できる。</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>
+        ポイントは、この図が<b>データベース設計図ではない</b>ことです。DBスキーマは「システムの都合」で正規化されますが、オントロジーは<b>業務の意味の構造</b>で描きます。現場の人が読んで「うちの仕事はたしかにこうなっている」と頷ける形が正解です。
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="chapter"><span class="no">四</span><h2>AIエージェントとどう接続するのか</h2></div>
+    <div class="prose">
+      <p>
+        オントロジーがAI活用の文脈で「世界モデル」「会社の地図」と呼ばれるのは、エージェントの推論の出発点になるからです。渡し方は驚くほど素朴で、<b>Markdownファイルとしてプロジェクトフォルダに置いておくだけ</b>。Claude Codeのようなエージェントは、タスク実行時にこの地図を参照してから動きます。
+      </p>
+    </div>
+
+    <figure>
+      <svg viewBox="0 0 840 240" role="img" aria-label="散在する一次情報からオントロジーを経てAIエージェントに至る流れ">
+        <defs>
+          <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
+          </marker>
+        </defs>
+        <line x1="235" y1="110" x2="295" y2="110" stroke="var(--accent)" stroke-width="2" marker-end="url(#ar3)"/>
+        <text x="265" y="95" text-anchor="middle" font-size="11" fill="var(--accent)">構造化</text>
+        <line x1="545" y1="110" x2="605" y2="110" stroke="var(--accent)" stroke-width="2" marker-end="url(#ar3)"/>
+        <text x="575" y="95" text-anchor="middle" font-size="11" fill="var(--accent)">参照</text>
+        <g>
+          <rect x="40" y="45" width="195" height="130" rx="12" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="137" y="75" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--ink)">散在する一次情報</text>
+          <text x="137" y="102" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">顧客の発言メモ</text>
+          <text x="137" y="122" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">提案資料 / 議事録</text>
+          <text x="137" y="142" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Slackでの社内議論</text>
+          <text x="137" y="164" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)">…人の頭の中にだけある構造</text>
+        </g>
+        <g>
+          <rect x="295" y="45" width="250" height="130" rx="12" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+          <text x="420" y="75" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--accent)">オントロジー(Markdown)</text>
+          <text x="420" y="102" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">クラス / 属性 / 関係 / 制約</text>
+          <text x="420" y="122" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">= AIが参照できる業務世界の定義</text>
+          <text x="420" y="147" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)">1フォルダに集約・随時更新</text>
+        </g>
+        <g>
+          <rect x="605" y="45" width="195" height="130" rx="12" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="702" y="75" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--ink)">AIエージェント</text>
+          <text x="702" y="102" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">推測が減る → 精度が上がる</text>
+          <text x="702" y="122" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">探索が減る → 速く・安く</text>
+          <text x="702" y="144" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)">「3年目社員」のような動き方</text>
+        </g>
+      </svg>
+      <figcaption><b>図3</b> — オントロジーは一次情報とエージェントの間に挟まる「意味のレイヤー」。プロンプト改善ではなく、参照する世界そのものを整える。</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="chapter"><span class="no">五</span><h2>アプローチ — 5ステップで作る</h2></div>
+    <div class="prose">
+      <p>
+        オントロジー構築は全社プロジェクトにしないのが鉄則です。山中さんの「半年間成果ゼロ」は営業業務全体を一気に任せようとした期間であり、動き始めたのは<b>範囲を絞ってから</b>でした。
+      </p>
+    </div>
+    <ol class="steps">
+      <li><div><b>スコープを1業務に絞る</b><p>「エンプラ営業の商談フォロー」程度の粒度から。広げるのは回ってから。</p></div></li>
+      <li><div><b>名詞を拾う → クラスと属性にする</b><p>議事録・資料・チャットに繰り返し出る名詞が候補。「顧客」「案件」…それぞれ何を管理しているかが属性。</p></div></li>
+      <li><div><b>動詞を拾う → 関係にする</b><p>「顧客が案件を発注する」「提案を商談で提示する」。主語─動詞─目的語の三つ組で書く。</p></div></li>
+      <li><div><b>判断基準・暗黙ルールを言語化する → 制約にする</b><p>ベテランに「どういうとき、どう動く?」を聞き出す。ここがAIの判断品質を最も左右する。</p></div></li>
+      <li><div><b>Markdownに書いて置き、運用しながら直す</b><p>一発で完成させない。エージェントの誤りは地図の欠落のシグナル。都度書き足す“生きた文書”として育てる。</p></div></li>
+    </ol>
+
+    <h3>Markdown記述例(ontology.md)</h3>
+    <pre><code># 営業オントロジー
+
+## クラスと属性
+- 顧客: 業界, 規模, キーパーソン
+- 案件: 受注確度(A/B/Cのみ), 金額, 最終更新日
+- 商談: 実施日, 参加者, 議事録リンク
+- 提案: バージョン, 状態(作成中/提示済/検討中)
+
+## 関係
+- 顧客 --発注を検討する--> 案件
+- 案件 --の場で進む--> 商談
+- 提案 --で提示される--> 商談
+- 担当者 --を担当する--> 案件
+
+## 制約・判断基準
+- 案件は必ず1顧客に属する
+- 確度B かつ 10日以上更新なし → 次回定例で懸念を再ヒアリング
+- 提案は商談での提示前に必ず社内レビューを通す</code></pre>
+  </section>
+
+  <section>
+    <div class="chapter"><span class="no">六</span><h2>まとめ — 考え方の本質</h2></div>
+    <div class="prose">
+      <table>
+        <tr><th>問い</th><th>オントロジー的な答え</th></tr>
+        <tr><td>AIの精度を上げたい</td><td>プロンプトを磨く前に、参照させる「世界の定義」を渡す</td></tr>
+        <tr><td>DB設計と何が違う?</td><td>システムの都合ではなく、業務の<b>意味</b>の構造で描く</td></tr>
+        <tr><td>ナレッジグラフとの関係は?</td><td>オントロジーが「型」、実データ入りのグラフが「ナレッジグラフ」</td></tr>
+        <tr><td>どこから始める?</td><td>1業務・1オブジェクトから。Markdown 1枚でよい</td></tr>
+        <tr><td>いつ完成する?</td><td>完成しない。AIの誤りを教師に育て続ける生きた文書</td></tr>
+      </table>
+      <p style="margin-top:1.6em">
+        オントロジーとは、突き詰めれば<b>「私たちの業務世界には何が存在し、どうつながり、何が成り立つのかを、AIと人間が共有できる形で書き下したもの」</b>です。AIエージェントの時代に必要なのは賢い指示文ではなく、エージェントが立って歩ける地面 — この発想の転換が、あのポストが刺さった理由だと言えます。
+      </p>
+    </div>
+  </section>
+
+  <section class="prose">
+    <h3>参考文献</h3>
+    <ul class="refs">
+      <li>gura105『Claude Codeの業務自動化で半年間成果ゼロだった話と、そこから全てが動き始めた話』(note)</li>
+      <li>takupeso『Claudeに「オントロジー」を持たせたら、コスト半分・3倍速になるかも』(Zenn)</li>
+      <li>kunpe『AIに会社の地図を持たせたら、3年目社員のように働き始めた』(note)</li>
+      <li>komlock lab『オントロジーとは何か』(Zenn) / 各種オントロジー解説記事(AI総合研究所ほか)</li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>
