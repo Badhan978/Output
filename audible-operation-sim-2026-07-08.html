@@ -82,8 +82,14 @@
   .cellbadge-thin{opacity:.55;font-weight:700}
   thead th.grp{text-align:center;background:#eef2f7;color:var(--ink);font-size:11px;border-left:2px solid var(--line)}
   thead th.gstart,td.gstart{border-left:2px solid var(--line)}
-  td.sticky,th.sticky{position:sticky;left:0;background:#fff;z-index:1}
-  thead th.sticky{background:#f8fafc}
+  /* matrix 専用: 17列を横スクロールなしで収める */
+  .mtx{table-layout:fixed;width:100%}
+  .mtx th,.mtx td{padding:6px 4px;font-size:10.5px;line-height:1.35;text-align:center;vertical-align:middle}
+  .mtx thead tr:nth-child(2) th{white-space:normal;word-break:keep-all;padding:6px 2px}
+  .mtx th.plabel,.mtx td.lever{width:110px;text-align:left;padding-left:10px}
+  .mtx td.lever{font-size:11px}
+  .mtx .cellbadge{display:inline-block;margin:0;padding:2px 6px;white-space:nowrap}
+  .mtx .def{font-size:9.5px;margin-top:2px}
 
   /* 5. mapwrap (因果/フロー図。CSS Gridのみ・mermaid禁止) */
   .mapwrap{padding:22px 20px;display:grid;
@@ -332,130 +338,130 @@
 <section id="matrix">
   <div class="card">
     <h2><span class="mark" style="background:var(--accent)"></span>ペルソナ × カテゴリー — 誰に何を当てるか (2026-07-22 再整理)</h2>
-    <div class="note">ペルソナ定義 = 「いつ耳が空くか × 何で感情が動くか」+ 証拠強度。カテゴリーは 親ジャンル3 (本 / 連動・切り抜き / エンタメ) × サブジャンル16 の階層管理。アングル = 交点で生成、全カテゴリ聴き放題対象限定。</div>
+    <div class="note">ペルソナ定義 = 「いつ耳が空くか × 何で感情が動くか」+ 証拠強度。カテゴリーは 親ジャンル3 × サブジャンル16 の階層管理。アングル = 交点で生成、全カテゴリ聴き放題対象限定。</div>
     <div class="persongrid">
-      <div class="pcard"><div class="name">T1 歴史好き通勤部長 <span class="st st-done">実測CV</span></div><div class="def">45-55男・通勤往復 × 歴史ロマン・知的優越</div></div>
-      <div class="pcard"><div class="name">T2 耳活サラリーマン</div><div class="def">30-40男・移動/外回り × 損得計算・時間を無駄にしたくない</div></div>
-      <div class="pcard"><div class="name">T3 ながらワーママ</div><div class="def">35-40女・家事育児中 × 物語で「自分の時間」回復</div></div>
-      <div class="pcard"><div class="name">T4 夜型情緒リスナー <span class="st st-run">検証中</span></div><div class="def">20代・就寝前 × 怖さ・情緒・没入 (A004で検証)</div></div>
-      <div class="pcard"><div class="name">T5 キャリア自己投資層</div><div class="def">25-35・通勤/ジム × 成長焦燥・周回遅れの恐怖</div></div>
-      <div class="pcard"><div class="name">T6 小説好きIG読書垢女性 <span class="st st-run">実働</span></div><div class="def">20-40女・就寝前/家事 × 感情移入・「続きが気になる」(A001/A003コア)</div></div>
-      <div class="pcard"><div class="name">T7 声優・ナレーター推し層</div><div class="def">20-30女・状況非依存 (推しが目的) × 推し愛。再生までの距離最短</div></div>
-      <div class="pcard"><div class="name">T8 聞き流し学習層</div><div class="def">20-30・通勤/作業/運動 × 学習効率・「勉強しなきゃ」の解消</div></div>
-      <div class="pcard"><div class="name">T9 映像・有名人起点層</div><div class="def">20-40・作品ロス/話題スパイク時 × 「原作・続き・本人の声」欲</div></div>
-      <div class="pcard"><div class="name">T10 共感スクロール層 <span class="st st-warn">導線専用</span></div><div class="def">20-30男・スクロール中 (目) × 自己投影・あるあるの痛み。CVでなくImp刈り取り→他ペルソナへの導線</div></div>
+      <div class="pcard"><div class="name">T1 歴史好き通勤部長 <span class="st st-done">実測CV</span></div><div class="def">45-55男・通勤往復 × 歴史ロマン</div></div>
+      <div class="pcard"><div class="name">T2 耳活サラリーマン</div><div class="def">30-40男・移動/外回り × 損得計算</div></div>
+      <div class="pcard"><div class="name">T3 ながらワーママ</div><div class="def">35-40女・家事育児中 × 物語で自分時間</div></div>
+      <div class="pcard"><div class="name">T4 夜型情緒リスナー <span class="st st-run">検証中</span></div><div class="def">20代・就寝前 × 情緒・没入 (A004で検証)</div></div>
+      <div class="pcard"><div class="name">T5 キャリア自己投資層</div><div class="def">25-35・通勤/ジム × 成長焦燥</div></div>
+      <div class="pcard"><div class="name">T6 小説好き読書垢女性 <span class="st st-run">実働</span></div><div class="def">20-40女・就寝前/家事 × 「続きが気になる」</div></div>
+      <div class="pcard"><div class="name">T7 声優・ナレーター推し層</div><div class="def">20-30女・推しが目的 × 推し愛。再生距離最短</div></div>
+      <div class="pcard"><div class="name">T8 聞き流し学習層</div><div class="def">20-30・通勤/作業 × 学習効率・罪悪感解消</div></div>
+      <div class="pcard"><div class="name">T9 映像・有名人起点層</div><div class="def">20-40・話題スパイク時 × 原作・本人の声</div></div>
+      <div class="pcard"><div class="name">T10 共感スクロール層 <span class="st st-warn">導線専用</span></div><div class="def">20-30男・スクロール中 × 自己投影。Imp刈り取り→他ペルソナへの導線</div></div>
     </div>
-    <div class="persongrid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="persongrid">
       <div class="pcard"><div class="name">本 (作品紹介型)</div><div class="def">ミステリー / イヤミス・人間ドラマ / 純文学 / 怪談 / 歴史関連 / ビジネス書 / 学習書・語学</div></div>
       <div class="pcard"><div class="name">連動・切り抜き (外部話題・人物起点型)</div><div class="def">ドラマ原作 / 映画化・アニメ化 / 大河・歴史ドラマ / 作家・有名人Clip / 芸人・タレント作家 / 声優・ナレーター</div></div>
       <div class="pcard"><div class="name">エンタメ (大量Imp刈り取り型)</div><div class="def">ニュース速報 / 漫画風Story / 世界の歴史ニュース — CVでなく導線</div></div>
     </div>
     <div class="tbl-wrap">
-      <table>
+      <table class="mtx">
         <thead>
           <tr>
-            <th class="sticky" rowspan="2">ペルソナ ＼ カテゴリー</th>
+            <th class="plabel" rowspan="2">ペルソナ ＼ カテゴリ</th>
             <th class="grp" colspan="7">本 (作品紹介型)</th>
-            <th class="grp" colspan="6">連動・切り抜き (外部話題・人物起点型)</th>
-            <th class="grp" colspan="3">エンタメ (大量Imp刈り取り型)</th>
+            <th class="grp" colspan="6">連動・切り抜き</th>
+            <th class="grp" colspan="3">エンタメ</th>
           </tr>
           <tr>
-            <th class="gstart">ミステリー</th><th>イヤミス・人間ドラマ</th><th>純文学</th><th>怪談</th><th>歴史関連</th><th>ビジネス書</th><th>学習書・語学</th>
-            <th class="gstart">ドラマ原作</th><th>映画化・アニメ化</th><th>大河・歴史ドラマ</th><th>作家・有名人Clip</th><th>芸人・タレント作家</th><th>声優・ナレーター</th>
-            <th class="gstart">ニュース速報</th><th>漫画風Story</th><th>世界の歴史ニュース</th>
+            <th class="gstart">ミステリー</th><th>イヤミス</th><th>純文学</th><th>怪談</th><th>歴史</th><th>ビジネス</th><th>学習・語学</th>
+            <th class="gstart">ドラマ原作</th><th>映画・アニメ</th><th>大河</th><th>作家Clip</th><th>芸人作家</th><th>声優</th>
+            <th class="gstart">速報</th><th>漫画Story</th><th>世界史</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td class="lever sticky">T1 歴史好き通勤部長</td>
+            <td class="lever">T1 歴史部長</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
-            <td><span class="cellbadge" style="background:var(--donebg);color:var(--done)">A002 sengoku_jikenbo</span><span class="def">実測CV層</span></td>
+            <td><span class="cellbadge" style="background:var(--donebg);color:var(--done)">A002</span><span class="def">実測CV層</span></td>
             <td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td>
-            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定・未設計</span><span class="def">T1増幅版</span></td>
+            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定</span><span class="def">T1増幅</span></td>
             <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td>
             <td><span class="cellbadge cellbadge-thin" style="background:var(--todobg);color:var(--todo)">候補</span></td>
           </tr>
           <tr>
-            <td class="lever sticky">T2 耳活サラリーマン</td>
+            <td class="lever">T2 耳活リーマン</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
-            <td><span class="cellbadge" style="background:var(--runbg);color:var(--run)">A005 tsundoku_zero</span><span class="def">リスク枠</span></td>
+            <td><span class="cellbadge" style="background:var(--runbg);color:var(--run)">A005</span><span class="def">リスク枠</span></td>
             <td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td>
           </tr>
           <tr>
-            <td class="lever sticky">T3 ながらワーママ</td>
-            <td class="gstart"><span class="cellbadge cellbadge-thin" style="background:var(--runbg);color:var(--run)">(A001 サブ)</span></td>
-            <td><span class="cellbadge cellbadge-thin" style="background:var(--runbg);color:var(--run)">(A003 サブ)</span></td>
+            <td class="lever">T3 ワーママ</td>
+            <td class="gstart"><span class="cellbadge cellbadge-thin" style="background:var(--runbg);color:var(--run)">A001 サブ</span></td>
+            <td><span class="cellbadge cellbadge-thin" style="background:var(--runbg);color:var(--run)">A003 サブ</span></td>
             <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td>
           </tr>
           <tr>
-            <td class="lever sticky">T4 夜型情緒リスナー</td>
+            <td class="lever">T4 夜型情緒</td>
             <td class="dash gstart">—</td><td class="dash">—</td>
-            <td><span class="cellbadge" style="background:var(--runbg);color:var(--run)">A004 bungou_koe</span><span class="def">④変形・育成型</span></td>
-            <td><span class="cellbadge cellbadge-thin" style="background:var(--todobg);color:var(--todo)">候補</span><span class="def">旧「有力候補」</span></td>
+            <td><span class="cellbadge" style="background:var(--runbg);color:var(--run)">A004</span><span class="def">育成型</span></td>
+            <td><span class="cellbadge cellbadge-thin" style="background:var(--todobg);color:var(--todo)">候補</span></td>
             <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td>
           </tr>
           <tr>
-            <td class="lever sticky">T5 キャリア自己投資層</td>
+            <td class="lever">T5 自己投資層</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
-            <td><span class="cellbadge cellbadge-thin" style="background:var(--runbg);color:var(--run)">(A005 内包)</span><span class="cellbadge cellbadge-thin" style="background:var(--todobg);color:var(--todo)">StudyHacker風 候補</span></td>
+            <td><span class="cellbadge cellbadge-thin" style="background:var(--runbg);color:var(--run)">A005 内包</span><span class="def">StudyHacker案</span></td>
             <td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td>
           </tr>
           <tr>
-            <td class="lever sticky">T6 小説好きIG読書垢女性</td>
-            <td class="gstart"><span class="cellbadge" style="background:var(--runbg);color:var(--run)">A001 nazoyomi_novel</span></td>
-            <td><span class="cellbadge" style="background:var(--runbg);color:var(--run)">A003 kokoro_yomi</span><span class="def">唯一の同一セッションCV型</span></td>
+            <td class="lever">T6 読書垢女性</td>
+            <td class="gstart"><span class="cellbadge" style="background:var(--runbg);color:var(--run)">A001</span></td>
+            <td><span class="cellbadge" style="background:var(--runbg);color:var(--run)">A003</span><span class="def">即時CV型</span></td>
             <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td>
-            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定・未設計</span><span class="def">選書フィルタでA001/A003内でも試行可</span></td>
+            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定</span><span class="def">選書で試行可</span></td>
             <td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td>
           </tr>
           <tr>
-            <td class="lever sticky">T7 声優・ナレーター推し層</td>
+            <td class="lever">T7 声優推し</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
-            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定・未設計</span><span class="def">再生距離最短</span></td>
+            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定</span><span class="def">再生距離最短</span></td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td>
           </tr>
           <tr>
-            <td class="lever sticky">T8 聞き流し学習層</td>
+            <td class="lever">T8 聞き流し学習</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
-            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">英語・資格 確定・未設計</span></td>
+            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定</span><span class="def">英語・資格</span></td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td>
           </tr>
           <tr>
-            <td class="lever sticky">T9 映像・有名人起点層</td>
+            <td class="lever">T9 映像・有名人</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
-            <td class="gstart"><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定・未設計</span><span class="def">⚠権利確認要</span></td>
+            <td class="gstart"><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定</span><span class="def">⚠権利</span></td>
             <td class="dash">—</td><td class="dash">—</td>
-            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定・未設計</span><span class="def">⚠権利確認要</span></td>
-            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定・未設計</span><span class="def">⚠権利確認要</span></td>
+            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定</span><span class="def">⚠権利</span></td>
+            <td><span class="cellbadge" style="background:var(--accentbg);color:var(--accent)">確定</span><span class="def">⚠権利</span></td>
             <td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td>
           </tr>
           <tr>
-            <td class="lever sticky">T10 共感スクロール層</td>
+            <td class="lever">T10 共感スクロール</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="dash gstart">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td>
             <td class="gstart"><span class="cellbadge cellbadge-thin" style="background:var(--todobg);color:var(--todo)">候補</span></td>
-            <td><span class="cellbadge cellbadge-thin" style="background:var(--todobg);color:var(--todo)">候補</span><span class="def">参考例 448K view</span></td>
+            <td><span class="cellbadge cellbadge-thin" style="background:var(--todobg);color:var(--todo)">候補</span><span class="def">参考448K</span></td>
             <td class="dash">—</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="note">バッジ: <b style="color:var(--done)">緑=設計済+実測CV</b> / <b style="color:var(--run)">青=設計書Draft済</b> (薄=サブ当て) / <b style="color:var(--accent)">ティール=確定アングル・未設計</b> / <b style="color:var(--todo)">グレー=候補</b>。設計書DB = Ceed-dev/v5-agents/audible-designs/(A001〜連番)。設計書が増えるたび交点にバッジ追加。</div>
+    <div class="note">バッジ: <b style="color:var(--done)">緑=設計済+実測CV</b> / <b style="color:var(--run)">青=設計書Draft済</b> (薄=サブ当て) / <b style="color:var(--accent)">ティール=確定アングル・未設計</b> / <b style="color:var(--todo)">グレー=候補</b>。列名は略記 — 正式名は上のカテゴリーカード参照。設計書DB = Ceed-dev/v5-agents/audible-designs/(A001〜連番)。</div>
   </div>
 </section>
 
