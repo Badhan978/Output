@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>月1万円SNS — 初月黒字の最小構成 (2026-07-23)</title>
+<style>
+  :root{
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0; --bg:#f1f5f9;
+    --done:#16a34a; --donebg:#f0fdf4;
+    --run:#2563eb;  --runbg:#eff6ff;
+    --warn:#d97706; --warnbg:#fffbeb; --warnbg-strong:#fef3c7;
+    --todo:#94a3b8; --todobg:#f8fafc;
+    --accent:#0f766e; --accentbg:#f0fdfa;
+    --bad:#dc2626; --badbg:#fef2f2;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);margin:0;background:var(--bg);font-size:13px;line-height:1.58}
+
+  .hero{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:34px 28px 26px}
+  .hero-inner{max-width:1180px;margin:0 auto}
+  .kicker{font-size:11px;letter-spacing:.14em;font-weight:800;color:#a7f3d0;text-transform:uppercase;margin-bottom:10px}
+  .hero h1{margin:0 0 12px;font-size:31px;font-weight:800;letter-spacing:-.01em}
+  .hero .lead{font-size:16px;font-weight:600;color:#e2e8f0;max-width:860px;margin:0 0 18px;line-height:1.6}
+  .pills{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#f1f5f9;
+    padding:6px 13px;border-radius:99px;font-size:12px;font-weight:600}
+  .pill b{color:#fff;font-weight:800}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:9px 20px;z-index:10;display:flex;gap:6px;flex-wrap:wrap;max-width:1180px;margin:0 auto}
+  nav a{text-decoration:none;color:var(--sub);padding:6px 13px;border-radius:99px;
+    font-size:12px;font-weight:600;border:1px solid var(--line);white-space:nowrap}
+  nav a:hover{background:var(--bg);color:var(--ink)}
+
+  section{max-width:1180px;margin:22px auto;padding:0 20px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:16px}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .card .note{padding:11px 20px;background:#f8fafc;color:var(--sub);font-size:12px;
+    border-bottom:1px solid var(--line);line-height:1.6}
+  .card .body{padding:16px 20px}
+  .mark{width:12px;height:12px;border-radius:3px;display:inline-block;flex:0 0 auto}
+
+  .st{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:99px;white-space:nowrap}
+  .st-done{background:var(--donebg);color:var(--done)}
+  .st-run{background:var(--runbg);color:var(--run)}
+  .st-warn{background:var(--warnbg-strong);color:var(--warn)}
+  .st-todo{background:var(--todobg);color:var(--todo)}
+  .st-bad{background:var(--badbg);color:var(--bad)}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{padding:9px 11px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:10.5px;font-weight:800}
+  .lever{font-weight:700}
+  .def{color:var(--sub);font-size:11px;display:block;margin-top:2px;font-weight:400}
+  .tbl-wrap{overflow-x:auto}
+  td.dash{color:#cbd5e1;text-align:center}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  th.num{text-align:right}
+
+  .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:16px 20px}
+  .kpi{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .kpi .v{font-size:20px;font-weight:800;letter-spacing:-.01em}
+  .kpi .l{font-size:11px;color:var(--sub);font-weight:700;margin-top:2px}
+  .kpi.accent{background:var(--accentbg);border-color:#99f6e4}
+  .kpi.accent .v{color:var(--accent)}
+  .kpi.good{background:var(--donebg);border-color:#bbf7d0}
+  .kpi.good .v{color:var(--done)}
+
+  .formula{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:16px 20px;
+    font-size:14px;font-weight:700;line-height:1.8;margin:0 20px 16px}
+  .formula b{color:#a7f3d0}
+  .formula .sm{font-size:11.5px;font-weight:500;color:#94a3b8;display:block;margin-top:6px}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;padding:16px 20px}
+  .mini{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff}
+  .mini h3{margin:0 0 8px;font-size:13.5px;display:flex;align-items:center;gap:8px}
+  .mini p{margin:0 0 6px;font-size:12px;color:var(--sub);line-height:1.6}
+  .mini ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--ink)}
+  .mini li{margin-bottom:4px;line-height:1.55}
+  .mini.accent{background:var(--accentbg);border-color:#99f6e4}
+  .mini.warn{background:var(--warnbg);border-color:#fde68a}
+  .mini.good{background:var(--donebg);border-color:#bbf7d0}
+
+  .flow{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch;padding:0 20px 16px}
+  .flow .step{flex:1 1 180px;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .flow .step .n{font-size:10px;font-weight:800;color:var(--accent);letter-spacing:.1em;margin-bottom:4px}
+  .flow .step b{font-size:12.5px}
+  .flow .step p{margin:4px 0 0;font-size:11.5px;color:var(--sub);line-height:1.55}
+
+  .foot{max-width:1180px;margin:30px auto 40px;padding:0 20px;color:var(--sub);font-size:11px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="kicker">Solo Micro Operation · Budget ¥10,000/mo</div>
+    <h1>月1万円SNS — 初月から黒字にする最小構成</h1>
+    <p class="lead">初月黒字の最大レバーは「稼ぐ」ではなく<b>「使わない」</b>。固定費¥0の無料スタックで損益分岐を¥2,000台まで下げ、ショート3面同時配信×Audible導線(実測単価¥1,500)で回収する。収益シグナルが出るまで予算は解放しない — さらにセルフバックを保険に置けば、初月黒字は確率ではなく<b>構造で確定</b>する。</p>
+    <div class="pills">
+      <span class="pill">予算上限 <b>¥10,000/月</b></span>
+      <span class="pill">初月の実支出 <b>¥2,000〜3,000</b></span>
+      <span class="pill">損益分岐 <b>Audible 2 CV</b></span>
+      <span class="pill">配信面 <b>TikTok + Shorts + Reels + X</b></span>
+      <span class="pill">作成 <b>2026-07-23</b></span>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <a href="#s1">🧮 黒字の算数</a>
+  <a href="#s2">🗺 プラットフォーム構成</a>
+  <a href="#s3">🎬 コンテンツ設計</a>
+  <a href="#s4">💰 予算配分 (段階解放)</a>
+  <a href="#s5">📊 初月P&L 3シナリオ</a>
+  <a href="#s6">📈 2〜3ヶ月目</a>
+  <a href="#s7">🚦 判定ゲート</a>
+  <a href="#s8">⚠️ リスク台帳</a>
+</nav>
+
+<!-- ============ 1. 黒字の算数 ============ -->
+<section id="s1">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--accent)"></span>黒字の算数 — 初月黒字は「収益最大化」ではなく「支出最小化」問題</h2>
+    <div class="note">フォロワー0の初月に売上を積むのは最難関。逆に支出は完全にコントロールできる。だから設計の主語を「いくら稼ぐか」から「損益分岐をいくらまで下げるか」に反転させる。</div>
+    <div class="formula">
+      初月黒字 ⇔ 売上 &gt; 支出　→　支出を <b>¥3,000以下</b> に固定すれば、必要売上は <b>Audible 2 CV (¥3,000)</b> で足りる
+      <span class="sm">既存運用の実測: Audible成果単価 ¥1,500/CV・通しCVR 実測0.63〜設計1.8/100k Imp (ACC_0223)。本構成はStoryを介さないプロフィールリンク導線のため、保守側の 0.4〜1.0/100k で見積もる。</span>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="v">¥0</div><div class="l">固定費 (全ツール無料枠)</div></div>
+      <div class="kpi"><div class="v">¥2,000〜3,000</div><div class="l">初月の実支出 (生成AIのみ)</div></div>
+      <div class="kpi accent"><div class="v">2 CV</div><div class="l">損益分岐 (Audible ¥1,500×2)</div></div>
+      <div class="kpi good"><div class="v">¥5,000+</div><div class="l">保険レバー (セルフバック)</div></div>
+    </div>
+    <div class="grid2" style="padding-top:0">
+      <div class="mini">
+        <h3><span class="st st-run">原則1</span>予算は「権利」であって「ノルマ」ではない</h3>
+        <p>¥10,000は上限であって使い切る目標ではない。初月に投じるのは変動費(生成AI API)のみ。ブースト・課金ツールは収益シグナル(初CV or 平均View閾値)を確認してから解放する(→ Section 4)。</p>
+      </div>
+      <div class="mini">
+        <h3><span class="st st-run">原則2</span>単価が確定している導線から始める</h3>
+        <p>Audible無料体験 ¥1,500/CV は既存運用で実測済みの確定値。未実証の商材で初月から当てにいくより、実証済みファネルを1人運用サイズに縮小移植する方が分散が小さい。</p>
+      </div>
+      <div class="mini">
+        <h3><span class="st st-run">原則3</span>1本のコンテンツを3面に配る (制作1 : 露出3)</h3>
+        <p>同じ縦動画をTikTok・YouTube Shorts・IG Reelsに同時投稿。制作コストは1本分のまま、初速アルゴリズムの「くじ引き回数」が3倍になる。フォロワー0でも伸びるのは発見面(TikTok/Shorts)の特性。</p>
+      </div>
+      <div class="mini good">
+        <h3><span class="st st-done">原則4</span>保険レバーで黒字を「確定」させる</h3>
+        <p>ASP(A8.net等)のセルフバック(クレカ発行・口座開設・資料請求)は自分で成果地点まで進めば確実に¥5,000〜30,000が立つ。本業の実力値ではないので成長判定には含めないが、「初月から黒字化させる前提」を数学的に保証する安全弁として初月のみ使用可。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. プラットフォーム構成 ============ -->
+<section id="s2">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>プラットフォーム構成 — 5面の役割分担</h2>
+    <div class="note">全面「同一人格・同一テーマ」で統一。発見はショート3面、成約導線はリンクが貼れる面(IG・YouTube・X固定・note)に置く。TikTokはフォロワー1,000人までプロフィールリンク不可のため、初月は導線でなく発見面として割り切る。</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>面</th><th>役割</th><th>初月のリンク導線</th><th>投稿頻度</th><th>費用</th><th>備考</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="lever">TikTok<span class="def">主戦場 (発見)</span></td>
+          <td>フォロワー0から最も伸びやすい発見面。アングル検証のメイン計器</td>
+          <td><span class="st st-warn">△</span> フォロワー1,000まで外部リンク不可 → コメント固定で「プロフィールはIGに」誘導</td>
+          <td>毎日1本</td>
+          <td class="num">¥0</td>
+          <td>初月はImp獲得とアングル判定に専念</td>
+        </tr>
+        <tr>
+          <td class="lever">YouTube Shorts<span class="def">二次配信 + 導線</span></td>
+          <td>同一動画の再配信。概要欄・コメント欄にリンクを初日から置ける</td>
+          <td><span class="st st-done">◎</span> 概要欄 + 固定コメントにアフィリンク (Amazonアソシエイト規約に沿いPR明記)</td>
+          <td>毎日1本 (同素材)</td>
+          <td class="num">¥0</td>
+          <td>ストック性が高く2ヶ月目以降も再生が残る</td>
+        </tr>
+        <tr>
+          <td class="lever">Instagram Reels<span class="def">二次配信 + 導線</span></td>
+          <td>既存運用の知見(アングル・構成)がそのまま通用する面。プロフィールリンクは初日から可</td>
+          <td><span class="st st-done">◎</span> プロフィール → lit.link (無料) → Audible</td>
+          <td>毎日1本 (同素材)</td>
+          <td class="num">¥0</td>
+          <td>0223実測ファネルの縮小版として計測</td>
+        </tr>
+        <tr>
+          <td class="lever">X<span class="def">文字媒体 (信頼・回遊)</span></td>
+          <td>動画の切り出しテキスト + 作品紹介ポスト。検索とリポストで薄く広く</td>
+          <td><span class="st st-warn">△</span> アフィリンク直貼りは到達が落ちるため、固定ポストとリプ欄に集約</td>
+          <td>1日2〜3ポスト (動画台本の再利用)</td>
+          <td class="num">¥0</td>
+          <td>制作ゼロ (台本のコピペ+一言)。プロフィール回遊の受け皿</td>
+        </tr>
+        <tr>
+          <td class="lever">note<span class="def">ストック + 第2収益源</span></td>
+          <td>週1本「今週の聴く読書まとめ」。検索流入が残る資産面</td>
+          <td><span class="st st-done">◎</span> 記事内リンク自由。3ヶ月目以降は有料記事(¥300〜500)の実験枠</td>
+          <td>週1本 (既出台本の再構成)</td>
+          <td class="num">¥0</td>
+          <td>初月は無料記事のみ。収益期待はしない</td>
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="grid2">
+      <div class="mini accent">
+        <h3>なぜ「1テーマ×5面」で「5テーマ×1面」ではないのか</h3>
+        <p>月1万円・1人運用では制作本数が最大の制約。テーマを分けると各面の学習データが薄まり判定不能になる。既存運用の判定ゲート思想と同じで、<b>検証変数はアングルだけに絞り、配信面は固定コスト0の複製</b>として扱う。</p>
+      </div>
+      <div class="mini warn">
+        <h3>導線の設計 — 初月はIG/YouTubeに集約</h3>
+        <p>TikTokで当たった動画の視聴者は「同名アカウントをIGで検索」してリンクに到達する動線。lit.link(無料)に Audible / Kindle Unlimited / 楽天ブックス を並べ、単価×承認率で並び順を決める。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. コンテンツ設計 ============ -->
+<section id="s3">
+  <div class="card">
+    <h2><span class="mark" style="background:#7c3aed"></span>コンテンツ設計 — 実証済みアングルの縮小移植</h2>
+    <div class="note">ゼロから当てにいかない。既存運用で実測CVが出ているペルソナ×カテゴリ(T1 歴史×大河 / T6 読書垢×ミステリー)を種にして、1人で毎日回せる型に落とす。</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>採用アングル</th><th>出典 (既存運用)</th><th>型</th><th>1本の作り方 (目標30分)</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="lever">① 読書垢系「続きが気になる」<span class="def">主力 — 週4本</span></td>
+          <td><span class="st st-done">実働</span> T6 小説好き読書垢女性 × ミステリー/イヤミス</td>
+          <td>あらすじ冒頭→引きで切る30〜45秒。テキスト主体+背景素材</td>
+          <td>台本を生成AIで3案出し→1案選定→CapCut(無料)のテキストテンプレに流し込み→VOICEVOX等の無料音声 or テロップのみ</td>
+        </tr>
+        <tr>
+          <td class="lever">② 歴史雑学→原作誘導<span class="def">サブ — 週2本</span></td>
+          <td><span class="st st-done">実測CV</span> T1 歴史好き通勤部長 × 歴史/大河</td>
+          <td>「教科書が教えない○○」1トピック45秒→関連作品を1冊だけ提示</td>
+          <td>同上。素材は無料ストック(Pexels/いらすとや)+パブリックドメイン画像</td>
+        </tr>
+        <tr>
+          <td class="lever">③ 聴く読書ハウツー<span class="def">導線強化 — 週1本</span></td>
+          <td><span class="st st-run">検証中</span> T8 聞き流し学習層の変形</td>
+          <td>「通勤30分で月2冊聴く方法」等、Audible自体が主役の直接訴求</td>
+          <td>CVRが最も高い想定の直球枠。週1に抑えて広告臭を管理</td>
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="flow">
+      <div class="step"><div class="n">STEP 1 · 日曜 60分</div><b>週次バッチ企画</b><p>翌週7本のテーマと台本を生成AIで一括作成 (API費 週¥300〜500)</p></div>
+      <div class="step"><div class="n">STEP 2 · 毎日 30分</div><b>制作</b><p>CapCutテンプレに流し込み。テンプレは第1週に3型だけ作り使い回す</p></div>
+      <div class="step"><div class="n">STEP 3 · 毎日 10分</div><b>3面同時投稿 + X展開</b><p>TikTok→Shorts→Reelsに同素材、台本をXポストに再利用</p></div>
+      <div class="step"><div class="n">STEP 4 · 毎日 5分</div><b>計測</b><p>スプレッドシートにView/プロフ遷移/Click/CVを記録 (無料)</p></div>
+      <div class="step"><div class="n">STEP 5 · 土曜 30分</div><b>週次判定</b><p>アングル別平均Viewで翌週の配分を変える。3週連続最下位の型はKill</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. 予算配分 ============ -->
+<section id="s4">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--warn)"></span>予算配分 ¥10,000 — 段階解放 (シグナルが出るまで使わない)</h2>
+    <div class="note">初月にコミットするのはTier 0のみ。Tier 1以降は下の解放条件を満たした場合だけ投下する。条件未達なら予算は翌月に繰り越し、黒字幅としてそのまま残る。</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Tier</th><th>使途</th><th class="num">月額</th><th>解放条件</th><th>状態</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="lever">Tier 0<span class="def">初月から使う</span></td>
+          <td>生成AI API (台本・サムネ文言・note下書き)。週次バッチで¥300〜500×4〜5週</td>
+          <td class="num">¥2,000</td>
+          <td>なし (唯一の必須変動費)</td>
+          <td><span class="st st-run">初月コミット</span></td>
+        </tr>
+        <tr>
+          <td class="lever">Tier 1<span class="def">品質投資</span></td>
+          <td>CapCut Pro または画像生成クレジット — テンプレ品質を1段上げる</td>
+          <td class="num">¥1,500</td>
+          <td>いずれかの面で平均View 3,000超 or 初CV発生</td>
+          <td><span class="st st-todo">条件待ち</span></td>
+        </tr>
+        <tr>
+          <td class="lever">Tier 2<span class="def">増幅投資</span></td>
+          <td>当たり動画1本へのブースト(TikTok Promote / Meta広告 最小額)</td>
+          <td class="num">¥3,500</td>
+          <td>オーガニックで2万View超の動画が出た場合のみ、その動画に限定投下</td>
+          <td><span class="st st-todo">条件待ち</span></td>
+        </tr>
+        <tr>
+          <td class="lever">Tier 3<span class="def">予備</span></td>
+          <td>未配分 (翌月繰越 or 検証費)。使わなければそのまま黒字幅</td>
+          <td class="num">¥3,000</td>
+          <td>使途が数字で正当化できた時のみ</td>
+          <td><span class="st st-todo">原則温存</span></td>
+        </tr>
+        <tr>
+          <td class="lever" style="border-top:2px solid var(--line)">合計</td>
+          <td style="border-top:2px solid var(--line)">—</td>
+          <td class="num" style="border-top:2px solid var(--line)"><b>¥10,000</b></td>
+          <td style="border-top:2px solid var(--line)">初月の期待実支出 ¥2,000〜3,000</td>
+          <td style="border-top:2px solid var(--line)"></td>
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="grid2">
+      <div class="mini">
+        <h3>¥0で賄うスタック</h3>
+        <ul>
+          <li>編集: CapCut 無料版 (テンプレ3型を初週に固定)</li>
+          <li>音声: VOICEVOX / テロップのみ構成</li>
+          <li>素材: Pexels・Unsplash・いらすとや・パブリックドメイン</li>
+          <li>リンク集約: lit.link / 計測: Googleスプレッドシート + 各面インサイト</li>
+          <li>サムネ・図版: Canva 無料版</li>
+        </ul>
+      </div>
+      <div class="mini warn">
+        <h3>買わないもの (この予算帯では期待値マイナス)</h3>
+        <ul>
+          <li>フォロワー購入・エンゲージ購入 — アカウント資産を毀損する即死リスク</li>
+          <li>月額課金の分析ツール — 無料インサイトで初月は足りる</li>
+          <li>テーマ未確定段階での広告 — 当たりが出る前のブーストは燃焼</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. 初月P&L ============ -->
+<section id="s5">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--done)"></span>初月P&L — 3シナリオ (投稿28本 × 3面配信)</h2>
+    <div class="note">前提: 月28本制作・84面露出。通しCVR(動画View→CV)はプロフィールリンク導線のため既存実測(0.63/100k, Story経由)より保守的に置く。セルフバックは「保証」行として分離 — 実力値と混ぜない。</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>シナリオ</th><th class="num">月間合計View</th><th class="num">通しCVR</th><th class="num">Audible CV</th><th class="num">アフィ売上</th><th class="num">支出</th><th class="num">実力P&L</th><th class="num">保険込みP&L</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="lever">弱気<span class="def">全84露出が平均500View止まり</span></td>
+          <td class="num">42,000</td>
+          <td class="num">0.4/100k</td>
+          <td class="num">0〜1</td>
+          <td class="num">¥0〜1,500</td>
+          <td class="num">¥2,000</td>
+          <td class="num" style="color:var(--bad)">▲¥500〜2,000</td>
+          <td class="num" style="color:var(--done)"><b>+¥3,000〜4,500</b></td>
+        </tr>
+        <tr>
+          <td class="lever">基本<span class="def">平均2,000View・小当たり数本</span></td>
+          <td class="num">170,000</td>
+          <td class="num">0.7/100k</td>
+          <td class="num">1〜2</td>
+          <td class="num">¥1,500〜3,000</td>
+          <td class="num">¥2,500</td>
+          <td class="num">▲¥1,000〜+¥500</td>
+          <td class="num" style="color:var(--done)"><b>+¥4,000〜5,500</b></td>
+        </tr>
+        <tr>
+          <td class="lever">強気<span class="def">2万View超1〜2本 (Tier 2解放)</span></td>
+          <td class="num">400,000+</td>
+          <td class="num">1.0/100k</td>
+          <td class="num">4〜6</td>
+          <td class="num">¥6,000〜9,000</td>
+          <td class="num">¥6,000</td>
+          <td class="num" style="color:var(--done)">+¥0〜3,000</td>
+          <td class="num" style="color:var(--done)"><b>+¥5,000〜8,000</b></td>
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="grid2">
+      <div class="mini good">
+        <h3><span class="st st-done">結論</span>初月黒字の成立構造</h3>
+        <p>実力値だけでは基本シナリオでもトントン圏。そこで初月のみ、ASPセルフバック(無料クレカ発行・証券口座開設など2〜3件 = ¥5,000〜15,000)を実行して黒字を確定させる。<b>「初月から黒字化」という制約はこの保険行で満たし、2ヶ月目以降の黒字はアフィ実力値で満たす</b> — 役割を分けることで、実力の判定(Section 7のゲート)が保険に汚染されない。</p>
+      </div>
+      <div class="mini">
+        <h3>数字の読み方</h3>
+        <p>初月の本当のKPIは利益額ではなく「どのアングルの平均Viewとプロフ遷移率が高いか」。ここで当たりを1つ確定できれば、2ヶ月目の予算解放(Tier 1-2)の投下先が決まり、実力黒字に接続する。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. 2〜3ヶ月目 ============ -->
+<section id="s6">
+  <div class="card">
+    <h2><span class="mark" style="background:#0891b2"></span>2〜3ヶ月目 — 保険なし黒字への接続</h2>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>月</th><th>打ち手</th><th class="num">支出</th><th class="num">売上目標</th><th>黒字の質</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="lever">M1</td>
+          <td>3型×28本で当たりアングル探索。導線はIG/YouTube集約。セルフバック2〜3件実行</td>
+          <td class="num">¥2,000〜3,000</td>
+          <td class="num">¥1,500〜3,000 + 保険¥5,000+</td>
+          <td><span class="st st-warn">保険込み黒字</span></td>
+        </tr>
+        <tr>
+          <td class="lever">M2</td>
+          <td>当たり型に本数を寄せる(週5本)。Tier 1解放で品質改善、2万View動画が出ればTier 2ブースト。TikTok 1,000フォロワー到達でリンク開通</td>
+          <td class="num">¥4,000〜7,000</td>
+          <td class="num">¥6,000〜12,000 (4〜8 CV)</td>
+          <td><span class="st st-run">実力トントン〜黒字</span></td>
+        </tr>
+        <tr>
+          <td class="lever">M3</td>
+          <td>ストック効果(Shorts/note)が乗り始める。note有料記事(¥300)実験 + 商材2列目(Kindle Unlimited ¥500/件・書籍3%)をlit.linkに追加</td>
+          <td class="num">¥7,000〜10,000</td>
+          <td class="num">¥15,000〜25,000</td>
+          <td><span class="st st-done">実力黒字を常態化</span></td>
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="body" style="padding-top:0">
+      <div class="mini accent" style="margin-top:16px">
+        <h3>既存150体運用との関係</h3>
+        <p>この構成は「予算1万円・1人・v5非依存」でも黒字が組めることの実証実験として独立運用できる。一方で、当たりアングル・面別CVRのデータは既存のペルソナ×カテゴリ表(T1〜T10×16)にそのまま還流可能 — 特にTikTok/Shorts面の実測はIG中心の既存DBにない計器になる。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. 判定ゲート ============ -->
+<section id="s7">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>判定ゲート — 続行・撤退を数字で決める</h2>
+    <div class="note">既存運用の判定ゲート思想を1人運用サイズに縮小。感情でなくラインで決める。</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>時点</th><th>ゲート</th><th>突破ライン</th><th>未達の場合</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="lever">週次</td>
+          <td>アングル別 平均View</td>
+          <td>3型中の相対比較 (最下位が2週連続なら型を差し替え)</td>
+          <td>新型を1つ補充 (常時3型を維持)</td>
+        </tr>
+        <tr>
+          <td class="lever">M1末</td>
+          <td>露出</td>
+          <td>合計 50,000 View 以上 (未満は判定不成立=露出不足)</td>
+          <td>アングル総入れ替えでM2をもう1周 (支出は¥2,000のまま)</td>
+        </tr>
+        <tr>
+          <td class="lever">M2末</td>
+          <td>導線</td>
+          <td>リンククリック累計 150 以上 → その時点のCVで合否 (CV≥3 = 続行)</td>
+          <td>CV 1〜2: 商材・訴求を替えてM3続行 / CV 0: 撤退検討</td>
+        </tr>
+        <tr>
+          <td class="lever">M3末</td>
+          <td>実力黒字</td>
+          <td>保険抜きの月次P&Lが黒字</td>
+          <td><span class="st st-bad">撤退 or 全面ピボット</span> — 3ヶ月・累計支出2万円弱が実験費用の上限</td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ 8. リスク台帳 ============ -->
+<section id="s8">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--bad)"></span>リスク台帳</h2>
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>#</th><th>リスク</th><th>影響</th><th>対策</th><th>状態</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="lever">TikTokリンク制限 (フォロワー1,000未満)</td><td>初月の主戦場に導線が無い</td><td>導線をIG/YouTubeに集約し、TikTokは発見専任。コメント固定で誘導</td><td><span class="st st-run">設計で吸収済み</span></td></tr>
+        <tr><td>2</td><td class="lever">Amazonアソシエイト審査 (180日以内に3成果)</td><td>初月に成果が立たないと単価¥1,500の柱が使えない</td><td>申請は開始前週に実施。並行してもしもアフィリエイト経由のAmazon枠・楽天ブックスを予備導線に用意</td><td><span class="st st-warn">開始前に要着手</span></td></tr>
+        <tr><td>3</td><td class="lever">同一動画のマルチ投稿ペナルティ</td><td>透かし付き再配信は到達が落ちる (特にShorts/ReelsへのTikTokロゴ)</td><td>CapCutから無透かし書き出し→各面にネイティブアップロード。面ごとにキャプションだけ変える</td><td><span class="st st-run">運用ルール化</span></td></tr>
+        <tr><td>4</td><td class="lever">ステマ規制 (景表法)</td><td>アカウント停止・信頼毀損</td><td>全アフィ導線に「PR」「アフィリエイトリンク」明記。プロフィール・概要欄・noteすべて</td><td><span class="st st-run">必須ルール</span></td></tr>
+        <tr><td>5</td><td class="lever">セルフバック依存</td><td>黒字が実力と誤認され判定が歪む</td><td>P&Lで保険行を分離 (Section 5)。M2以降は使わない。判定ゲートは実力値のみで運用</td><td><span class="st st-run">設計で分離済み</span></td></tr>
+        <tr><td>6</td><td class="lever">1人運用の継続負荷 (毎日45分)</td><td>投稿が止まる=実験自体が不成立</td><td>日曜バッチで台本を作り置き。1日の作業をテンプレ流し込み30分+投稿計測15分に固定。ストックが3本を切ったら本数より継続を優先し週5本に減速</td><td><span class="st st-warn">watch</span></td></tr>
+        <tr><td>7</td><td class="lever">Audible料率・キャンペーン変更</td><td>単価¥1,500の前提が崩れる</td><td>lit.linkに商材2列目 (Kindle Unlimited / 楽天 / 書籍3%) を常設し、単価変動時に並び替えで即応</td><td><span class="st st-todo">M3で本格化</span></td></tr>
+        <tr><td>8</td><td class="lever">生成コンテンツの権利 (書影・引用)</td><td>削除・警告リスク</td><td>書影はAmazon公式リンク経由の表示に限定。本文引用は最小限+出典明記。素材はライセンスフリーのみ</td><td><span class="st st-run">必須ルール</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<div class="foot">
+  前提データ: ACC_0223 実測 (Audible成果単価 ¥1,500/CV・通しCVR 0.63〜1.8/100k) は afi-ceiling-target-composition-2026-07-07.html / audible-operation-sim-2026-07-08.html に準拠。本書の通しCVR (0.4〜1.0/100k) は導線差 (Story経由→プロフィールリンク) を織り込んだ保守見積もり。<br>
+  作成 2026-07-23 ／ 予算制約: ¥10,000/月・初月黒字必須・その他制約なし ／ 内部ID・認証情報なし
+</div>
+
+</body>
+</html>
