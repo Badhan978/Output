@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>江戸裏話 収益化診断 — 2026-08-13</title>
+<style>
+  :root{
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    --done:#16a34a; --donebg:#f0fdf4;
+    --run:#7c3aed;  --runbg:#f5f3ff;
+    --on:#2563eb;   --onbg:#eff6ff;
+    --off:#0d9488;  --offbg:#f0fdfa;
+    --warn:#d97706; --warnbg:#fffbeb; --warnbg-strong:#fef3c7;
+    --bad:#dc2626;  --badbg:#fef2f2;
+    --todo:#94a3b8; --todobg:#f8fafc;
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
+
+  header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:30px 28px 26px}
+  .kicker{font-size:11px;letter-spacing:.18em;color:#7dd3fc;font-weight:800;text-transform:uppercase}
+  header h1{margin:6px 0 8px;font-size:29px;line-height:1.3}
+  header .lead{margin:0;color:#cbd5e1;font-size:13.5px;max-width:940px}
+  .pills{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+  .pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    color:#e2e8f0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:12px;border:1px solid var(--line)}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  section{max-width:1180px;margin:24px auto;padding:0 20px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .mark{width:12px;height:12px;border-radius:4px;display:inline-block;flex:0 0 auto}
+  .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
+    border-bottom:1px solid var(--line)}
+  .pad{padding:16px 20px}
+
+  .chip{font-size:10px;font-weight:800;padding:3px 10px;border-radius:5px;color:#fff;white-space:nowrap}
+  .st{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;white-space:nowrap}
+  .st-done{background:#dcfce7;color:#15803d}
+  .st-run{background:#ede9fe;color:#6d28d9}
+  .st-warn{background:var(--warnbg-strong);color:var(--warn)}
+  .st-bad{background:#fee2e2;color:#b91c1c}
+  .st-todo{background:#f1f5f9;color:#64748b}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700}
+  .lever{font-weight:700}
+  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .tbl-wrap{overflow-x:auto}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:16px 20px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px 20px}
+  .gcard{border:1.5px solid var(--line);border-radius:10px;overflow:hidden}
+  .gcard .ghead{padding:9px 14px;font-weight:800;font-size:13px;display:flex;gap:8px;align-items:center}
+  .gcard ul{margin:0;padding:10px 14px 12px 28px;font-size:12.5px}
+  .gcard li{margin-bottom:6px}
+  .gcard .gbody{padding:10px 14px 12px;font-size:12.5px}
+
+  .metric{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:16px 20px}
+  .mcell{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff}
+  .mcell .v{font-size:26px;font-weight:800;line-height:1.15}
+  .mcell .l{font-size:11px;color:var(--sub);font-weight:700;margin-top:2px}
+  .mcell .d{font-size:11px;color:var(--sub);margin-top:4px}
+
+  .funnel{display:grid;grid-template-columns:1fr 30px 1fr 30px 1fr 30px 1fr;
+    gap:8px;padding:18px 20px;align-items:stretch}
+  .fnode{border-radius:9px;padding:10px 12px;font-size:12px;border:1.5px solid}
+  .fnode b{display:block;font-size:15px}
+  .farrow{display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:18px;font-weight:700}
+  .rate{display:inline-block;font-size:10.5px;font-weight:800;border-radius:5px;padding:1px 7px;margin-top:4px}
+
+  footer{max-width:1180px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px;line-height:1.7}
+  @media(max-width:980px){
+    .grid3,.grid2,.metric{grid-template-columns:1fr}
+    .funnel{grid-template-columns:1fr}
+    .farrow{transform:rotate(90deg)}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">AI KOL · ACC_0223 江戸裏話 · 収益化診断</div>
+  <h1>江戸裏話が収益化しない理由 — Impは収益の分母ではない</h1>
+  <p class="lead">「Imp→CVの率が低い」は正しい実測（通しCVR 0.63/100k）だが、原因は一段ではない。Impの<b>96%はそもそもCV経路（Story）に入らない</b>構造で、実際の律速は Story→Link Click のタップ層（実測 0.48〜1.14% vs 目標 2.2%）。ストーリー・ハイライトは「設置」されているが「タップする理由」がまだ設計できていない — 設置と転換は別物、が本診断の結論。</p>
+  <div class="pills">
+    <span class="pill">作成 2026-08-13</span>
+    <span class="pill">データ: 6月実測＋7月実測（〜7/23 repo反映分）</span>
+    <span class="pill">現状 通しCVR 0.63/100k・収支 −¥6,900/月</span>
+    <span class="pill">黒字ライン CV 7/月（15本体制コスト ¥9,675）</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#summary">🎯 結論 3行</a>
+  <a href="#funnel">🧭 ファネル分解</a>
+  <a href="#causes">🔬 原因 5件</a>
+  <a href="#done">✅ 「やってあるのに」への答え</a>
+  <a href="#actions">🛠 打ち手 5本</a>
+  <a href="#deadline">⏱ 判定期限</a>
+</nav>
+
+<section id="summary">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>🎯 結論 — 3行で</h2>
+    <div class="grid3">
+      <div class="gcard">
+        <div class="ghead" style="background:var(--onbg)"><span class="chip" style="background:var(--on)">構造</span>分母の誤認</div>
+        <div class="gbody">Reels Imp 63万のうちStory F1に到達するのは<b>2.5万（4.04%）だけ</b>。CVの分母はImpではなく「フォロワー × Story閲覧12.4%/日 × Story日数」。Impをいくら積んでも通しCVRは上がらない構造（2026-07-07設計で確定済み）。</div>
+      </div>
+      <div class="gcard">
+        <div class="ghead" style="background:var(--badbg)"><span class="chip" style="background:var(--bad)">律速</span>タップ層の未設計</div>
+        <div class="gbody">ボトルネックは<b>F1→Link Click</b>。6月1.14% → 7月実測<b>0.48%</b>（目標2.2%）と逆行し、tap率ゼロのStoryが約半数。導線の「設置」は済んでいるが、リード文型×CTA型×商材期待という「タップする心理」が未確定。</div>
+      </div>
+      <div class="gcard">
+        <div class="ghead" style="background:var(--warnbg)"><span class="chip" style="background:var(--warn)">前提</span>役割の二重定義</div>
+        <div class="gbody">7/3裁定では江戸系は「<b>CVを攻めない</b>供給・送客口」、7/7には「<b>Audible黒字化運用</b>」で継続決定。直接CVと関西送客がStory枠を取り合ったまま。どちらを主にするかの裁定が、全打ち手の前提になる。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="funnel">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--on)"></span>🧭 ファネル分解 — どの段がいくら足りないか</h2>
+    <div class="note">ACC_0223 実測（2026-07-07 ユニットエコノミクス設計・20本月）。太字＝設計値（15本体制）。<b>Reels段は既に設計値を満たしている</b> — 未達はすべてStory以降。</div>
+    <div class="funnel">
+      <div class="fnode" style="border-color:var(--done);background:var(--donebg)">Reels View<b>631,436</b><span class="def">20本 · avg 31.6k／設計 63万（15本 × 42k）</span><span class="rate" style="background:#dcfce7;color:#15803d">設計値クリア済み</span></div>
+      <div class="farrow">→</div>
+      <div class="fnode" style="border-color:var(--warn);background:var(--warnbg)">Story F1<b>25,488 <small>(4.04%)</small></b><span class="def">設計 37,800（6.0%）— 予告CTA＋同期投稿</span><span class="rate" style="background:var(--warnbg-strong);color:var(--warn)">−12,300 不足</span></div>
+      <div class="farrow">→</div>
+      <div class="fnode" style="border-color:var(--bad);background:var(--badbg)">Link Click<b>291 <small>(1.14%)</small></b><span class="def">設計 756（2.0%）／7月4acc実測は<b>0.48%</b>まで悪化</span><span class="rate" style="background:#fee2e2;color:#b91c1c">最大の律速</span></div>
+      <div class="farrow">→</div>
+      <div class="fnode" style="border-color:var(--warn);background:var(--warnbg)">CV<b>4 <small>(LC→CV 1.37%)</small></b><span class="def">設計 11（1.5%・無料明示）／収支 −¥6,900 → +¥6,825</span><span class="rate" style="background:var(--warnbg-strong);color:var(--warn)">黒字まで −7 CV</span></div>
+    </div>
+    <div class="note" style="border-top:1px solid var(--line);border-bottom:none">
+      <b>検算 — Story段さえ設計値に届けば黒字圏:</b> F1 37,800 × F1→LC 2.2% × LC→CV 1.5% ≈ <b>12 CV = ¥18,000売上（粗利 +¥8,000超）</b>。逆に、Reels Impを2倍にしてもStory段の率が今のままなら CV は 8 止まり。伸ばすべき変数はImpではなくStory到達とタップ率。
+    </div>
+  </div>
+</section>
+
+<section id="causes">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--run)"></span>🔬 原因の分解 — 5件（すべて実測根拠つき）</h2>
+    <div class="note">「率が低い」を1つの問題として扱わない。段ごとに原因・根拠・改善可能性が違う。</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th style="width:190px">原因</th><th>中身</th><th>実測根拠</th><th style="width:120px">改善可能性</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="lever">① Impの質 — 娯楽完結型<span class="def">TOFUの構造問題</span></td>
+          <td>江戸ネタで集まるのは<b>コンテンツ消費層</b>。視聴維持28〜31sという「見て満足する」強みが、そのまま「リンク先に未充足が残らない」弱みになる。バイラルImpほどフォロワー外・低意図層に希釈される。</td>
+          <td>エンタメ CV/10万Imp <b>0.23</b> vs 教育系 <b>11.84</b>（50倍差・6月分解）／Saves/1k エンタメ0.6〜0.9 vs 生活系1.91〜2.43</td>
+          <td><span class="st st-todo">低</span><span class="def">ネタの性質そのもの。戦うべき場所ではない</span></td>
+        </tr>
+        <tr>
+          <td class="lever">② Imp→Story 4.04%<span class="def">Impの96%が経路外</span></td>
+          <td>F1母数は「フォロワー × 12.4%/日 × Story日数」で決まり、<b>平均Viewは直接CVに効かない</b>。Story日数・同期投稿・予告CTAが未整備のぶんだけ、Impと収益が切断される。</td>
+          <td>F1 25,488 vs 設計37,800（7/7）／フォロワー22.8kの冷静上限は F1 70,000+/月 — 現状はその36%</td>
+          <td><span class="st st-done">高</span><span class="def">1回の運用改修で全投稿に効く「最太レバー」</span></td>
+        </tr>
+        <tr>
+          <td class="lever">③ F1→LC 0.48〜1.14%<span class="def">タップ層 — 最大の律速</span></td>
+          <td>導線は設置済みだが、タップさせる<b>心理設計（リード文型×CTA型×書影×リンク箱）が未確定</b>。しかも6月→7月で悪化。業界実アカ事例（0.5〜1.25%）と同水準なので「異常」ではないが、黒字に必要な740LC/月に対し291。</td>
+          <td>7月4acc実測 <b>0.48%</b> vs 目標2.2%（リスク台帳・実測）／tap率ゼロが約半数・中央値0.11%（Story PDCA n=68）</td>
+          <td><span class="st st-run">中〜高</span><span class="def">有望0.9%→勝ち2.0%の2段。型別累積判定で詰める</span></td>
+        </tr>
+        <tr>
+          <td class="lever">④ LC→CV 1.02〜1.37%<span class="def">CV層 — 期待調整不足</span></td>
+          <td>Audible無料体験（¥1,500）の成果地点に対し、「無料で1冊」の明示・軽いタップを増やさないlintは<b>設計のみで未実装</b>。かつCVはacc×月で分子1〜2件しかなく、book別の効果検証が構造的に不能。</td>
+          <td>実測1.02〜1.37% vs 計画1.5%（リスク台帳）／「CVR測定不能→設計制約で代替」（Story PDCA裁定）</td>
+          <td><span class="st st-run">中</span><span class="def">lint実装で1.5%は射程。それ以上は単価とトレードオフ</span></td>
+        </tr>
+        <tr>
+          <td class="lever">⑤ 役割の二重定義<span class="def">戦略の未裁定</span></td>
+          <td>7/3「エンタメ＝供給・送客、CVは攻めない（Story CTA→関西メンション）」と7/7「0223＝Audible黒字化運用」が併存。<b>Storyという1つの枠を直接CVと送客が取り合い</b>、どちらのKPIも中途半端になる。</td>
+          <td>toc-category-strategy（7/3）vs acc-unit-economics（7/7）の裁定記録／送客数は「計測なし→基準値取得」のまま</td>
+          <td><span class="st st-warn">裁定次第</span><span class="def">技術でなく意思決定の問題。即日解消可能</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section id="done">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--off)"></span>✅ 「ストーリーもハイライトもやってあるのに」への答え — 設置と転換は別物</h2>
+    <div class="note">施策の「有無」は既に満たしている。未達なのは各施策の「転換設計」— そして視聴層のデータはむしろ、このアカが健全であることを示している。</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>やってあること</th><th>実測評価</th><th>足りていないもの</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="lever">Story運用<span class="def">配布105 story・週次運用</span></td>
+          <td><b>視聴層は健全</b>: learnアカのreach rateは同規模帯ベンチ（10-50Kフォロワー＝1.4〜2.0%）の2〜3倍上。完走率中央値0.61・F1→F2離脱22%は業界標準幅（23.8%）<span class="st st-done">アカ問題ではない</span></td>
+          <td>Story<b>日数</b>（F1母数はフォロワー×12.4%/<b>日</b>×日数）と、Reel同期投稿・予告CTA。見られてはいるが、毎日・全投稿連動になっていない</td>
+        </tr>
+        <tr>
+          <td class="lever">ハイライト設置<span class="def">プロフ導線</span></td>
+          <td>プロフには来ている（エンタメPFV率4.91%）が、<b>リンクを踏まない</b>（LC CTR 1.06% vs 教育系7.8%）— 6月分解で「MOFUが弱い」と特定済みのまま</td>
+          <td>ハイライトが機能するのは「保存版・リスト型の未充足」がある時（関西の『歴史書10選・保存版』型）。娯楽完結コンテンツの隣に置いても踏む理由がない — <b>置き場所でなく中身の型</b>の問題</td>
+        </tr>
+        <tr>
+          <td class="lever">リンク・CTA設置<span class="def">Audible導線</span></td>
+          <td>tap率0.6〜0.8%は業界実アカ事例と同水準 — 「異常に低い」証拠はない（業界ベンチ実査で公開基準の不存在を確定）。ただし黒字必要量には全く足りない</td>
+          <td>リード文型×CTA型の<b>勝ち型確定</b>（型別累積 Σreach≥4,000・2倍差で判定、微差A/Bは禁止）と、最終フレームでの「無料で1冊」明示</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="note" style="border-top:1px solid var(--line);border-bottom:none"><b>要するに:</b> 「印象より率が低い」最大の理由は、Imp→CVという通し率で見ているから。Impの96%は最初からCV経路の外にあり（②）、経路内に入った後の律速は施策の有無でなくタップ心理の設計（③）。施策は揃っている — 各施策の中の<b>変数がまだ1つも「勝ち」で確定していない</b>、が現在地。</div>
+  </div>
+</section>
+
+<section id="actions">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--done)"></span>🛠 打ち手 — 優先順5本（すべて既存設計と接続済み）</h2>
+    <div class="note">新しい発明は不要。7/7ユニットエコノミクス・7/20 Story PDCA設計・7/23 Audible実行計画に既にある打ち手を、江戸裏話に優先順をつけて当てるだけ。</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th style="width:36px">#</th><th>打ち手</th><th>効く段</th><th class="num">期待値</th><th>根拠・状態</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="lever">0</td>
+          <td><b>役割の裁定</b> — Audible主軸か送客主軸かを1つに決める<span class="def">Audible主軸なら Story CTAを実測CVが出ている唯一の交点 A002（T1歴史好き通勤部長 × 歴史カテゴリ）型に固定。送客主軸なら関西メンションの送客数をKPI化</span></td>
+          <td>全段の前提</td>
+          <td class="num">—</td>
+          <td><span class="st st-warn">未裁定</span><span class="def">原因⑤。これが決まらないと下の4本の評価軸が定まらない</span></td>
+        </tr>
+        <tr>
+          <td class="lever">1</td>
+          <td><b>Story日数の毎日化＋Reel同期投稿＋予告CTA</b><span class="def">F1母数はフォロワー×12.4%/日×Story日数 — 運用改修1回で全投稿に効く</span></td>
+          <td>② Imp→F1</td>
+          <td class="num">4.04% → <b>6.0%</b><span class="def">F1 +12,300/月</span></td>
+          <td><span class="st st-run">設計済み・未達</span><span class="def">7/7設計の「最太レバー」。Link付きStoryは手動必須 — 分担体制が前提</span></td>
+        </tr>
+        <tr>
+          <td class="lever">2</td>
+          <td><b>タップ型の累積判定でリード文型×CTA型を確定</b><span class="def">型別累積プール Σreach≥4,000・2倍差で判定。微差A/B禁止。tap率ゼロStory（約半数）の型を先に淘汰</span></td>
+          <td>③ F1→LC</td>
+          <td class="num">0.48% → <b>0.9%</b>（有望）→ 2.0%（勝ち）</td>
+          <td><span class="st st-run">PDCA設計v2済み・Go待ち</span><span class="def">最大の律速に対する唯一の系統的手段</span></td>
+        </tr>
+        <tr>
+          <td class="lever">3</td>
+          <td><b>最終フレーム「無料で1冊」明示＋軽タップ罠lint</b><span class="def">「本を読みたくなる心理が先、フリクション軽減は後」を生成時lintに</span></td>
+          <td>④ LC→CV</td>
+          <td class="num">1.37% → <b>1.5%</b></td>
+          <td><span class="st st-run">設計済み・未実装</span><span class="def">tap率↑でもCVR↓になる軽タップ増加を防ぐガード込み</span></td>
+        </tr>
+        <tr>
+          <td class="lever">4</td>
+          <td><b>フォロワー資産の育成をKPIに載せる</b><span class="def">F1母数が毎月自動成長する唯一の複利指標。22.8k→40kでF1上限は月70k+、CV 30〜37の成熟層に入る</span></td>
+          <td>②の上限</td>
+          <td class="num">売上/acc ¥2,700〜6,000 → <b>¥50k〜75k</b>（成熟後）</td>
+          <td><span class="st st-todo">中期</span><span class="def">短期打ち手ではないが、天井を破る変数はこれのみ（7/7冷静上限）</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="metric">
+      <div class="mcell"><div class="v">12 CV</div><div class="l">#1〜#3 が同時成立した月の試算</div><div class="d">37,800 × 2.2% × 1.5% — 設計値どおり</div></div>
+      <div class="mcell"><div class="v" style="color:var(--done)">+¥8,000超</div><div class="l">月次粗利（15本体制）</div><div class="d">売上¥18,000 − コスト¥9,675</div></div>
+      <div class="mcell"><div class="v">7 CV</div><div class="l">損益分岐（黒字ライン）</div><div class="d">コスト¥9,675 ÷ ¥1,500 — 現状4CVとの差は3件</div></div>
+      <div class="mcell"><div class="v">×2でも8</div><div class="l">Imp倍増時のCV（率据え置き）</div><div class="d">Imp施策では黒字ラインすら不確実 — 率が先</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="deadline">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--warn)"></span>⏱ 判定期限 — ダラダラ改善を続けないための出口</h2>
+    <div class="note">改善ループには必ず出口をつける。判定基準はすべて合意済み（判定ゲート 7/23・適合判定 Story PDCA v2）。</div>
+    <div class="grid2">
+      <div class="gcard">
+        <div class="ghead" style="background:var(--runbg)"><span class="chip" style="background:var(--run)">短期</span>判定ゲート — LC150で合否を出す</div>
+        <div class="gbody">Story View 5,000未満は判定不成立（露出不足）。<b>Link Click 150に到達した時点のCV数</b>で判定する: CV≥3＝当たり（横展開）／CV1-2＝保留／CV0＝撤退。「なんとなく続ける」を排除する装置。</div>
+      </div>
+      <div class="gcard">
+        <div class="ghead" style="background:var(--warnbg)"><span class="chip" style="background:var(--warn)">出口</span>8週ルール — アカ問題ではなく商材適合を疑う</div>
+        <div class="gbody">8週回し切って <b>tap率0.9%未達かつCV=0</b> の場合: 江戸裏話の視聴層は業界レンジ<b>内</b>（規模帯ベンチの2〜3倍上）なので、裁定は「アカの問題」ではなく「<b>Audible不適合 → 商材替え</b>」に落ちる。歴史興味層108,494 PV/月という母集団資産自体は本物 — 売るものの側を疑ってよい。</div>
+      </div>
+    </div>
+    <div class="note" style="border-top:1px solid var(--line);border-bottom:none">⚠ <b>データの鮮度:</b> 本診断はrepoに反映済みの実測（〜2026-07-23）に基づく。8月はPhase 3（大量展開）期間であり、8月スコアボード（週次Run）の最新値で各段の答え合わせをしてから打ち手の順番を確定すること。特に F1→LC が7月の0.48%から回復しているかが最初の確認点。</div>
+  </div>
+</section>
+
+<footer>
+  出典: toc-category-strategy-2026-07.html（6月カテゴリ分解・7/3裁定）／ acc-unit-economics-500man-2026-07-07.html（ACC_0223ファネル実測・冷静上限）／ audible-operation-sim-2026-07-08.html（2026-07-23版・転換率目標v2・リスク台帳実測）／ audible-story-pdca-design.html（2026-07-20 v2・実測n=68・業界ベンチ実査）<br>
+  作成 2026-08-13 · 内部ID・認証情報は除去済み
+</footer>
+
+</body>
+</html>
