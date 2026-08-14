@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ToB事業設計 — 月次1億到達ロードマップ</title>
+<style>
+  :root{
+    --bg:#ffffff; --ink:#1a1a1a; --sub:#6b6b6b;
+    --line:#dcdcd8; --accent:#0f62fe;
+    --run:#0e8345; --runbg:#e6f4ec;
+    --lab:#0f62fe; --labbg:#eef4ff;
+    --build:#b45309; --buildbg:#fdf3e3;
+    --risk:#b42318; --riskbg:#fdecea;
+    --wait:#6b6b6b; --waitbg:#f1f1ee;
+    --apexbg:#101828;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",sans-serif;
+       padding:36px 20px;line-height:1.6}
+  .wrap{max-width:960px;margin:0 auto}
+  h1{font-size:21px;font-weight:700;margin-bottom:4px}
+  .date{font-size:12px;color:var(--sub);margin-bottom:14px}
+  h2{font-size:16px;font-weight:700;margin:34px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+  h3{font-size:14px;font-weight:700;margin:16px 0 8px}
+  p{font-size:13.5px;margin-bottom:8px}
+  .principle{font-size:13px;background:var(--waitbg);border:1px solid var(--line);
+             border-radius:10px;padding:12px 16px;margin:10px 0 6px}
+  .principle b{color:var(--accent)}
+
+  .apex{background:var(--apexbg);color:#fff;border-radius:14px;padding:22px 26px;text-align:center;margin-top:16px}
+  .apex .tag{font-size:11px;letter-spacing:.14em;opacity:.7;margin-bottom:4px}
+  .apex h2m{display:block;font-size:22px;font-weight:700}
+  .apex .note{font-size:12px;opacity:.75;margin-top:6px}
+
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+  @media(max-width:760px){.cards{grid-template-columns:1fr}}
+  .card{border:1.5px solid var(--line);border-radius:12px;padding:14px 16px}
+  .card .lid{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--sub);margin-bottom:6px}
+  .card h4{font-size:14px;font-weight:700;margin-bottom:6px}
+  .card p{font-size:12.5px;color:var(--ink)}
+  .card .src{font-size:11px;color:var(--sub);margin-top:8px}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0}
+  th{background:var(--waitbg);text-align:left;font-weight:700;padding:8px 10px;border:1px solid var(--line);white-space:nowrap}
+  td{padding:8px 10px;border:1px solid var(--line);vertical-align:top}
+  .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .tablewrap{overflow-x:auto}
+
+  .badge{display:inline-block;font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px;margin-right:6px}
+  .b-run{background:var(--runbg);color:var(--run)}
+  .b-lab{background:var(--labbg);color:var(--lab)}
+  .b-build{background:var(--buildbg);color:var(--build)}
+  .b-risk{background:var(--riskbg);color:var(--risk)}
+
+  .phase{border:1.5px solid var(--line);border-radius:14px;padding:16px 20px;margin:14px 0}
+  .phase .ph-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:8px}
+  .phase .ph-head h3{margin:0}
+  .phase .term{font-size:12px;color:var(--sub)}
+  .phase ul{margin:6px 0 4px 20px;font-size:13px}
+  .phase li{margin-bottom:5px}
+  .goal{background:var(--labbg);border:1px solid var(--lab);border-radius:8px;
+        padding:8px 12px;font-size:12.5px;margin-top:10px}
+  .goal b{color:var(--lab)}
+
+  .risk{border:1.5px solid var(--line);border-left:4px solid var(--risk);border-radius:10px;
+        padding:12px 16px;margin:10px 0;font-size:13px}
+  .risk b{display:block;margin-bottom:4px}
+  .risk .taisaku{color:var(--ink)}
+  .risk .taisaku::before{content:"→ 対応: ";font-weight:700;color:var(--run)}
+
+  .formula{background:var(--waitbg);border:1px solid var(--line);border-radius:10px;
+           padding:12px 16px;font-size:13px;margin:10px 0;font-variant-numeric:tabular-nums}
+  .snote{font-size:11.5px;color:var(--sub);margin-top:6px}
+  .todo{font-size:13px;margin:6px 0 4px 20px}
+  .todo li{margin-bottom:5px}
+  .owner{font-size:11px;font-weight:700;color:var(--sub);background:var(--waitbg);
+         border-radius:6px;padding:1px 8px;margin-left:6px;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>ToB事業設計 — 月次1億到達ロードマップ（叩き）</h1>
+<div class="date">2026-08-14 作成 / 前提: 2026-08-12 投資家定例（Ceed 月次定例）の決定事項・議論</div>
+
+<div class="apex">
+  <div class="tag">TARGET</div>
+  <h2m>2027年4月（春）に 月次売上 1億円</h2m>
+  <div class="note">現状: 契約ベース 月140〜190万円（2026-08） / リソースの9割をB2Bへ集約決定 / ネットバーン 月400万・ランウェイ8ヶ月</div>
+</div>
+
+<h2>0. 定例で決まったこと・言われたこと（設計の入力）</h2>
+<div class="cards">
+  <div class="card">
+    <div class="lid">決定事項</div>
+    <h4>リソース9割をB2Bへ</h4>
+    <p>プロダクト開発のPDCAもB2B案件に特化して回す。B2Cメディアは基盤維持（月1,000万impは3ヶ月後も再現可能という判断）。</p>
+    <div class="src">Zach・Badhan合意 → 定例で共有</div>
+  </div>
+  <div class="card">
+    <div class="lid">投資家見解 ①</div>
+    <h4>エンプラ集中モデル</h4>
+    <p>「1億は小型案件の積み上げ（100万×100社）より、巨大顧客2〜3社が売上の8割を占める構成の方がスケールする。トライアル→本契約の流れで獲る」</p>
+    <div class="src">北原さん（Decima）</div>
+  </div>
+  <div class="card">
+    <div class="lid">投資家見解 ②</div>
+    <h4>春までに・階段の可視化</h4>
+    <p>「年間マーケ予算3億級の企業から数千万規模を3〜4社なら1億はあり得る。来年春までにやってほしい。1億まで登る階段（ロードマップ）とB2Bデックを見せて」</p>
+    <div class="src">吉田さん（KUSABI）</div>
+  </div>
+</div>
+<div class="cards">
+  <div class="card">
+    <div class="lid">投資家見解 ③</div>
+    <h4>商品定義をシャープに</h4>
+    <p>「何をやっている会社で、どういうプロダクトなのかをもっとシャープに語れた方がいい。クライアントに理解できるのか」→ 売り物の一文定義が必要。</p>
+    <div class="src">湯田さん（ZVC）</div>
+  </div>
+  <div class="card">
+    <div class="lid">懸念</div>
+    <h4>アセット性の低下</h4>
+    <p>「B2Cは資産（アカウント・データ）が自律的に積み上がるのが旨み。B2Bでそれが消えるのは嫌。B2Bでもアセットが積み上がるモデルなら賛成」</p>
+    <div class="src">吉田さん（KUSABI）</div>
+  </div>
+  <div class="card">
+    <div class="lid">宿題（Next Steps）</div>
+    <h4>この文書がその回答</h4>
+    <p>①テレアポ拡充（人材紹介以外へ）②セールス責任者・CTO候補の採用 ③B2B営業資料の共有 ④<b>春までに1億の段階的計画の策定（Zach・Badhan）</b></p>
+    <div class="src">8/12定例 Next Steps</div>
+  </div>
+</div>
+
+<h2>1. 売り物の定義（湯田さん指摘への回答）</h2>
+<div class="principle">
+  <b>一文定義:</b> 「AIエージェント（戦略×制作×分析）で企業のSNSグロースを代行し、インプレッション/CVを10倍にするグロースパートナー」<br>
+  裏付けアセット: 300アカウント全自動運用の実績 / imp→CV 40%アングル発見のマネタイズ検証 / 切り抜き量産システム / 月1,000万imp級の自社メディア運用ノウハウ
+</div>
+<p>競合相場（切り抜き系）は「100万回再生=100万円、上位プラン300〜500万円」かつ広告ブーストで再生数を合わせにいくのが主流。当社はオーガニックで同等impを量産できるため、粗利構造で優位。ここが「1社事例が取れれば他社が簡単に真似できない」根拠。</p>
+
+<h2>2. 商品ティアと1億円の構成（北原・吉田モデルの採用）</h2>
+<div class="tablewrap">
+<table>
+  <tr><th>ティア</th><th>対象・内容</th><th>単価（月）</th><th>2027-04 目標</th><th>売上寄与</th></tr>
+  <tr>
+    <td><span class="badge b-lab">Tier E</span>エンタープライズ年間契約</td>
+    <td>年間マーケ予算 数億円級。データ基盤整備〜SNSグロース一括の「AIグロースパートナー」年間契約。トライアル（1〜3ヶ月・100〜300万）→本契約で転換</td>
+    <td class="num">1,500〜2,500万</td>
+    <td class="num">3〜4社</td>
+    <td class="num">6,000〜8,000万<br>（全体の7〜8割）</td>
+  </tr>
+  <tr>
+    <td><span class="badge b-run">Tier M</span>ミッドマーケット</td>
+    <td>東京通信（アイドルimp拡大・3ヶ月で1億imp）・CARTA子会社「読みて」（D2Cデータ基盤）型。事業部KPI直結の個別案件＋成果インセンティブ</td>
+    <td class="num">100〜300万</td>
+    <td class="num">8〜10社</td>
+    <td class="num">1,500〜2,500万</td>
+  </tr>
+  <tr>
+    <td><span class="badge b-build">Tier S</span>パッケージ（床）</td>
+    <td>人材紹介などテレアポ開拓のSMB。SNS集客パッケージを定型化して量産。キャッシュの床＋事例・業界データの収集装置</td>
+    <td class="num">30〜80万</td>
+    <td class="num">15〜20社</td>
+    <td class="num">500〜1,000万</td>
+  </tr>
+</table>
+</div>
+<div class="formula">
+  1億円 = <b>E: 4社 × 1,750万 = 7,000万</b> ＋ M: 10社 × 200万 = 2,000万 ＋ S: 20社 × 50万 = 1,000万<br>
+  <span class="snote">北原さんの「売上の8割を2〜3社から」に沿い、EがなければMとSをいくら積んでも1億に届かない設計。勝負はEの本契約4社。</span>
+</div>
+
+<h2>3. タイムライン（2026-08 → 2027-04）</h2>
+
+<div class="phase">
+  <div class="ph-head"><span class="badge b-build">Phase 0</span><h3>設計・武装</h3><span class="term">2026年8月下旬〜9月上旬</span></div>
+  <ul>
+    <li>B2Bデック完成・投資家グループへ共有（吉田さん依頼分）。売り物の一文定義と料金ティアを固定</li>
+    <li>テレアポの発注拡大: 人材紹介で見えた勝ち筋（社員30名以上・年商数億円以上）を維持しつつ、介護・アプリ・D2Cへ業種拡張</li>
+    <li>セールス責任者・CTO候補の採用開始（LinkedIn無料スカウト→ビズリーチ等の有料チャネルへ移行）</li>
+    <li>Eターゲットリスト150社の作成: 年間マーケ予算数億円級。投資家ネットワーク（CARTA・東京通信の石川さんルート等）からの紹介導線を明示的に依頼</li>
+  </ul>
+  <div class="goal"><b>出口条件:</b> デック共有済み / テレアポ2業種目稼働 / Eリスト150社 / 採用媒体稼働</div>
+</div>
+
+<div class="phase">
+  <div class="ph-head"><span class="badge b-run">Phase 1</span><h3>事例づくり（王手事例2本）</h3><span class="term">2026年9月〜10月　目標月商: 9月 400万 / 10月 700万</span></div>
+  <ul>
+    <li>進行中3〜4案件のクローズ（既存140〜190万 → 300万台へ）＋テレアポ経由S案件を月2〜3社ペースで積む</li>
+    <li><b>東京通信=「グロース事例」:</b> 3ヶ月1億impプロジェクトを数字で完遂 → 「オーガニックで◯impを◯円で作った」の実績スライド化</li>
+    <li><b>読みて=「データ基盤事例」:</b> AIエージェントレディ化の型（現場入り→データ整備→エージェント接続）をパッケージとして言語化。これがEトライアルの入口商品になる</li>
+    <li>セールス責任者オファー（10月中の入社目標）</li>
+  </ul>
+  <div class="goal"><b>出口条件:</b> 誰もが欲しがる事例2本（グロース系/データ基盤系）がデックに載る / 月商700万 / セールス責任者確保</div>
+</div>
+
+<div class="phase">
+  <div class="ph-head"><span class="badge b-lab">Phase 2</span><h3>エンプラ開拓（トライアル獲得）</h3><span class="term">2026年11月〜2027年1月　目標月商: 11月 1,200万 / 12月 1,800万 / 1月 3,000万</span></div>
+  <ul>
+    <li>事例デックを武器にEリスト150社へアプローチ（紹介30社・アウトバウンド120社）→ 商談30社 → <b>トライアル6〜8社</b>（各100〜300万/月）</li>
+    <li>トライアル設計を「本契約への階段」として固定: 90日で対象事業部のimp/CVを◯倍 → 達成時は年間契約へ移行、と最初から契約に書く</li>
+    <li>1月に<b>E本契約1号</b>（月1,500万級）。M案件は東京通信・読みての横展開で8社へ</li>
+    <li>デリバリー体制: CS/運用の採用（コア3→5名へ）。エージェントのPDCAはB2B案件データで回す（=B2Bでもデータ資産が積み上がる状態を作る）</li>
+  </ul>
+  <div class="goal"><b>出口条件:</b> Eトライアル6〜8社走行中 / E本契約1号締結 / 月商3,000万</div>
+</div>
+
+<div class="phase">
+  <div class="ph-head"><span class="badge b-lab">Phase 3</span><h3>本契約転換・1億</h3><span class="term">2027年2月〜4月　目標月商: 2月 4,500万 / 3月 7,000万 / 4月 1億</span></div>
+  <ul>
+    <li>トライアル8社のうち<b>4社を本契約へ転換</b>（転換率50%想定）。1社あたり月1,500〜2,500万の年間契約</li>
+    <li>M 10社・S 20社の積層を維持（解約率を月5%以内に管理）</li>
+    <li>未転換トライアルは縮小版Mへダウングレードで受け止め（売上ゼロにしない）</li>
+    <li>4月定例で「1億達成の構成と、その先（月2〜3億）の顧客構成」を提示 → 次ラウンドの資金調達ストーリーへ接続</li>
+  </ul>
+  <div class="goal"><b>出口条件:</b> 月次1億円 = E4社(7,000万) + M10社(2,000万) + S20社(1,000万)</div>
+</div>
+
+<h2>4. パイプライン逆算（何件仕込めば足りるか）</h2>
+<div class="tablewrap">
+<table>
+  <tr><th>ティア</th><th>目標（4月）</th><th>必要トライアル/商談</th><th>必要リード</th><th>主なチャネル</th></tr>
+  <tr>
+    <td>Tier E</td><td class="num">本契約 4社</td>
+    <td class="num">トライアル 8社（転換50%）← 商談 30社（トライアル化 25〜30%）</td>
+    <td class="num">ターゲット 150社</td>
+    <td>投資家・既存顧客の紹介（最優先）／トップアプローチ</td>
+  </tr>
+  <tr>
+    <td>Tier M</td><td class="num">10社</td>
+    <td class="num">商談 30〜40社（受注25〜30%）</td>
+    <td class="num">リード 100社</td>
+    <td>既存事例の横展開（エンタメ・D2C・人材）</td>
+  </tr>
+  <tr>
+    <td>Tier S</td><td class="num">20社（累計）</td>
+    <td class="num">アポ 100件（受注20〜25%）</td>
+    <td class="num">コール 4,000〜5,000件</td>
+    <td>テレアポ外部発注（アポ率2〜3%）。現況: 人材紹介で12件の見込み母集団</td>
+  </tr>
+</table>
+</div>
+<p class="snote">※ 転換率は現時点の仮置き。9〜10月の実績で毎月この表を更新し、率が下振れたら「リード量を増やす」ではなくまず「事例の強さ・ターゲット選定」を疑う。</p>
+
+<h2>5. 体制・お金との整合</h2>
+<div class="tablewrap">
+<table>
+  <tr><th>項目</th><th>現状</th><th>計画</th></tr>
+  <tr><td>コアメンバー</td><td class="num">3名</td><td>セールス責任者（10月）→ CS/運用（11月）→ CTO候補（Q4〜Q1）で5名体制へ</td></tr>
+  <tr><td>ネットバーン</td><td class="num">月400万</td><td>採用・テレアポ・Eアプローチ費で一時 月600〜700万へ増加を許容。1月に月商3,000万（粗利率高）でバーン相殺 → 2月以降黒字圏</td></tr>
+  <tr><td>ランウェイ</td><td class="num">8ヶ月（〜2027年4月）</td><td>計画通りなら3月に自走。<b>12月時点で月商1,200万未達なら</b>ブリッジ調達 or バーン圧縮を判断（判断期限を先に決めておく）</td></tr>
+</table>
+</div>
+
+<h2>6. リスクと対応</h2>
+<div class="risk">
+  <b><span class="badge b-risk">R1</span>アセット性の低下（吉田さん懸念）</b>
+  B2B移行で自社アカウント・データの自律的な積み上がりが消える。
+  <div class="taisaku">①自社メディアは月1,000万impの床を維持（9割B2Bでも1割で回る体制は確認済み）②B2B案件の運用データを自社エージェントの学習資産として契約上確保（データ利用条項を標準契約に入れる）③「B2B売上が積み上がる=業界別の勝ちパターンDBが積み上がる」構造をデックで説明。</div>
+</div>
+<div class="risk">
+  <b><span class="badge b-risk">R2</span>成果コミットの期待値リスク（6月定例で合意済みの論点）</b>
+  コンバージョンを保証できない案件でクライアント期待が暴発する。
+  <div class="taisaku">高い成果が見込める案件に絞る（6/10定例合意）。トライアル契約はimp系KPI（コントロール可能）を主指標、CV系は参考指標として設計。</div>
+</div>
+<div class="risk">
+  <b><span class="badge b-risk">R3</span>E転換率の下振れ</b>
+  トライアル→本契約50%は未実証。ここが崩れると1億の7割が消える。
+  <div class="taisaku">トライアル開始時に本契約の条件・金額を先に合意（Success Criteria契約）。8社中4社の転換が2月末までに見えなければ、Mの単価引き上げ（成果報酬比率増）で3月に部分補填しつつ、達成時期を1〜2ヶ月後ろ倒しで再提示（黙って未達にしない）。</div>
+</div>
+<div class="risk">
+  <b><span class="badge b-risk">R4</span>デリバリーキャパ</b>
+  受注が伸びるほど「最終週にZachが一人でコンテンツ量産」構造（6月定例の指摘）が再発する。
+  <div class="taisaku">エージェント自動運用（300アカ実績）をB2B納品ラインに転用。人が要る工程（現場データ整備）はCS採用で吸収。1社あたり工数を毎月計測し、E1社=0.5人月以内を維持。</div>
+</div>
+
+<h2>7. 直近2週間のアクション（〜8月末）</h2>
+<ul class="todo">
+  <li>B2Bデック v1 完成 → 投資家Slackへ共有<span class="owner">Zach</span></li>
+  <li>この1億ロードマップを定例フォーマットに落として投資家グループへ頭出し（吉田さん・北原さんの宿題回収）<span class="owner">Badhan / Zach</span></li>
+  <li>Eターゲット150社リスト作成＋石川さん・CARTAルートへの紹介依頼リスト化<span class="owner">Badhan</span></li>
+  <li>テレアポ2業種目（介護 or アプリ）の発注<span class="owner">Zach</span></li>
+  <li>セールス責任者JD作成・有料媒体出稿<span class="owner">Zach</span></li>
+  <li>東京通信・読みての「事例スライド化に必要な計測項目」を今のうちに仕込む（後から数字が取れない事故を防ぐ）<span class="owner">Badhan</span></li>
+</ul>
+
+<p class="snote" style="margin-top:28px">出典: 2026-08-12 Ceed 月次定例（議事録・文字起こし）、2026-06-10 定例サマリー、投資家定例Prep（Notion 2026-07-08 / 2026-08-12）。数値の仮置き（転換率・単価レンジ）は毎月の定例で実績更新する。</p>
+
+</div>
+</body>
+</html>
