@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FDE価格表と売上逆算 — 1億に必要な案件数</title>
+<style>
+  :root{
+    --bg:#ffffff; --card:#ffffff; --ink:#1a1a1a; --sub:#6b6b6b;
+    --line:#dcdcd8; --accent:#0f62fe;
+    --ok:#0e8345; --okbg:#e6f4ec;
+    --warn:#b45309; --warnbg:#fdf3e3;
+    --ng:#b42318; --ngbg:#fdeceb;
+    --mute:#6b6b6b; --mutebg:#f1f1ee;
+    --apexbg:#101828;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",sans-serif;
+       padding:36px 20px;line-height:1.55}
+  .wrap{max-width:920px;margin:0 auto}
+  h1{font-size:20px;font-weight:700;margin-bottom:4px}
+  .date{font-size:12px;color:var(--sub);margin-bottom:6px}
+  .principle{font-size:13px;background:var(--mutebg);border:1px solid var(--line);
+             border-radius:10px;padding:10px 16px;margin:14px 0 26px}
+  .principle b{color:var(--accent)}
+
+  h2{font-size:15px;font-weight:700;margin:32px 0 4px;padding-bottom:7px;border-bottom:1.5px solid var(--ink)}
+  .lead{font-size:12.5px;color:var(--sub);margin-bottom:14px}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:right}
+  th{background:var(--mutebg);font-weight:700;font-size:11.5px;text-align:center;color:var(--sub)}
+  td.l,th.l{text-align:left}
+  td.tier{font-weight:700}
+  tr.accentrow td{background:var(--okbg)}
+  tr.entryrow td{background:var(--warnbg)}
+  .num{font-variant-numeric:tabular-nums}
+  .hl{color:var(--accent);font-weight:700}
+
+  .apex{background:var(--apexbg);color:#fff;border-radius:14px;padding:18px 24px;margin:10px 0 4px}
+  .apex .tag{font-size:11px;letter-spacing:.14em;opacity:.7;margin-bottom:5px}
+  .apex .eq{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+  .apex .note{font-size:12px;opacity:.75;margin-top:7px;line-height:1.6}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+  @media(max-width:720px){.cards{grid-template-columns:1fr}}
+  .card{border:1.5px solid var(--line);border-radius:14px;padding:16px 18px}
+  .card.goal{border-color:var(--accent)}
+  .card .gtag{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--sub)}
+  .card h3{font-size:19px;font-weight:700;margin:2px 0 2px;font-variant-numeric:tabular-nums}
+  .card .need{font-size:12.5px;color:var(--accent);font-weight:700;margin-bottom:10px}
+  .combo{font-size:12.5px;border-top:1px dashed var(--line);padding-top:8px;margin-top:8px}
+  .combo b{display:inline-block;min-width:118px}
+  .verdict{font-size:11.5px;font-weight:700;border-radius:20px;padding:2px 9px;margin-left:4px}
+  .v-ok{background:var(--okbg);color:var(--ok)}
+  .v-warn{background:var(--warnbg);color:var(--warn)}
+  .v-ng{background:var(--ngbg);color:var(--ng)}
+
+  .box{border:1.5px solid var(--line);border-radius:14px;padding:16px 20px;margin-top:12px}
+  .box.blue{background:#eef4ff;border-color:var(--accent)}
+  .box.blue h3{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:8px}
+  .box p{font-size:12.5px;margin-bottom:8px}
+  .box li{font-size:12.5px;margin:5px 0 5px 18px}
+  .box li:last-child{margin-bottom:0}
+
+  .gaps{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:10px;margin-top:12px}
+  .gap{border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:12.5px}
+  .gap b{display:block;margin-bottom:4px}
+  .gap .tagline{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--warn);margin-bottom:3px}
+
+  .foot{margin-top:30px;font-size:12px;color:var(--sub);border-top:1px solid var(--line);padding-top:14px}
+  .foot li{margin:4px 0 4px 18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>FDE価格表と売上逆算 — 年商5,000万〜1億に必要な案件数</h1>
+  <div class="date">2026-08-17 · 客先常駐でAIデータ基盤構築 → 売上予測の仕組みを組む案件の価格設計</div>
+  <div class="principle">価格表アプローチは<b>正しい</b>。ただし逆算を効かせるには「月額 × 最低期間」に<b>投入FTE</b>と<b>年間クローズ必要数</b>の2列を足す必要がある。<br>結論を先に言うと — <b>1億は案件数の問題ではなく同時稼働FTEの問題</b>。小口の積み上げでは構造的に到達できない。</div>
+
+  <h2>1. 価格表（修正版）</h2>
+  <div class="lead">「小口/通常/大型」を規模の呼び名ではなく<b>投入FTE</b>で定義する。単価は 200万円/月・FTE を仮置き（AI/データ基盤のFDE型の中央値レンジ 150〜250万から採用）。元の3ティアに<b>入口（Phase 0）</b>と<b>出口（運用）</b>を追加。</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th class="l">ティア</th><th>投入FTE</th><th>月額</th><th>最低期間</th>
+        <th>契約総額</th><th>1枠を1年<br>埋めた売上</th><th>年間クローズ<br>必要数 / 枠</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="entryrow">
+        <td class="l tier">Phase 0 アセスメント</td><td class="num">0.5 × 1ヶ月</td><td class="num">250万（固定）</td><td class="num">4週</td>
+        <td class="num">250万</td><td class="num">—</td><td class="num">—</td>
+      </tr>
+      <tr>
+        <td class="l tier">小口</td><td class="num">0.5</td><td class="num">100万</td><td class="num">3ヶ月</td>
+        <td class="num">300万</td><td class="num">1,200万</td><td class="num hl">4件</td>
+      </tr>
+      <tr>
+        <td class="l tier">通常</td><td class="num">1.0</td><td class="num">200万</td><td class="num">6ヶ月</td>
+        <td class="num">1,200万</td><td class="num">2,400万</td><td class="num hl">2件</td>
+      </tr>
+      <tr class="accentrow">
+        <td class="l tier">大型</td><td class="num">2.5</td><td class="num">500万</td><td class="num">12ヶ月</td>
+        <td class="num">6,000万</td><td class="num">6,000万</td><td class="num hl">1件</td>
+      </tr>
+      <tr>
+        <td class="l tier">運用・改善</td><td class="num">0.25</td><td class="num">60万</td><td class="num">12ヶ月<br>自動更新</td>
+        <td class="num">720万</td><td class="num">720万</td><td class="num">0（更新）</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="box blue">
+    <h3>右端の列が「最低契約月数」の本当の意味</h3>
+    <p>最低契約月数は値引き防止の条件ではなく、<b>営業回数を割る装置</b>。小口の1枠を1年間埋め続けるには年4回クローズしなければならない。同じ1枠でも大型なら年1回で済む。<br>
+    つまり <b>年間クローズ必要数 = 12 ÷ 最低契約月数</b> — ここが営業チームの負荷そのものになる。</p>
+  </div>
+
+  <h2>2. 売上の計算式とキャパ制約</h2>
+  <div class="lead">FDEは人月キャパで天井が決まる。売上は需要ではなく<b>自社の人数</b>で決まるので、必ず制約式とセットで置く。</div>
+
+  <div class="apex">
+    <div class="tag">売上</div>
+    <div class="eq">月次売上 ＝ Σ（同時稼働案件数 × ティア月額）</div>
+    <div class="tag" style="margin-top:14px">制約（これが天井）</div>
+    <div class="eq">Σ（同時稼働案件数 × ティアFTE） ≦ FDE人数 × 稼働率 0.8</div>
+    <div class="note">稼働率0.8 — 案件間の空白・プリセールス・採用・社内開発に食われる分。常駐型で0.9を置くのは楽観。</div>
+  </div>
+
+  <h2>3. 年商目標からの逆算</h2>
+  <div class="lead">目標年商 ÷ 12 ＝ 必要月次売上 → ÷ 200万（単価/FTE） ＝ 必要稼働FTE → ÷ 0.8 ＝ 必要FDE人数。</div>
+
+  <div class="cards">
+    <div class="card goal">
+      <div class="gtag">目標 A</div>
+      <h3>年商 5,000万</h3>
+      <div class="need">月次417万 → 常時 2.1 FTE → <b>FDE 3人体制</b></div>
+      <div class="combo"><b>大型1本</b>6,000万 <span class="verdict v-ok">◎ 1本で超える</span></div>
+      <div class="combo"><b>通常2本</b>4,800万 <span class="verdict v-ok">◎ 年4件クローズ</span></div>
+      <div class="combo"><b>小口4枠</b>4,800万 <span class="verdict v-ng">× 年16件クローズ</span></div>
+    </div>
+    <div class="card goal">
+      <div class="gtag">目標 B</div>
+      <h3>年商 1億</h3>
+      <div class="need">月次833万 → 常時 4.2 FTE → <b>FDE 5〜6人体制</b></div>
+      <div class="combo"><b>大型1+通常2+運用4</b>1.1億 <span class="verdict v-ok">◎ 現実解</span></div>
+      <div class="combo"><b>大型2本</b>1.2億 <span class="verdict v-warn">△ 依存集中</span></div>
+      <div class="combo"><b>通常4本</b>9,600万 <span class="verdict v-warn">△ 年8件クローズ</span></div>
+      <div class="combo"><b>小口8枠</b>9,600万 <span class="verdict v-ng">× 年32件クローズ</span></div>
+    </div>
+  </div>
+
+  <div class="box">
+    <p><b>読み方 —</b> 1億の壁は「案件をたくさん取れるか」ではなく「<b>5〜6人を常時フル稼働で埋め続けられるか</b>」。小口を積み上げる戦略は年32件のクローズを要求するので構造的に破綻する。<b>大型1本を軸に据え、その周りを通常と運用で埋める</b>のが唯一現実的な形。</p>
+    <p style="margin-bottom:0">同時に、大型2本だけで1億を作ると<b>1社が抜けた瞬間に売上が半減する</b>。大型は軸であって全部ではない — 通常＋運用の層が解約バッファになる。</p>
+  </div>
+
+  <h2>4. この価格表だけでは決まらないこと</h2>
+  <div class="lead">逆算の目的には上記で足りる。ただし実際に計画として回す前に、以下は別途埋める必要がある。</div>
+
+  <div class="gaps">
+    <div class="gap">
+      <div class="tagline">原価</div>
+      <b>ティア別の粗利率</b>
+      原価/FTE（人件費＋社保）を110万とすると粗利率は約45〜55%。常駐の交通費・宿泊費・クラウド原価を実費請求にするか込みにするかで数ポイント動く。<b>込みにするなら月額に載せる。</b>
+    </div>
+    <div class="gap">
+      <div class="tagline">先行指標</div>
+      <b>採用リードタイム</b>
+      売れても人がいなければ売上にならない。FDE採用は3〜6ヶ月＋立ち上がり1〜2ヶ月。<b>受注計画より2四半期先行して採用計画を置く。</b>
+    </div>
+    <div class="gap">
+      <div class="tagline">継続</div>
+      <b>最低期間終了後の更新率</b>
+      翌年の売上を最も動かす変数。70%と90%では2年後が倍違う。運用ティアは実質ここを固定化するための装置。
+    </div>
+    <div class="gap">
+      <div class="tagline">パイプライン</div>
+      <b>商談 → 着任のリードタイム</b>
+      商談から常駐開始まで2〜3ヶ月。ここを織り込まないと期初の数字は必ず未達になる。必要商談数 = 目標クローズ数 ÷ 受注率。
+    </div>
+    <div class="gap">
+      <div class="tagline">キャッシュ</div>
+      <b>支払サイトと着手金</b>
+      月末締め翌月末払いなら入金は2ヶ月遅れ。人件費は先に出る。大型12ヶ月は着手金を設計に入れる。
+    </div>
+    <div class="gap">
+      <div class="tagline">天井外し</div>
+      <b>アセットのプロダクト化</b>
+      同じものを3〜5社で作ったらプロダクト化してライセンス収入に回す。汎用部分のIP自社帰属を契約で握っておく。<b>これが無いと売上は永久に人数×単価で頭打ち。</b>
+    </div>
+  </div>
+
+  <div class="foot">
+    <b>前提</b>
+    <ul>
+      <li>単価 200万円/月・FTE は AI/データ基盤のFDE型の相場レンジ（150〜250万）からの仮置き。実際の提示単価が決まったら全数値がスケールする。</li>
+      <li>稼働率0.8、原価110万/FTE も仮置き。この2つと単価の3変数で必要FDE人数が決まる。</li>
+      <li>「1枠を1年埋めた売上」は空白期間ゼロの理想値。稼働率0.8を掛けた値が実際の期待値。</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
