@@ -1,0 +1,317 @@
+<title>1億円への三本の階段</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#f4f6f8; --surface:#ffffff; --surface2:#eef1f5;
+  --ink:#141a21; --sub:#5b6675; --faint:#8a93a1; --line:#dde2e9;
+  --s1:#2a78d6; --s2:#1baf7a; --s3:#eb6834;
+  --ok:#14733f; --bad:#b3261e; --warn:#a4620d;
+  --okbg:#e7f4ec; --badbg:#fdeceb; --warnbg:#fdf3e4;
+  --springbg:rgba(42,120,214,.07);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#12151a; --surface:#191d24; --surface2:#212630;
+    --ink:#e7ebf0; --sub:#a3adba; --faint:#78828f; --line:#2c323c;
+    --s1:#3987e5; --s2:#199e70; --s3:#d95926;
+    --ok:#4ec27f; --bad:#f4796b; --warn:#e0a44a;
+    --okbg:#14261c; --badbg:#2a1715; --warnbg:#291f11;
+    --springbg:rgba(57,135,229,.12);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#12151a; --surface:#191d24; --surface2:#212630;
+  --ink:#e7ebf0; --sub:#a3adba; --faint:#78828f; --line:#2c323c;
+  --s1:#3987e5; --s2:#199e70; --s3:#d95926;
+  --ok:#4ec27f; --bad:#f4796b; --warn:#e0a44a;
+  --okbg:#14261c; --badbg:#2a1715; --warnbg:#291f11;
+  --springbg:rgba(57,135,229,.12);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+  font-size:14px;line-height:1.72;-webkit-font-smoothing:antialiased}
+.mono,.n,.stat .v,.chart text{font-variant-numeric:tabular-nums;
+  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+header{background:var(--surface);border-bottom:1px solid var(--line);padding:44px 0 34px}
+.kicker{font-size:11px;letter-spacing:.2em;font-weight:700;color:var(--s1);text-transform:uppercase}
+h1{margin:12px 0 10px;font-size:34px;line-height:1.24;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+.lede{margin:0;color:var(--sub);font-size:14.5px;max-width:66ch}
+.src{margin-top:16px;font-size:12px;color:var(--faint);max-width:70ch}
+
+nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--surface) 92%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:4px;flex-wrap:wrap;padding-top:9px;padding-bottom:9px}
+nav a{text-decoration:none;color:var(--sub);font-size:12px;padding:5px 11px;border-radius:6px;
+  border:1px solid transparent}
+nav a:hover{background:var(--surface2);color:var(--ink)}
+nav a:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+
+section{padding:38px 0 4px}
+.qhead{display:flex;gap:13px;align-items:baseline;margin-bottom:6px}
+.qnum{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--s1);
+  border:1px solid var(--s1);border-radius:5px;padding:2px 8px;flex:none}
+h2{margin:0;font-size:21px;font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+.qsub{margin:0 0 20px 0;color:var(--sub);font-size:13.5px;max-width:72ch}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:22px;margin-bottom:16px}
+.card h3{margin:0 0 4px;font-size:14.5px;font-weight:700}
+.card .note{margin:0 0 16px;font-size:12.5px;color:var(--sub);max-width:74ch}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:16px 18px;
+  border-top:3px solid var(--s1)}
+.stat.b{border-top-color:var(--bad)} .stat.w{border-top-color:var(--warn)} .stat.g{border-top-color:var(--ok)}
+.stat .k{font-size:11px;letter-spacing:.06em;color:var(--sub);font-weight:700}
+.stat .v{font-size:27px;font-weight:800;letter-spacing:-.02em;margin:5px 0 3px;line-height:1.1}
+.stat .d{font-size:12px;color:var(--sub)}
+
+.tw{overflow-x:auto;margin:0 -4px}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:560px}
+th,td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:11px;letter-spacing:.05em;color:var(--sub);font-weight:700;white-space:nowrap;
+  border-bottom:1.5px solid var(--line)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.b,.b{font-weight:700}
+td.sm,.sm{font-size:11.5px;color:var(--sub)}
+tr.sum td{border-top:1.5px solid var(--line);border-bottom:none;font-weight:700;background:var(--surface2)}
+tr.hl td{background:var(--springbg)}
+td.neg{color:var(--bad);font-weight:700} td.pos{color:var(--ok);font-weight:700}
+.dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:7px;vertical-align:baseline}
+
+.chart{width:100%;height:auto;display:block}
+.chart .ax{font-size:10.5px;fill:var(--faint)}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .zero{stroke:var(--faint);stroke-width:1.5;stroke-dasharray:2 3}
+.chart .ref{stroke:var(--faint);stroke-width:1.5;stroke-dasharray:5 4}
+.chart .reflab{font-size:10.5px;fill:var(--faint);font-weight:700}
+.chart .lanelab{font-size:12px;fill:var(--ink);font-weight:700}
+.chart .barlab{font-size:11px;fill:var(--sub)}
+.chart .seglab{font-size:11px;fill:#fff;font-weight:700}
+.chart .totlab{font-size:11.5px;fill:var(--ink);font-weight:700}
+.chart .serieslab{font-size:13px;font-weight:800}
+.chart .badlab{font-size:10.5px;fill:var(--bad);font-weight:700}
+.chart .spring{fill:var(--springbg)}
+
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--sub);margin-top:12px}
+.legend span.i{display:inline-flex;align-items:center;gap:6px}
+
+.funnels{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.funnel{border:1px solid var(--line);border-radius:9px;padding:14px 16px;background:var(--surface2)}
+.fh{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.fmeta{font-size:11px;color:var(--sub);font-weight:400;margin-left:auto}
+.frow{display:grid;grid-template-columns:52px 1fr 58px;align-items:center;gap:8px;margin-bottom:5px}
+.fn{font-size:11.5px;color:var(--sub)}
+.fbarwrap{background:var(--line);border-radius:3px;height:13px;overflow:hidden}
+.fbar{display:block;height:100%;border-radius:3px}
+.fv{font-size:12px;text-align:right;font-weight:700;
+  font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.fnote{font-size:11px;color:var(--sub);margin-top:9px;padding-top:8px;border-top:1px solid var(--line)}
+
+.call{border-radius:10px;padding:15px 18px;margin:16px 0;font-size:13.5px;border:1px solid}
+.call.bad{background:var(--badbg);border-color:var(--bad)}
+.call.ok{background:var(--okbg);border-color:var(--ok)}
+.call.warn{background:var(--warnbg);border-color:var(--warn)}
+.call .t{font-weight:800;display:block;margin-bottom:4px;font-size:13px}
+.call.bad .t{color:var(--bad)} .call.ok .t{color:var(--ok)} .call.warn .t{color:var(--warn)}
+.call p{margin:0} .call p+p{margin-top:7px}
+
+ul.tight{margin:8px 0 0;padding-left:19px} ul.tight li{margin-bottom:6px}
+ol.tight{margin:8px 0 0;padding-left:20px} ol.tight li{margin-bottom:7px}
+footer{border-top:1px solid var(--line);margin-top:44px;padding:26px 0 46px;color:var(--faint);font-size:12px}
+@media(max-width:640px){h1{font-size:26px}.stat .v{font-size:23px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header><div class="wrap">
+  <div class="kicker">Ceed · toB 収益シミュレーション</div>
+  <h1>1億円への三本の階段</h1>
+  <p class="lede">8/12 投資家定例で決めた「リソースの9割を2Bへ・来年春までに1億」を、案件タイプ別の単価・ファネル・リードタイムに分解して、<b>どの案件を何社取れば届くのか</b>、そのために<b>月何件のリードが要るのか</b>を数字で置いたもの。</p>
+  <p class="src">出典: 2026-08-12 投資家定例議事録／2026-08-07・07-24 経営会議／Notion「toBでの1億売上の計画台の叩き作成」。実績値は 2026-08 時点。★印のない数値はすべて仮置きパラメータで、確定値ではない。</p>
+</div></header>
+
+<nav><div class="wrap">
+  <a href="#q1">Q1 目標定義</a><a href="#q2">Q2 天井</a><a href="#q3">Q3 レーン</a>
+  <a href="#q4">Q4 ミックス</a><a href="#q5">Q5 ファネル</a><a href="#q6">Q6 期限</a>
+  <a href="#q7">Q7 資金</a><a href="#open">未確定</a>
+</div></nav>
+
+<div class="wrap">
+
+<section id="sum">
+<div class="stats">
+  <div class="stat"><div class="k">シナリオA 春の着地（月次シム）</div><div class="v">856万<span style="font-size:15px">/月</span></div><div class="d">ARR 1.03億 — エンプラ2社が乗る前提</div></div>
+  <div class="stat b"><div class="k">エンプラ リード投入期限</div><div class="v">2026-10</div><div class="d">11月以降の投入は春に売上化しない</div></div>
+  <div class="stat w"><div class="k">必要商談数</div><div class="v">3.0件<span style="font-size:15px">/月</span></div><div class="d">現状 約26件/月 — 数は足りている</div></div>
+  <div class="stat b"><div class="k">資金枯渇（Aで採用実行時）</div><div class="v">2027-01</div><div class="d">春を待たずに現金が尽きる</div></div>
+</div>
+<div class="call bad"><span class="t">このシミュレーションの結論を3行で</span>
+<p>① 春の1億は <b>ARR 1億（月商833万）なら射程、月商1億は算数的に不可能</b>。② 律速は商談数ではなく<b>商談の単価階層</b> — 現状は1商談あたり月5.4万円、必要なのは約300万円。③ 最大のリスクは売上ではなく<b>資金</b>で、採用を先行させると春の前に現金が尽きる。</p></div>
+</section>
+
+<section id="q1">
+<div class="qhead"><span class="qnum">Q1</span><h2>そもそも「1億」は月商かARRか</h2></div>
+<p class="qsub">議事録には「月1億円」と記録されているが、その根拠として引かれた吉田さんの発言（3,000万 × 3〜4社）は<b>年間</b>の積み上げ。Ken さんは「1ヶ月で1〜2億」の前提で話しており、会議の中で定義が割れたまま決議されている。12倍の差なので、まずここを確定させないと計画が引けない。</p>
+<div class="card">
+  <h3>現状 月商140万円から、7ヶ月（2026-09〜2027-03）で到達するのに必要な月次成長率</h3>
+  <p class="note">複利。エンタープライズ営業はリードタイムが5ヶ月あるため、途中月の成長は後ろ倒しに効く。</p>
+  <div class="tw"><table><thead><tr><th>解釈</th><th class="n">春の月商</th><th class="n">現状比</th><th class="n">必要成長率</th><th>判定</th></tr></thead><tbody>
+  <tr><td class="b">ARR 1億（月商833万）</td><td class="n">833万</td><td class="n">6.0倍</td><td class="n b">+29.0%/月</td><td><span class="b" style="color:var(--ok)">射程内</span> — 大型案件が2社乗れば届く</td></tr>
+  <tr><td class="b">月商 1億（ARR 12億）</td><td class="n">10,000万</td><td class="n">71.4倍</td><td class="n b">+84.0%/月</td><td><span class="b" style="color:var(--bad)">不可能</span> — 7ヶ月連続で月+84%は事例がない</td></tr>
+  </tbody></table></div>
+  <div class="call warn"><span class="t">提案</span><p>春の目標は <b>ARR 1億（月商833万・年間契約ベース3,000万×3社相当）</b> と定義し直す。月商1億は2028年以降の目標として分離する。以降のシミュレーションはすべて ARR 1億基準。</p></div>
+</div>
+</section>
+
+<section id="q2">
+<div class="qhead"><span class="qnum">Q2</span><h2>プロダクト量産だけで1億に届くのか</h2></div>
+<p class="qsub">吉田さんの「今のノウハウのままだと3,000〜4,000万で頭打ち」という指摘の検証。各レーンの上限は <b>到達可能な母数（TAM）× リード→受注CVR × 単価 × 12ヶ月</b> で決まる。単価が低いレーンは、CVRを上げても母数の壁に先に当たる。</p>
+<div class="card">
+  <h3>レーン別の理論上限 ARR</h3>
+  <p class="note">タレント事務所のうち切り抜き予算を持つのが200社なら、プロダクト単独の上限は ARR 3,600万 — 吉田さんの指摘とほぼ一致する。500社に広げても9,000万で、1億に「ぎりぎり届かない」帯に留まる。</p>
+  <svg viewBox="0 0 1000 330" class="chart" role="img" aria-label="レーン別TAM天井"><line x1="150.0" y1="34" x2="150.0" y2="286" class="grid"/><text x="150.0" y="304.0" text-anchor="middle" class="ax">0.0億</text><line x1="352.5" y1="34" x2="352.5" y2="286" class="grid"/><text x="352.5" y="304.0" text-anchor="middle" class="ax">1.0億</text><line x1="555.0" y1="34" x2="555.0" y2="286" class="grid"/><text x="555.0" y="304.0" text-anchor="middle" class="ax">2.0億</text><line x1="757.5" y1="34" x2="757.5" y2="286" class="grid"/><text x="757.5" y="304.0" text-anchor="middle" class="ax">3.0億</text><line x1="960.0" y1="34" x2="960.0" y2="286" class="grid"/><text x="960.0" y="304.0" text-anchor="middle" class="ax">4.0億</text><text x="138" y="64" text-anchor="end" class="lanelab">プロダクト</text><rect x="150" y="40" width="72.9" height="16" rx="4" fill="var(--s3)" opacity="0.450"/><text x="230.9" y="53" class="barlab">TAM 200社 → 0.36億</text><rect x="150" y="61" width="182.2" height="16" rx="4" fill="var(--s3)" opacity="0.725"/><text x="340.2" y="74" class="barlab">TAM 500社 → 0.90億</text><rect x="150" y="82" width="364.5" height="16" rx="4" fill="var(--s3)" opacity="1.000"/><text x="522.5" y="95" class="barlab">TAM 1000社 → 1.80億</text><text x="138" y="138" text-anchor="end" class="lanelab">FDE</text><rect x="150" y="114" width="328.1" height="16" rx="4" fill="var(--s2)" opacity="0.450"/><text x="486.1" y="127" class="barlab">TAM 200社 → 1.62億</text><rect x="150" y="135" width="492.1" height="16" rx="4" fill="var(--s2)" opacity="0.725"/><text x="650.1" y="148" class="barlab">TAM 300社 → 2.43億</text><rect x="150" y="156" width="810.0" height="16" rx="4" fill="var(--s2)" opacity="1.000"/><text x="952.0" y="169" text-anchor="end" class="seglab">TAM 1000社 → 8.10億＋</text><text x="138" y="212" text-anchor="end" class="lanelab">エンプラ</text><rect x="150" y="188" width="670.3" height="16" rx="4" fill="var(--s1)" opacity="0.450"/><text x="828.3" y="201" class="barlab">TAM 200社 → 3.31億</text><rect x="150" y="209" width="810.0" height="16" rx="4" fill="var(--s1)" opacity="0.725"/><text x="952.0" y="222" text-anchor="end" class="seglab">TAM 500社 → 8.27億＋</text><rect x="150" y="230" width="810.0" height="16" rx="4" fill="var(--s1)" opacity="1.000"/><text x="952.0" y="243" text-anchor="end" class="seglab">TAM 1000社 → 16.54億＋</text><line x1="352.5" y1="26" x2="352.5" y2="286" class="ref"/><text x="358.5" y="22" class="reflab">ARR 1億</text></svg>
+  <div class="legend">
+    <span class="i"><span class="dot" style="background:var(--s3)"></span>プロダクト</span>
+    <span class="i"><span class="dot" style="background:var(--s2)"></span>FDE</span>
+    <span class="i"><span class="dot" style="background:var(--s1)"></span>エンプラ</span>
+    <span class="i">濃度は TAM 想定の大小</span>
+  </div>
+  <div class="call bad"><span class="t">読み取り</span><p>プロダクト量産は<b>単価30万 × 母数の壁</b>で1億に構造的に届きにくい。一方エンプラは1社=年3,000万＝プロダクト8.3社分なので、母数が同じ500社でも上限は8.3倍になる。<b>吉田さんの懸念は数字上正しく、エンプラなしで春1億は成立しない</b>。</p></div>
+</div>
+</section>
+
+<section id="q3">
+<div class="qhead"><span class="qnum">Q3</span><h2>三本のレーンをどう置いたか</h2></div>
+<p class="qsub">単価とCVRだけでは期限付きの計画は引けない。<b>リードタイム</b>（受注から売上計上まで）・<b>チャーン</b>（積み上がるか流れ落ちるか）・<b>デリバリー人数</b>を合わせた5変数で置いている。★は実績由来、それ以外は仮置き。</p>
+<div class="card">
+  <h3>レーン定義</h3>
+  <p class="note">★実績由来: プロダクト単価30万（現状 月140万 ÷ 稼働4〜5社）、エンプラ年間契約3,000万（吉田さん目線）、FDE = 読みて案件の想定。CVR・リードタイム・チャーンは全て仮置きで、実データによる補正が必要。</p>
+  <div class="tw"><table><thead><tr><th>レーン</th><th class="n">単価/月</th><th class="n">年間契約</th><th class="n">ファネル各段</th><th class="n">L→受注</th><th class="n">リードタイム</th><th class="n">月次チャーン</th><th class="n">TAM</th><th>主チャネル</th></tr></thead><tbody><tr><td><span class="dot" style="background:var(--s1)"></span>③ エンプラ大型（年間契約3,000万・東京通信型）</td><td class="n b">250万</td><td class="n">3,000万</td><td class="n sm">35% × 35% × 45%</td><td class="n">5.51%</td><td class="n">5.0ヶ月</td><td class="n">2%</td><td class="n">500社</td><td class="sm">紹介（投資家・既存顧客）主体。アウトバウンドでは届かない</td></tr><tr><td><span class="dot" style="background:var(--s2)"></span>② FDE型（社内データ基盤・売上予測／読みて型）</td><td class="n b">150万</td><td class="n">1,800万</td><td class="n sm">15% × 30%</td><td class="n">4.50%</td><td class="n">2.0ヶ月</td><td class="n">3%</td><td class="n">300社</td><td class="sm">紹介＋既存顧客アップセル</td></tr><tr><td><span class="dot" style="background:var(--s3)"></span>① プロダクト量産（切り抜き自動化・WS型 → タレント事務所）</td><td class="n b">30万</td><td class="n">360万</td><td class="n sm">20% × 25%</td><td class="n">5.00%</td><td class="n">1.5ヶ月</td><td class="n">5%</td><td class="n">500社</td><td class="sm">アウトバウンド（テレアポ／フォーム）</td></tr></tbody></table></div>
+  <div class="call warn"><span class="t">エンプラのチャネル前提が効いている</span><p>エンプラは紹介チャネル前提でリード→商談35%と置いた。東京通信は石川さん紹介、読みてはカルタ経由で、どちらも<b>実績として紹介から来ている</b>。これをアウトバウンド（商談化率6%）で取ろうとすると、必要リードは44件から<b>259件</b>に跳ね上がり、テレアポ体制では現実的でなくなる。</p></div>
+</div>
+</section>
+
+<section id="q4">
+<div class="qhead"><span class="qnum">Q4</span><h2>どの案件を何社取れば届くのか</h2></div>
+<p class="qsub">3つのミックスを比較する。Aは Ken さんの「大口1〜2社で売上の8割」型、Bは現状の受注ペース（+1社/週）をそのまま延長した型、Cはその中間。</p>
+
+<div class="card">
+  <h3>春（2027-03）の売上ミックス比較</h3>
+  <p class="note">横軸は月商。ARR 1億ライン（月商833万）を基準線として表示。</p>
+  <svg viewBox="0 0 1000 216" class="chart" role="img" aria-label="シナリオ別 春の売上ミックス"><text x="96" y="50" text-anchor="end" class="lanelab">シナリオ A</text><rect x="108.0" y="26" width="373.7" height="30" rx="3" fill="var(--s1)"/><text x="294.9" y="45" text-anchor="middle" class="seglab">633万</text><rect x="483.7" y="26" width="87.0" height="30" rx="3" fill="var(--s2)"/><text x="527.3" y="45" text-anchor="middle" class="seglab">150万</text><rect x="572.8" y="26" width="69.2" height="30" rx="3" fill="var(--s3)"/><text x="607.4" y="45" text-anchor="middle" class="seglab">120万</text><text x="654.0" y="46" class="totlab">計 903万 · ARR 1.08億</text><text x="96" y="106" text-anchor="end" class="lanelab">シナリオ B</text><rect x="108.0" y="82" width="87.0" height="30" rx="3" fill="var(--s2)"/><text x="151.5" y="101" text-anchor="middle" class="seglab">150万</text><rect x="197.0" y="82" width="425.4" height="30" rx="3" fill="var(--s3)"/><text x="409.7" y="101" text-anchor="middle" class="seglab">720万</text><text x="634.4" y="102" class="totlab">計 870万 · ARR 1.04億</text><text x="96" y="162" text-anchor="end" class="lanelab">シナリオ C</text><rect x="108.0" y="138" width="225.3" height="30" rx="3" fill="var(--s1)"/><text x="220.7" y="157" text-anchor="middle" class="seglab">383万</text><rect x="335.3" y="138" width="265.1" height="30" rx="3" fill="var(--s2)"/><text x="467.9" y="157" text-anchor="middle" class="seglab">450万</text><rect x="602.5" y="138" width="211.7" height="30" rx="3" fill="var(--s3)"/><text x="708.3" y="157" text-anchor="middle" class="seglab">360万</text><text x="826.2" y="158" class="totlab">計 1,193万 · ARR 1.43億</text><line x1="602.7" y1="16" x2="602.7" y2="180" class="ref"/><text x="602.7" y="12" text-anchor="middle" class="reflab">ARR 1億ライン</text></svg>
+  <div class="legend">
+    <span class="i"><span class="dot" style="background:var(--s1)"></span>エンプラ</span>
+    <span class="i"><span class="dot" style="background:var(--s2)"></span>FDE</span>
+    <span class="i"><span class="dot" style="background:var(--s3)"></span>プロダクト</span>
+  </div>
+</div>
+
+<div class="card">
+  <h3>シナリオA — エンプラ主導（Ken型・エンプラ構成比70%）</h3>
+  <p class="note">本契約2社＋PoC実施中1社。投資家に約束した「大口が売上の大半を占める構成」に最も忠実。</p>
+  <div class="tw"><table><thead><tr><th>レーン</th><th class="n">稼働社数</th><th class="n">PoC</th><th class="n">単価/月</th><th class="n">年間契約</th><th class="n">月商</th><th class="n">構成比</th></tr></thead><tbody><tr><td><span class="dot" style="background:var(--s1)"></span>エンプラ</td><td class="n">2</td><td class="n">1</td><td class="n">250万</td><td class="n">3,000万</td><td class="n b">633万</td><td class="n">70.1%</td></tr><tr><td><span class="dot" style="background:var(--s2)"></span>FDE</td><td class="n">1</td><td class="n">—</td><td class="n">150万</td><td class="n">1,800万</td><td class="n b">150万</td><td class="n">16.6%</td></tr><tr><td><span class="dot" style="background:var(--s3)"></span>プロダクト</td><td class="n">4</td><td class="n">—</td><td class="n">30万</td><td class="n">360万</td><td class="n b">120万</td><td class="n">13.3%</td></tr><tr class="sum"><td>合計</td><td class="n"></td><td class="n"></td><td class="n"></td><td class="n"></td><td class="n b">903万</td><td class="n">ARR 1.08億</td></tr></tbody></table></div>
+</div>
+<div class="card">
+  <h3>シナリオB — プロダクト主導（現状延長）</h3>
+  <p class="note">エンプラを取らず、+4社/月のペースを7ヶ月継続した場合。24社まで積むが、必要リードが TAM の85%を消費し、春の着地も伸び切らない。</p>
+  <div class="tw"><table><thead><tr><th>レーン</th><th class="n">稼働社数</th><th class="n">PoC</th><th class="n">単価/月</th><th class="n">年間契約</th><th class="n">月商</th><th class="n">構成比</th></tr></thead><tbody><tr><td><span class="dot" style="background:var(--s1)"></span>エンプラ</td><td class="n">0</td><td class="n">—</td><td class="n">250万</td><td class="n">3,000万</td><td class="n b">0万</td><td class="n">0.0%</td></tr><tr><td><span class="dot" style="background:var(--s2)"></span>FDE</td><td class="n">1</td><td class="n">—</td><td class="n">150万</td><td class="n">1,800万</td><td class="n b">150万</td><td class="n">17.2%</td></tr><tr><td><span class="dot" style="background:var(--s3)"></span>プロダクト</td><td class="n">24</td><td class="n">—</td><td class="n">30万</td><td class="n">360万</td><td class="n b">720万</td><td class="n">82.8%</td></tr><tr class="sum"><td>合計</td><td class="n"></td><td class="n"></td><td class="n"></td><td class="n"></td><td class="n b">870万</td><td class="n">ARR 1.04億</td></tr></tbody></table></div>
+</div>
+<div class="card">
+  <h3>シナリオC — バランス</h3>
+  <p class="note">エンプラ1社＋FDE3社＋プロダクト12社。名目の月商は最大だが、後述のとおり必要人員13.5人で資金が最も早く尽きる。</p>
+  <div class="tw"><table><thead><tr><th>レーン</th><th class="n">稼働社数</th><th class="n">PoC</th><th class="n">単価/月</th><th class="n">年間契約</th><th class="n">月商</th><th class="n">構成比</th></tr></thead><tbody><tr><td><span class="dot" style="background:var(--s1)"></span>エンプラ</td><td class="n">1</td><td class="n">1</td><td class="n">250万</td><td class="n">3,000万</td><td class="n b">383万</td><td class="n">32.1%</td></tr><tr><td><span class="dot" style="background:var(--s2)"></span>FDE</td><td class="n">3</td><td class="n">—</td><td class="n">150万</td><td class="n">1,800万</td><td class="n b">450万</td><td class="n">37.7%</td></tr><tr><td><span class="dot" style="background:var(--s3)"></span>プロダクト</td><td class="n">12</td><td class="n">—</td><td class="n">30万</td><td class="n">360万</td><td class="n b">360万</td><td class="n">30.2%</td></tr><tr class="sum"><td>合計</td><td class="n"></td><td class="n"></td><td class="n"></td><td class="n"></td><td class="n b">1,193万</td><td class="n">ARR 1.43億</td></tr></tbody></table></div>
+</div>
+
+<div class="card">
+  <h3>月次売上推移</h3>
+  <p class="note">シナリオAは2027-02にエンプラの本契約が乗るまで横ばいが続き、そこから一気に立ち上がる。Bはなだらかに伸びるが 2027-05 で母数が尽きて頭打ちに転じる。
+  なお Q4 のミックス表（A = 903万）は<b>目標とする定常構成</b>、この月次シムの春の値（A = 856万）は<b>チャーンとエンプラ本契約の立ち上がりタイミングを織り込んだ着地見込み</b>で、約5%の差はその分。</p>
+  <svg viewBox="0 0 1000 360" class="chart" role="img" aria-label="シナリオ別 月次売上推移"><line x1="62" y1="314.0" x2="882" y2="314.0" class="grid"/><text x="52.0" y="318.0" text-anchor="end" class="ax">0</text><line x1="62" y1="273.4" x2="882" y2="273.4" class="grid"/><text x="52.0" y="277.4" text-anchor="end" class="ax">200</text><line x1="62" y1="232.9" x2="882" y2="232.9" class="grid"/><text x="52.0" y="236.9" text-anchor="end" class="ax">400</text><line x1="62" y1="192.3" x2="882" y2="192.3" class="grid"/><text x="52.0" y="196.3" text-anchor="end" class="ax">600</text><line x1="62" y1="151.7" x2="882" y2="151.7" class="grid"/><text x="52.0" y="155.7" text-anchor="end" class="ax">800</text><line x1="62" y1="111.1" x2="882" y2="111.1" class="grid"/><text x="52.0" y="115.1" text-anchor="end" class="ax">1,000</text><line x1="62" y1="70.6" x2="882" y2="70.6" class="grid"/><text x="52.0" y="74.6" text-anchor="end" class="ax">1,200</text><line x1="62" y1="30.0" x2="882" y2="30.0" class="grid"/><text x="52.0" y="34.0" text-anchor="end" class="ax">1,400</text><text x="62.0" y="332.0" text-anchor="middle" class="ax">26/09</text><text x="153.1" y="332.0" text-anchor="middle" class="ax">26/10</text><text x="244.2" y="332.0" text-anchor="middle" class="ax">26/11</text><text x="335.3" y="332.0" text-anchor="middle" class="ax">26/12</text><text x="426.4" y="332.0" text-anchor="middle" class="ax">27/01</text><text x="517.6" y="332.0" text-anchor="middle" class="ax">27/02</text><text x="608.7" y="332.0" text-anchor="middle" class="ax">27/03</text><text x="699.8" y="332.0" text-anchor="middle" class="ax">27/04</text><text x="790.9" y="332.0" text-anchor="middle" class="ax">27/05</text><text x="882.0" y="332.0" text-anchor="middle" class="ax">27/06</text><rect x="592.7" y="30" width="32" height="284.0" class="spring"/><text x="608.7" y="20" text-anchor="middle" class="reflab">春 2027-03</text><line x1="62" y1="145.0" x2="882" y2="145.0" class="ref"/><text x="890.0" y="139.0" class="reflab">ARR 1億</text><text x="890.0" y="155.0" class="reflab">月商833万</text><polyline points="62.0,261.4 153.1,262.9 244.2,263.0 335.3,263.1 426.4,263.1 517.6,201.2 608.7,140.4 699.8,105.7 790.9,72.2 882.0,40.8" fill="none" stroke="var(--s1)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="608.7" cy="140.4" r="5" fill="var(--s1)" stroke="var(--surface)" stroke-width="2"/><text x="830.0" y="44.8" class="serieslab" fill="var(--s1)">A</text><polyline points="62.0,261.4 153.1,254.2 244.2,237.3 335.3,221.3 426.4,206.1 517.6,191.6 608.7,177.9 699.8,164.9 790.9,161.7 882.0,168.7" fill="none" stroke="var(--s3)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="608.7" cy="177.9" r="5" fill="var(--s3)" stroke="var(--surface)" stroke-width="2"/><text x="830.0" y="172.7" class="serieslab" fill="var(--s3)">B</text><polyline points="62.0,261.4 153.1,259.4 244.2,244.0 335.3,229.3 426.4,215.0 517.6,164.6 608.7,115.5 699.8,82.2 790.9,53.9 882.0,39.8" fill="none" stroke="var(--s2)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="608.7" cy="115.5" r="5" fill="var(--s2)" stroke="var(--surface)" stroke-width="2"/><text x="830.0" y="43.8" class="serieslab" fill="var(--s2)">C</text></svg>
+  <div class="legend">
+    <span class="i"><span class="dot" style="background:var(--s1)"></span>A エンプラ主導</span>
+    <span class="i"><span class="dot" style="background:var(--s3)"></span>B プロダクト主導</span>
+    <span class="i"><span class="dot" style="background:var(--s2)"></span>C バランス</span>
+  </div>
+  <div class="tw"><table><thead><tr><th>月</th><th class="n">A 月商</th><th class="n">B 月商</th><th class="n">C 月商</th><th class="n">A の内訳（エンプラ / FDE / プロダクト）</th></tr></thead><tbody><tr><td>2026-09</td><td class="n">260</td><td class="n">260</td><td class="n">260</td><td class="n sm">0 / 146 / 114</td></tr><tr><td>2026-10</td><td class="n">252</td><td class="n">295</td><td class="n">269</td><td class="n sm">0 / 141 / 111</td></tr><tr><td>2026-11</td><td class="n">252</td><td class="n">378</td><td class="n">345</td><td class="n sm">0 / 141 / 111</td></tr><tr><td>2026-12</td><td class="n">251</td><td class="n">457</td><td class="n">418</td><td class="n sm">0 / 141 / 110</td></tr><tr><td>2027-01</td><td class="n">251</td><td class="n">532</td><td class="n">488</td><td class="n sm">0 / 141 / 110</td></tr><tr><td>2027-02</td><td class="n">556</td><td class="n">603</td><td class="n">736</td><td class="n sm">306 / 141 / 109</td></tr><tr class="hl"><td>2027-03 ← 春</td><td class="n">856</td><td class="n">671</td><td class="n">979</td><td class="n sm">606 / 141 / 109</td></tr><tr><td>2027-04</td><td class="n">1,027</td><td class="n">735</td><td class="n">1,143</td><td class="n sm">777 / 141 / 109</td></tr><tr><td>2027-05</td><td class="n">1,192</td><td class="n">751</td><td class="n">1,282</td><td class="n sm">945 / 141 / 106</td></tr><tr><td>2027-06</td><td class="n">1,347</td><td class="n">716</td><td class="n">1,352</td><td class="n sm">1,110 / 136 / 101</td></tr></tbody></table></div>
+</div>
+</section>
+
+<section id="q5">
+<div class="qhead"><span class="qnum">Q5</span><h2>そのために月何件のリードが要るのか</h2></div>
+<p class="qsub">シナリオAを達成するために、7ヶ月で必要な受注数から逆算したファネル。ここが今回いちばん意外な結果になった。</p>
+<div class="card">
+  <h3>シナリオA のファネル逆算（2026-09〜2027-03 の7ヶ月合計）</h3>
+  <p class="note">必要受注数 ÷ 受注率 = 必要商談数 ÷ 商談化率 = 必要リード数。既存稼働分のチャーン補填を含む。</p>
+  <div class="funnels"><div class="funnel"><div class="fh"><span class="dot" style="background:var(--s1)"></span>エンプラ<span class="fmeta">L→受注 5.51% ／ LT 5.0ヶ月</span></div><div class="frow"><span class="fn">リード</span><span class="fbarwrap"><span class="fbar" style="width:100.00%;background:var(--s1)"></span></span><span class="fv">44.4</span></div><div class="frow"><span class="fn">商談</span><span class="fbarwrap"><span class="fbar" style="width:35.14%;background:var(--s1)"></span></span><span class="fv">15.6</span></div><div class="frow"><span class="fn">PoC</span><span class="fbarwrap"><span class="fbar" style="width:12.16%;background:var(--s1)"></span></span><span class="fv">5.4</span></div><div class="frow"><span class="fn">受注</span><span class="fbarwrap"><span class="fbar" style="width:6.76%;background:var(--s1)"></span></span><span class="fv">3.0</span></div><div class="fnote">月あたり リード 6.3件 ／ 商談 2.2件 ・ TAM消費 8.9%</div></div><div class="funnel"><div class="fh"><span class="dot" style="background:var(--s2)"></span>FDE<span class="fmeta">L→受注 4.5% ／ LT 2.0ヶ月</span></div><div class="frow"><span class="fn">リード</span><span class="fbarwrap"><span class="fbar" style="width:9.68%;background:var(--s2)"></span></span><span class="fv">4.3</span></div><div class="frow"><span class="fn">商談</span><span class="fbarwrap"><span class="fbar" style="width:1.35%;background:var(--s2)"></span></span><span class="fv">0.6</span></div><div class="frow"><span class="fn">受注</span><span class="fbarwrap"><span class="fbar" style="width:1.20%;background:var(--s2)"></span></span><span class="fv">0.2</span></div><div class="fnote">月あたり リード 0.6件 ／ 商談 0.1件 ・ TAM消費 1.4%</div></div><div class="funnel"><div class="fh"><span class="dot" style="background:var(--s3)"></span>プロダクト<span class="fmeta">L→受注 5.0% ／ LT 1.5ヶ月</span></div><div class="frow"><span class="fn">リード</span><span class="fbarwrap"><span class="fbar" style="width:54.28%;background:var(--s3)"></span></span><span class="fv">24.1</span></div><div class="frow"><span class="fn">商談</span><span class="fbarwrap"><span class="fbar" style="width:10.81%;background:var(--s3)"></span></span><span class="fv">4.8</span></div><div class="frow"><span class="fn">受注</span><span class="fbarwrap"><span class="fbar" style="width:2.70%;background:var(--s3)"></span></span><span class="fv">1.2</span></div><div class="fnote">月あたり リード 3.4件 ／ 商談 0.7件 ・ TAM消費 4.8%</div></div></div>
+  <div style="height:18px"></div>
+  <div class="tw"><table><thead><tr><th>レーン</th><th class="n">必要受注</th><th class="n">PoC</th><th class="n">必要商談</th><th class="n">必要リード</th><th class="n">リード/月</th><th class="n">L→受注</th><th class="n">LT</th><th class="n">TAM消費</th></tr></thead><tbody><tr><td><span class="dot" style="background:var(--s1)"></span>エンプラ</td><td class="n">3.0</td><td class="n">5.4</td><td class="n">15.6</td><td class="n b">44.4</td><td class="n">6.3</td><td class="n">5.51%</td><td class="n">5.0ヶ月</td><td class="n">8.9%</td></tr><tr><td><span class="dot" style="background:var(--s2)"></span>FDE</td><td class="n">0.2</td><td class="n">—</td><td class="n">0.6</td><td class="n b">4.3</td><td class="n">0.6</td><td class="n">4.5%</td><td class="n">2.0ヶ月</td><td class="n">1.4%</td></tr><tr><td><span class="dot" style="background:var(--s3)"></span>プロダクト</td><td class="n">1.2</td><td class="n">—</td><td class="n">4.8</td><td class="n b">24.1</td><td class="n">3.4</td><td class="n">5.0%</td><td class="n">1.5ヶ月</td><td class="n">4.8%</td></tr><tr class="sum"><td>合計</td><td class="n"></td><td class="n"></td><td class="n b">21.0</td><td class="n b">72.8</td><td class="n">10.4</td><td class="n"></td><td class="n"></td><td class="n"></td></tr></tbody></table></div>
+  <div class="call bad"><span class="t">律速はリードの「数」ではなく「階層」</span>
+  <p>必要商談数は <b>月3.0件</b>。現状すでに <b>約26件/月</b> の商談があり、量は6倍以上足りている。それでも月商が140万に留まっているのは、商談が全て単価30万帯だから。</p>
+  <p>現状は <b>1商談あたり月5.4万円</b>（140万 ÷ 26件）。シナリオAが要求するのは <b>1商談あたり月301万円</b> — <b>約56倍</b>。つまり打ち手は「テレアポを増やす」ではなく、<b>年間契約3,000万を出せる相手の商談を月3〜4件作る</b>ことに尽きる。</p></div>
+  <div class="call ok"><span class="t">現実的な打ち手</span>
+  <p>エンプラ44件のリードは、紹介チャネルなら <b>月6件</b>。石川さん・北原さん・長谷さん（CARTA）・既存顧客（東京通信・読みて）からの紹介で積める水準で、テレアポ体制の拡大とは別ラインの仕事になる。</p></div>
+</div>
+</section>
+
+<section id="q6">
+<div class="qhead"><span class="qnum">Q6</span><h2>いつまでに動けば春に間に合うのか</h2></div>
+<p class="qsub">エンプラは 初回商談0.5ヶ月 → PoC契約1.5ヶ月 → PoC実施3ヶ月 → 本契約移行 で、リード投入から売上計上まで<b>約5ヶ月</b>かかる。ここから逆算すると期限が一意に決まる。</p>
+<div class="card">
+  <h3>エンプラ案件：リード投入月 → 本契約の売上計上月</h3>
+  <svg viewBox="0 0 1000 268" class="chart" role="img" aria-label="エンプラ案件のリード投入期限"><line x1="132.0" y1="36" x2="132.0" y2="238" class="grid"/><text x="173.4" y="30.0" text-anchor="middle" class="ax">26/09</text><line x1="214.8" y1="36" x2="214.8" y2="238" class="grid"/><text x="256.2" y="30.0" text-anchor="middle" class="ax">26/10</text><line x1="297.6" y1="36" x2="297.6" y2="238" class="grid"/><text x="339.0" y="30.0" text-anchor="middle" class="ax">26/11</text><line x1="380.4" y1="36" x2="380.4" y2="238" class="grid"/><text x="421.8" y="30.0" text-anchor="middle" class="ax">26/12</text><line x1="463.2" y1="36" x2="463.2" y2="238" class="grid"/><text x="504.6" y="30.0" text-anchor="middle" class="ax">27/01</text><line x1="546.0" y1="36" x2="546.0" y2="238" class="grid"/><text x="587.4" y="30.0" text-anchor="middle" class="ax">27/02</text><line x1="628.8" y1="36" x2="628.8" y2="238" class="grid"/><text x="670.2" y="30.0" text-anchor="middle" class="ax">27/03</text><line x1="711.6" y1="36" x2="711.6" y2="238" class="grid"/><text x="753.0" y="30.0" text-anchor="middle" class="ax">27/04</text><line x1="794.4" y1="36" x2="794.4" y2="238" class="grid"/><text x="835.8" y="30.0" text-anchor="middle" class="ax">27/05</text><line x1="877.2" y1="36" x2="877.2" y2="238" class="grid"/><text x="918.6" y="30.0" text-anchor="middle" class="ax">27/06</text><rect x="628.8" y="36" width="82.8" height="202.0" class="spring"/><text x="120" y="67" text-anchor="end" class="lanelab">投入 26-09</text><rect x="135.0" y="50" width="490.8" height="22" rx="4" fill="var(--ok)" opacity="0.85"/><text x="143.0" y="65" class="seglab">PoC → 本契約 ✓</text><text x="120" y="100" text-anchor="end" class="lanelab">投入 26-10</text><rect x="217.8" y="83" width="490.8" height="22" rx="4" fill="var(--ok)" opacity="0.85"/><text x="225.8" y="98" class="seglab">PoC → 本契約 ✓</text><text x="120" y="133" text-anchor="end" class="lanelab">投入 26-11</text><rect x="300.6" y="116" width="490.8" height="22" rx="4" fill="var(--bad)" opacity="0.85"/><text x="308.6" y="131" class="seglab">PoC → 本契約 ✕</text><text x="120" y="166" text-anchor="end" class="lanelab">投入 26-12</text><rect x="383.4" y="149" width="490.8" height="22" rx="4" fill="var(--bad)" opacity="0.85"/><text x="391.4" y="164" class="seglab">PoC → 本契約 ✕</text><text x="120" y="199" text-anchor="end" class="lanelab">投入 27-01</text><rect x="466.2" y="182" width="490.8" height="22" rx="4" fill="var(--bad)" opacity="0.85"/><text x="474.2" y="197" class="seglab">PoC → 本契約 ✕</text><text x="120" y="232" text-anchor="end" class="lanelab">投入 27-02</text><rect x="549.0" y="215" width="408.0" height="22" rx="4" fill="var(--bad)" opacity="0.85"/><text x="557.0" y="230" class="seglab">PoC → 本契約 ✕</text><text x="670.2" y="256" text-anchor="middle" class="reflab">春の期限</text></svg>
+  <div class="call bad"><span class="t">期限は 2026年10月</span>
+  <p>2026年11月以降に着手したエンプラ案件は、<b>どれだけうまく進んでも春には売上計上されない</b>。逆に言えば、春1億の成否は「9月・10月にエンプラの紹介リードを何件立ち上げられたか」でほぼ決まり、年明け以降の営業努力は春の数字には効かない。</p>
+  <p>PoC を挟まず年間契約を直接取る、あるいは PoC を有償（400万規模）にして PoC 自体を売上計上する設計にすれば、この期限は1〜2ヶ月後ろにずらせる。</p></div>
+</div>
+</section>
+
+<section id="q7">
+<div class="qhead"><span class="qnum">Q7</span><h2>この計画は資金が持つのか</h2></div>
+<p class="qsub">シミュレーションで最も厳しい結果が出たのがここ。売上計画そのものより先に、現金がボトルネックになる。</p>
+<div class="card">
+  <h3>春時点の損益と、現金が尽きる月</h3>
+  <p class="note">人件費は1人80万/月。営業3名＋経営/開発/コーポレート4名にデリバリー要員を加えた構成。現金の初期値は 3,200万（月バーン400万 × ランウェイ8ヶ月、8/12 投資家定例の報告値）。</p>
+  <div class="tw"><table><thead><tr><th>シナリオ</th><th class="n">春の月商</th><th class="n">直接原価</th><th class="n">人員</th><th class="n">人件費</th><th class="n">営業利益/月</th><th class="n">損益分岐 月商</th><th class="n">資金枯渇</th></tr></thead><tbody><tr><td class="b">A</td><td class="n b">903万</td><td class="n">280万</td><td class="n">10.1人</td><td class="n">807万</td><td class="n neg">-264万</td><td class="n">1,286万 <span class="sm">(ARR 1.54億)</span></td><td class="n neg">2027-01</td></tr><tr><td class="b">B</td><td class="n b">870万</td><td class="n">238万</td><td class="n">10.9人</td><td class="n">871万</td><td class="n neg">-320万</td><td class="n">1,309万 <span class="sm">(ARR 1.57億)</span></td><td class="n neg">2027-01</td></tr><tr><td class="b">C</td><td class="n b">1,193万</td><td class="n">310万</td><td class="n">13.5人</td><td class="n">1,078万</td><td class="n neg">-275万</td><td class="n">1,565万 <span class="sm">(ARR 1.88億)</span></td><td class="n neg">2026-12</td></tr></tbody></table></div>
+  <svg viewBox="0 0 1000 300" class="chart" role="img" aria-label="シナリオ別 現金残高推移"><line x1="74" y1="236.8" x2="892" y2="236.8" class="grid"/><text x="64.0" y="240.8" text-anchor="end" class="ax">-3,000</text><line x1="74" y1="188.9" x2="892" y2="188.9" class="grid"/><text x="64.0" y="192.9" text-anchor="end" class="ax">-1,500</text><line x1="74" y1="141.0" x2="892" y2="141.0" class="grid"/><text x="64.0" y="145.0" text-anchor="end" class="ax">0</text><line x1="74" y1="93.1" x2="892" y2="93.1" class="grid"/><text x="64.0" y="97.1" text-anchor="end" class="ax">1,500</text><line x1="74" y1="45.2" x2="892" y2="45.2" class="grid"/><text x="64.0" y="49.2" text-anchor="end" class="ax">3,000</text><line x1="74" y1="141.0" x2="892" y2="141.0" class="zero"/><text x="900.0" y="145.0" class="reflab">現金 0</text><text x="74.0" y="274.0" text-anchor="middle" class="ax">26/09</text><text x="164.9" y="274.0" text-anchor="middle" class="ax">26/10</text><text x="255.8" y="274.0" text-anchor="middle" class="ax">26/11</text><text x="346.7" y="274.0" text-anchor="middle" class="ax">26/12</text><text x="437.6" y="274.0" text-anchor="middle" class="ax">27/01</text><text x="528.4" y="274.0" text-anchor="middle" class="ax">27/02</text><text x="619.3" y="274.0" text-anchor="middle" class="ax">27/03</text><text x="710.2" y="274.0" text-anchor="middle" class="ax">27/04</text><text x="801.1" y="274.0" text-anchor="middle" class="ax">27/05</text><text x="892.0" y="274.0" text-anchor="middle" class="ax">27/06</text><rect x="603.3" y="26" width="32" height="230.0" class="spring"/><text x="619.3" y="18" text-anchor="middle" class="reflab">春</text><polyline points="74.0,61.4 164.9,84.2 255.8,107.0 346.7,129.8 437.6,152.6 528.4,168.7 619.3,178.1 710.2,183.8 801.1,185.9 892.0,184.6" fill="none" stroke="var(--s1)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><text x="900.0" y="188.6" class="serieslab" fill="var(--s1)">A</text><circle cx="437.6" cy="152.6" r="5" fill="var(--bad)" stroke="var(--surface)" stroke-width="2"/><polyline points="74.0,63.1 164.9,86.7 255.8,108.3 346.7,128.1 437.6,146.1 528.4,162.5 619.3,177.3 710.2,190.6 801.1,203.6 892.0,217.3" fill="none" stroke="var(--s3)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><text x="900.0" y="221.3" class="serieslab" fill="var(--s3)">B</text><circle cx="437.6" cy="146.1" r="5" fill="var(--bad)" stroke="var(--surface)" stroke-width="2"/><polyline points="74.0,69.6 164.9,100.3 255.8,129.1 346.7,156.2 437.6,181.7 528.4,201.3 619.3,215.1 710.2,225.1 801.1,231.8 892.0,236.8" fill="none" stroke="var(--s2)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><text x="900.0" y="240.8" class="serieslab" fill="var(--s2)">C</text><circle cx="346.7" cy="156.2" r="5" fill="var(--bad)" stroke="var(--surface)" stroke-width="2"/><line x1="437.6" y1="147.0" x2="437.6" y2="230.0" class="ref"/><text x="437.6" y="244.0" text-anchor="middle" class="badlab">A・B 枯渇 27-01</text><line x1="346.7" y1="147.0" x2="346.7" y2="230.0" class="ref"/><text x="346.7" y="244.0" text-anchor="middle" class="badlab">C 枯渇 26-12</text></svg>
+  <div class="legend">
+    <span class="i"><span class="dot" style="background:var(--s1)"></span>A</span>
+    <span class="i"><span class="dot" style="background:var(--s3)"></span>B</span>
+    <span class="i"><span class="dot" style="background:var(--s2)"></span>C</span>
+  </div>
+  <div class="call bad"><span class="t">採用を先行させると春の前に現金が尽きる</span>
+  <p>3シナリオとも、春時点でまだ<b>営業赤字</b>（−264〜−320万/月）。黒字化は <b>ARR 1.5〜1.9億</b> からで、春の1億では届かない。そして採用（セールス責任者・CTO候補・デリバリー要員）のコストが先に立ち上がるため、現金は <b>2026年12月〜2027年1月</b> に尽きる計算になる。</p>
+  <p>つまり <b>「春までに1億」と「採用でスケールさせる」は、現状の現金では同時に成立しない</b>。前提として、①調達、②採用ペースを売上の実現に連動させる、③エンプラのPoCを有償化して前倒しで現金化する、のいずれかが要る。</p></div>
+  <div class="call warn"><span class="t">ランウェイの前提値が資料間で食い違っている</span>
+  <p>この結論は現金3,200万（ランウェイ8ヶ月）を前提にしている。ただし <b>8/7 経営会議の定点表ではランウェイ24〜28ヶ月</b>と記載されており、3倍以上の開きがある。24ヶ月側（現金 約1億）が正であれば上記の枯渇は起きず、計画は成立する。<b>この1点で結論が反転するので、最優先で確定させたい。</b></p></div>
+</div>
+</section>
+
+<section id="open">
+<div class="qhead"><span class="qnum">要確定</span><h2>この計算を実データに寄せるために</h2></div>
+<p class="qsub">今回のシミュレーションは仮置きパラメータが多い。実データで置き換えると結論が動く順に並べた。</p>
+<div class="card">
+  <h3>感度の高い順</h3>
+  <ol class="tight">
+    <li><b>ランウェイの実数</b> — 8ヶ月か24〜28ヶ月か。Q7の結論が反転する。</li>
+    <li><b>「1億」の定義</b> — 月商かARRか。計画の形そのものが変わる。</li>
+    <li><b>エンプラのPoC→本契約 転換率（45%と仮置き）</b> — 春の月商が ±250万動く。実績ゼロなので、東京通信・読みての2件が最初のサンプルになる。</li>
+    <li><b>タレント事務所の実TAM（200社か500社か）</b> — プロダクト単独路線が生きるかどうかを決める。</li>
+    <li><b>現状 月140万の内訳</b> — 何社 × いくらか。プロダクト単価30万の妥当性が検証できる。</li>
+    <li><b>商談→受注の実CVR とリードタイム</b> — sales-ops-hub の Firestore／スプレッドシートに商談データがあるはずなので、そこから実測できる。</li>
+    <li><b>案件あたりのデリバリー工数</b> — 現在の3案件（カロミー・ホワイトスコーピオン・コンサル）の実工数から逆算できる。</li>
+  </ol>
+  <div class="call ok"><span class="t">次にやると効くこと</span>
+  <p>①〜②は経営会議で決める話。③〜⑦は実データを引けば埋まる。特に <b>⑥は sales-ops-hub 側に商談ログが溜まっている</b>ので、そこを集計すればファネルの仮置きを実測値に置き換えられる。</p></div>
+</div>
+</section>
+
+<footer><div class="wrap">
+Ceed toB 収益シミュレーション ／ 作成 2026-08-17 ／ モデルは月次コホート積み上げ（リードタイム・チャーン・TAM上限・デリバリーキャパを内生化）。
+数値は明記のない限り仮置きパラメータであり、意思決定の前に実データでの補正が必要。
+</div></footer>
+</div>
