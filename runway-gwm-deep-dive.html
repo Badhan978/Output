@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Runway GWM-1 Deep Dive — 仕組みと競合 2026-08</title>
+<title>Physical AI Data Market — 立ち上げ検討材料 2026-08</title>
 <style>
   :root{
     --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
-    --yes:#16a34a; --yesbg:#f0fdf4;   /* 実在・公開・検証済み */
-    --mid:#2563eb; --midbg:#eff6ff;   /* 実在寄り・部分公開 */
-    --no:#94a3b8;  --nobg:#f1f5f9;    /* 主張段階・非公開 */
-    --talk:#7c3aed; --talkbg:#f5f3ff; /* 報道・未確定 */
-    --hl:#ea580c;  --hlbg:#fff7ed;    /* Runway強調 */
+    --yes:#16a34a; --yesbg:#f0fdf4;   /* 外部調達の実績・意向あり / 提供中 */
+    --mid:#2563eb; --midbg:#eff6ff;   /* 検討・初期段階 */
+    --no:#94a3b8;  --nobg:#f1f5f9;    /* 自製派 (買わない) / 非公開 */
+    --talk:#7c3aed; --talkbg:#f5f3ff; /* 報道・推測 */
+    --hl:#ea580c;  --hlbg:#fff7ed;    /* 注目強調 */
   }
   *{box-sizing:border-box}
   body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
@@ -50,64 +50,43 @@
 
   .legend{display:flex;gap:14px;flex-wrap:wrap;padding:12px 20px;align-items:center;font-size:12px;color:var(--sub)}
 
-  /* 因果マップ / フロー (CSS Grid自製) */
-  .mapwrap{padding:22px 20px;display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr;gap:10px;align-items:stretch}
-  .node{border-radius:9px;padding:10px 13px;font-size:12px;font-weight:600;border:1.5px solid}
-  .node .def{margin-top:3px}
-  .n-base{border-color:#93c5fd;background:var(--midbg)}
-  .n-conv{border-color:#c4b5fd;background:var(--talkbg)}
-  .n-fin{border-color:#86efac;background:var(--yesbg)}
-  .arrows{display:flex;justify-content:center;align-items:center;color:#94a3b8;font-size:22px;font-weight:700}
+  .pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;padding:14px 16px}
+  a.p{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;
+    display:block;color:inherit;text-decoration:none;transition:border-color .12s,box-shadow .12s}
+  a.p:hover{border-color:var(--mid);box-shadow:0 2px 8px rgba(37,99,235,.18)}
+  .pname{font-weight:700;font-size:12.5px;display:flex;gap:7px;align-items:center}
+  .pname .nm{flex:1;min-width:0}
+  .plogo{width:18px;height:18px;border-radius:4px;flex:0 0 18px;object-fit:contain;background:#f8fafc}
+  .def{color:var(--sub);font-size:11.5px;display:block;font-weight:400;margin-top:2px}
+  .kpi{font-weight:800;color:var(--ink)}
+  .p-hl{background:var(--hlbg);border-color:#fdba74}
 
-  /* policy⇄world model ループ */
-  .loopwrap{padding:18px 20px 22px;display:grid;grid-template-columns:1fr 150px 1fr;gap:10px;align-items:center;max-width:760px}
-  .loopmid{text-align:center;color:#94a3b8;font-size:11.5px;font-weight:700;line-height:1.5}
+  .subzone{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin:12px 16px}
+  .sublabel{font-size:11px;font-weight:800;color:var(--sub);letter-spacing:.06em;margin:0 0 8px}
+  .subgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
 
-  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 20px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px 20px}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:16px 20px}
   .ibox{border:1px solid var(--line);border-radius:10px;padding:13px 15px}
   .ibox h3{margin:0 0 5px;font-size:13px}
   .ibox p{margin:0;font-size:12px;color:var(--sub)}
-  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px 20px}
-
-  .metric{font-size:26px;font-weight:800;line-height:1.1}
+  .ibox a{color:inherit;border-bottom:1px dotted #cbd5e1;text-decoration:none}
+  .ibox a:hover{color:var(--mid)}
+  .metric{font-size:24px;font-weight:800;line-height:1.15}
   .metric small{display:block;font-size:11px;font-weight:600;color:var(--sub);margin-top:4px}
 
   table{width:100%;border-collapse:collapse;font-size:12.5px}
   th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
   thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700;white-space:nowrap}
   .lever{font-weight:700;white-space:nowrap}
-  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
-  .kpi{font-weight:800;color:var(--ink)}
-  .row-hl td{background:var(--hlbg)}
   .tablewrap{overflow-x:auto}
-
-  /* 競合カード (landscapeページと同型) */
-  .pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;padding:14px 16px}
-  a.p{border:1px solid var(--line);border-radius:10px;padding:10px 13px;background:#fff;
-    display:block;color:inherit;text-decoration:none;transition:border-color .12s,box-shadow .12s}
-  a.p:hover{border-color:var(--mid);box-shadow:0 2px 8px rgba(37,99,235,.18)}
-  .pname{font-weight:700;font-size:12.5px;display:flex;gap:7px;align-items:center}
-  .pname .nm{flex:1;min-width:0}
-  .plogo{width:18px;height:18px;border-radius:4px;flex:0 0 18px;object-fit:contain;background:#f8fafc}
-  .prow{font-size:11.5px;color:var(--sub);margin-top:6px;line-height:1.5}
-  .plabel{display:inline-block;font-size:9.5px;font-weight:800;color:var(--sub);letter-spacing:.05em;
-    background:#f1f5f9;border-radius:4px;padding:0 6px;margin-right:5px}
-  .p-hl{background:var(--hlbg);border-color:#fdba74}
-
-  /* テーブル内の企業リンク + ロゴ */
-  .tlogo{width:16px;height:16px;border-radius:3px;vertical-align:-3px;margin-right:5px;background:#f8fafc}
   td a{color:inherit;text-decoration:none;border-bottom:1px dotted #cbd5e1}
   td a:hover{color:var(--mid);border-bottom-color:var(--mid)}
-  .ibox a{color:inherit;border-bottom:1px dotted #cbd5e1;text-decoration:none}
-  .ibox a:hover{color:var(--mid)}
 
   footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
   @media(max-width:980px){
-    .mapwrap{grid-template-columns:1fr}
-    .mapwrap .arrows{transform:rotate(90deg);padding:2px 0}
-    .loopwrap{grid-template-columns:1fr}
-    .grid4{grid-template-columns:repeat(2,1fr)}
     .grid3{grid-template-columns:1fr}
+    .grid2{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -115,202 +94,185 @@
 
 <header>
   <div class="hwrap">
-    <p class="kicker">Runway GWM-1 / World Model Business</p>
-    <h1>Runway GWM-1 Deep Dive — 仕組みと競合</h1>
-    <p class="lead">動画生成の会社Runwayが、ロボットの訓練・評価インフラ (world model) をどう実現し、誰と戦っているか。
-      技術の種明かしは「巨大動画モデルの物理知識を土台に、生成方式を作り替え、ロボットデータで仕上げて実機で検証」の3段構え。
-      競合は切り口の異なるUSPで同じ層に並び、価格と顧客名はまだほとんど公開されていない。</p>
+    <p class="kicker">Physical AI Data Market / 参入検討</p>
+    <h1>実世界AI向けデータ供給市場 — 立ち上げ検討材料</h1>
+    <p class="lead">実世界で動くAI (ロボット・自動運転・現場ビジョン) の訓練用データを「AIで製造して」売る市場の整理。
+      Badhan × Zach がこの領域での仮説検証・立ち上げに挑むべきかを議論するための材料ページ。</p>
     <span class="pill">作成: 2026-08-18</span>
-    <span class="pill">GWM-1発表: 2025-12-11</span>
-    <span class="pill">競合比較 7プレイヤー</span>
+    <span class="pill">ステータス: 判断前・材料段階</span>
     <span class="pill">出典: 各社発表・報道 (2026年8月時点)</span>
   </div>
 </header>
 
 <nav>
-  <a href="#how">🔬 実現の仕組み 3段</a>
-  <a href="#products">📦 提供製品 4つ</a>
-  <a href="#compete">⚔️ 競合比較 7社</a>
-  <a href="#data">📊 L4データ供給 6社</a>
-  <a href="#japan">🇯🇵 日本のL4〜L6 15社</a>
+  <a href="#sellers">🏭 売り手プレイヤー</a>
+  <a href="#buyers">🛒 買い手4業界</a>
+  <a href="#pain">🔥 解いているペイン</a>
+  <a href="#moat">🎯 差別化の読み</a>
+  <a href="#money">💰 金額と単価</a>
+  <a href="#entry">🚀 参入シナリオ</a>
 </nav>
 
-<section id="how">
+<section id="sellers">
   <div class="card">
-    <h2><span class="mark" style="background:var(--mid)"></span>実現の仕組み — 3段構え</h2>
-    <div class="note">物理エンジンを書く代わりに、動画データから物理を「学習」で獲得する路線。CTO発言:「優れた世界モデルの前提はまず優れた動画モデル。ピクセルを直接予測するのが汎用シミュレーションへの最善手」。</div>
-    <div class="mapwrap">
-      <div class="node n-base">① 土台 = Gen-4.5 の事前学習
-        <span class="def">大量動画から物体の動き・光・接触など「世界の物理」をピクセル予測として獲得済み</span>
-      </div>
-      <div class="arrows">→</div>
-      <div class="node n-conv">② 生成方式の転換
-        <span class="def">一発生成をやめ「過去フレーム+制御入力 → 次の1フレーム」の自己回帰型へ再構成。カメラポーズ・Robot Pose・イベントを毎フレーム注入可</span>
-      </div>
-      <div class="arrows">→</div>
-      <div class="node n-fin">③ ドメイン仕上げ + 実機検証
-        <span class="def">roboticsデータでpost-training (中身は非公開)。実機8ポリシーの結果と突き合わせて相関0.95を実証</span>
-      </div>
-    </div>
-    <div class="note">動作イメージ — policy (頭脳) と world model (舞台) のループ。本来「現実世界」が返す結果を GWM-1 が代役する:</div>
-    <div class="loopwrap">
-      <div class="node n-base">Policy Model (頭脳)
-        <span class="def">カメラ映像を見て次のアクションを出力 (アームを右へ3cm)</span>
-      </div>
-      <div class="loopmid">→ アクション →<br>← 次のフレーム ←</div>
-      <div class="node n-fin">GWM-1 (仮想世界)
-        <span class="def">「そうしたら世界はこう見える」を毎フレーム生成して返す</span>
-      </div>
-    </div>
-    <div class="grid3">
-      <div class="ibox"><div class="metric">0.95<small>実機との相関 (8ポリシー・1,450 rollout・16,000評価)</small></div></div>
-      <div class="ibox"><div class="metric">720p / 2分<small>リアルタイム応答・マルチビュー対応の生成スペック</small></div></div>
-      <div class="ibox"><div class="metric">非公開<small>パラメータ数・訓練データ構成・長時間一貫性の機構は未開示</small></div></div>
-    </div>
-  </div>
-</section>
-
-<section id="products">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--yes)"></span>提供製品 4つ — Python SDK・申請制</h2>
-    <div class="note">コンシューマー向けではなく、ロボティクス企業向けインフラ。価格は非公開・商談ベースのみ。</div>
-    <div class="grid4">
-      <div class="ibox"><h3>Policy Model</h3><p>カメラ観測からアクションを予測する制御モデル。顧客のハードウェア・環境ごとにファインチューン</p></div>
-      <div class="ibox"><h3>Video Model Licensing</h3><p>GWM-1をバックボーンとして貸与。顧客インフラ内で自社ポリシーを訓練 (データを外に出さない)</p></div>
-      <div class="ibox"><h3>Offline Policy Evaluation</h3><p>実機デプロイ前に仮想世界内でポリシーを走らせ失敗モードを検出。開発イテレーションを高速化</p></div>
-      <div class="ibox"><h3>Data Augmentation</h3><p>実軌跡データを別環境・照明・物体配置に変換し、訓練分布を実データ収集なしで拡張</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="compete">
-  <div class="card">
-    <h2><span class="mark" style="background:var(--talk)"></span>競合比較 — USP・価格・顧客</h2>
-    <div class="note">同じ層 (world modelの外部提供) に並ぶが、USPの切り口はすべて異なり正面衝突はまだ起きていない。ロボティクス用途で顧客名を公表できているのは実質NVIDIAのみ — 市場全体がdesign partner段階。</div>
+    <h2><span class="mark" style="background:var(--mid)"></span>売り手 — 合成映像・AI製データを提供する既存プレイヤー</h2>
+    <div class="note">2群に分かれる: 「モデルで合成する」勢 (world model) と「人で集める」実データ勢。<span class="kpi">合成データの専業は世界的に不在</span>で、合成はモデル企業の一機能として提供されている。国内には合成映像の専業がゼロ。カードクリックで公式サイト。</div>
     <div class="legend">
-      <span><span class="st st-yes">実在 / 公開</span> 検証・数値あり</span>
-      <span><span class="st st-mid">実在寄り / 部分公開</span> 実測はあるが限定的</span>
-      <span><span class="st st-no">主張段階 / 非公開</span> 第三者検証・開示なし</span>
+      <span><span class="st st-yes">提供中</span> 商用提供・実証あり</span>
+      <span><span class="st st-mid">準備中</span> 立ち上げ・検討段階</span>
+      <span><span class="st st-no">非公開</span> 詳細未開示</span>
       <span><span class="st st-talk">報道</span> 未確定情報</span>
     </div>
-    <div class="pcards">
-      <a class="p p-hl" href="https://runway.com/product/robotics" target="_blank" rel="noopener">
-        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=runway.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Runway GWM-1</span> <span class="st st-yes">実在</span></div>
-        <div class="prow"><span class="plabel">USP</span>動画モデル由来の視覚品質 + 実機検証済み評価 (相関 <span class="kpi">0.95</span>)</div>
-        <div class="prow"><span class="plabel">価格</span>非公開・商談のみ</div>
-        <div class="prow"><span class="plabel">顧客</span>robotics顧客名なし (「複数社と協議中」)。提携はNVIDIA/AMD</div>
-      </a>
-      <a class="p" href="https://www.nvidia.com/en-us/ai/cosmos/" target="_blank" rel="noopener">
-        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=nvidia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">NVIDIA Cosmos</span> <span class="st st-yes">実在</span></div>
-        <div class="prow"><span class="plabel">USP</span>オープンweight + ロボ制御信号の直接出力。稼ぎはGPU販売へのlock-in</div>
-        <div class="prow"><span class="plabel">価格</span>モデル無料 + 従量API (公式単価非公開。第三者実測 動画$0.05/秒)</div>
-        <div class="prow"><span class="plabel">顧客</span>最多。Coalition + 日本21社 (FANUC・Honda・川崎重工・ソニー・安川等)、Skild、Boston Dynamics</div>
-      </a>
-      <a class="p" href="https://www.worldlabs.ai" target="_blank" rel="noopener">
-        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=worldlabs.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">World Labs</span> <span class="st st-yes">実在</span></div>
-        <div class="prow"><span class="plabel">USP</span>3D幾何の一貫性 — カメラを動かしても世界が崩れない</div>
-        <div class="prow"><span class="plabel">価格</span>公開: $20〜95/月 + クレジット従量 (1生成 $0.12〜2.4)</div>
-        <div class="prow"><span class="plabel">顧客</span>Escape.ai, Fenestra, Interior AI, Magnific (クリエイティブのみ、roboticsは未公表)</div>
-      </a>
-      <a class="p" href="https://decart.ai" target="_blank" rel="noopener">
-        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=decart.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Decart</span> <span class="st st-mid">実在寄り</span></div>
-        <div class="prow"><span class="plabel">USP</span>リアルタイム性 (30fps・遅延100ms未満)。Anthropicが$6Bで買収協議報道</div>
-        <div class="prow"><span class="plabel">価格</span>公開: 完全従量 $0.01〜0.04/秒</div>
-        <div class="prow"><span class="plabel">顧客</span>Amazon (アンカーAPI顧客), eBay。AV向けOasisの利用社名は非公開</div>
-      </a>
-      <a class="p" href="https://odyssey.ml" target="_blank" rel="noopener">
-        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=odyssey.ml&amp;sz=64" alt="" loading="lazy"><span class="nm">Odyssey</span> <span class="st st-yes">実在</span></div>
-        <div class="prow"><span class="plabel">USP</span>実行中にテキストで世界を動的改変できるインタラクティブ性</div>
-        <div class="prow"><span class="plabel">価格</span>API公開・単価非公開 (100万回無料配布中)</div>
-        <div class="prow"><span class="plabel">顧客</span>ほぼ非公開 (testimonialはSamsung Nextのみ)。AWS/Crusoeはインフラ側</div>
-      </a>
-      <a class="p" href="https://generalintuition.com" target="_blank" rel="noopener">
-        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=generalintuition.com&amp;sz=64" alt="" loading="lazy"><span class="nm">General Intuition</span> <span class="st st-no">主張段階</span></div>
-        <div class="prow"><span class="plabel">USP</span>ゲームクリップ年間20億本の「ボタン入力つき」行動ラベルデータ (第三者検証なし)</div>
-        <div class="prow"><span class="plabel">価格</span>非公開・enterprise pilotのみ (今夏に一般API予定)</div>
-        <div class="prow"><span class="plabel">顧客</span>少数のdesign partners (社名非公開)</div>
-      </a>
-      <a class="p" href="https://www.buildfastwithai.com/blogs/tencent-alibaba-world-models-april-2026" target="_blank" rel="noopener">
-        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=hunyuan.tencent.com&amp;sz=64" alt="" loading="lazy"><span class="nm">中国OSS勢</span> <span class="st st-yes">実在</span></div>
-        <div class="prow"><span class="plabel">USP</span>無料 + ベンチマーク実測優位 (Tencent HY-World)。モデル自体では稼がない構造</div>
-        <div class="prow"><span class="plabel">価格</span>$0 (オープンソース。AlibabaはクラウドGPU販売で回収)</div>
-        <div class="prow"><span class="plabel">顧客</span>Alibaba: Unitree G1等に実機デプロイ。X Square: 58.com。Tencentは利用指標のみ (300万DL)</div>
-      </a>
+    <div class="subzone">
+      <p class="sublabel">🌍 海外 — モデルで合成する勢 (world model)</p>
+      <div class="subgrid">
+        <a class="p p-hl" href="https://runway.com/product/robotics" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=runway.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Runway GWM-1</span> <span class="st st-yes">提供中</span></div><span class="def">動画モデル由来。実機相関<span class="kpi">0.95</span>の検証を公表。商談制</span></a>
+        <a class="p" href="https://www.nvidia.com/en-us/ai/cosmos/" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=nvidia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">NVIDIA Cosmos</span> <span class="st st-yes">提供中</span></div><span class="def">オープンweight <span class="kpi">200万DL</span>。GPU販売で回収する無料戦略</span></a>
+        <a class="p" href="https://www.worldlabs.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=worldlabs.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">World Labs</span> <span class="st st-yes">提供中</span></div><span class="def">3D幾何一貫性。API従量 $0.12〜2.4/生成</span></a>
+        <a class="p" href="https://decart.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=decart.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Decart</span> <span class="st st-talk">報道</span></div><span class="def">リアルタイム従量 $0.01〜0.04/秒。Anthropic買収協議報道</span></a>
+        <a class="p" href="https://odyssey.ml" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=odyssey.ml&amp;sz=64" alt="" loading="lazy"><span class="nm">Odyssey</span> <span class="st st-yes">提供中</span></div><span class="def">実行中に世界を動的改変。API公開・単価非公開</span></a>
+        <a class="p" href="https://generalintuition.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=generalintuition.com&amp;sz=64" alt="" loading="lazy"><span class="nm">General Intuition</span> <span class="st st-mid">準備中</span></div><span class="def">ゲームクリップ年20億本の行動データ。pilotのみ</span></a>
+        <a class="p" href="https://www.buildfastwithai.com/blogs/tencent-alibaba-world-models-april-2026" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=hunyuan.tencent.com&amp;sz=64" alt="" loading="lazy"><span class="nm">中国OSS勢</span> <span class="st st-yes">提供中</span></div><span class="def">Tencent / Alibaba / X Square。無料公開、GPU/エコシステムで回収</span></a>
+        <a class="p" href="https://lightwheel.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=lightwheel.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Lightwheel</span> <span class="st st-yes">提供中</span></div><span class="def">sim/合成データ・評価インフラ ($145M調達)。world modelチームが顧客</span></a>
+      </div>
     </div>
-    <div class="grid3">
-      <div class="ibox"><h3>価格の現在地</h3><p>公開しているのはWorld LabsとDecartの従量制2社のみ。RunwayとGeneral Intuitionは価値ベースのエンタープライズ商談を探る段階で、市場はまだ「価格発見」の途中。</p></div>
-      <div class="ibox"><h3>顧客の現在地</h3><p>ロボティクス用途で顧客ロゴを出せているのは実質NVIDIAだけ。Runwayが顧客名を出せないのは出遅れではなく、市場全体の現在地。</p></div>
-      <div class="ibox"><h3>最大の変数</h3><p>中国OSSの無料攻勢が価格の天井を規定しにいく。Google Genie 3のB2B参入、Decart買収 (報道) の成立も地図を変え得る。</p></div>
+    <div class="subzone">
+      <p class="sublabel">🌍 海外 — 人で集める実データ勢 (比較参照)</p>
+      <div class="subgrid">
+        <a class="p" href="https://scale.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=scale.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Scale AI</span> <span class="st st-yes">提供中</span></div><span class="def">実演収録<span class="kpi">10万時間</span>+アノテーション+収集オペ代行</span></a>
+        <a class="p" href="https://xdof.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=xdof.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">XDOF</span> <span class="st st-yes">提供中</span></div><span class="def">teleop軌跡専業。$70M調達・顧客20社</span></a>
+        <a class="p" href="https://www.micro1.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=micro1.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Micro1</span> <span class="st st-yes">提供中</span></div><span class="def">専門家実演teleop軌跡をフロンティアラボへ</span></a>
+        <a class="p" href="https://apptronik.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=apptronik.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Apptronik</span> <span class="st st-yes">提供中</span></div><span class="def">専用施設Robot ParkからGoogle DeepMindへデータ供給</span></a>
+      </div>
+    </div>
+    <div class="subzone">
+      <p class="sublabel">🇯🇵 国内 — 合成映像の専業は不在。近接プレイヤーのみ</p>
+      <div class="subgrid">
+        <a class="p" href="https://apto.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=apto.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">APTO</span> <span class="st st-mid">準備中</span></div><span class="def">アノテーション企業。Isaac Simでの合成データ生成に展開中</span></a>
+        <a class="p" href="https://fastlabel.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=fastlabel.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">FastLabel</span> <span class="st st-mid">準備中</span></div><span class="def">累計23.5億円。ロボティクスへ事業拡張、ugoとVLA開発提携</span></a>
+        <a class="p" href="https://www.airoa.org" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=airoa.org&amp;sz=64" alt="" loading="lazy"><span class="nm">AIRoA</span> <span class="st st-mid">準備中</span></div><span class="def">国策データ基盤 (NEDO <span class="kpi">205億円</span>)。実データ収集中心</span></a>
+        <a class="p" href="https://tx-inc.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=tx-inc.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Telexistence</span> <span class="st st-no">非公開</span></div><span class="def">店舗teleopデータを自社の自律化に転用 (外販は未確認)</span></a>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="data">
+<section id="buyers">
   <div class="card">
-    <h2><span class="mark" style="background:var(--yes)"></span>L4 データ供給 — 誰に何を売っているか</h2>
-    <div class="note">純粋な「データ販売」は上4社。Rerun/Foxgloveはデータを扱う道具を売るツール企業 (顧客名を公表できているのはツール側だけ)。データ4社の売り物はすべて実世界データ (人間の実演・teleop軌跡) — 合成データ専業はこの層に不在で、合成はL3のモデル勢が担う構図。</div>
-    <div class="tablewrap">
-    <table>
-      <thead><tr><th>企業</th><th>売っているもの (データの種類)</th><th>対象顧客</th></tr></thead>
-      <tbody>
-        <tr><td class="lever"><a href="https://scale.com" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=scale.com&amp;sz=64" alt="" loading="lazy">Scale AI</a></td><td>実演収録データ (<span class="kpi">10万時間</span>超) + 2D/3D・センサーフュージョンアノテーション + 収集オペ代行<span class="def">在宅ギグワーカー組織化による作業収録も</span></td><td>robot基盤モデル勢・AV・フロンティアラボ (実名非公開)。<a href="https://www.universal-robots.com" target="_blank" rel="noopener">Universal Robots</a>とは提携製品化</td></tr>
-        <tr><td class="lever"><a href="https://xdof.ai" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=xdof.ai&amp;sz=64" alt="" loading="lazy">XDOF</a></td><td>専門オペレータのteleop軌跡 (双腕マニピュレーション中心)<span class="def">GELLO由来の低コスト収集リグが強み。ABC-130Kデータセット公開</span></td><td>顧客約20社。フロンティアAI研究機関を含む (社名非公開)</td></tr>
-        <tr><td class="lever"><a href="https://www.micro1.ai" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=micro1.ai&amp;sz=64" alt="" loading="lazy">Micro1</a></td><td>専門家実演つきteleop軌跡<span class="def">低レベル制御・器用な物体操作向けの高品質データ</span></td><td>フロンティアAI研究機関 (社名非公開)</td></tr>
-        <tr><td class="lever"><a href="https://techstartups.com/2026/07/23/ropedia-raises-30m-to-build-the-data-infrastructure-powering-physical-ai-and-robotics/" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=ropedia.com&amp;sz=64" alt="" loading="lazy">Ropedia</a></td><td>実世界マルチモーダルデータ (映像+センサー) の収集・配信基盤<span class="def">$30M調達の立ち上げ期、開示薄</span></td><td>physical AI / robotics開発企業 (具体名未公表)</td></tr>
-        <tr><td class="lever"><a href="https://rerun.io" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=rerun.io&amp;sz=64" alt="" loading="lazy">Rerun</a></td><td>【ツール】マルチモーダルログ可視化OSS + 商用DB (2026年後半予定)</td><td><a href="https://ai.meta.com" target="_blank" rel="noopener">Meta</a>, <a href="https://deepmind.google" target="_blank" rel="noopener">Google</a>, <a href="https://www.unitree.com" target="_blank" rel="noopener">Unitree</a>, <a href="https://huggingface.co" target="_blank" rel="noopener">Hugging Face</a> (LeRobot)</td></tr>
-        <tr><td class="lever"><a href="https://foxglove.dev" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=foxglove.dev&amp;sz=64" alt="" loading="lazy">Foxglove</a></td><td>【ツール】ロボットデータの記録・管理・分析 (observability) 基盤</td><td><a href="https://www.nvidia.com" target="_blank" rel="noopener">NVIDIA</a>, <a href="https://www.aboutamazon.com/news/tag/robotics" target="_blank" rel="noopener">Amazon</a>, <a href="https://www.anduril.com" target="_blank" rel="noopener">Anduril</a>, <a href="https://wayve.ai" target="_blank" rel="noopener">Wayve</a>, <a href="https://www.dexterity.ai" target="_blank" rel="noopener">Dexterity</a></td></tr>
-      </tbody>
-    </table>
+    <h2><span class="mark" style="background:var(--yes)"></span>買い手 — 業界ごとの整理 (国内・海外)</h2>
+    <div class="note">大原則: データに金を払うのは「モデルを学習する主体」だけで、エンド企業はまだ買わない。そして最有力の買い手ほど自製に向かう。バッジ = 外部調達の見込み。</div>
+    <div class="legend">
+      <span><span class="st st-yes">外部調達</span> 実績・公表意向あり</span>
+      <span><span class="st st-mid">検討段階</span> 意欲表明・学習未着手</span>
+      <span><span class="st st-no">自製派</span> 内製済み = 売りにくい</span>
+      <span><span class="st st-talk">推測</span> 需要は推測</span>
     </div>
-    <div class="grid3">
-      <div class="ibox"><h3>買い手はモデルを作る側</h3><p>実名確定の大口はGoogle DeepMind (Apptronik「Robot Park」から供給)。XDOF/Micro1の顧客も「フロンティアラボ」— データに払うのはモデル開発勢に限られる。</p></div>
-      <div class="ibox"><h3>最有力の買い手ほど自製</h3><p>Physical Intelligence・1X・Tesla・Figureは収集を垂直統合し外部購入の形跡なし。日本の安川・FANUC (NVIDIAツールで自製) と同じ構造。</p></div>
-      <div class="ibox"><h3>売り手の共通点</h3><p>食い込めているXDOF・Micro1・Apptronikは「ラボが自前で組織できない物量の人的オペレーション」の肩代わり。データ販売の実体はオペレーション業。</p></div>
+    <div class="subzone">
+      <p class="sublabel">🚗 自動運転</p>
+      <div class="subgrid">
+        <a class="p" href="https://tier4.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=tier4.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">TIER IV 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">Cosmos Coalition参加。オープンソースAutoware陣営</span></a>
+        <a class="p" href="https://turing-motors.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=turing-motors.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Turing 🇯🇵</span> <span class="st st-yes">外部調達</span></div><span class="def">自社VLAで公道実演 (2026年3月)。学習データ需要が現在進行形</span></a>
+        <a class="p" href="https://waymo.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=waymo.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Waymo</span> <span class="st st-no">自製派</span></div><span class="def">Genie 3ベースの自社world modelで合成を内製</span></a>
+        <a class="p" href="https://wayve.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=wayve.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Wayve / Waabi / Tesla</span> <span class="st st-no">自製派</span></div><span class="def">3社とも自社world model・自社データで垂直統合</span></a>
+      </div>
+    </div>
+    <div class="subzone">
+      <p class="sublabel">🌾 農業 physical AI</p>
+      <div class="subgrid">
+        <a class="p" href="https://www.kubota.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=kubota.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">クボタ 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">Cosmosベースの自律農業を公言。農場は物理simで再現しにくく合成映像と相性最良</span></a>
+        <a class="p" href="https://www.deere.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=deere.com&amp;sz=64" alt="" loading="lazy"><span class="nm">John Deere</span> <span class="st st-talk">推測</span></div><span class="def">自律農機の先行者 (Apptronik出資)。データ需要は推測</span></a>
+      </div>
+    </div>
+    <div class="subzone">
+      <p class="sublabel">🤖 ロボットメーカー (国産・海外)</p>
+      <div class="subgrid">
+        <a class="p" href="https://ugo.plus" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=ugo.plus&amp;sz=64" alt="" loading="lazy"><span class="nm">ugo 🇯🇵</span> <span class="st st-yes">外部調達</span></div><span class="def">FastLabelとVLA開発を公表 = データ需要が明文化された唯一の国産メーカー</span></a>
+        <a class="p" href="https://jizai.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=jizai.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Jizai / カワダ 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">汎用AIロボ創業期 / NEDO事業でteleopデータ収集側</span></a>
+        <a class="p" href="https://www.yaskawa.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=yaskawa.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">安川電機 / FANUC 🇯🇵</span> <span class="st st-no">自製派</span></div><span class="def">Isaac Sim/GR00Tで学習まで自製済み。「自製では作れない実データ」でしか刺さらない</span></a>
+        <a class="p" href="https://www.khi.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=khi.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">川崎重工 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">FANUC・富士通・安川と4社連合でsim-to-real基盤構築中。医療・造船へ展開予定</span></a>
+        <a class="p" href="https://www.skild.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=skild.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Skild / Physical Intelligence</span> <span class="st st-yes">外部調達</span></div><span class="def">FM勢はデータ需要最大。SkildはCosmos利用、PIは自製寄り</span></a>
+        <a class="p" href="https://www.figure.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=figure.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Figure / 1X / Tesla</span> <span class="st st-no">自製派</span></div><span class="def">収集を垂直統合。外部購入の形跡なし</span></a>
+      </div>
+    </div>
+    <div class="subzone">
+      <p class="sublabel">🏗 建設安全・現場ビジョン</p>
+      <div class="subgrid">
+        <a class="p" href="https://www.shimz.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=shimz.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">清水建設 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">CosmosビジョンAIで建設安全管理。危険シーンは実データが集められず合成でしか作れない</span></a>
+        <a class="p" href="https://www.deepx.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=deepx.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">DeepX顧客圏 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">タダノ・日立建機・フジタ等、建機自動化に投資済みの層</span></a>
+        <a class="p" href="#" ><div class="pname"><span class="nm">海外の建設安全</span> <span class="st st-no">未調査</span></div><span class="def">この業界の海外側は未調査 (次スイープ対象)</span></a>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="japan">
+<section id="pain">
   <div class="card">
-    <h2><span class="mark" style="background:var(--hl)"></span>日本のL4〜L6プレイヤー — 参入検討の前提マップ</h2>
-    <div class="note">前提: L3 (world model本体) は自前生成モデル必須で国費1兆円級のNoetraが着手済み — 後発の現実的な参入域はL4 (データ)・L5 (policy)・L6 (導入統合)。資本と実績が揃った専業はL6のMujinほぼ一社で、「オープンworld modelを顧客現場にfine-tune統合する」専業FDEは日本にまだ不在。</div>
+    <h2><span class="mark" style="background:var(--hl)"></span>解いているペイン — なぜ買い手はデータに払うのか</h2>
+    <div class="note">LLMと違い実世界AIの訓練データはネットに存在しない。実機収集の物理的限界が3層のペインを作る。</div>
+    <div class="grid3">
+      <div class="ibox"><h3>① 集められない</h3><p>実データはteleopで1軌跡ずつ収集 ($136/時間)。数千時間集めるのは金額以前に物理的に遅い。→ 収集オペ代行・合成による水増しに払う</p></div>
+      <div class="ibox"><h3>② 集めても足りない</h3><p>実データは自社環境に偏る。ロングテール (危険シーン・稀な状況・多様な環境) は意図的に集められない。→ 合成でしか埋まらない。清水建設 (事故シーン)・クボタ (天候×作物) 型の需要</p></div>
+      <div class="ibox"><h3>③ 評価が回らない</h3><p>ポリシー改良ごとに実機で数百回試すのは遅く危険で再現性がない。→ 仮想世界での事前評価に払う。Runwayが実機相関0.95を論文で示したのはこの支払理由を証明するため</p></div>
+    </div>
+    <div class="note">買う理由の本質は2つに集約される: <span class="kpi">「自前で組織できない物量の人的オペレーション」</span>の肩代わり (XDOF/Micro1/Apptronikが食い込めた理由) と、<span class="kpi">「simでは作れないドメインの実写系データ」</span> (農業・建設・店舗)。</div>
+  </div>
+</section>
+
+<section id="moat">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--talk)"></span>差別化の読み — 各社のUSPから抽出した競争軸</h2>
+    <div class="note">各社が何で差別化を主張しているかを並べると、業界の競争軸が3本に収斂している。</div>
+    <div class="grid3">
+      <div class="ibox"><h3>軸1: 他人が持てないデータ源</h3><p>General Intuition = ゲームクリップ独占、XDOF = 収集リグ+オペレータ網、Apptronik = 専用施設。モデルは真似できてもデータ源は真似できない、が各社の防御線。</p></div>
+      <div class="ibox"><h3>軸2: 効果の証明力</h3><p>Runway = 実機相関0.95の論文、Tencent = ベンチマーク首位。「使うと本当にモデルが良くなる」の実証が価格を正当化する唯一の手段になっている。</p></div>
+      <div class="ibox"><h3>軸3: 価格と配布戦略</h3><p>NVIDIA・中国勢は無料配布でモデル自体の値段をゼロに向かわせている。従量課金の公開2社 (World Labs, Decart) は$0.01〜0.04/秒。モデル性能での差別化は消耗戦。</p></div>
+    </div>
+    <div class="note">読み (私見): モデル性能は無料OSSの追撃でコモディティ化する。生き残る差別化は<span class="kpi">軸1 (独自データ源)</span>と<span class="kpi">軸2 (効果証明)</span>のみ — 我々が参入するなら「日本の現場への独占アクセス」が唯一構築可能な防御線で、技術はオープンモデルを借りればよい。</div>
+  </div>
+</section>
+
+<section id="money">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--yes)"></span>金額と単価 — この領域に流れている金 (判明分+推定)</h2>
+    <div class="note">確定数値は出典つき、単価は逆算による推定 (実測ではない)。</div>
+    <div class="grid3">
+      <div class="ibox"><div class="metric">年 約50億円<small>AIRoA (NEDO 205億円/4年) — 国内でデータ層に明示的についた唯一の予算</small></div></div>
+      <div class="ibox"><div class="metric">3,873億円<small>Noetra/FRONTia 2026年度 (モデル開発全体。データはその一部)</small></div></div>
+      <div class="ibox"><div class="metric">年 数十億円<small>国内民間のデータ層支出の推定値 (専業がFastLabel 23.5億円級しかいない事実からの逆算)</small></div></div>
+    </div>
     <div class="tablewrap">
     <table>
-      <thead><tr><th>レイヤ</th><th>プレイヤー</th><th>概要</th><th>規模 (報道ベース)</th></tr></thead>
+      <thead><tr><th>買い手セグメント</th><th>年間投下の根拠になる事実</th><th>顧客単価の推定 (推測)</th></tr></thead>
       <tbody>
-        <tr><td class="lever" rowspan="5">L4 データ供給</td>
-          <td class="lever"><a href="https://www.airoa.org" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=airoa.org&amp;sz=64" alt="" loading="lazy">AIRoA</a></td><td>国策データ基盤 (NEDO採択)。国産ロボ基盤モデルも2027年OSS予定 (L5兼業)<span class="def">東大尾形教授代表・トヨタ等20社超参加</span></td><td><span class="kpi">205億円</span> (国費)</td></tr>
-        <tr><td class="lever"><a href="https://tx-inc.com" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=tx-inc.com&amp;sz=64" alt="" loading="lazy">Telexistence</a></td><td>コンビニ遠隔操作 (ファミマ300店) で蓄積したteleopデータを自律化へ転用</td><td>累計 <span class="kpi">230億円</span>+</td></tr>
-        <tr><td class="lever"><a href="https://www.kawadarobot.co.jp" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=kawadarobot.co.jp&amp;sz=64" alt="" loading="lazy">カワダ</a>×<a href="https://weblab.t.u-tokyo.ac.jp" target="_blank" rel="noopener">東大松尾研</a></td><td>ヒューマノイドNEXTAGEのteleopタスクデータ収集基盤・リーダーデバイス</td><td>NEDO事業内</td></tr>
-        <tr><td class="lever"><a href="https://monoist.itmedia.co.jp/mn/articles/2203/16/news053.html" target="_blank" rel="noopener">リモートロボティクス</a></td><td>ソニーG×川崎重工JVの遠隔操作プラットフォーム<span class="def">公式サイト未確認のため報道リンク</span></td><td>JV (額非公開)</td></tr>
-        <tr><td class="lever"><a href="https://fastlabel.ai" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=fastlabel.ai&amp;sz=64" alt="" loading="lazy">FastLabel</a> / <a href="https://apto.co.jp" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=apto.co.jp&amp;sz=64" alt="" loading="lazy">APTO</a></td><td>アノテーション企業がロボット訓練データへ事業拡張中<span class="def">FastLabelは<a href="https://ugo.plus" target="_blank" rel="noopener">ugo</a>と提携、APTOはIsaac Sim合成データ</span></td><td>FastLabel 累計23.5億円</td></tr>
-        <tr><td class="lever" rowspan="5">L5 Policy Model</td>
-          <td class="lever"><a href="https://prtimes.jp/main/html/rd/p/000000004.000159736.html" target="_blank" rel="noopener">RLWRLD</a></td><td>VLA基盤モデル (製造・物流向け)。2026年上期に正式公開予定<span class="def">韓国発の日本拠点。公式サイト未確認のためプレスリンク</span></td><td>累計 <span class="kpi">63億円</span></td></tr>
-        <tr><td class="lever"><a href="https://integral.ai" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=integral.ai&amp;sz=64" alt="" loading="lazy">Integral AI</a></td><td>元Google Jad Tarifiの東京拠点。<a href="https://www.denso-wave.com" target="_blank" rel="noopener">デンソーウェーブ</a>「AI模倣学習」の中核AI</td><td>$5.5M (追加調達中)</td></tr>
-        <tr><td class="lever"><a href="https://www.preferred.jp" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=preferred.jp&amp;sz=64" alt="" loading="lazy">Preferred Networks</a></td><td>自社チップ+基盤モデル。<a href="https://global.toyota" target="_blank" rel="noopener">トヨタ</a>系とphysical AI共同研究 (2026年6月〜)</td><td>国内最大級AI企業</td></tr>
-        <tr><td class="lever"><a href="https://www.deepx.co.jp" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=deepx.co.jp&amp;sz=64" alt="" loading="lazy">DeepX</a> / <a href="https://ascent.ai" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=ascent.ai&amp;sz=64" alt="" loading="lazy">Ascent Robotics</a></td><td>建機自動化 (<a href="https://www.tadano.co.jp" target="_blank" rel="noopener">タダノ</a>協業) / ロボピッキングAI (<a href="https://www.bridgestone.co.jp" target="_blank" rel="noopener">ブリヂストン</a>提携)</td><td>16億円 / 11億円+</td></tr>
-        <tr><td class="lever"><a href="https://jizai.ai" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=jizai.ai&amp;sz=64" alt="" loading="lazy">Jizai</a></td><td>汎用AIロボ「Mi-Mo」。創業期 (LayerX福島氏らエンジェル出資)</td><td>創業ラウンド (非公開)</td></tr>
-        <tr><td class="lever" rowspan="5">L6 FDE / 導入統合</td>
-          <td class="lever"><a href="https://www.mujin.co.jp" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=mujin.co.jp&amp;sz=64" alt="" loading="lazy">Mujin</a></td><td>日本の本命。ロボOS「MujinOS」+複数メーカー統合制御。<a href="https://group.ntt" target="_blank" rel="noopener">NTT</a>と資本業務提携<span class="def">導入実績2,000+プラットフォーム</span></td><td><span class="kpi">364億円</span> (2025年国内1位)</td></tr>
-        <tr><td class="lever"><a href="https://www.accenture.com/jp-ja" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=accenture.com&amp;sz=64" alt="" loading="lazy">アクセンチュア</a></td><td>「Physical AI Orchestrator」提供開始 (2025年12月、NVIDIA統合)</td><td>グローバルSI</td></tr>
-        <tr><td class="lever"><a href="https://classmethod.jp" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=classmethod.jp&amp;sz=64" alt="" loading="lazy">classmethod</a></td><td>Cosmos Coalition参加。クラウド知見で実証→継続運用の橋渡しを標榜</td><td>クラウドSI</td></tr>
-        <tr><td class="lever"><a href="https://www.denso-wave.com" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=denso-wave.com&amp;sz=64" alt="" loading="lazy">デンソーウェーブ</a></td><td>AI模倣学習ソフトの製品販売 (AI開発元は<a href="https://integral.ai" target="_blank" rel="noopener">Integral AI</a>)</td><td>デンソーG</td></tr>
-        <tr><td class="lever"><a href="https://www.rapyuta-robotics.com/ja" target="_blank" rel="noopener"><img class="tlogo" src="https://www.google.com/s2/favicons?domain=rapyuta-robotics.com&amp;sz=64" alt="" loading="lazy">Rapyuta Robotics</a></td><td>クラウドロボ基盤rapyuta.io。<a href="https://www.yaskawa.co.jp" target="_blank" rel="noopener">安川電機</a>と資本提携</td><td>累計 約106億円</td></tr>
+        <tr><td class="lever">海外フロンティアラボ / FM勢</td><td>XDOFが顧客20社で$70M調達を正当化 / Scale AIはrobotics部門が黒字化 / GoogleはApptronikの専用施設を運営</td><td>年 <span class="kpi">$1M〜5M</span>/社 (XDOFの調達規模と顧客数からの逆算)</td></tr>
+        <tr><td class="lever">国内モデル開発スタートアップ (RLWRLD級)</td><td>調達63億円。収集網を丸抱えできない規模</td><td>年 <span class="kpi">数千万〜1億円</span> (調達額の数%をデータに充てる想定)</td></tr>
+        <tr><td class="lever">国策 (AIRoA経由)</td><td>年約50億円が収集・整備の事業者に分配される構造</td><td>案件 <span class="kpi">数億円</span>規模 (受託型)</td></tr>
+        <tr><td class="lever">現場映像系 (清水建設・クボタ型)</td><td>Cosmos活用を公言済みだが学習フェーズ前</td><td>PoC <span class="kpi">数百万〜数千万円</span> (国内AI受託の一般相場からの類推)</td></tr>
+        <tr><td class="lever">単価の地合い</td><td>teleopデータ相場: $340/h (2024) → <span class="kpi">$136/h</span> (2025Q4) へ急落</td><td>単価下落トレンド = 量・独占性・検証力で稼ぐ構造へ移行中</td></tr>
       </tbody>
     </table>
     </div>
+  </div>
+</section>
+
+<section id="entry">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--hl)"></span>参入シナリオ 3仮説 — 最後にここを議論する</h2>
+    <div class="note">いずれもフロンティアモデルは作らない前提。中間径路として mimic robotics 型 (オープンweightを自社ドメインデータでpost-trainingし派生モデル資産を持つ、$3.25B評価の先行実例) が全仮説に接続可能。</div>
     <div class="grid3">
-      <div class="ibox"><h3>L3は国策が占有</h3><p>基盤モデル本体はNoetra×産総研「FRONTia」(44社連合・5年約1兆円)、データ基盤はAIRoA (205億円) が国費で着手済み。後発が正面から重なる意味はない。</p></div>
-      <div class="ibox"><h3>空白 = 専業FDE</h3><p>Cosmos Coalitionに日本大手21社が参加した一方、オープンworld modelを各社現場へfine-tune統合する専業は不在。最も近いアクセンチュア・classmethodも2025年末開始の立ち上げ期。</p></div>
-      <div class="ibox"><h3>中間径路 = mimic型</h3><p>フロンティアモデルは作らず、オープンweight (Cosmos等) を自社ドメインデータでpost-trainingし「派生モデル資産」を持つ型。スイス<a href="https://www.mimicrobotics.com" target="_blank" rel="noopener">mimic robotics</a>が$3.25B評価の先行実例。</p></div>
+      <div class="ibox"><h3>A. teleopデータ収集オペレーター型</h3><p>リグ+訓練オペレータで軌跡データを量産・販売。初期顧客: 海外ラボ+RLWRLD級。人件費差 ($136/h相場 vs 国内$10〜17/h) で粗利成立。最大リスク: 買い手が「日本産」にプレミアムを払わない可能性。</p></div>
+      <div class="ibox"><h3>B. 現場アクセス独占型</h3><p>日本の工場・店舗・農場との契約でドメインデータの独占アクセスを確保し、モデル勢の日本進出時のデータパートナーになる。初期顧客: Noetra/クボタ/清水建設圏。最大リスク: 収益化が相手の学習フェーズ入りを待つ後払い構造。</p></div>
+      <div class="ibox"><h3>C. 合成データ製造型</h3><p>オープンモデル (Cosmos等) を顧客環境でfine-tuneし合成データ+評価を納品。技術は数名・数ヶ月・初期数百万円で立ち上がる。最大リスク: 効果検証の信頼性構築と、Cosmosライセンスの「競合サービス禁止」条項の法務確認。</p></div>
     </div>
+    <div class="note">共通の未検証前提: ① 買い手は日本の現場データにいくら払うか (直接ヒアリング未実施) ② AIRoAの発注要件・参加資格 ③ 合成データ販売のライセンス適法性。議論の起点はこの3点の検証設計から。</div>
   </div>
 </section>
 
 <footer>
-  出典: Runway Research (introducing-runway-gwm-1 / accelerating-robot-policy-evaluation)・各社公式発表・TechCrunch・Bloomberg等 (2026年8月18日時点の報道ベース。評価額・買収協議は未確定情報を含む) ／
-  作成: 2026-08-18 ／ 内部ID・認証情報は含まず ／
-  正本: ~/claude/output/runway-gwm-deep-dive-2026-08.md ／ 関連: physical-ai-landscape.html (レイヤ別勢力図)
+  出典: 各社公式発表・TechCrunch・Bloomberg・NEDO・NVIDIA等 (2026年8月18日時点の報道ベース。評価額・買収協議・単価推定は未確定情報を含む) ／
+  作成: 2026-08-18 ／ 内部ID・認証情報は含まず ／ ロゴ = Google faviconサービス経由 ／
+  関連: <a href="https://badhan978.github.io/Output/physical-ai-landscape.html">physical-ai-landscape.html</a> (レイヤ別勢力図) ／
+  正本: ~/claude/output/runway-gwm-deep-dive-2026-08.md
 </footer>
 
 </body>
