@@ -111,6 +111,7 @@
   <a href="#how">🔬 実現の仕組み 3段</a>
   <a href="#products">📦 提供製品 4つ</a>
   <a href="#compete">⚔️ 競合比較 7社</a>
+  <a href="#japan">🇯🇵 日本のL4〜L6 15社</a>
 </nav>
 
 <section id="how">
@@ -231,6 +232,43 @@
       <div class="ibox"><h3>価格の現在地</h3><p>公開しているのはWorld LabsとDecartの従量制2社のみ。RunwayとGeneral Intuitionは価値ベースのエンタープライズ商談を探る段階で、市場はまだ「価格発見」の途中。</p></div>
       <div class="ibox"><h3>顧客の現在地</h3><p>ロボティクス用途で顧客ロゴを出せているのは実質NVIDIAだけ。Runwayが顧客名を出せないのは出遅れではなく、市場全体の現在地。</p></div>
       <div class="ibox"><h3>最大の変数</h3><p>中国OSSの無料攻勢が価格の天井を規定しにいく。Google Genie 3のB2B参入、Decart買収 (報道) の成立も地図を変え得る。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="japan">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--hl)"></span>日本のL4〜L6プレイヤー — 参入検討の前提マップ</h2>
+    <div class="note">前提: L3 (world model本体) は自前生成モデル必須で国費1兆円級のNoetraが着手済み — 後発の現実的な参入域はL4 (データ)・L5 (policy)・L6 (導入統合)。資本と実績が揃った専業はL6のMujinほぼ一社で、「オープンworld modelを顧客現場にfine-tune統合する」専業FDEは日本にまだ不在。</div>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>レイヤ</th><th>プレイヤー</th><th>概要</th><th>規模 (報道ベース)</th></tr></thead>
+      <tbody>
+        <tr><td class="lever" rowspan="5">L4 データ供給</td>
+          <td class="lever">AIRoA</td><td>国策データ基盤 (NEDO採択)。国産ロボ基盤モデルも2027年OSS予定 (L5兼業)<span class="def">東大尾形教授代表・トヨタ等20社超参加</span></td><td><span class="kpi">205億円</span> (国費)</td></tr>
+        <tr><td class="lever">Telexistence</td><td>コンビニ遠隔操作 (ファミマ300店) で蓄積したteleopデータを自律化へ転用</td><td>累計 <span class="kpi">230億円</span>+</td></tr>
+        <tr><td class="lever">カワダ×東大松尾研</td><td>ヒューマノイドNEXTAGEのteleopタスクデータ収集基盤・リーダーデバイス</td><td>NEDO事業内</td></tr>
+        <tr><td class="lever">リモートロボティクス</td><td>ソニーG×川崎重工JVの遠隔操作プラットフォーム</td><td>JV (額非公開)</td></tr>
+        <tr><td class="lever">FastLabel / APTO</td><td>アノテーション企業がロボット訓練データへ事業拡張中<span class="def">FastLabelはugoと提携、APTOはIsaac Sim合成データ</span></td><td>FastLabel 累計23.5億円</td></tr>
+        <tr><td class="lever" rowspan="5">L5 Policy Model</td>
+          <td class="lever">RLWRLD</td><td>VLA基盤モデル (製造・物流向け)。2026年上期に正式公開予定<span class="def">韓国発の日本拠点である点に注意</span></td><td>累計 <span class="kpi">63億円</span></td></tr>
+        <tr><td class="lever">Integral AI</td><td>元Google Jad Tarifiの東京拠点。デンソーウェーブ「AI模倣学習」の中核AI</td><td>$5.5M (追加調達中)</td></tr>
+        <tr><td class="lever">Preferred Networks</td><td>自社チップ+基盤モデル。トヨタ系とphysical AI共同研究 (2026年6月〜)</td><td>国内最大級AI企業</td></tr>
+        <tr><td class="lever">DeepX / Ascent Robotics</td><td>建機自動化 (タダノ協業) / ロボピッキングAI (ブリヂストン提携)</td><td>16億円 / 11億円+</td></tr>
+        <tr><td class="lever">Jizai</td><td>汎用AIロボ「Mi-Mo」。創業期 (LayerX福島氏らエンジェル出資)</td><td>創業ラウンド (非公開)</td></tr>
+        <tr><td class="lever" rowspan="5">L6 FDE / 導入統合</td>
+          <td class="lever">Mujin</td><td>日本の本命。ロボOS「MujinOS」+複数メーカー統合制御。NTTと資本業務提携<span class="def">導入実績2,000+プラットフォーム</span></td><td><span class="kpi">364億円</span> (2025年国内1位)</td></tr>
+        <tr><td class="lever">アクセンチュア</td><td>「Physical AI Orchestrator」提供開始 (2025年12月、NVIDIA統合)</td><td>グローバルSI</td></tr>
+        <tr><td class="lever">classmethod</td><td>Cosmos Coalition参加。クラウド知見で実証→継続運用の橋渡しを標榜</td><td>クラウドSI</td></tr>
+        <tr><td class="lever">デンソーウェーブ</td><td>AI模倣学習ソフトの製品販売 (AI開発元はIntegral AI)</td><td>デンソーG</td></tr>
+        <tr><td class="lever">Rapyuta Robotics</td><td>クラウドロボ基盤rapyuta.io。安川電機と資本提携</td><td>累計 約106億円</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="grid3">
+      <div class="ibox"><h3>L3は国策が占有</h3><p>基盤モデル本体はNoetra×産総研「FRONTia」(44社連合・5年約1兆円)、データ基盤はAIRoA (205億円) が国費で着手済み。後発が正面から重なる意味はない。</p></div>
+      <div class="ibox"><h3>空白 = 専業FDE</h3><p>Cosmos Coalitionに日本大手21社が参加した一方、オープンworld modelを各社現場へfine-tune統合する専業は不在。最も近いアクセンチュア・classmethodも2025年末開始の立ち上げ期。</p></div>
+      <div class="ibox"><h3>中間径路 = mimic型</h3><p>フロンティアモデルは作らず、オープンweight (Cosmos等) を自社ドメインデータでpost-trainingし「派生モデル資産」を持つ型。スイスmimicが$3.25B評価の先行実例。</p></div>
     </div>
   </div>
 </section>
