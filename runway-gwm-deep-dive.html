@@ -81,6 +81,19 @@
   .row-hl td{background:var(--hlbg)}
   .tablewrap{overflow-x:auto}
 
+  /* 競合カード (landscapeページと同型) */
+  .pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;padding:14px 16px}
+  a.p{border:1px solid var(--line);border-radius:10px;padding:10px 13px;background:#fff;
+    display:block;color:inherit;text-decoration:none;transition:border-color .12s,box-shadow .12s}
+  a.p:hover{border-color:var(--mid);box-shadow:0 2px 8px rgba(37,99,235,.18)}
+  .pname{font-weight:700;font-size:12.5px;display:flex;gap:7px;align-items:center}
+  .pname .nm{flex:1;min-width:0}
+  .plogo{width:18px;height:18px;border-radius:4px;flex:0 0 18px;object-fit:contain;background:#f8fafc}
+  .prow{font-size:11.5px;color:var(--sub);margin-top:6px;line-height:1.5}
+  .plabel{display:inline-block;font-size:9.5px;font-weight:800;color:var(--sub);letter-spacing:.05em;
+    background:#f1f5f9;border-radius:4px;padding:0 6px;margin-right:5px}
+  .p-hl{background:var(--hlbg);border-color:#fdba74}
+
   footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
   @media(max-width:980px){
     .mapwrap{grid-template-columns:1fr}
@@ -111,6 +124,7 @@
   <a href="#how">🔬 実現の仕組み 3段</a>
   <a href="#products">📦 提供製品 4つ</a>
   <a href="#compete">⚔️ 競合比較 7社</a>
+  <a href="#data">📊 L4データ供給 6社</a>
   <a href="#japan">🇯🇵 日本のL4〜L6 15社</a>
 </nav>
 
@@ -172,66 +186,79 @@
       <span><span class="st st-no">主張段階 / 非公開</span> 第三者検証・開示なし</span>
       <span><span class="st st-talk">報道</span> 未確定情報</span>
     </div>
-    <div class="tablewrap">
-    <table>
-      <thead><tr><th>プレイヤー</th><th>USP (差別化)</th><th>実在度</th><th>価格モデル</th><th>公表されている顧客</th></tr></thead>
-      <tbody>
-        <tr class="row-hl">
-          <td class="lever">Runway GWM-1</td>
-          <td>動画モデル由来の視覚品質 + 実機検証済みpolicy評価<span class="def">相関 <span class="kpi">0.95</span> を論文で公表</span></td>
-          <td><span class="st st-yes">実在</span></td>
-          <td>非公開・商談のみ</td>
-          <td>robotics顧客名なし<span class="def">「複数社と協議中」段階。提携はNVIDIA/AMD</span></td>
-        </tr>
-        <tr>
-          <td class="lever">NVIDIA Cosmos</td>
-          <td>オープンweight + ロボ制御信号の直接出力<span class="def">稼ぎはGPU販売へのlock-in</span></td>
-          <td><span class="st st-yes">実在</span></td>
-          <td>モデル無料 + 従量API<span class="def">公式単価非公開。第三者実測 動画$0.05/秒</span></td>
-          <td>最多。Coalition + 日本21社<span class="def">FANUC・Honda・川崎重工・ソニー・安川・Skild・Boston Dynamics等</span></td>
-        </tr>
-        <tr>
-          <td class="lever">World Labs</td>
-          <td>3D幾何の一貫性<span class="def">カメラを動かしても世界が崩れない</span></td>
-          <td><span class="st st-yes">実在</span></td>
-          <td>公開: $20〜95/月 + クレジット従量<span class="def">1生成 $0.12〜2.4</span></td>
-          <td>Escape.ai, Fenestra, Interior AI, Magnific<span class="def">クリエイティブ系のみ。roboticsは未公表</span></td>
-        </tr>
-        <tr>
-          <td class="lever">Decart</td>
-          <td>リアルタイム性 (30fps・遅延100ms未満)<span class="def">Anthropicが$6Bで買収協議報道</span></td>
-          <td><span class="st st-mid">実在寄り</span></td>
-          <td>公開: 完全従量 $0.01〜0.04/秒</td>
-          <td>Amazon (アンカーAPI顧客), eBay<span class="def">AV向けOasisの利用社名は非公開</span></td>
-        </tr>
-        <tr>
-          <td class="lever">Odyssey</td>
-          <td>実行中にテキストで世界を動的改変<span class="def">インタラクティブ性</span></td>
-          <td><span class="st st-yes">実在</span></td>
-          <td>API公開・単価非公開<span class="def">100万回無料配布中</span></td>
-          <td>ほぼ非公開<span class="def">testimonialはSamsung Nextのみ。AWS/Crusoeはインフラ側</span></td>
-        </tr>
-        <tr>
-          <td class="lever">General Intuition</td>
-          <td>ゲームクリップ年間20億本の行動ラベルデータ<span class="def">第三者検証なし</span></td>
-          <td><span class="st st-no">主張段階</span></td>
-          <td>非公開・enterprise pilotのみ<span class="def">今夏に一般API予定</span></td>
-          <td>少数のdesign partners (社名非公開)</td>
-        </tr>
-        <tr>
-          <td class="lever">中国OSS勢<span class="def">Tencent / Alibaba / X Square / MiniMax</span></td>
-          <td>無料 + ベンチマーク実測優位 (Tencent)<span class="def">モデル自体では稼がない構造</span></td>
-          <td><span class="st st-yes">実在</span></td>
-          <td>$0 (オープンソース)<span class="def">AlibabaはクラウドGPU販売で回収</span></td>
-          <td>Alibaba: Unitree G1等の実機にデプロイ済み<span class="def">Tencentは利用指標のみ (300万DL)。X Square: 58.com</span></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="pcards">
+      <a class="p p-hl" href="https://runway.com/product/robotics" target="_blank" rel="noopener">
+        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=runway.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Runway GWM-1</span> <span class="st st-yes">実在</span></div>
+        <div class="prow"><span class="plabel">USP</span>動画モデル由来の視覚品質 + 実機検証済み評価 (相関 <span class="kpi">0.95</span>)</div>
+        <div class="prow"><span class="plabel">価格</span>非公開・商談のみ</div>
+        <div class="prow"><span class="plabel">顧客</span>robotics顧客名なし (「複数社と協議中」)。提携はNVIDIA/AMD</div>
+      </a>
+      <a class="p" href="https://www.nvidia.com/en-us/ai/cosmos/" target="_blank" rel="noopener">
+        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=nvidia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">NVIDIA Cosmos</span> <span class="st st-yes">実在</span></div>
+        <div class="prow"><span class="plabel">USP</span>オープンweight + ロボ制御信号の直接出力。稼ぎはGPU販売へのlock-in</div>
+        <div class="prow"><span class="plabel">価格</span>モデル無料 + 従量API (公式単価非公開。第三者実測 動画$0.05/秒)</div>
+        <div class="prow"><span class="plabel">顧客</span>最多。Coalition + 日本21社 (FANUC・Honda・川崎重工・ソニー・安川等)、Skild、Boston Dynamics</div>
+      </a>
+      <a class="p" href="https://www.worldlabs.ai" target="_blank" rel="noopener">
+        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=worldlabs.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">World Labs</span> <span class="st st-yes">実在</span></div>
+        <div class="prow"><span class="plabel">USP</span>3D幾何の一貫性 — カメラを動かしても世界が崩れない</div>
+        <div class="prow"><span class="plabel">価格</span>公開: $20〜95/月 + クレジット従量 (1生成 $0.12〜2.4)</div>
+        <div class="prow"><span class="plabel">顧客</span>Escape.ai, Fenestra, Interior AI, Magnific (クリエイティブのみ、roboticsは未公表)</div>
+      </a>
+      <a class="p" href="https://decart.ai" target="_blank" rel="noopener">
+        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=decart.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Decart</span> <span class="st st-mid">実在寄り</span></div>
+        <div class="prow"><span class="plabel">USP</span>リアルタイム性 (30fps・遅延100ms未満)。Anthropicが$6Bで買収協議報道</div>
+        <div class="prow"><span class="plabel">価格</span>公開: 完全従量 $0.01〜0.04/秒</div>
+        <div class="prow"><span class="plabel">顧客</span>Amazon (アンカーAPI顧客), eBay。AV向けOasisの利用社名は非公開</div>
+      </a>
+      <a class="p" href="https://odyssey.ml" target="_blank" rel="noopener">
+        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=odyssey.ml&amp;sz=64" alt="" loading="lazy"><span class="nm">Odyssey</span> <span class="st st-yes">実在</span></div>
+        <div class="prow"><span class="plabel">USP</span>実行中にテキストで世界を動的改変できるインタラクティブ性</div>
+        <div class="prow"><span class="plabel">価格</span>API公開・単価非公開 (100万回無料配布中)</div>
+        <div class="prow"><span class="plabel">顧客</span>ほぼ非公開 (testimonialはSamsung Nextのみ)。AWS/Crusoeはインフラ側</div>
+      </a>
+      <a class="p" href="https://generalintuition.com" target="_blank" rel="noopener">
+        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=generalintuition.com&amp;sz=64" alt="" loading="lazy"><span class="nm">General Intuition</span> <span class="st st-no">主張段階</span></div>
+        <div class="prow"><span class="plabel">USP</span>ゲームクリップ年間20億本の「ボタン入力つき」行動ラベルデータ (第三者検証なし)</div>
+        <div class="prow"><span class="plabel">価格</span>非公開・enterprise pilotのみ (今夏に一般API予定)</div>
+        <div class="prow"><span class="plabel">顧客</span>少数のdesign partners (社名非公開)</div>
+      </a>
+      <a class="p" href="https://www.buildfastwithai.com/blogs/tencent-alibaba-world-models-april-2026" target="_blank" rel="noopener">
+        <div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=hunyuan.tencent.com&amp;sz=64" alt="" loading="lazy"><span class="nm">中国OSS勢</span> <span class="st st-yes">実在</span></div>
+        <div class="prow"><span class="plabel">USP</span>無料 + ベンチマーク実測優位 (Tencent HY-World)。モデル自体では稼がない構造</div>
+        <div class="prow"><span class="plabel">価格</span>$0 (オープンソース。AlibabaはクラウドGPU販売で回収)</div>
+        <div class="prow"><span class="plabel">顧客</span>Alibaba: Unitree G1等に実機デプロイ。X Square: 58.com。Tencentは利用指標のみ (300万DL)</div>
+      </a>
     </div>
     <div class="grid3">
       <div class="ibox"><h3>価格の現在地</h3><p>公開しているのはWorld LabsとDecartの従量制2社のみ。RunwayとGeneral Intuitionは価値ベースのエンタープライズ商談を探る段階で、市場はまだ「価格発見」の途中。</p></div>
       <div class="ibox"><h3>顧客の現在地</h3><p>ロボティクス用途で顧客ロゴを出せているのは実質NVIDIAだけ。Runwayが顧客名を出せないのは出遅れではなく、市場全体の現在地。</p></div>
       <div class="ibox"><h3>最大の変数</h3><p>中国OSSの無料攻勢が価格の天井を規定しにいく。Google Genie 3のB2B参入、Decart買収 (報道) の成立も地図を変え得る。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="data">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--yes)"></span>L4 データ供給 — 誰に何を売っているか</h2>
+    <div class="note">純粋な「データ販売」は上4社。Rerun/Foxgloveはデータを扱う道具を売るツール企業 (顧客名を公表できているのはツール側だけ)。データ4社の売り物はすべて実世界データ (人間の実演・teleop軌跡) — 合成データ専業はこの層に不在で、合成はL3のモデル勢が担う構図。</div>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>企業</th><th>売っているもの (データの種類)</th><th>対象顧客</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">Scale AI</td><td>実演収録データ (<span class="kpi">10万時間</span>超) + 2D/3D・センサーフュージョンアノテーション + 収集オペ代行<span class="def">在宅ギグワーカー組織化による作業収録も</span></td><td>robot基盤モデル勢・AV・フロンティアラボ (実名非公開)。Universal Robotsとは提携製品化</td></tr>
+        <tr><td class="lever">XDOF</td><td>専門オペレータのteleop軌跡 (双腕マニピュレーション中心)<span class="def">GELLO由来の低コスト収集リグが強み。ABC-130Kデータセット公開</span></td><td>顧客約20社。フロンティアAI研究機関を含む (社名非公開)</td></tr>
+        <tr><td class="lever">Micro1</td><td>専門家実演つきteleop軌跡<span class="def">低レベル制御・器用な物体操作向けの高品質データ</span></td><td>フロンティアAI研究機関 (社名非公開)</td></tr>
+        <tr><td class="lever">Ropedia</td><td>実世界マルチモーダルデータ (映像+センサー) の収集・配信基盤<span class="def">$30M調達の立ち上げ期、開示薄</span></td><td>physical AI / robotics開発企業 (具体名未公表)</td></tr>
+        <tr><td class="lever">Rerun</td><td>【ツール】マルチモーダルログ可視化OSS + 商用DB (2026年後半予定)</td><td>Meta, Google, Unitree, Hugging Face (LeRobot)</td></tr>
+        <tr><td class="lever">Foxglove</td><td>【ツール】ロボットデータの記録・管理・分析 (observability) 基盤</td><td>NVIDIA, Amazon, Anduril, Wayve, Dexterity</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="grid3">
+      <div class="ibox"><h3>買い手はモデルを作る側</h3><p>実名確定の大口はGoogle DeepMind (Apptronik「Robot Park」から供給)。XDOF/Micro1の顧客も「フロンティアラボ」— データに払うのはモデル開発勢に限られる。</p></div>
+      <div class="ibox"><h3>最有力の買い手ほど自製</h3><p>Physical Intelligence・1X・Tesla・Figureは収集を垂直統合し外部購入の形跡なし。日本の安川・FANUC (NVIDIAツールで自製) と同じ構造。</p></div>
+      <div class="ibox"><h3>売り手の共通点</h3><p>食い込めているXDOF・Micro1・Apptronikは「ラボが自前で組織できない物量の人的オペレーション」の肩代わり。データ販売の実体はオペレーション業。</p></div>
     </div>
   </div>
 </section>
