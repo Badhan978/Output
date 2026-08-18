@@ -13,6 +13,7 @@
     --off:#0d9488;  --offbg:#f0fdfa;   /* 内製・自社専用 */
     --run:#7c3aed;  --runbg:#f5f3ff;   /* 協議中・報道ベース未確定 */
     --todo:#94a3b8;                    /* 研究段階・未参入 */
+    --hl:#ea580c; --hlbg:#fff7ed; --hlhead:#ffedd5; --hlline:#fdba74; /* 注目レイヤ強調 */
   }
   *{box-sizing:border-box}
   body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
@@ -67,10 +68,21 @@
   .pname{font-weight:700;font-size:12.5px;display:flex;gap:7px;align-items:center}
   .pname .nm{flex:1;min-width:0}
   .plogo{width:18px;height:18px;border-radius:4px;flex:0 0 18px;object-fit:contain;background:#f8fafc}
-  .layer-hot .lhead{background:var(--onbg);border-right:2px solid var(--on)}
-  .layer-hot a.p{border-color:#bfdbfe}
   .def{color:var(--sub);font-size:11.5px;display:block;font-weight:400;margin-top:2px}
   .kpi{font-weight:800;color:var(--ink)}
+
+  /* 注目レイヤ (World Model / データ供給): 行全体をオレンジで強調 */
+  .layer-hl .lhead{background:var(--hlhead);border-right:2px solid var(--hl)}
+  .layer-hl .lbody{background:var(--hlbg)}
+  .layer-hl a.p{border-color:var(--hlline)}
+  .layer-hl a.p:hover{border-color:var(--hl);box-shadow:0 2px 8px rgba(234,88,12,.2)}
+
+  /* 顧客レイヤ内の2分割 */
+  .lbody-split{padding:12px 14px;display:block}
+  .subzone{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+  .subzone:last-child{margin-bottom:0}
+  .sublabel{font-size:11px;font-weight:800;color:var(--sub);letter-spacing:.06em;margin:0 0 8px}
+  .subgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:8px}
 
   .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:16px 20px}
   .ibox{border:1px solid var(--line);border-radius:10px;padding:14px 16px}
@@ -81,6 +93,7 @@
   @media(max-width:980px){
     .layer{grid-template-columns:1fr}
     .lhead{border-right:none;border-bottom:1px solid var(--line)}
+    .layer-hl .lhead{border-right:none;border-left:2px solid var(--hl)}
     .grid3{grid-template-columns:1fr}
   }
 </style>
@@ -92,76 +105,89 @@
     <p class="kicker">Physical AI / Robotics Training Infrastructure</p>
     <h1>Physical AI Landscape — レイヤ別プレイヤーマップ</h1>
     <p class="lead">ロボットの「頭脳」を作るための訓練・シミュレーション産業の全体地図。
-      Runway GWM-1 (world model) を起点に、演算基盤から実世界のロボットOEMまで8レイヤで整理。
+      Runway GWM-1 (world model) を起点に、演算基盤 (Layer 1) から最終顧客 (Layer 7) まで7レイヤで整理。
       兆ドル級と予測されるロボティクス市場の手前で、その訓練インフラ層に2026年だけで$23B超のVC資金が流入している。</p>
     <span class="pill">作成: 2026-08-18</span>
     <span class="pill">起点: Runway GWM-1 (Layer 3)</span>
-    <span class="pill">8レイヤ / 約40社</span>
+    <span class="pill">7レイヤ / 約40社</span>
     <span class="pill">出典: 各社発表・報道 (2026年8月時点)</span>
   </div>
 </header>
 
 <nav>
-  <a href="#stack">🗺 レイヤスタック 8層</a>
+  <a href="#stack">🗺 レイヤスタック 7層</a>
   <a href="#insight">💡 構造ポイント 3点</a>
 </nav>
 
 <section id="stack">
   <div class="card">
-    <h2><span class="mark" style="background:var(--on)"></span>レイヤスタック — 上が実世界 (需要)、下が基盤 (供給)</h2>
-    <div class="note">各社のバッジ = 提供形態。上のレイヤは下のレイヤの「買い手」。青帯の Layer 3 が Runway の主戦場。カードクリックで公式サイトが開く。金額 = 評価額・調達額・売上 (報道ベース)。</div>
+    <h2><span class="mark" style="background:var(--on)"></span>レイヤスタック — 上が基盤 (供給)、下が実世界 (需要)</h2>
+    <div class="note">各社のバッジ = 提供形態。下のレイヤは上のレイヤの「買い手」で、最下段の顧客レイヤが最終需要。オレンジ帯 = Runwayの主戦場 (World Model) と、その対抗軸になるデータ供給。カードクリックで公式サイトが開く。金額 = 評価額・調達額・売上 (報道ベース)。</div>
     <div class="legend">
       <span><span class="st st-sell">外販</span> 他社に売る</span>
       <span><span class="st st-open">オープン</span> OSS・無償配布</span>
       <span><span class="st st-own">内製</span> 自社専用</span>
       <span><span class="st st-talk">報道</span> 協議中・未確定</span>
       <span><span class="st st-lab">研究</span> 研究段階・未参入</span>
+      <span><span class="st" style="background:var(--hlhead);color:var(--hl)">オレンジ帯</span> 注目レイヤ</span>
     </div>
 
     <div class="layer">
       <div class="lhead">
-        <div class="lnum">LAYER 8</div>
-        <div class="lname">自動運転</div>
-        <span class="def">同じ訓練インフラを使う隣接需要</span>
+        <div class="lnum">LAYER 1</div>
+        <div class="lname">演算・チップ基盤</div>
+        <span class="def">訓練GPUとエッジ推論チップ</span>
       </div>
       <div class="lbody">
-        <a class="p" href="https://waymo.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=waymo.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Waymo</span> <span class="st st-own">内製</span></div><span class="def">評価額 <span class="kpi">$126B</span>。Genie 3ベースの自社WM</span></a>
-        <a class="p" href="https://wayve.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=wayve.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Wayve</span> <span class="st st-own">内製</span></div><span class="def">評価額 <span class="kpi">$8.6B</span>。自社WM GAIA-3/4</span></a>
-        <a class="p" href="https://waabi.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=waabi.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Waabi</span> <span class="st st-own">内製</span></div><span class="def">調達 <span class="kpi">$1B</span>。Waabi Worldでsim中心開発</span></a>
-        <a class="p" href="https://www.tesla.com/AI" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=tesla.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Tesla FSD</span> <span class="st st-own">内製</span></div><span class="def">OptimusとWM・訓練基盤を共有</span></a>
-      </div>
-    </div>
-
-    <div class="layer">
-      <div class="lhead">
-        <div class="lnum">LAYER 7</div>
-        <div class="lname">ロボットOEM</div>
-        <span class="def">最終買い手。内製か外部調達かが分水嶺</span>
-      </div>
-      <div class="lbody">
-        <a class="p" href="https://www.figure.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=figure.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Figure AI</span> <span class="st st-own">内製</span></div><span class="def">評価額 <span class="kpi">$39B</span>。頭脳Helixも自社専用</span></a>
-        <a class="p" href="https://www.tesla.com/AI" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=tesla.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Tesla Optimus</span> <span class="st st-own">内製</span></div><span class="def">量産立ち上げ中。完全垂直統合</span></a>
-        <a class="p" href="https://www.1x.tech" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=1x.tech&amp;sz=64" alt="" loading="lazy"><span class="nm">1X (NEO)</span> <span class="st st-own">内製</span></div><span class="def">家庭用$2万。teleop学習+自社WM Lab</span></a>
-        <a class="p" href="https://www.unitree.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=unitree.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Unitree</span> <span class="st st-sell">外販</span></div><span class="def">売上 <span class="kpi">$235M</span>・唯一の黒字。IPO準備</span></a>
-        <a class="p" href="https://www.agilityrobotics.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=agilityrobotics.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Agility Robotics</span> <span class="st st-sell">外販</span></div><span class="def">SPAC上場予定 <span class="kpi">$2.5B</span>。受注$300M超</span></a>
-        <a class="p" href="https://apptronik.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=apptronik.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Apptronik</span> <span class="st st-sell">外販</span></div><span class="def">評価額 <span class="kpi">$5B</span>。Google DeepMindへデータ供給</span></a>
-        <a class="p" href="https://global.abb/group/en" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=global.abb&amp;sz=64" alt="" loading="lazy"><span class="nm">ABB</span> <span class="st st-sell">外販</span></div><span class="def">産業用大手。Isaac/Omniverse統合進行</span></a>
-        <a class="p" href="https://www.fanuc.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=fanuc.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">FANUC</span> <span class="st st-sell">外販</span></div><span class="def">産業用大手。NVIDIA基盤の外部調達へ</span></a>
-        <a class="p" href="https://www.kuka.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=kuka.com&amp;sz=64" alt="" loading="lazy"><span class="nm">KUKA</span> <span class="st st-sell">外販</span></div><span class="def">産業用大手。NVIDIA基盤の外部調達へ</span></a>
-        <a class="p" href="https://www.aboutamazon.com/news/tag/robotics" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=aboutamazon.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Amazon Robotics</span> <span class="st st-own">内製</span></div><span class="def"><span class="kpi">100万台</span>展開。基盤モデルまで内製</span></a>
+        <a class="p" href="https://www.nvidia.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=nvidia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">NVIDIA</span> <span class="st st-sell">外販</span></div><span class="def">訓練GPU + Jetson Thor。ほぼ独占</span></a>
+        <a class="p" href="https://www.tesla.com/AI" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=tesla.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Tesla Cortex</span> <span class="st st-own">内製</span></div><span class="def"><span class="kpi">23万GPU</span>の自社クラスタ。例外枠</span></a>
       </div>
     </div>
 
     <div class="layer">
       <div class="lhead">
-        <div class="lnum">LAYER 6</div>
-        <div class="lname">FDE / 導入サービス</div>
-        <span class="def">顧客環境への実装部隊。まだ層が薄い</span>
+        <div class="lnum">LAYER 2</div>
+        <div class="lname">物理simエンジン</div>
+        <span class="def">物理演算で実世界を再現する従来アプローチ</span>
       </div>
       <div class="lbody">
-        <a class="p" href="https://www.appliedintuition.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=appliedintuition.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Applied Intuition</span> <span class="st st-sell">外販</span></div><span class="def">評価額 <span class="kpi">$15B</span>。ほぼ唯一の明示的FDE</span></a>
-        <a class="p" href="https://openai.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=openai.com&amp;sz=64" alt="" loading="lazy"><span class="nm">OpenAI FDE</span> <span class="st st-lab">研究</span></div><span class="def">導入専門組織。現状エンタープライズAI向け</span></a>
-        <a class="p" href="https://www.anthropic.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=anthropic.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Anthropic FDE</span> <span class="st st-lab">研究</span></div><span class="def">FDE合弁$1.5B。physical AIは今後</span></a>
+        <a class="p" href="https://developer.nvidia.com/isaac/sim" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=nvidia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">NVIDIA Isaac Sim</span> <span class="st st-sell">外販</span></div><span class="def">Omniverse上の業界標準。大手OEMが統合</span></a>
+        <a class="p" href="https://mujoco.org" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=mujoco.org&amp;sz=64" alt="" loading="lazy"><span class="nm">MuJoCo</span> <span class="st st-open">オープン</span></div><span class="def">DeepMind保有の研究標準。無償OSS</span></a>
+        <a class="p" href="https://github.com/Genesis-Embodied-AI/Genesis" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=github.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Genesis (OSS)</span> <span class="st st-open">オープン</span></div><span class="def">学術発。実世界の43万倍速を主張</span></a>
+        <a class="p" href="https://unity.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=unity.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Unity</span> <span class="st st-sell">外販</span></div><span class="def">汎用エンジン。デジタルツイン・ROS連携</span></a>
+        <a class="p" href="https://www.unrealengine.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=unrealengine.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Unreal Engine</span> <span class="st st-sell">外販</span></div><span class="def">汎用エンジン。センサーsimに強み</span></a>
+      </div>
+    </div>
+
+    <div class="layer layer-hl">
+      <div class="lhead">
+        <div class="lnum">LAYER 3 ★ Runwayの層</div>
+        <div class="lname">World Model</div>
+        <span class="def">動画データから学習した「仮想世界」の外販</span>
+      </div>
+      <div class="lbody">
+        <a class="p" href="https://runway.com/product/robotics" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=runway.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Runway GWM-1</span> <span class="st st-sell">外販</span></div><span class="def">評価額 <span class="kpi">$5.3B</span>。申請制エンタープライズ販売</span></a>
+        <a class="p" href="https://www.nvidia.com/en-us/ai/cosmos/" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=nvidia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">NVIDIA Cosmos</span> <span class="st st-open">オープン</span></div><span class="def"><span class="kpi">200万DL</span>+従量API。最大競合</span></a>
+        <a class="p" href="https://www.worldlabs.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=worldlabs.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">World Labs</span> <span class="st st-sell">外販</span></div><span class="def">Marble。$1B調達・$5B評価協議報道</span></a>
+        <a class="p" href="https://decart.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=decart.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Decart</span> <span class="st st-talk">報道</span></div><span class="def">$4B評価。Anthropicが$6B買収協議報道</span></a>
+        <a class="p" href="https://deepmind.google/blog/genie-3-a-new-frontier-for-world-models/" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=deepmind.google&amp;sz=64" alt="" loading="lazy"><span class="nm">Google Genie 3</span> <span class="st st-lab">研究</span></div><span class="def">consumer提供のみ。B2B参入が最大の変数</span></a>
+        <a class="p" href="https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models/" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=amilabs.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">AMI Labs (LeCun)</span> <span class="st st-lab">研究</span></div><span class="def">シード <span class="kpi">$1.03B</span>。製品は数年先と自認</span></a>
+      </div>
+    </div>
+
+    <div class="layer layer-hl">
+      <div class="lhead">
+        <div class="lnum">LAYER 4</div>
+        <div class="lname">データ供給</div>
+        <span class="def">実世界データの収集・販売・整備</span>
+      </div>
+      <div class="lbody">
+        <a class="p" href="https://scale.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=scale.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Scale AI</span> <span class="st st-sell">外販</span></div><span class="def">Physical AI Data Engine。<span class="kpi">10万時間</span>超収録</span></a>
+        <a class="p" href="https://xdof.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=xdof.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">XDOF</span> <span class="st st-sell">外販</span></div><span class="def">teleopデータ専業。$70M調達・顧客20社</span></a>
+        <a class="p" href="https://techstartups.com/2026/07/23/ropedia-raises-30m-to-build-the-data-infrastructure-powering-physical-ai-and-robotics/" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=ropedia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Ropedia</span> <span class="st st-sell">外販</span></div><span class="def">実世界マルチモーダルデータ基盤。$30M</span></a>
+        <a class="p" href="https://www.micro1.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=micro1.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Micro1</span> <span class="st st-sell">外販</span></div><span class="def">専門家teleop軌跡を研究機関へ供給</span></a>
+        <a class="p" href="https://rerun.io" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=rerun.io&amp;sz=64" alt="" loading="lazy"><span class="nm">Rerun</span> <span class="st st-sell">外販</span></div><span class="def">可視化OSS ($20M)。商用DBを準備中</span></a>
+        <a class="p" href="https://foxglove.dev" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=foxglove.dev&amp;sz=64" alt="" loading="lazy"><span class="nm">Foxglove</span> <span class="st st-sell">外販</span></div><span class="def">observability ($58M)。顧客にNVIDIA/Anduril</span></a>
       </div>
     </div>
 
@@ -182,60 +208,48 @@
 
     <div class="layer">
       <div class="lhead">
-        <div class="lnum">LAYER 4</div>
-        <div class="lname">データ供給</div>
-        <span class="def">実世界データの収集・販売・整備</span>
+        <div class="lnum">LAYER 6</div>
+        <div class="lname">FDE / 導入サービス</div>
+        <span class="def">顧客環境への実装部隊。まだ層が薄い</span>
       </div>
       <div class="lbody">
-        <a class="p" href="https://scale.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=scale.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Scale AI</span> <span class="st st-sell">外販</span></div><span class="def">Physical AI Data Engine。<span class="kpi">10万時間</span>超収録</span></a>
-        <a class="p" href="https://xdof.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=xdof.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">XDOF</span> <span class="st st-sell">外販</span></div><span class="def">teleopデータ専業。$70M調達・顧客20社</span></a>
-        <a class="p" href="https://techstartups.com/2026/07/23/ropedia-raises-30m-to-build-the-data-infrastructure-powering-physical-ai-and-robotics/" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=ropedia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Ropedia</span> <span class="st st-sell">外販</span></div><span class="def">実世界マルチモーダルデータ基盤。$30M</span></a>
-        <a class="p" href="https://www.micro1.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=micro1.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Micro1</span> <span class="st st-sell">外販</span></div><span class="def">専門家teleop軌跡を研究機関へ供給</span></a>
-        <a class="p" href="https://rerun.io" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=rerun.io&amp;sz=64" alt="" loading="lazy"><span class="nm">Rerun</span> <span class="st st-sell">外販</span></div><span class="def">可視化OSS ($20M)。商用DBを準備中</span></a>
-        <a class="p" href="https://foxglove.dev" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=foxglove.dev&amp;sz=64" alt="" loading="lazy"><span class="nm">Foxglove</span> <span class="st st-sell">外販</span></div><span class="def">observability ($58M)。顧客にNVIDIA/Anduril</span></a>
-      </div>
-    </div>
-
-    <div class="layer layer-hot">
-      <div class="lhead">
-        <div class="lnum">LAYER 3 ★ Runwayの層</div>
-        <div class="lname">World Model</div>
-        <span class="def">動画データから学習した「仮想世界」の外販</span>
-      </div>
-      <div class="lbody">
-        <a class="p" href="https://runway.com/product/robotics" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=runway.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Runway GWM-1</span> <span class="st st-sell">外販</span></div><span class="def">評価額 <span class="kpi">$5.3B</span>。申請制エンタープライズ販売</span></a>
-        <a class="p" href="https://www.nvidia.com/en-us/ai/cosmos/" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=nvidia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">NVIDIA Cosmos</span> <span class="st st-open">オープン</span></div><span class="def"><span class="kpi">200万DL</span>+従量API。最大競合</span></a>
-        <a class="p" href="https://www.worldlabs.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=worldlabs.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">World Labs</span> <span class="st st-sell">外販</span></div><span class="def">Marble。$1B調達・$5B評価協議報道</span></a>
-        <a class="p" href="https://decart.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=decart.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Decart</span> <span class="st st-talk">報道</span></div><span class="def">$4B評価。Anthropicが$6B買収協議報道</span></a>
-        <a class="p" href="https://deepmind.google/blog/genie-3-a-new-frontier-for-world-models/" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=deepmind.google&amp;sz=64" alt="" loading="lazy"><span class="nm">Google Genie 3</span> <span class="st st-lab">研究</span></div><span class="def">consumer提供のみ。B2B参入が最大の変数</span></a>
-        <a class="p" href="https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models/" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=amilabs.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">AMI Labs (LeCun)</span> <span class="st st-lab">研究</span></div><span class="def">シード <span class="kpi">$1.03B</span>。製品は数年先と自認</span></a>
+        <a class="p" href="https://www.appliedintuition.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=appliedintuition.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Applied Intuition</span> <span class="st st-sell">外販</span></div><span class="def">評価額 <span class="kpi">$15B</span>。ほぼ唯一の明示的FDE</span></a>
+        <a class="p" href="https://openai.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=openai.com&amp;sz=64" alt="" loading="lazy"><span class="nm">OpenAI FDE</span> <span class="st st-lab">研究</span></div><span class="def">導入専門組織。現状エンタープライズAI向け</span></a>
+        <a class="p" href="https://www.anthropic.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=anthropic.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Anthropic FDE</span> <span class="st st-lab">研究</span></div><span class="def">FDE合弁$1.5B。physical AIは今後</span></a>
       </div>
     </div>
 
     <div class="layer">
       <div class="lhead">
-        <div class="lnum">LAYER 2</div>
-        <div class="lname">物理simエンジン</div>
-        <span class="def">物理演算で実世界を再現する従来アプローチ</span>
+        <div class="lnum">LAYER 7</div>
+        <div class="lname">顧客</div>
+        <span class="def">最終買い手。内製か外部調達かが分水嶺</span>
       </div>
-      <div class="lbody">
-        <a class="p" href="https://developer.nvidia.com/isaac/sim" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=nvidia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">NVIDIA Isaac Sim</span> <span class="st st-sell">外販</span></div><span class="def">Omniverse上の業界標準。大手OEMが統合</span></a>
-        <a class="p" href="https://mujoco.org" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=mujoco.org&amp;sz=64" alt="" loading="lazy"><span class="nm">MuJoCo</span> <span class="st st-open">オープン</span></div><span class="def">DeepMind保有の研究標準。無償OSS</span></a>
-        <a class="p" href="https://github.com/Genesis-Embodied-AI/Genesis" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=github.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Genesis (OSS)</span> <span class="st st-open">オープン</span></div><span class="def">学術発。実世界の43万倍速を主張</span></a>
-        <a class="p" href="https://unity.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=unity.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Unity</span> <span class="st st-sell">外販</span></div><span class="def">汎用エンジン。デジタルツイン・ROS連携</span></a>
-        <a class="p" href="https://www.unrealengine.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=unrealengine.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Unreal Engine</span> <span class="st st-sell">外販</span></div><span class="def">汎用エンジン。センサーsimに強み</span></a>
-      </div>
-    </div>
-
-    <div class="layer">
-      <div class="lhead">
-        <div class="lnum">LAYER 1</div>
-        <div class="lname">演算・チップ基盤</div>
-        <span class="def">訓練GPUとエッジ推論チップ</span>
-      </div>
-      <div class="lbody">
-        <a class="p" href="https://www.nvidia.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=nvidia.com&amp;sz=64" alt="" loading="lazy"><span class="nm">NVIDIA</span> <span class="st st-sell">外販</span></div><span class="def">訓練GPU + Jetson Thor。ほぼ独占</span></a>
-        <a class="p" href="https://www.tesla.com/AI" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=tesla.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Tesla Cortex</span> <span class="st st-own">内製</span></div><span class="def"><span class="kpi">23万GPU</span>の自社クラスタ。例外枠</span></a>
+      <div class="lbody-split">
+        <div class="subzone">
+          <p class="sublabel">🤖 ロボットOEM</p>
+          <div class="subgrid">
+            <a class="p" href="https://www.figure.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=figure.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Figure AI</span> <span class="st st-own">内製</span></div><span class="def">評価額 <span class="kpi">$39B</span>。頭脳Helixも自社専用</span></a>
+            <a class="p" href="https://www.tesla.com/AI" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=tesla.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Tesla Optimus</span> <span class="st st-own">内製</span></div><span class="def">量産立ち上げ中。完全垂直統合</span></a>
+            <a class="p" href="https://www.1x.tech" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=1x.tech&amp;sz=64" alt="" loading="lazy"><span class="nm">1X (NEO)</span> <span class="st st-own">内製</span></div><span class="def">家庭用$2万。teleop学習+自社WM Lab</span></a>
+            <a class="p" href="https://www.unitree.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=unitree.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Unitree</span> <span class="st st-sell">外販</span></div><span class="def">売上 <span class="kpi">$235M</span>・唯一の黒字。IPO準備</span></a>
+            <a class="p" href="https://www.agilityrobotics.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=agilityrobotics.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Agility Robotics</span> <span class="st st-sell">外販</span></div><span class="def">SPAC上場予定 <span class="kpi">$2.5B</span>。受注$300M超</span></a>
+            <a class="p" href="https://apptronik.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=apptronik.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Apptronik</span> <span class="st st-sell">外販</span></div><span class="def">評価額 <span class="kpi">$5B</span>。Google DeepMindへデータ供給</span></a>
+            <a class="p" href="https://global.abb/group/en" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=global.abb&amp;sz=64" alt="" loading="lazy"><span class="nm">ABB</span> <span class="st st-sell">外販</span></div><span class="def">産業用大手。Isaac/Omniverse統合進行</span></a>
+            <a class="p" href="https://www.fanuc.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=fanuc.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">FANUC</span> <span class="st st-sell">外販</span></div><span class="def">産業用大手。NVIDIA基盤の外部調達へ</span></a>
+            <a class="p" href="https://www.kuka.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=kuka.com&amp;sz=64" alt="" loading="lazy"><span class="nm">KUKA</span> <span class="st st-sell">外販</span></div><span class="def">産業用大手。NVIDIA基盤の外部調達へ</span></a>
+            <a class="p" href="https://www.aboutamazon.com/news/tag/robotics" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=aboutamazon.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Amazon Robotics</span> <span class="st st-own">内製</span></div><span class="def"><span class="kpi">100万台</span>展開。基盤モデルまで内製</span></a>
+          </div>
+        </div>
+        <div class="subzone">
+          <p class="sublabel">🚗 自動運転</p>
+          <div class="subgrid">
+            <a class="p" href="https://waymo.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=waymo.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Waymo</span> <span class="st st-own">内製</span></div><span class="def">評価額 <span class="kpi">$126B</span>。Genie 3ベースの自社WM</span></a>
+            <a class="p" href="https://wayve.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=wayve.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Wayve</span> <span class="st st-own">内製</span></div><span class="def">評価額 <span class="kpi">$8.6B</span>。自社WM GAIA-3/4</span></a>
+            <a class="p" href="https://waabi.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=waabi.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Waabi</span> <span class="st st-own">内製</span></div><span class="def">調達 <span class="kpi">$1B</span>。Waabi Worldでsim中心開発</span></a>
+            <a class="p" href="https://www.tesla.com/AI" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=tesla.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Tesla FSD</span> <span class="st st-own">内製</span></div><span class="def">OptimusとWM・訓練基盤を共有</span></a>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -251,7 +265,7 @@
         <p>チップ (L1)・simエンジン (L2)・world model (L3)・policy model (L5) の4層を単独でカバーする唯一のプレイヤー。オープン配布でエコシステムごと囲い込む戦略。</p>
       </div>
       <div class="ibox">
-        <h3>OEMは内製 vs 外部調達に二極化</h3>
+        <h3>顧客は内製 vs 外部調達に二極化</h3>
         <p>Tesla・Amazonは基盤モデルまで完全内製。対してApptronik×Google、産業用大手×NVIDIAのように外部AI連携型が拡大。この外部調達側がL3〜L5の顧客市場になる。</p>
       </div>
       <div class="ibox">
