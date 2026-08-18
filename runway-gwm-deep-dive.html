@@ -51,9 +51,15 @@
   .legend{display:flex;gap:14px;flex-wrap:wrap;padding:12px 20px;align-items:center;font-size:12px;color:var(--sub)}
 
   .pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;padding:14px 16px}
-  a.p{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;
+  .p{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;
     display:block;color:inherit;text-decoration:none;transition:border-color .12s,box-shadow .12s}
   a.p:hover{border-color:var(--mid);box-shadow:0 2px 8px rgba(37,99,235,.18)}
+  .phases{display:grid;grid-template-columns:1fr 30px 1fr 30px 1fr 30px 1fr 30px 1fr;gap:8px;align-items:stretch;padding:18px 20px 6px}
+  .ph{border:1.5px solid var(--line);border-radius:9px;padding:9px 12px;font-size:12px;font-weight:700}
+  .ph .def{font-weight:400}
+  .ph-now{border-color:var(--hl);background:var(--hlbg)}
+  .parrow{display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:18px;font-weight:700}
+  @media(max-width:980px){.phases{grid-template-columns:1fr}.parrow{transform:rotate(90deg)}}
   .pname{font-weight:700;font-size:12.5px;display:flex;gap:7px;align-items:center}
   .pname .nm{flex:1;min-width:0}
   .plogo{width:18px;height:18px;border-radius:4px;flex:0 0 18px;object-fit:contain;background:#f8fafc}
@@ -112,6 +118,8 @@
   <a href="#moat">🎯 差別化の読み</a>
   <a href="#money">💰 金額と単価</a>
   <a href="#entry">🚀 仮説: 市場候補5つ</a>
+  <a href="#plan">📅 半年計画 (仮置き)</a>
+  <a href="#barriers">🧱 障壁</a>
 </nav>
 
 <section id="cases">
@@ -161,7 +169,7 @@
         <a class="p" href="https://odyssey.ml" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=odyssey.ml&amp;sz=64" alt="" loading="lazy"><span class="nm">Odyssey</span> <span class="st st-yes">提供中</span></div><span class="def">実行中に世界を動的改変。API公開・単価非公開</span></a>
         <a class="p" href="https://generalintuition.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=generalintuition.com&amp;sz=64" alt="" loading="lazy"><span class="nm">General Intuition</span> <span class="st st-mid">準備中</span></div><span class="def">ゲームクリップ年20億本の行動データ。pilotのみ</span></a>
         <a class="p" href="https://www.buildfastwithai.com/blogs/tencent-alibaba-world-models-april-2026" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=hunyuan.tencent.com&amp;sz=64" alt="" loading="lazy"><span class="nm">中国OSS勢</span> <span class="st st-yes">提供中</span></div><span class="def">Tencent / Alibaba / X Square。無料公開、GPU/エコシステムで回収</span></a>
-        <a class="p" href="https://lightwheel.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=lightwheel.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Lightwheel</span> <span class="st st-yes">提供中</span></div><span class="def">sim/合成データ・評価インフラ ($145M調達)。world modelチームが顧客</span></a>
+        <a class="p" href="https://lightwheel.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=lightwheel.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Lightwheel</span> <span class="st st-yes">提供中</span></div><span class="def">sim/合成データ・評価インフラ ($145M調達)。トップworld modelチームとの提携を自称</span></a>
       </div>
     </div>
     <div class="subzone">
@@ -177,7 +185,7 @@
       <p class="sublabel">🇯🇵 国内 — 合成映像の専業は不在。近接プレイヤーのみ</p>
       <div class="subgrid">
         <a class="p" href="https://apto.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=apto.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">APTO</span> <span class="st st-mid">準備中</span></div><span class="def">アノテーション企業。Isaac Simでの合成データ生成に展開中</span></a>
-        <a class="p" href="https://fastlabel.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=fastlabel.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">FastLabel</span> <span class="st st-mid">準備中</span></div><span class="def">累計23.5億円。ロボティクスへ事業拡張、ugoとVLA開発提携</span></a>
+        <a class="p" href="https://fastlabel.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=fastlabel.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">FastLabel</span> <span class="st st-yes">提供中</span></div><span class="def">国内先行 (約1年)。ロボティクスAI事業本部発足 (2026年4月)、安川・RealMan・ugoと提携しteleopデータ受託</span></a>
         <a class="p" href="https://www.airoa.org" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=airoa.org&amp;sz=64" alt="" loading="lazy"><span class="nm">AIRoA</span> <span class="st st-mid">準備中</span></div><span class="def">国策データ基盤 (NEDO <span class="kpi">205億円</span>)。実データ収集中心</span></a>
         <a class="p" href="https://tx-inc.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=tx-inc.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Telexistence</span> <span class="st st-no">非公開</span></div><span class="def">店舗teleopデータを自社の自律化に転用 (外販は未確認)</span></a>
       </div>
@@ -199,7 +207,7 @@
       <p class="sublabel">🚗 自動運転</p>
       <div class="subgrid">
         <a class="p" href="https://tier4.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=tier4.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">TIER IV 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">Cosmos Coalition参加。オープンソースAutoware陣営</span></a>
-        <a class="p" href="https://turing-motors.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=turing-motors.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Turing 🇯🇵</span> <span class="st st-yes">外部調達</span></div><span class="def">自社VLAで公道実演 (2026年3月)。学習データ需要が現在進行形</span></a>
+        <a class="p" href="https://turing-motors.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=turing-motors.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Turing 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">自社VLAで公道実演 (2026年3月)。データ需要は進行形だが外部調達の証跡は未確認</span></a>
         <a class="p" href="https://waymo.com" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=waymo.com&amp;sz=64" alt="" loading="lazy"><span class="nm">Waymo</span> <span class="st st-no">自製派</span></div><span class="def">Genie 3ベースの自社world modelで合成を内製</span></a>
         <a class="p" href="https://wayve.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=wayve.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Wayve / Waabi / Tesla</span> <span class="st st-no">自製派</span></div><span class="def">3社とも自社world model・自社データで垂直統合</span></a>
       </div>
@@ -218,7 +226,8 @@
         <a class="p" href="https://jizai.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=jizai.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Jizai / カワダ 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">汎用AIロボ創業期 / NEDO事業でteleopデータ収集側</span></a>
         <a class="p" href="https://www.yaskawa.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=yaskawa.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">安川電機 / FANUC 🇯🇵</span> <span class="st st-no">自製派</span></div><span class="def">Isaac Sim/GR00Tで学習まで自製済み。「自製では作れない実データ」でしか刺さらない</span></a>
         <a class="p" href="https://www.khi.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=khi.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">川崎重工 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">FANUC・富士通・安川と4社連合でsim-to-real基盤構築中。医療・造船へ展開予定</span></a>
-        <a class="p" href="https://www.skild.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=skild.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Skild / Physical Intelligence</span> <span class="st st-yes">外部調達</span></div><span class="def">FM勢はデータ需要最大。SkildはCosmos利用、PIは自製寄り</span></a>
+        <a class="p" href="https://www.skild.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=skild.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Skild AI</span> <span class="st st-yes">外部調達</span></div><span class="def">FM勢はデータ需要最大。Cosmos利用で合成データを外部調達する側</span></a>
+        <a class="p" href="https://www.physicalintelligence.company" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=physicalintelligence.company&amp;sz=64" alt="" loading="lazy"><span class="nm">Physical Intelligence</span> <span class="st st-no">自製派</span></div><span class="def">収集を垂直統合、外部購入の形跡なし</span></a>
         <a class="p" href="https://www.figure.ai" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=figure.ai&amp;sz=64" alt="" loading="lazy"><span class="nm">Figure / 1X / Tesla</span> <span class="st st-no">自製派</span></div><span class="def">収集を垂直統合。外部購入の形跡なし</span></a>
       </div>
     </div>
@@ -227,7 +236,7 @@
       <div class="subgrid">
         <a class="p" href="https://www.shimz.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=shimz.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">清水建設 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">CosmosビジョンAIで建設安全管理。危険シーンは実データが集められず合成でしか作れない</span></a>
         <a class="p" href="https://www.deepx.co.jp" target="_blank" rel="noopener"><div class="pname"><img class="plogo" src="https://www.google.com/s2/favicons?domain=deepx.co.jp&amp;sz=64" alt="" loading="lazy"><span class="nm">DeepX顧客圏 🇯🇵</span> <span class="st st-mid">検討段階</span></div><span class="def">タダノ・日立建機・フジタ等、建機自動化に投資済みの層</span></a>
-        <a class="p" href="#" ><div class="pname"><span class="nm">海外の建設安全</span> <span class="st st-no">未調査</span></div><span class="def">この業界の海外側は未調査 (次スイープ対象)</span></a>
+        <div class="p"><div class="pname"><span class="nm">海外の建設安全</span> <span class="st st-no">未調査</span></div><span class="def">この業界の海外側は未調査 (次スイープ対象)</span></div>
       </div>
     </div>
   </div>
@@ -266,7 +275,7 @@
     <div class="grid3">
       <div class="ibox"><div class="metric">年 約50億円<small>AIRoA (NEDO 205億円/4年) — 国内でデータ層に明示的についた唯一の予算</small></div></div>
       <div class="ibox"><div class="metric">3,873億円<small>Noetra/FRONTia 2026年度 (モデル開発全体。データはその一部)</small></div></div>
-      <div class="ibox"><div class="metric">年 数十億円<small>国内民間のデータ層支出の推定値 (専業がFastLabel 23.5億円級しかいない事実からの逆算)</small></div></div>
+      <div class="ibox"><div class="metric">年 数十億円<small>国内民間のデータ層支出の推定値 (アノテーション等の隣接支出を含む広義。AI製データ単体の市場は冒頭の通り未成立)</small></div></div>
     </div>
     <div class="tablewrap">
     <table>
@@ -276,7 +285,7 @@
         <tr><td class="lever">国内モデル開発スタートアップ (RLWRLD級)</td><td>調達63億円。収集網を丸抱えできない規模</td><td>年 <span class="kpi">数千万〜1億円</span> (調達額の数%をデータに充てる想定)</td></tr>
         <tr><td class="lever">国策 (AIRoA経由)</td><td>年約50億円が収集・整備の事業者に分配される構造</td><td>案件 <span class="kpi">数億円</span>規模 (受託型)</td></tr>
         <tr><td class="lever">現場映像系 (清水建設・クボタ型)</td><td>Cosmos活用を公言済みだが学習フェーズ前</td><td>PoC <span class="kpi">数百万〜数千万円</span> (国内AI受託の一般相場からの類推)</td></tr>
-        <tr><td class="lever">単価の地合い</td><td>teleopデータ相場: $340/h (2024) → <span class="kpi">$136/h</span> (2025Q4) へ急落</td><td>単価下落トレンド = 量・独占性・検証力で稼ぐ構造へ移行中</td></tr>
+        <tr><td class="lever">単価の地合い</td><td>teleopデータ相場: $340/h (2024) → <span class="kpi">$136/h</span> (2025Q4) へ急落 (業界報道ベース・一次未確認)</td><td>単価下落トレンド = 量・独占性・検証力で稼ぐ構造へ移行中</td></tr>
       </tbody>
     </table>
     </div>
@@ -291,7 +300,7 @@
     <table>
       <thead><tr><th>市場候補</th><th>①代替<br>不可能性</th><th>②量・<br>反復性</th><th>③外部<br>調達性</th><th>④難易度<br>(低いほど◎)</th><th>現状のプレイヤー = ターゲット顧客の理想像</th></tr></thead>
       <tbody>
-        <tr><td class="lever">1. 建設・現場安全の希少シーン合成<span class="def">事故・ヒヤリハットは実データが構造的に存在しない</span></td><td>◎</td><td>○</td><td>◎<span class="def">建設会社はAI自製しない</span></td><td>○<span class="def">映像系・ロボ制御不要</span></td><td><a href="https://www.shimz.co.jp" target="_blank" rel="noopener">清水建設</a> (Cosmos安全AI公言)・<a href="https://www.deepx.co.jp" target="_blank" rel="noopener">DeepX顧客圏</a> (フジタ・オリエンタル白石・日立建機)</td></tr>
+        <tr><td class="lever">1. 建設・現場安全の希少シーン合成<span class="def">事故・ヒヤリハットは実データが構造的に存在しない</span></td><td>◎</td><td>○</td><td>◎</td><td>○<span class="def">映像系・ロボ制御不要</span></td><td><a href="https://www.shimz.co.jp" target="_blank" rel="noopener">清水建設</a> (Cosmos安全AI公言)・<a href="https://www.deepx.co.jp" target="_blank" rel="noopener">DeepX顧客圏</a> (フジタ・オリエンタル白石・日立建機)</td></tr>
         <tr><td class="lever">2. 農業 physical AI<span class="def">天候×作物×土は物理simで再現不能 — 実写系合成の独壇場</span></td><td>◎</td><td>○</td><td>○<span class="def">クボタは検討段階・自製体力未知</span></td><td>○</td><td><a href="https://www.kubota.co.jp" target="_blank" rel="noopener">クボタ</a> (Cosmos自律農業公言)・<a href="https://www.deere.com" target="_blank" rel="noopener">John Deere</a> (需要は推測)</td></tr>
         <tr><td class="lever">3. 国産モデル開発勢へのteleop軌跡供給<span class="def">需要が「今」実在する唯一の市場。ただしFastLabelが約1年先行</span></td><td>△</td><td>◎</td><td>◎<span class="def">国策は発注構造そのもの</span></td><td>○</td><td><a href="https://www.airoa.org" target="_blank" rel="noopener">AIRoA</a> (年約50億円)・Noetra・<a href="https://prtimes.jp/main/html/rd/p/000000004.000159736.html" target="_blank" rel="noopener">RLWRLD</a>・<a href="https://ugo.plus" target="_blank" rel="noopener">ugo</a></td></tr>
         <tr><td class="lever">4. 業務ロボの微調整・評価データ<span class="def">環境・製品が変わるたび再学習 = 反復購入の構造</span></td><td>△</td><td>◎</td><td>○<span class="def">2番手メーカー・SIは自製できない</span></td><td>△<span class="def">効果検証に実機アクセスが必要</span></td><td><a href="https://ugo.plus" target="_blank" rel="noopener">ugo</a>・<a href="https://jizai.ai" target="_blank" rel="noopener">Jizai</a>・<a href="https://www.kawadarobot.co.jp" target="_blank" rel="noopener">カワダ</a>・<a href="https://www.mujin.co.jp" target="_blank" rel="noopener">Mujin</a>導入企業圏 (2,000+)</td></tr>
@@ -300,6 +309,48 @@
     </table>
     </div>
     <div class="note">フレームが導く除外市場: <span class="kpi">医療</span> (④で脱落 — 精度要求と規制で検証コストが過大。初期ターゲットから除外) / <span class="kpi">国防・自律ドローン</span> (難易度でなく資格・機密の壁で脱落) / <span class="kpi">自動運転</span> (③で脱落 — Waymo・Wayve・Waabi・Tesla全員が自製派で外部調達性ゼロ。国内のTuring等は例外的に残る)。採点は現時点の調査に基づく仮置きで、議論での上書きを前提とする。</div>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--mid)"></span>半年計画 (仮置き) — フェーズと数字の連動</h2>
+    <div class="note">領域① = 市場候補5つから議論で選定 (未確定)。数字はページ内「金額と単価」の推定単価に連動したざっくり仮置きで、実測ではない。</div>
+    <div class="phases">
+      <div class="ph ph-now">フェーズ0<span class="def">生成準備 (今〜1ヶ月目)。生成パイプライン検証・デモ制作</span></div>
+      <div class="parrow">→</div>
+      <div class="ph">フェーズ1<span class="def">領域①の顧客基盤作り (1〜3ヶ月目)。PoC受注</span></div>
+      <div class="parrow">→</div>
+      <div class="ph">フェーズ2<span class="def">領域①拡大 (3〜6ヶ月目)。PoC→年間契約化</span></div>
+      <div class="parrow">→</div>
+      <div class="ph">フェーズ3<span class="def">領域②〜Nの仕込み (5ヶ月目〜並行)。新領域PoC</span></div>
+      <div class="parrow">→</div>
+      <div class="ph">フェーズ4<span class="def">領域②〜N拡大 (7ヶ月目〜)。複数領域の横展開</span></div>
+    </div>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>フェーズ</th><th>期間目安</th><th>顧客社数</th><th>顧客単価</th><th>売上 (期間累計)</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">0. 生成準備</td><td>今〜1ヶ月目</td><td>0社</td><td>—</td><td>¥0 (支出のみ: 検証環境+デモ、数百万円)</td></tr>
+        <tr><td class="lever">1. 領域① 顧客基盤作り</td><td>1〜3ヶ月目</td><td>PoC 1〜2社</td><td>¥300〜500万/PoC</td><td>¥300万〜1,000万</td></tr>
+        <tr><td class="lever">2. 領域① 拡大</td><td>3〜6ヶ月目</td><td>3〜5社</td><td>¥500万〜1,000万 (年間契約化)</td><td>¥1,500万〜5,000万</td></tr>
+        <tr><td class="lever">3. 領域②〜N 仕込み</td><td>5ヶ月目〜並行</td><td>+1〜2社 (新領域PoC)</td><td>¥300〜500万/PoC</td><td>+数百万</td></tr>
+        <tr><td class="lever">4. 領域②〜N 拡大</td><td>7ヶ月目〜 (半年計画の外)</td><td>合計10社規模へ</td><td>—</td><td>年商 ¥1〜2億円ペースが目安</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section id="barriers">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--no)"></span>障壁</h2>
+    <div class="note">参入判断の前に潰すべき壁。議論で追加・削除する前提のリスト。</div>
+    <div class="grid3">
+      <div class="ibox"><h3>1. 学習可能な映像生成の難易度</h3><p>「見た目が良い映像」と「学習に効く映像」は別物。物理整合性・対象ドメインとの分布一致にどこまで到達できるかが未検証。</p></div>
+      <div class="ibox"><h3>2. ライセンスは必要か</h3><p>オープンモデル (Cosmos等) の商用条項で「合成データの販売」が許されるかの法務確認。加えて元になる現場映像の権利処理 (肖像権・営業秘密・二次利用権)。</p></div>
+      <div class="ibox"><h3>3. 効果の証明 (提案)</h3><p>買い手は「モデル精度が上がったか」で払う。学習に効いたことをどう証明するかの設計 — 顧客実機での検証か、公開ベンチマークか。※この項は Claude の提案。差し替え可。</p></div>
+    </div>
   </div>
 </section>
 
