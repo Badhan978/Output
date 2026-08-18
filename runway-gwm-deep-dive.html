@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Runway GWM-1 Deep Dive — 仕組みと競合 2026-08</title>
+<style>
+  :root{
+    --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    --yes:#16a34a; --yesbg:#f0fdf4;   /* 実在・公開・検証済み */
+    --mid:#2563eb; --midbg:#eff6ff;   /* 実在寄り・部分公開 */
+    --no:#94a3b8;  --nobg:#f1f5f9;    /* 主張段階・非公開 */
+    --talk:#7c3aed; --talkbg:#f5f3ff; /* 報道・未確定 */
+    --hl:#ea580c;  --hlbg:#fff7ed;    /* Runway強調 */
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);margin:0;background:#f1f5f9;font-size:13.5px;line-height:1.6}
+
+  header{background:linear-gradient(135deg,#0f172a,#17375e,#0f766e);color:#fff;padding:34px 28px 28px}
+  .hwrap{max-width:1200px;margin:0 auto}
+  .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#7dd3fc;font-weight:700;margin:0 0 8px}
+  header h1{margin:0;font-size:30px;line-height:1.25}
+  header .lead{margin:12px 0 16px;color:#cbd5e1;font-size:13.5px;max-width:840px}
+  .pill{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+    border-radius:99px;padding:4px 14px;font-size:11.5px;margin-right:8px;margin-bottom:6px}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 28px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:12px;border:1px solid var(--line)}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  section{max-width:1200px;margin:26px auto;padding:0 20px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card h2{margin:0;padding:15px 20px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .card .note{padding:10px 20px;background:#f8fafc;color:var(--sub);font-size:12.5px;
+    border-bottom:1px solid var(--line)}
+  .mark{width:12px;height:12px;border-radius:4px;display:inline-block}
+
+  .st{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 9px;border-radius:99px;white-space:nowrap}
+  .st-yes{background:var(--yesbg);color:var(--yes)}
+  .st-mid{background:var(--midbg);color:var(--mid)}
+  .st-no{background:var(--nobg);color:var(--no)}
+  .st-talk{background:var(--talkbg);color:var(--talk)}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;padding:12px 20px;align-items:center;font-size:12px;color:var(--sub)}
+
+  /* 因果マップ / フロー (CSS Grid自製) */
+  .mapwrap{padding:22px 20px;display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr;gap:10px;align-items:stretch}
+  .node{border-radius:9px;padding:10px 13px;font-size:12px;font-weight:600;border:1.5px solid}
+  .node .def{margin-top:3px}
+  .n-base{border-color:#93c5fd;background:var(--midbg)}
+  .n-conv{border-color:#c4b5fd;background:var(--talkbg)}
+  .n-fin{border-color:#86efac;background:var(--yesbg)}
+  .arrows{display:flex;justify-content:center;align-items:center;color:#94a3b8;font-size:22px;font-weight:700}
+
+  /* policy⇄world model ループ */
+  .loopwrap{padding:18px 20px 22px;display:grid;grid-template-columns:1fr 150px 1fr;gap:10px;align-items:center;max-width:760px}
+  .loopmid{text-align:center;color:#94a3b8;font-size:11.5px;font-weight:700;line-height:1.5}
+
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 20px}
+  .ibox{border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .ibox h3{margin:0 0 5px;font-size:13px}
+  .ibox p{margin:0;font-size:12px;color:var(--sub)}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px 20px}
+
+  .metric{font-size:26px;font-weight:800;line-height:1.1}
+  .metric small{display:block;font-size:11px;font-weight:600;color:var(--sub);margin-top:4px}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:9px 12px;border-bottom:1px solid #f1f5f9;text-align:left;vertical-align:top}
+  thead th{background:#f8fafc;color:var(--sub);font-size:11px;font-weight:700;white-space:nowrap}
+  .lever{font-weight:700;white-space:nowrap}
+  .def{color:var(--sub);font-size:11.5px;display:block;margin-top:2px;font-weight:400}
+  .kpi{font-weight:800;color:var(--ink)}
+  .row-hl td{background:var(--hlbg)}
+  .tablewrap{overflow-x:auto}
+
+  footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
+  @media(max-width:980px){
+    .mapwrap{grid-template-columns:1fr}
+    .mapwrap .arrows{transform:rotate(90deg);padding:2px 0}
+    .loopwrap{grid-template-columns:1fr}
+    .grid4{grid-template-columns:repeat(2,1fr)}
+    .grid3{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <p class="kicker">Runway GWM-1 / World Model Business</p>
+    <h1>Runway GWM-1 Deep Dive — 仕組みと競合</h1>
+    <p class="lead">動画生成の会社Runwayが、ロボットの訓練・評価インフラ (world model) をどう実現し、誰と戦っているか。
+      技術の種明かしは「巨大動画モデルの物理知識を土台に、生成方式を作り替え、ロボットデータで仕上げて実機で検証」の3段構え。
+      競合は切り口の異なるUSPで同じ層に並び、価格と顧客名はまだほとんど公開されていない。</p>
+    <span class="pill">作成: 2026-08-18</span>
+    <span class="pill">GWM-1発表: 2025-12-11</span>
+    <span class="pill">競合比較 7プレイヤー</span>
+    <span class="pill">出典: 各社発表・報道 (2026年8月時点)</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#how">🔬 実現の仕組み 3段</a>
+  <a href="#products">📦 提供製品 4つ</a>
+  <a href="#compete">⚔️ 競合比較 7社</a>
+</nav>
+
+<section id="how">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--mid)"></span>実現の仕組み — 3段構え</h2>
+    <div class="note">物理エンジンを書く代わりに、動画データから物理を「学習」で獲得する路線。CTO発言:「優れた世界モデルの前提はまず優れた動画モデル。ピクセルを直接予測するのが汎用シミュレーションへの最善手」。</div>
+    <div class="mapwrap">
+      <div class="node n-base">① 土台 = Gen-4.5 の事前学習
+        <span class="def">大量動画から物体の動き・光・接触など「世界の物理」をピクセル予測として獲得済み</span>
+      </div>
+      <div class="arrows">→</div>
+      <div class="node n-conv">② 生成方式の転換
+        <span class="def">一発生成をやめ「過去フレーム+制御入力 → 次の1フレーム」の自己回帰型へ再構成。カメラポーズ・Robot Pose・イベントを毎フレーム注入可</span>
+      </div>
+      <div class="arrows">→</div>
+      <div class="node n-fin">③ ドメイン仕上げ + 実機検証
+        <span class="def">roboticsデータでpost-training (中身は非公開)。実機8ポリシーの結果と突き合わせて相関0.95を実証</span>
+      </div>
+    </div>
+    <div class="note">動作イメージ — policy (頭脳) と world model (舞台) のループ。本来「現実世界」が返す結果を GWM-1 が代役する:</div>
+    <div class="loopwrap">
+      <div class="node n-base">Policy Model (頭脳)
+        <span class="def">カメラ映像を見て次のアクションを出力 (アームを右へ3cm)</span>
+      </div>
+      <div class="loopmid">→ アクション →<br>← 次のフレーム ←</div>
+      <div class="node n-fin">GWM-1 (仮想世界)
+        <span class="def">「そうしたら世界はこう見える」を毎フレーム生成して返す</span>
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="ibox"><div class="metric">0.95<small>実機との相関 (8ポリシー・1,450 rollout・16,000評価)</small></div></div>
+      <div class="ibox"><div class="metric">720p / 2分<small>リアルタイム応答・マルチビュー対応の生成スペック</small></div></div>
+      <div class="ibox"><div class="metric">非公開<small>パラメータ数・訓練データ構成・長時間一貫性の機構は未開示</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="products">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--yes)"></span>提供製品 4つ — Python SDK・申請制</h2>
+    <div class="note">コンシューマー向けではなく、ロボティクス企業向けインフラ。価格は非公開・商談ベースのみ。</div>
+    <div class="grid4">
+      <div class="ibox"><h3>Policy Model</h3><p>カメラ観測からアクションを予測する制御モデル。顧客のハードウェア・環境ごとにファインチューン</p></div>
+      <div class="ibox"><h3>Video Model Licensing</h3><p>GWM-1をバックボーンとして貸与。顧客インフラ内で自社ポリシーを訓練 (データを外に出さない)</p></div>
+      <div class="ibox"><h3>Offline Policy Evaluation</h3><p>実機デプロイ前に仮想世界内でポリシーを走らせ失敗モードを検出。開発イテレーションを高速化</p></div>
+      <div class="ibox"><h3>Data Augmentation</h3><p>実軌跡データを別環境・照明・物体配置に変換し、訓練分布を実データ収集なしで拡張</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="compete">
+  <div class="card">
+    <h2><span class="mark" style="background:var(--talk)"></span>競合比較 — USP・価格・顧客</h2>
+    <div class="note">同じ層 (world modelの外部提供) に並ぶが、USPの切り口はすべて異なり正面衝突はまだ起きていない。ロボティクス用途で顧客名を公表できているのは実質NVIDIAのみ — 市場全体がdesign partner段階。</div>
+    <div class="legend">
+      <span><span class="st st-yes">実在 / 公開</span> 検証・数値あり</span>
+      <span><span class="st st-mid">実在寄り / 部分公開</span> 実測はあるが限定的</span>
+      <span><span class="st st-no">主張段階 / 非公開</span> 第三者検証・開示なし</span>
+      <span><span class="st st-talk">報道</span> 未確定情報</span>
+    </div>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>プレイヤー</th><th>USP (差別化)</th><th>実在度</th><th>価格モデル</th><th>公表されている顧客</th></tr></thead>
+      <tbody>
+        <tr class="row-hl">
+          <td class="lever">Runway GWM-1</td>
+          <td>動画モデル由来の視覚品質 + 実機検証済みpolicy評価<span class="def">相関 <span class="kpi">0.95</span> を論文で公表</span></td>
+          <td><span class="st st-yes">実在</span></td>
+          <td>非公開・商談のみ</td>
+          <td>robotics顧客名なし<span class="def">「複数社と協議中」段階。提携はNVIDIA/AMD</span></td>
+        </tr>
+        <tr>
+          <td class="lever">NVIDIA Cosmos</td>
+          <td>オープンweight + ロボ制御信号の直接出力<span class="def">稼ぎはGPU販売へのlock-in</span></td>
+          <td><span class="st st-yes">実在</span></td>
+          <td>モデル無料 + 従量API<span class="def">公式単価非公開。第三者実測 動画$0.05/秒</span></td>
+          <td>最多。Coalition + 日本21社<span class="def">FANUC・Honda・川崎重工・ソニー・安川・Skild・Boston Dynamics等</span></td>
+        </tr>
+        <tr>
+          <td class="lever">World Labs</td>
+          <td>3D幾何の一貫性<span class="def">カメラを動かしても世界が崩れない</span></td>
+          <td><span class="st st-yes">実在</span></td>
+          <td>公開: $20〜95/月 + クレジット従量<span class="def">1生成 $0.12〜2.4</span></td>
+          <td>Escape.ai, Fenestra, Interior AI, Magnific<span class="def">クリエイティブ系のみ。roboticsは未公表</span></td>
+        </tr>
+        <tr>
+          <td class="lever">Decart</td>
+          <td>リアルタイム性 (30fps・遅延100ms未満)<span class="def">Anthropicが$6Bで買収協議報道</span></td>
+          <td><span class="st st-mid">実在寄り</span></td>
+          <td>公開: 完全従量 $0.01〜0.04/秒</td>
+          <td>Amazon (アンカーAPI顧客), eBay<span class="def">AV向けOasisの利用社名は非公開</span></td>
+        </tr>
+        <tr>
+          <td class="lever">Odyssey</td>
+          <td>実行中にテキストで世界を動的改変<span class="def">インタラクティブ性</span></td>
+          <td><span class="st st-yes">実在</span></td>
+          <td>API公開・単価非公開<span class="def">100万回無料配布中</span></td>
+          <td>ほぼ非公開<span class="def">testimonialはSamsung Nextのみ。AWS/Crusoeはインフラ側</span></td>
+        </tr>
+        <tr>
+          <td class="lever">General Intuition</td>
+          <td>ゲームクリップ年間20億本の行動ラベルデータ<span class="def">第三者検証なし</span></td>
+          <td><span class="st st-no">主張段階</span></td>
+          <td>非公開・enterprise pilotのみ<span class="def">今夏に一般API予定</span></td>
+          <td>少数のdesign partners (社名非公開)</td>
+        </tr>
+        <tr>
+          <td class="lever">中国OSS勢<span class="def">Tencent / Alibaba / X Square / MiniMax</span></td>
+          <td>無料 + ベンチマーク実測優位 (Tencent)<span class="def">モデル自体では稼がない構造</span></td>
+          <td><span class="st st-yes">実在</span></td>
+          <td>$0 (オープンソース)<span class="def">AlibabaはクラウドGPU販売で回収</span></td>
+          <td>Alibaba: Unitree G1等の実機にデプロイ済み<span class="def">Tencentは利用指標のみ (300万DL)。X Square: 58.com</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="grid3">
+      <div class="ibox"><h3>価格の現在地</h3><p>公開しているのはWorld LabsとDecartの従量制2社のみ。RunwayとGeneral Intuitionは価値ベースのエンタープライズ商談を探る段階で、市場はまだ「価格発見」の途中。</p></div>
+      <div class="ibox"><h3>顧客の現在地</h3><p>ロボティクス用途で顧客ロゴを出せているのは実質NVIDIAだけ。Runwayが顧客名を出せないのは出遅れではなく、市場全体の現在地。</p></div>
+      <div class="ibox"><h3>最大の変数</h3><p>中国OSSの無料攻勢が価格の天井を規定しにいく。Google Genie 3のB2B参入、Decart買収 (報道) の成立も地図を変え得る。</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  出典: Runway Research (introducing-runway-gwm-1 / accelerating-robot-policy-evaluation)・各社公式発表・TechCrunch・Bloomberg等 (2026年8月18日時点の報道ベース。評価額・買収協議は未確定情報を含む) ／
+  作成: 2026-08-18 ／ 内部ID・認証情報は含まず ／
+  正本: ~/claude/output/runway-gwm-deep-dive-2026-08.md ／ 関連: physical-ai-landscape.html (レイヤ別勢力図)
+</footer>
+
+</body>
+</html>
