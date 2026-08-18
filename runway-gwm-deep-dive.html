@@ -110,7 +110,7 @@
   <a href="#pain">🔥 解いているペイン</a>
   <a href="#moat">🎯 差別化の読み</a>
   <a href="#money">💰 金額と単価</a>
-  <a href="#entry">🚀 参入シナリオ</a>
+  <a href="#entry">🚀 仮説: 市場候補5つ</a>
 </nav>
 
 <section id="sellers">
@@ -257,14 +257,21 @@
 
 <section id="entry">
   <div class="card">
-    <h2><span class="mark" style="background:var(--hl)"></span>参入シナリオ 3仮説 — 最後にここを議論する</h2>
-    <div class="note">いずれもフロンティアモデルは作らない前提。中間径路として mimic robotics 型 (オープンweightを自社ドメインデータでpost-trainingし派生モデル資産を持つ、$3.25B評価の先行実例) が全仮説に接続可能。</div>
-    <div class="grid3">
-      <div class="ibox"><h3>A. teleopデータ収集オペレーター型</h3><p>リグ+訓練オペレータで軌跡データを量産・販売。初期顧客: 海外ラボ+RLWRLD級。人件費差 ($136/h相場 vs 国内$10〜17/h) で粗利成立。最大リスク: 買い手が「日本産」にプレミアムを払わない可能性。</p></div>
-      <div class="ibox"><h3>B. 現場アクセス独占型</h3><p>日本の工場・店舗・農場との契約でドメインデータの独占アクセスを確保し、モデル勢の日本進出時のデータパートナーになる。初期顧客: Noetra/クボタ/清水建設圏。最大リスク: 収益化が相手の学習フェーズ入りを待つ後払い構造。</p></div>
-      <div class="ibox"><h3>C. 合成データ製造型</h3><p>オープンモデル (Cosmos等) を顧客環境でfine-tuneし合成データ+評価を納品。技術は数名・数ヶ月・初期数百万円で立ち上がる。最大リスク: 効果検証の信頼性構築と、Cosmosライセンスの「競合サービス禁止」条項の法務確認。</p></div>
+    <h2><span class="mark" style="background:var(--hl)"></span>参入仮説 — 評価フレームと市場候補5つ</h2>
+    <div class="note">評価フレーム (4項目): ① <span class="kpi">代替不可能性</span> — そのデータは他で手に入らないか (=単価の源泉) / ② <span class="kpi">量・反復性</span> — 一度きりか、微調整のたびに買われ続けるか (=継続収益) / ③ <span class="kpi">外部調達性</span> — 買い手が自製しない構造か (需要が巨大でも自製派には売れない) / ④ <span class="kpi">製造+検証の難易度</span> — 作れるかに加え「効いた」と証明できるか。参入形態 (収集オペ / 現場独占 / 合成製造) は市場を選んだ後の従属変数。</div>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>市場候補</th><th>①代替<br>不可能性</th><th>②量・<br>反復性</th><th>③外部<br>調達性</th><th>④難易度<br>(低いほど◎)</th><th>現状のプレイヤー = ターゲット顧客の理想像</th></tr></thead>
+      <tbody>
+        <tr><td class="lever">1. 建設・現場安全の希少シーン合成<span class="def">事故・ヒヤリハットは実データが構造的に存在しない</span></td><td>◎</td><td>○</td><td>◎<span class="def">建設会社はAI自製しない</span></td><td>○<span class="def">映像系・ロボ制御不要</span></td><td><a href="https://www.shimz.co.jp" target="_blank" rel="noopener">清水建設</a> (Cosmos安全AI公言)・<a href="https://www.deepx.co.jp" target="_blank" rel="noopener">DeepX顧客圏</a> (フジタ・オリエンタル白石・日立建機)</td></tr>
+        <tr><td class="lever">2. 農業 physical AI<span class="def">天候×作物×土は物理simで再現不能 — 実写系合成の独壇場</span></td><td>◎</td><td>○</td><td>○<span class="def">クボタは検討段階・自製体力未知</span></td><td>○</td><td><a href="https://www.kubota.co.jp" target="_blank" rel="noopener">クボタ</a> (Cosmos自律農業公言)・<a href="https://www.deere.com" target="_blank" rel="noopener">John Deere</a> (需要は推測)</td></tr>
+        <tr><td class="lever">3. 国産モデル開発勢へのteleop軌跡供給<span class="def">需要が「今」実在する唯一の市場。ただしFastLabelが約1年先行</span></td><td>△</td><td>◎</td><td>◎<span class="def">国策は発注構造そのもの</span></td><td>○</td><td><a href="https://www.airoa.org" target="_blank" rel="noopener">AIRoA</a> (年約50億円)・Noetra・<a href="https://prtimes.jp/main/html/rd/p/000000004.000159736.html" target="_blank" rel="noopener">RLWRLD</a>・<a href="https://ugo.plus" target="_blank" rel="noopener">ugo</a></td></tr>
+        <tr><td class="lever">4. 業務ロボの微調整・評価データ<span class="def">環境・製品が変わるたび再学習 = 反復購入の構造</span></td><td>△</td><td>◎</td><td>○<span class="def">2番手メーカー・SIは自製できない</span></td><td>△<span class="def">効果検証に実機アクセスが必要</span></td><td><a href="https://ugo.plus" target="_blank" rel="noopener">ugo</a>・<a href="https://jizai.ai" target="_blank" rel="noopener">Jizai</a>・<a href="https://www.kawadarobot.co.jp" target="_blank" rel="noopener">カワダ</a>・<a href="https://www.mujin.co.jp" target="_blank" rel="noopener">Mujin</a>導入企業圏 (2,000+)</td></tr>
+        <tr><td class="lever">5. 店舗・物流の現場オペレーション映像<span class="def">現場アクセスそのものが参入障壁になる領域</span></td><td>○</td><td>○</td><td>○</td><td>○</td><td>小売チェーン (<a href="https://tx-inc.com" target="_blank" rel="noopener">Telexistence</a>がファミマ・ローソンで先行)・物流3PL (<a href="https://www.rapyuta-robotics.com/ja" target="_blank" rel="noopener">Rapyuta</a>顧客圏)</td></tr>
+      </tbody>
+    </table>
     </div>
-    <div class="note">共通の未検証前提: ① 買い手は日本の現場データにいくら払うか (直接ヒアリング未実施) ② AIRoAの発注要件・参加資格 ③ 合成データ販売のライセンス適法性。議論の起点はこの3点の検証設計から。</div>
+    <div class="note">フレームが導く除外市場: <span class="kpi">医療</span> (④で脱落 — 精度要求と規制で検証コストが過大。初期ターゲットから除外) / <span class="kpi">国防・自律ドローン</span> (難易度でなく資格・機密の壁で脱落) / <span class="kpi">自動運転</span> (③で脱落 — Waymo・Wayve・Waabi・Tesla全員が自製派で外部調達性ゼロ。国内のTuring等は例外的に残る)。採点は現時点の調査に基づく仮置きで、議論での上書きを前提とする。</div>
   </div>
 </section>
 
