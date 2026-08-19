@@ -117,6 +117,14 @@
   .mc-logo-sm{width:14px;height:14px;border-radius:3px;flex:0 0 auto;object-fit:contain;
     background:#fff;border:1px solid var(--line);vertical-align:middle}
 
+  /* セグメント行 (顧客リスト) — 左: セグメント名+仮説メモ / 右: 該当社カード */
+  .segrow{display:grid;grid-template-columns:180px 1fr;gap:14px;padding:14px 20px;
+    border-bottom:1px solid var(--line)}
+  .segrow:last-of-type{border-bottom:none}
+  .seg-label{font-weight:700;font-size:12.5px}
+  .seg-note{display:block;font-weight:400;color:var(--sub);font-size:11px;margin-top:4px;line-height:1.45}
+  .seg-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+
   footer{max-width:1200px;margin:30px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
   footer .tbd{background:#fff;border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin-bottom:12px;color:var(--sub)}
   footer p{margin:4px 0}
@@ -126,6 +134,7 @@
     .grid2,.grid3,.grid4,.minigrid{grid-template-columns:1fr}
     .mapwrap{grid-template-columns:1fr}
     .arrow{transform:rotate(90deg);padding:4px 0}
+    .segrow{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -139,7 +148,7 @@
     <div class="pills">
       <div class="pill">作成日 <b>2026-08-19</b></div>
       <div class="pill">事業型 <b>加工業 (Runway仕入れ主軸)</b></div>
-      <div class="pill">M18目標 <b>累計13社 / 売上1億2,600万円</b></div>
+      <div class="pill">2028年2月目標 <b>累計13社 / 売上1億2,600万円</b></div>
       <div class="pill">状態 <b>製造難易度セッション合意ドラフト</b></div>
     </div>
   </div>
@@ -151,9 +160,9 @@
   <a href="#flow">🔁 工程 6段</a>
   <a href="#team">👥 人員体制</a>
   <a href="#industries">🏗️ 業界 3本命+見送り3</a>
-  <a href="#customers">📋 顧客リスト 30社</a>
+  <a href="#customers">📋 顧客 6セグメント30社</a>
   <a href="#pricing">💰 価格・原価</a>
-  <a href="#revenue">📈 売上計画 M1-18</a>
+  <a href="#revenue">📈 売上計画 〜2028/2</a>
   <a href="#risks">⚠️ 障壁 5件</a>
 </nav>
 
@@ -251,35 +260,51 @@
 
 <section id="customers">
   <div class="card">
-    <h2><span class="mark" style="background:var(--on)"></span>⑤ 顧客リスト — 3業界×10社 (外部調達余地が大きい順)</h2>
-    <div class="note">上位ほど会社規模・予算は小さい。消去法判定が多く、商談前ヒアリングでの裏取りが前提。各業界7〜10位は内製組 (対象外) として淡色で圧縮表示。</div>
+    <h2><span class="mark" style="background:var(--on)"></span>⑤ 顧客リスト — 3業界×6セグメント (30社)</h2>
+    <div class="note">セグメント = 需要仮説の単位。上位ほど会社規模・予算は小さい。消去法判定が多く商談前ヒアリングで裏取り前提。淡色行は内製組 (対象外)。</div>
 
     <div class="body" style="padding-bottom:0"><span class="st st-done">ヒューマノイド・汎用ロボット (本命)</span></div>
-    <div class="minigrid">
-      <a class="minicard" href="https://close-r.com/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=close-r.com&sz=64" width="20" height="20" alt="Closer"><b>1. Closer</b></span><span>筑波大発、工場アームAI。4.2億調達直後</span></a>
-      <a class="minicard" href="https://eii-net.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=eii-net.co.jp&sz=64" width="20" height="20" alt="EII"><b>2. EII</b></span><span>VLA自社開発、リサイクル現場向け</span></a>
-      <a class="minicard" href="https://www.highlanders.ai/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=highlanders.ai&sz=64" width="20" height="20" alt="Highlanders"><b>3. Highlanders</b></span><span>三菱自出資、要補強確認</span></a>
-      <a class="minicard" href="https://ugo.plus/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=ugo.plus&sz=64" width="20" height="20" alt="ugo"><b>4. ugo</b></span><span>模倣学習キット、OSS基盤でVLA学習</span></a>
-      <a class="minicard" href="https://enactic.ai/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=enactic.ai&sz=64" width="20" height="20" alt="Enactic"><b>5. Enactic</b></span><span>介護ヒューマノイド、実データ拡大を明言</span></a>
-      <a class="minicard" href="https://www.donutrobotics.com/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=donutrobotics.com&sz=64" width="20" height="20" alt="ドーナッツロボティクス"><b>6. ドーナッツロボティクス</b></span><span>2028年VLA自社開発計画</span></a>
+    <div class="segrow">
+      <div class="seg-label">現場特化ロボAI<span class="seg-note">単一現場のタスク特化。環境の多様性を実機で踏む余力がない</span></div>
+      <div class="seg-cards">
+        <a class="minicard" href="https://close-r.com/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=close-r.com&sz=64" width="20" height="20" alt="Closer"><b>Closer</b></span><span>筑波大発、工場アームAI。4.2億調達直後</span></a>
+        <a class="minicard" href="https://eii-net.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=eii-net.co.jp&sz=64" width="20" height="20" alt="EII"><b>EII</b></span><span>VLA自社開発、リサイクル現場向け</span></a>
+        <a class="minicard" href="https://enactic.ai/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=enactic.ai&sz=64" width="20" height="20" alt="Enactic"><b>Enactic</b></span><span>介護ヒューマノイド、実データ拡大を明言</span></a>
+      </div>
     </div>
-    <div class="muted-row"><b>7〜10位 (内製組・対象外):</b>
-      <a class="mrow-link" href="https://robotics.tokyo/ja/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=robotics.tokyo&sz=64" alt="東京ロボティクス">東京ロボティクス</a><span class="sep">/</span>
+    <div class="segrow">
+      <div class="seg-label">汎用ヒューマノイド開発<span class="seg-note">実機台数が少なくデータ量が桁で不足。合成で学習量を補完</span></div>
+      <div class="seg-cards">
+        <a class="minicard" href="https://www.highlanders.ai/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=highlanders.ai&sz=64" width="20" height="20" alt="Highlanders"><b>Highlanders</b></span><span>三菱自出資、要補強確認</span></a>
+        <a class="minicard" href="https://www.donutrobotics.com/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=donutrobotics.com&sz=64" width="20" height="20" alt="ドーナッツロボティクス"><b>ドーナッツロボティクス</b></span><span>2028年VLA自社開発計画</span></a>
+        <a class="minicard" href="https://ugo.plus/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=ugo.plus&sz=64" width="20" height="20" alt="ugo"><b>ugo</b></span><span>模倣学習キット、OSS基盤でVLA学習</span></a>
+        <a class="minicard" href="https://robotics.tokyo/ja/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=robotics.tokyo&sz=64" width="20" height="20" alt="東京ロボティクス"><b>東京ロボティクス</b></span><span>Torobo、Isaac Sim/MuJoCo対応</span></a>
+      </div>
+    </div>
+    <div class="muted-row"><b>内製組 (対象外):</b>
       <a class="mrow-link" href="https://global.toyota/jp/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=global.toyota&sz=64" alt="トヨタ">トヨタ</a><span class="sep">/</span>
       <a class="mrow-link" href="https://www.khi.co.jp/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=khi.co.jp&sz=64" alt="川崎重工">川崎重工</a><span class="sep">/</span>
       <a class="mrow-link" href="https://tx-inc.com/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=tx-inc.com&sz=64" alt="Telexistence">Telexistence</a>
     </div>
 
     <div class="body" style="padding-bottom:0"><span class="st st-run">自動運転 (第二)</span></div>
-    <div class="minigrid">
-      <a class="minicard" href="https://lomby.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=lomby.jp&sz=64" width="20" height="20" alt="LOMBY"><b>1. LOMBY</b></span><span>配送ロボ。AI自社開発、sim言及なし</span></a>
-      <a class="minicard" href="https://www.mazda.com/ja/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=mazda.com&sz=64" width="20" height="20" alt="マツダ"><b>2. マツダ</b></span><span>E2E採用方針、sim内製情報なし</span></a>
-      <a class="minicard" href="https://t2.auto/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=t2.auto&sz=64" width="20" height="20" alt="T2"><b>3. T2</b></span><span>トラック。PFNと合成データ研究 (限定用途)</span></a>
-      <a class="minicard" href="https://www.nissan.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=nissan.co.jp&sz=64" width="20" height="20" alt="日産"><b>4. 日産</b></span><span>E2EはWayve依存。日本適応データの余地</span></a>
-      <a class="minicard" href="https://www.honda.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=honda.co.jp&sz=64" width="20" height="20" alt="ホンダ"><b>5. ホンダ</b></span><span>Helm.ai提携で生成simカバー済み、余地限定</span></a>
-      <a class="minicard" href="https://www.shm-afeela.com/ja/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=shm-afeela.com&sz=64" width="20" height="20" alt="ソニー・ホンダモビリティ"><b>6. ソニー・ホンダモビリティ</b></span><span>sim開発中、内製度不明</span></a>
+    <div class="segrow">
+      <div class="seg-label">ラストマイル・商用特化<span class="seg-note">限定エリアでもレアケース網羅が安全承認の鍵。実車台数が足りない</span></div>
+      <div class="seg-cards">
+        <a class="minicard" href="https://lomby.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=lomby.jp&sz=64" width="20" height="20" alt="LOMBY"><b>LOMBY</b></span><span>配送ロボ。AI自社開発、sim言及なし</span></a>
+        <a class="minicard" href="https://t2.auto/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=t2.auto&sz=64" width="20" height="20" alt="T2"><b>T2</b></span><span>トラック。PFNと合成データ研究 (限定用途)</span></a>
+      </div>
     </div>
-    <div class="muted-row"><b>7〜10位 (内製組・対象外):</b>
+    <div class="segrow">
+      <div class="seg-label">OEMのE2E転換組<span class="seg-note">E2E移行中だが生成sim資産が薄い。日本特有シーンの補完需要</span></div>
+      <div class="seg-cards">
+        <a class="minicard" href="https://www.mazda.com/ja/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=mazda.com&sz=64" width="20" height="20" alt="マツダ"><b>マツダ</b></span><span>E2E採用方針、sim内製情報なし</span></a>
+        <a class="minicard" href="https://www.shm-afeela.com/ja/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=shm-afeela.com&sz=64" width="20" height="20" alt="ソニー・ホンダモビリティ"><b>ソニー・ホンダモビリティ</b></span><span>sim開発中、内製度不明</span></a>
+        <a class="minicard" href="https://www.nissan.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=nissan.co.jp&sz=64" width="20" height="20" alt="日産"><b>日産</b></span><span>E2EはWayve依存。日本適応データの余地</span></a>
+      </div>
+    </div>
+    <div class="muted-row"><b>内製組・提携済み (対象外):</b>
+      <a class="mrow-link" href="https://www.honda.co.jp/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=honda.co.jp&sz=64" alt="ホンダ">ホンダ</a><span class="sep">/</span>
       <a class="mrow-link" href="https://woven.toyota/en/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=woven.toyota&sz=64" alt="Woven by Toyota">Woven by Toyota</a><span class="sep">/</span>
       <a class="mrow-link" href="https://www.denso.com/jp/ja/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=denso.com&sz=64" alt="デンソー">デンソー</a><span class="sep">/</span>
       <a class="mrow-link" href="https://tier4.jp/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=tier4.jp&sz=64" alt="Tier IV">Tier IV</a><span class="sep">/</span>
@@ -287,15 +312,23 @@
     </div>
 
     <div class="body" style="padding-bottom:0"><span class="st st-off">建機・農機 (三番手)</span></div>
-    <div class="minigrid">
-      <a class="minicard" href="https://www.sumitomokenki.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=sumitomokenki.co.jp&sz=64" width="20" height="20" alt="住友建機"><b>1. 住友建機</b></span><span>自律ショベル実証、sim言及なし</span></a>
-      <a class="minicard" href="https://www.kobelco-kenki.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=kobelco-kenki.co.jp&sz=64" width="20" height="20" alt="コベルコ建機"><b>2. コベルコ建機</b></span><span>K-DIVE遠隔操作データ→AI化</span></a>
-      <a class="minicard" href="https://tokuiten.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=tokuiten.jp&sz=64" width="20" height="20" alt="トクイテン"><b>3. トクイテン</b></span><span>トマト収穫ロボ</span></a>
-      <a class="minicard" href="https://legmin.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=legmin.co.jp&sz=64" width="20" height="20" alt="レグミン"><b>4. レグミン</b></span><span>自律農業ロボ</span></a>
-      <a class="minicard" href="https://www.yanmar.com/jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=yanmar.com&sz=64" width="20" height="20" alt="ヤンマー"><b>5. ヤンマー</b></span><span>消去法判定、要確認</span></a>
-      <a class="minicard" href="https://www.kubota.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=kubota.co.jp&sz=64" width="20" height="20" alt="クボタ"><b>6. クボタ</b></span><span>NVIDIA提携、合成データ言及なし</span></a>
+    <div class="segrow">
+      <div class="seg-label">遠隔操作→自動化転換<span class="seg-note">テレオペで行動データは持つが映像の多様性がない</span></div>
+      <div class="seg-cards">
+        <a class="minicard" href="https://www.sumitomokenki.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=sumitomokenki.co.jp&sz=64" width="20" height="20" alt="住友建機"><b>住友建機</b></span><span>自律ショベル実証、sim言及なし</span></a>
+        <a class="minicard" href="https://www.kobelco-kenki.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=kobelco-kenki.co.jp&sz=64" width="20" height="20" alt="コベルコ建機"><b>コベルコ建機</b></span><span>K-DIVE遠隔操作データ→AI化</span></a>
+      </div>
     </div>
-    <div class="muted-row"><b>7〜10位 (内製組・対象外):</b>
+    <div class="segrow">
+      <div class="seg-label">農業自律ロボ<span class="seg-note">季節・天候・生育でデータ収集窓が年数回しかない</span></div>
+      <div class="seg-cards">
+        <a class="minicard" href="https://tokuiten.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=tokuiten.jp&sz=64" width="20" height="20" alt="トクイテン"><b>トクイテン</b></span><span>トマト収穫ロボ</span></a>
+        <a class="minicard" href="https://legmin.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=legmin.co.jp&sz=64" width="20" height="20" alt="レグミン"><b>レグミン</b></span><span>自律農業ロボ</span></a>
+        <a class="minicard" href="https://www.yanmar.com/jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=yanmar.com&sz=64" width="20" height="20" alt="ヤンマー"><b>ヤンマー</b></span><span>消去法判定、要確認</span></a>
+        <a class="minicard" href="https://www.kubota.co.jp/" target="_blank" rel="noopener"><span class="mc-head"><img class="mc-logo" src="https://www.google.com/s2/favicons?domain=kubota.co.jp&sz=64" width="20" height="20" alt="クボタ"><b>クボタ</b></span><span>NVIDIA提携、合成データ言及なし</span></a>
+      </div>
+    </div>
+    <div class="muted-row"><b>内製組 (対象外):</b>
       <a class="mrow-link" href="https://arav.jp/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=arav.jp&sz=64" alt="ARAV">ARAV</a><span class="sep">/</span>
       <a class="mrow-link" href="https://www.hitachicm.com/global/ja/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=hitachicm.com&sz=64" alt="日立建機">日立建機</a><span class="sep">/</span>
       <a class="mrow-link" href="https://www.komatsu.jp/jp/" target="_blank" rel="noopener"><img class="mc-logo-sm" src="https://www.google.com/s2/favicons?domain=komatsu.jp&sz=64" alt="コマツ">コマツ</a><span class="sep">/</span>
@@ -327,20 +360,23 @@
       <table>
         <thead><tr><th>月</th><th>合計顧客数 (稼働中)</th><th>売上 (期間)</th></tr></thead>
         <tbody>
-          <tr><td class="lever">M1〜9</td><td>1→4社</td><td>3,800万円</td></tr>
-          <tr><td class="lever">M10〜12</td><td>3〜4社</td><td>2,200万円</td></tr>
-          <tr><td class="lever">M13〜15</td><td>5社</td><td>3,000万円</td></tr>
-          <tr><td class="lever">M16〜18</td><td>6社</td><td>3,600万円</td></tr>
-          <tr style="border-top:2px solid var(--ink);font-weight:700"><td class="lever">合計 (M1〜18)</td><td>累計13社</td><td>1億2,600万円</td></tr>
+          <tr><td class="lever">〜9月 (2026)</td><td>1社</td><td>200万円</td></tr>
+          <tr><td class="lever">10〜12月</td><td>1〜2社</td><td>800万円</td></tr>
+          <tr><td class="lever">1〜3月 (2027)</td><td>2〜3社</td><td>1,400万円</td></tr>
+          <tr><td class="lever">4〜6月</td><td>3〜4社</td><td>2,000万円</td></tr>
+          <tr><td class="lever">7〜9月</td><td>4〜5社</td><td>2,600万円</td></tr>
+          <tr><td class="lever">10〜12月</td><td>5〜6社</td><td>3,200万円</td></tr>
+          <tr><td class="lever">1〜2月 (2028)</td><td>6社</td><td>2,400万円</td></tr>
+          <tr style="border-top:2px solid var(--ink);font-weight:700"><td class="lever">合計</td><td>累計13社</td><td>1億2,600万円</td></tr>
         </tbody>
       </table>
     </div>
     <div class="statgrid">
-      <div class="stat"><b>13社</b><span>M18時点 累計受注社数</span></div>
-      <div class="stat"><b>1億2,600万円</b><span>M18までの売上 (契約総額は1億5,600万円、残りはM18以降入金)</span></div>
+      <div class="stat"><b>13社</b><span>2028年2月時点 累計受注社数</span></div>
+      <div class="stat"><b>1億2,600万円</b><span>2028年2月までの売上 (契約総額は1億5,600万円、残りは2028年2月以降入金)</span></div>
       <div class="stat"><b>2.5〜3割</b><span>打率 (商談3〜4件に1受注)</span></div>
     </div>
-    <div class="note" style="border-top:1px solid var(--line);border-bottom:none">月商=稼働中社数×200万円 (継続6ヶ月で切れるため新規獲得は永続タスク、止めると階段状に落ちる)。入金は契約から6ヶ月かけて着地 (契約額と当期売上はずれる)。顧客ライフタイムは平均6ヶ月で計画 (予測レンジ6〜24: スタートアップ層6〜12、大手18〜24、上限は内製化)。良い顧客ほど早く卒業する構造 — 対抗は蓄積レシピの独占。8〜10社はM9時点で「商談中」の目標、受注確定はM12〜18。最重要変数は継続率と転換率 — 最初の3社の実績で本表を引き直す。</div>
+    <div class="note" style="border-top:1px solid var(--line);border-bottom:none">月商=稼働中社数×200万円 (継続6ヶ月で切れるため新規獲得は永続タスク、止めると階段状に落ちる)。入金は契約から6ヶ月かけて着地 (契約額と当期売上はずれる)。顧客ライフタイムは平均6ヶ月で計画 (予測レンジ6〜24: スタートアップ層6〜12、大手18〜24、上限は内製化)。良い顧客ほど早く卒業する構造 — 対抗は蓄積レシピの独占。8〜10社は2027年5月時点で「商談中」の目標、受注確定は2027年8月〜2028年2月。最重要変数は継続率と転換率 — 最初の3社の実績で本表を引き直す。</div>
   </div>
 </section>
 
