@@ -1,0 +1,689 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ハイランダーズ訪問ブリーフ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@600;700;900&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --ground:#E9ECEE;
+  --surface:#FCFDFD;
+  --surface-2:#F1F4F5;
+  --ink:#15181B;
+  --muted:#5A646B;
+  --faint:#8A939A;
+  --rule:#C9D0D4;
+  --rule-soft:#DDE3E6;
+  --accent:#1F6F8B;
+  --accent-soft:#E2EEF3;
+  --signal:#9A6A08;
+  --signal-soft:#F7EDD6;
+  --danger:#8F3327;
+  --danger-soft:#F7E4E1;
+  --go:#2F6B4F;
+  --go-soft:#E1EFE7;
+  --shadow:0 1px 2px rgba(21,24,27,.06), 0 8px 24px -16px rgba(21,24,27,.28);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#111417;
+    --surface:#1A1E22;
+    --surface-2:#22272C;
+    --ink:#E4E9EB;
+    --muted:#9BA5AC;
+    --faint:#6F7A81;
+    --rule:#333B41;
+    --rule-soft:#282F34;
+    --accent:#63B7D3;
+    --accent-soft:#16323C;
+    --signal:#E0B155;
+    --signal-soft:#33290F;
+    --danger:#DE8377;
+    --danger-soft:#3A1F1B;
+    --go:#7CC4A0;
+    --go-soft:#16301F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111417;
+  --surface:#1A1E22;
+  --surface-2:#22272C;
+  --ink:#E4E9EB;
+  --muted:#9BA5AC;
+  --faint:#6F7A81;
+  --rule:#333B41;
+  --rule-soft:#282F34;
+  --accent:#63B7D3;
+  --accent-soft:#16323C;
+  --signal:#E0B155;
+  --signal-soft:#33290F;
+  --danger:#DE8377;
+  --danger-soft:#3A1F1B;
+  --go:#7CC4A0;
+  --go-soft:#16301F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"BIZ UDPGothic","Hiragino Sans","Yu Gothic UI",system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.85;
+  padding:0 20px 96px;
+}
+.wrap{max-width:1040px;margin:0 auto}
+h1,h2,h3,h4{font-family:"Zen Old Mincho",'Yu Mincho',serif;text-wrap:balance;line-height:1.35}
+code,.mono,.num{font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+/* ---------- masthead ---------- */
+.mast{padding:56px 0 28px;border-bottom:2px solid var(--ink)}
+.kicker{
+  font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:18px
+}
+.mast h1{font-size:clamp(30px,6vw,50px);font-weight:900;letter-spacing:.01em}
+.mast .sub{margin-top:14px;color:var(--muted);font-size:15px;max-width:62ch}
+.factline{
+  display:flex;flex-wrap:wrap;gap:0 28px;margin-top:22px;
+  font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted)
+}
+.factline b{color:var(--ink);font-weight:600}
+
+/* ---------- nav ---------- */
+nav{
+  position:sticky;top:0;z-index:20;background:var(--ground);
+  border-bottom:1px solid var(--rule);margin-bottom:44px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch
+}
+nav ul{display:flex;gap:2px;list-style:none;padding:8px 0;white-space:nowrap}
+nav a{
+  display:block;padding:5px 11px;border-radius:3px;text-decoration:none;
+  color:var(--muted);font-size:12.5px;font-family:"JetBrains Mono",monospace
+}
+nav a:hover{background:var(--surface-2);color:var(--ink)}
+
+/* ---------- sections ---------- */
+section{margin:0 0 68px;scroll-margin-top:60px}
+.shead{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--rule);padding-bottom:10px;margin-bottom:26px}
+.snum{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--accent);font-weight:600;flex:none}
+.shead h2{font-size:clamp(21px,3.4vw,27px);font-weight:700}
+.shead .note{margin-left:auto;font-size:11.5px;color:var(--faint);font-family:"JetBrains Mono",monospace;flex:none}
+h3{font-size:17px;font-weight:700;margin:34px 0 12px}
+h3:first-child{margin-top:0}
+p{margin:0 0 14px;max-width:70ch}
+p.lead{font-size:16.5px}
+ul.plain{list-style:none;margin:0 0 16px;max-width:70ch}
+ul.plain li{padding-left:18px;position:relative;margin-bottom:7px}
+ul.plain li::before{content:"—";position:absolute;left:0;color:var(--faint)}
+
+/* ---------- cards & boxes ---------- */
+.card{background:var(--surface);border:1px solid var(--rule-soft);border-radius:4px;padding:20px 22px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+@media(min-width:760px){
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+}
+.box{border-left:3px solid var(--accent);background:var(--surface);padding:18px 20px;border-radius:0 4px 4px 0;margin:20px 0}
+.box.warn{border-left-color:var(--signal);background:var(--signal-soft)}
+.box.stop{border-left-color:var(--danger);background:var(--danger-soft)}
+.box h4{font-size:15px;margin-bottom:8px}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+
+.tag{
+  display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10.5px;
+  letter-spacing:.05em;padding:2px 7px;border-radius:2px;vertical-align:2px;
+  background:var(--surface-2);color:var(--muted);border:1px solid var(--rule-soft)
+}
+.tag.fact{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.tag.guess{background:var(--signal-soft);color:var(--signal);border-color:transparent}
+.tag.hot{background:var(--danger-soft);color:var(--danger);border-color:transparent}
+.tag.good{background:var(--go-soft);color:var(--go);border-color:transparent}
+
+/* ---------- key takeaways ---------- */
+.brief{background:var(--surface);border:1px solid var(--rule);border-radius:5px;padding:26px 26px 22px;margin-bottom:56px;box-shadow:var(--shadow)}
+.brief h2{font-size:19px;margin-bottom:4px}
+.brief .bsub{font-size:12px;color:var(--faint);font-family:"JetBrains Mono",monospace;margin-bottom:18px}
+.blist{list-style:none;counter-reset:b;display:grid;gap:13px}
+.blist li{counter-increment:b;display:flex;gap:13px;align-items:flex-start}
+.blist li::before{
+  content:counter(b);flex:none;width:22px;height:22px;border-radius:50%;
+  background:var(--ink);color:var(--surface);font-family:"JetBrains Mono",monospace;
+  font-size:11px;display:grid;place-items:center;margin-top:5px
+}
+.blist strong{display:block;font-size:15px}
+.blist span{color:var(--muted);font-size:14px;line-height:1.7}
+
+/* ---------- tables ---------- */
+.scroller{overflow-x:auto;margin:18px 0;border:1px solid var(--rule-soft);border-radius:4px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule-soft);vertical-align:top;line-height:1.65}
+th{background:var(--surface-2);font-weight:700;font-size:12px;letter-spacing:.03em;color:var(--muted);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.k{white-space:nowrap;font-weight:700}
+
+/* ---------- question cards ---------- */
+.qgroup{margin:26px 0}
+.qgroup>.ghead{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.ghead .gl{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--surface);background:var(--accent);padding:2px 8px;border-radius:2px;flex:none}
+.ghead h3{margin:0;font-size:16px}
+.ghead .why{font-size:12px;color:var(--faint);margin-left:auto;text-align:right}
+.qlist{list-style:none;display:grid;gap:0;border:1px solid var(--rule-soft);border-radius:4px;overflow:hidden;background:var(--surface)}
+.qlist li{padding:13px 16px;border-bottom:1px solid var(--rule-soft)}
+.qlist li:last-child{border-bottom:none}
+.q{font-size:14.5px;line-height:1.7}
+.a{display:block;margin-top:5px;font-size:12.5px;color:var(--muted);line-height:1.65}
+.a::before{content:"▸ 狙い ";color:var(--faint);font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.05em}
+
+/* ---------- scenario matrix ---------- */
+.matrix{display:grid;gap:8px;margin:22px 0;grid-template-columns:auto 1fr 1fr}
+.matrix .mh{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);display:grid;place-items:center;text-align:center;padding:6px}
+.matrix .mv{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);display:grid;place-items:center;text-align:center;writing-mode:vertical-rl;padding:6px 2px}
+.cell{background:var(--surface);border:1px solid var(--rule-soft);border-radius:4px;padding:12px 13px;min-height:88px}
+.cell .cid{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--accent);font-weight:600}
+.cell .ct{font-size:13.5px;font-weight:700;margin-top:2px;line-height:1.5}
+.cell .cn{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.6}
+@media(max-width:700px){.matrix{grid-template-columns:1fr}.matrix .mv{writing-mode:horizontal-tb;justify-items:start;text-align:left;padding:10px 0 0}}
+
+/* ---------- scenario detail ---------- */
+.scn{background:var(--surface);border:1px solid var(--rule-soft);border-left:4px solid var(--rule);border-radius:0 4px 4px 0;padding:18px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.scn.p-hi{border-left-color:var(--danger)}
+.scn.p-mid{border-left-color:var(--signal)}
+.scn.p-low{border-left-color:var(--faint)}
+.scn.p-win{border-left-color:var(--go)}
+.scn .sh{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:12px}
+.scn .sid{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:600;color:var(--muted)}
+.scn .st{font-family:"Zen Old Mincho",serif;font-size:17px;font-weight:700}
+.rows{display:grid;gap:9px}
+.row{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:start;font-size:13.5px;line-height:1.7}
+.row .rl{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.05em;color:var(--faint);padding-top:4px}
+.row .rv strong{color:var(--ink)}
+.row .rv .say{display:block;border-left:2px solid var(--rule);padding-left:10px;color:var(--muted);font-style:normal;margin:3px 0}
+@media(max-width:620px){.row{grid-template-columns:1fr;gap:2px}.row .rl{padding-top:0}}
+
+/* ---------- defense Q&A ---------- */
+.qa{border:1px solid var(--rule-soft);border-radius:4px;overflow:hidden;background:var(--surface)}
+.qa details{border-bottom:1px solid var(--rule-soft)}
+.qa details:last-child{border-bottom:none}
+.qa summary{padding:13px 16px;cursor:pointer;font-size:14.5px;font-weight:700;list-style:none;display:flex;gap:10px;align-items:baseline}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"Q";font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--danger);flex:none}
+.qa summary:hover{background:var(--surface-2)}
+.qa .ans{padding:0 16px 16px 42px;font-size:13.5px;color:var(--muted);line-height:1.8}
+.qa .ans strong{color:var(--ink)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--rule);padding-top:24px;font-size:12px;color:var(--faint)}
+footer h4{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+footer ul{list-style:none;display:grid;gap:5px;margin-bottom:20px}
+footer a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--rule-soft)}
+footer a:hover{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">Field Brief / 2026-08-27 17:00 JST</div>
+  <h1>ハイランダーズ訪問ブリーフ</h1>
+  <p class="sub">合成映像データ事業の初期ヒアリング。相手は「データを買う側」ではなく<b>自前でワールドモデルを持つ側</b>だった。前提を組み替えた上での、当日の質問設計・分岐シナリオ・逆質問。</p>
+  <div class="factline">
+    <span><b>17:00–22:00</b> ／ 5時間枠</span>
+    <span>同行 <b>Zach</b>（設定者）</span>
+    <span>目的 <b>ヒアリング</b>（売り込みではない）</span>
+    <span>手持ちPoC <b>なし</b></span>
+  </div>
+</header>
+
+<nav aria-label="セクション">
+  <ul>
+    <li><a href="#brief">直前5分</a></li>
+    <li><a href="#s1">① 相手</a></li>
+    <li><a href="#s2">② 前提の再点検</a></li>
+    <li><a href="#s3">③ 業界知識</a></li>
+    <li><a href="#s4">④ ヒアリング</a></li>
+    <li><a href="#s5">⑤ シナリオ</a></li>
+    <li><a href="#s6">⑥ 逆質問・返し</a></li>
+    <li><a href="#s7">⑦ 地雷</a></li>
+    <li><a href="#s8">⑧ 収穫定義</a></li>
+  </ul>
+</nav>
+
+<!-- ============ BRIEF ============ -->
+<div class="brief" id="brief">
+  <h2>直前5分で入れておくこと</h2>
+  <div class="bsub">これだけ頭に入っていれば会話は成立する</div>
+  <ol class="blist">
+    <li><div><strong>相手は自社ワールドモデル「Kepler v1.0」を持っている。</strong><span>100億パラメータ規模、中核が world model、「大脳（タスク理解・計画）／小脳（バランス・力制御）」構成。学習データは<b>実機・シミュレーション・遠隔操作の3系統</b>。さらに複数ロボットから匿名化動作データを集める <code>arterie</code> というパイプラインを開発中。<span class="tag fact">報道</span></span></div></li>
+    <li><div><strong>したがって「データが足りないでしょう？」は禁句。</strong><span>彼らのコーポレートタグラインは <em>“The data flywheel for the physical world”</em>。データを作れることが自社の強みだと定義している会社に、その弱点を突く入り方をすると一発で終わる。</span></div></li>
+    <li><div><strong>ただしフライホイールはまだ回っていない。</strong><span>実機の量産開始は2027年早期、月産1,000台体制は2027年後半。<b>今日から2027年前半までは実機データがほとんど出ない期間</b>。ここが唯一かつ最大の突き所。</span></div></li>
+    <li><div><strong>「生成映像で学習は効くのか」は技術的には決着済み。</strong><span>NVIDIA GEAR の DreamGen（2025）が、1タスク1環境のテレオペのみで22の新規behaviorを実行。<b>11時間で78万軌跡＝人間デモ6,500時間相当</b>を生成。相手が懐疑的なら、議論せずこの数字だけ置く。</span></div></li>
+    <li><div><strong>今日の勝ち条件は受注ではなく「ボトルネックの一言」。</strong><span>Keplerの性能を今いちばん止めているのは何か。データ量か、多様性か、評価か、人か。それを相手の言葉で持ち帰れば今日は成功。</span></div></li>
+  </ol>
+</div>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <div class="shead"><span class="snum">01</span><h2>相手ファクトシート</h2><span class="note">公開情報ベース</span></div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h3>会社</h3>
+      <ul class="plain">
+        <li>株式会社Highlanders（ハイランダーズ）／ <b>2023年5月設立・東京大学発</b></li>
+        <li>本社 東京・豊島区。従業員 <span class="num">約23名</span>（業務委託含む）<span class="tag guess">要確認</span></li>
+        <li>代表取締役 上原昇馬（Shoma Uehara）<span class="tag guess">読み要確認</span></li>
+        <li>ビジョン「労働をロボットで一掃する」／ 英文タグライン “The data flywheel for the physical world”</li>
+        <li>実証実施領域：<b>防衛・インフラ・製造・物流・通信・自動車</b></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>プロダクト</h3>
+      <ul class="plain">
+        <li><b>HL Human</b>（ヒューマノイド）2025年6月30日プロトタイプ初公開。<span class="num">19自由度</span>／片腕 <span class="num">4DoF</span>×2／オプション5指ハンドで <span class="num">3kg</span> 把持／3Dステレオカメラ＋LiDARで自律マッピング／<span class="num">3km/h</span> 自律移動／衝突検知・自動制動</li>
+        <li>ネジ締め・部品組付など精密作業を訴求。「3段目の棚から箱を取ってパレットに置いて」レベルの自然言語指示に対応（VLM連携）</li>
+        <li><b>HLQ Pro</b>（四足・総重量約<span class="num">60kg</span>・2025年5月ベータ提供開始）／ <b>HLQ Air</b>（四足）</li>
+        <li>ロボットシミュレータも提供領域に含む<span class="tag guess">詳細不明・要確認</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card">
+      <h3>AI ─ Kepler v1.0</h3>
+      <ul class="plain">
+        <li>自社開発の基盤モデル。<b>中核に world model</b>（次に何が起きるかの予測）</li>
+        <li>「大脳」＝タスク理解・計画／「小脳」＝バランス・力制御 の二層構成 — 業界でいう <b>dual-system VLA</b> と同じ設計思想</li>
+        <li>規模 <span class="num">100億パラメータ</span>級</li>
+        <li>学習データ＝<b>実機／シミュレーション／遠隔操作</b>の3系統</li>
+        <li><code>arterie</code>：複数ロボットから匿名化した動作データを集める自社パイプライン（開発中）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>三菱自動車との協業</h3>
+      <ul class="plain">
+        <li>2026年5月までに三菱自が出資。<b>7月9日にMOU締結</b></li>
+        <li>三菱自 <b>京都製作所（京都市）の遊休スペース</b>にロボット生産設備。2027年早期に生産開始</li>
+        <li><b>2027年後半に月産1,000台体制</b>を目標<span class="tag guess">一部報道は「2027年中に1,000台」。桁が違うので当日確認価値あり</span></li>
+        <li>三菱自は<b>まず自社工場にHL Humanを導入し、稼働データとノウハウを蓄積</b>する建て付け</li>
+        <li>自動車メーカーとヒューマノイド企業が量産で組むのは世界初の形態、という打ち出し</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box warn">
+    <h4>この事実が意味すること（本日いちばん重要な読み替え）</h4>
+    <p>顧客リスト上のセグメント仮説は「<b>実機台数が少なくデータ量が桁で不足。合成で学習量を補完</b>」だった。これは<b>半分しか当たっていない</b>。</p>
+    <ul class="plain">
+      <li><b>外れている側</b>：彼らは合成データを「買う」発想の会社ではない。world modelもsimもteleopパイプラインも自前で持ち、それが事業の中核ストーリー。素直な「内製組」に近い。</li>
+      <li><b>当たっている側</b>：<b>その自前フライホイールは、実機が出そろう2027年後半まで回転数が上がらない</b>。10Bのモデルを回すには圧倒的にデータが足りず、しかも今は量産立ち上げに人的リソースが吸われている。<b>「作れるが、今は作る手が足りない」期間</b>にいる。</li>
+    </ul>
+    <p style="margin-top:10px">→ 今日の立ち位置は「データを売る業者」ではなく <b>「あなたたちのフライホイールが回り始めるまでの、外付けの生成ライン」</b>。</p>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <div class="shead"><span class="snum">02</span><h2>我々の仮説 vs 判明した事実</h2><span class="note">事業計画の該当セルを更新する材料</span></div>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>事業計画上の前提</th><th>判明した事実</th><th>判定</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Highlanders＝「要補強確認」の非内製組</td><td>自社基盤モデル Kepler v1.0＋自社データパイプライン arterie を保有</td><td><span class="tag hot">要修正</span> 内製寄りに再分類</td></tr>
+        <tr><td class="k">実機台数が少なくデータ量が桁で不足</td><td>事実。量産は2027年、現在は実証・プロト段階</td><td><span class="tag good">維持</span></td></tr>
+        <tr><td class="k">合成で学習量を補完したいはず</td><td>simとteleopで補完する設計。生成AI映像の利用は<b>公開情報では確認できず</b></td><td><span class="tag guess">当日の最重要確認事項</span></td></tr>
+        <tr><td class="k">顧客はML能力を保有＝内製は技術的に簡単</td><td>その通り。10Bモデルを自前で学習させている水準</td><td><span class="tag good">維持</span>（守りは技術でなく工数の経済性）</td></tr>
+        <tr><td class="k">単価 月額200万円・平均6ヶ月</td><td>プレシリーズ規模のスタートアップ。三菱自マネーは量産設備に向く可能性</td><td><span class="tag hot">価格感の実地確認が必要</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><span class="tag">補足</span> 「内製組」に再分類しても対象外にはならない。むしろ <b>ML文脈が通じる相手＝仕様の翻訳コストが最も低い顧客</b>であり、初号案件としては最良クラス。ただし売り方は「不足を埋める」ではなく「<b>ピークをアウトソースする</b>」に変わる。</p>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <div class="shead"><span class="snum">03</span><h2>押さえておくべき業界知識</h2><span class="note">素人扱いされないための最低ライン</span></div>
+
+  <h3>A. 学習パラダイムと語彙 — 相手の言葉に合わせる</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>用語</th><th>中身</th><th>相手との接続点</th></tr></thead>
+      <tbody>
+        <tr><td class="k">模倣学習 / BC</td><td>人間の実演を教師に方策を学ぶ。テレオペ収録が前提</td><td>Keplerの学習の主軸のはず</td></tr>
+        <tr><td class="k">VLA</td><td>Vision-Language-Action。画像＋言語指示→行動。π0（Physical Intelligence）、GR00T N1（NVIDIA）、Helix（Figure）</td><td>HL Humanの自然言語指示対応＝この系譜</td></tr>
+        <tr><td class="k">dual-system</td><td>遅い思考（VLMで計画）＋速い制御（diffusion action head）の二層</td><td><b>Keplerの「大脳／小脳」がまさにこれ</b>。この語を出すと通じる</td></tr>
+        <tr><td class="k">world model</td><td>「この行動をしたら次にどう見えるか」を予測するモデル。simの代替にも、方策の中の予測器にもなる</td><td>Keplerの中核。<b>我々の仕入元（Runway GWM / Cosmos）と同じ言葉</b></td></tr>
+        <tr><td class="k">WAM</td><td>World-Action Model。映像予測と行動チャンクを同時に出す2026年の潮流</td><td>「Keplerは映像も吐きますか？」が刺さる質問になる</td></tr>
+        <tr><td class="k">IDM / latent action</td><td>行動ラベルのない映像から疑似行動を復元する仕組み</td><td><b>我々の商品が学習に使える理屈そのもの</b>（次項C）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>B. ロボット学習データの4系統 — これが商談の共通言語</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>系統</th><th>強み</th><th>弱み</th><th>Highlandersの現状</th></tr></thead>
+      <tbody>
+        <tr><td class="k">① 実機テレオペ</td><td>行動ラベルが正確。最高品質</td><td>人時間に線形。1台1オペレーター。最も高い</td><td>保有。ただし人手が律速</td></tr>
+        <tr><td class="k">② 物理シミュレーション</td><td>ほぼ無限・安い。Isaac Sim / MuJoCo / Genesis</td><td>sim2realギャップ（特に接触・変形・光学）。シーン制作コストが人手</td><td>保有。シミュレータ提供も</td></tr>
+        <tr><td class="k">③ 実機自律ログ（fleet）</td><td>本番分布そのもの。台数×稼働時間で自動増殖</td><td><b>台数が出るまでゼロ</b></td><td><code>arterie</code>で設計済み・<b>2027年後半まで本格稼働しない</b></td></tr>
+        <tr><td class="k">④ 生成AI映像（world model）</td><td>視覚的多様性を人手ゼロで量産。①②③にない分布を足せる</td><td>行動ラベルがない・物理の厳密性が弱い</td><td><b>不明＝今日の最大の確認事項</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><span class="tag fact">要点</span> ④は①②③の<b>代替ではなく第4の系統</b>。この整理をそのまま口に出せると、話が「うちで作れる／作れない」の水掛け論にならない。</p>
+
+  <h3>C. なぜ「映像だけ」で学習が回るのか — 必ず来る技術的疑問への答え</h3>
+  <ul class="plain">
+    <li>生成映像には行動ラベルがない。そこで <b>IDM（逆動力学モデル）</b> または <b>latent action model</b> で、連続フレームから疑似的な行動系列を復元する。これを <b>neural trajectory</b> と呼び、そのまま模倣学習に食わせる。</li>
+    <li>実証：<b>DreamGen</b>（NVIDIA GEAR Lab, arXiv:2505.12705 / GR00T-Dreamsとしてblueprint公開）。<b>1タスク・1環境のテレオペデータのみ</b>を起点に、ヒューマノイドが<b>22の新規behavior</b>を既知・未知の両環境で実行。<b>11時間で78万軌跡</b>を生成し、これは<b>人間デモ6,500時間相当</b>。</li>
+    <li>2026年の潮流：world model内での強化学習が、教師ありfine-tuneも物理simも上回るという報告（World-Gymnast, PlayWorld）。映像生成モデルを「制御一貫性のあるシミュレータ」として使う方向に完全に移行している。</li>
+    <li>→ <b>「効くのか？」は2025年に決着し、2026年は「どう効かせるか」の勝負</b>というフレームで話す。これは事実として言い切ってよい。</li>
+  </ul>
+
+  <h3>D. sim2realギャップの3層 — どこに効き、どこに効かないかを正直に持っておく</h3>
+  <div class="grid g3">
+    <div class="card"><div class="tag good">生成AIが強い</div><h3 style="margin:8px 0 6px;font-size:15px">視覚ギャップ</h3><p style="font-size:13px;color:var(--muted);margin:0">テクスチャ・照明・材質・カメラ特性。CGでは作り込みに人手がかかる部分を、生成モデルは事実上ゼロコストで量産する。</p></div>
+    <div class="card"><div class="tag good">生成AIが強い</div><h3 style="margin:8px 0 6px;font-size:15px">分布ギャップ</h3><p style="font-size:13px;color:var(--muted);margin:0">物体・レイアウト・作業者の振る舞い・レアケース。多様性そのものが商品になる層。日本の現場適合もここ。</p></div>
+    <div class="card"><div class="tag hot">生成AIが弱い</div><h3 style="margin:8px 0 6px;font-size:15px">物理ギャップ</h3><p style="font-size:13px;color:var(--muted);margin:0">摩擦・慣性・接触力・変形。ここは物理simと実機の領分。<b>認めた上で話すこと</b>。取り繕うと一気に信用を失う。</p></div>
+  </div>
+  <div class="box">
+    <h4>この整理から出てくる、我々のポジション一文</h4>
+    <p style="margin:0">「<b>生成映像は実機の代替ではなく、実機の前段です。事前学習と汎化の底上げに使い、最終的な精密動作は実機でfine-tuneする。</b>」— これを最初に自分から言うと、相手の批判をほぼ全部先回りできる。</p>
+  </div>
+
+  <h3>E. 数量とコストの感覚 — これがないと価格の話ができない</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>指標</th><th>相場観</th><th>使いどころ</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Open X-Embodiment</td><td>100万エピソード超／22実施形態のオープンデータ</td><td>「公開データで足りない部分は何ですか」の起点</td></tr>
+        <tr><td class="k">π0 級の事前学習</td><td>1万時間規模のクロス実施形態データ</td><td>10Bモデルを回す前提量の目安</td></tr>
+        <tr><td class="k">実機テレオペ</td><td>人時間に線形。1オペ1台、収録＋整備＋検品で実効効率は数割</td><td>「1タスク立ち上げに何人日？」の答え合わせ</td></tr>
+        <tr><td class="k">我々の商品</td><td>1〜5万クリップ／案件（30〜150時間相当）を月額200万円 ＝ <b>1クリップ40〜200円</b></td><td>テレオペ比で<b>1〜2桁安い</b>という言い方ができる</td></tr>
+        <tr><td class="k">DreamGen</td><td>11時間で78万軌跡 ＝ 人間デモ6,500時間相当</td><td>生成側のスループットの上限感</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><span class="tag hot">注意</span> 価格は今日は<b>言わない</b>のが基本。聞かれたら「規模と要求品質で決まるので、まず何が必要かを教えてください」と返す（詳細は⑥）。</p>
+
+  <h3>F. HL Human 固有の読み — ここまで読めていると本気度が伝わる</h3>
+  <ul class="plain">
+    <li><b>19自由度・片腕4DoFは、ヒューマノイドとしては控り目な設計</b>。Figure 02級（40+）やUnitree G1（23–43）と比べると明確に少ない。＝<b>「汎用」を名乗りつつ、実態は工場の定型作業に絞った割り切り設計</b>と読める。<span class="tag guess">推測</span></li>
+    <li>これは我々にとって<b>両刃</b>。必要なデータの多様性は相対的に狭い（＝案件規模は小さくなりうる）が、狙うべきタスク分布が具体的で<b>PoCが作りやすい</b>。</li>
+    <li><b>embodiment適合が必須</b>：生成映像はそのロボットの見た目・関節構成に合わせないと使えない。DreamGenも “adapting to the target embodiment” が前提。→ <b>HL Humanの実機映像かCADを預からないと商品が作れない</b>。これはNDAと初期素材の話につながる、今日の実務上の最重要ポイント。</li>
+    <li>三菱自の工場データ＝<b>データの帰属が誰か</b>は必ず論点になる。MOU段階なので、まだ決まっていない可能性が高い。</li>
+  </ul>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <div class="shead"><span class="snum">04</span><h2>ヒアリング設計</h2><span class="note">L1→L5。5時間あるのでL2に最も時間を割く</span></div>
+  <p class="lead">順番が重要。<b>事実確認（答えやすい）→痛み→意思決定→金→関係</b>。いきなりL3から入ると防御される。会食フェーズがあるならL2の再訪とL5をそこに置く。</p>
+
+  <div class="qgroup">
+    <div class="ghead"><span class="gl">L1</span><h3>現在地の確認</h3><span class="why">答えやすい質問で場を温める／事実を握る</span></div>
+    <ul class="qlist">
+      <li><span class="q">Kepler v1.0の学習データは、実機・シミュレーション・遠隔操作の構成比でいうと今どのくらいですか？</span><span class="a">どの系統が主軸か。simが薄ければ生成映像の入る余地が大きい。</span></li>
+      <li><span class="q">arterieは今どのくらい回っていますか。何台から、月に何時間くらい入ってくる状態ですか。</span><span class="a">フライホイールの実回転数。ここが小さいと確信できれば全体の説得力が変わる。</span></li>
+      <li><span class="q">三菱自さんの工場データはいつから流れ始めますか。データの帰属はどちら側の資産になるんですか。</span><span class="a">2027年前半までの空白期間の裏取り。帰属が三菱自側なら自由に使えない＝さらに追い風。</span></li>
+      <li><span class="q">シミュレータは内製ですか、Isaac SimやMuJoCoをお使いですか。外販もされていると見たのですが。</span><span class="a">sim資産の厚み。自社simを外販しているなら、我々は競合になりうるので早期に把握。</span></li>
+      <li><span class="q">Keplerの再学習サイクルはどのくらいですか。週次、月次、それともタスク都度ですか。</span><span class="a">データ供給のリズム＝月額サブスクが噛み合うかの判定。</span></li>
+      <li><span class="q">Keplerは映像も出力しますか？　それとも行動だけですか。</span><span class="a">WAMかどうか。映像を吐くなら「自前で合成データを作れる」ことになり、話が根本から変わる。</span></li>
+    </ul>
+  </div>
+
+  <div class="qgroup">
+    <div class="ghead"><span class="gl">L2</span><h3>痛みの特定 ─ ここが本番</h3><span class="why">ここで相手の言葉を1つ持ち帰れば今日は成功</span></div>
+    <ul class="qlist">
+      <li><span class="q">いま Kepler の性能を一番止めているのは何ですか。データ量ですか、多様性ですか、計算資源ですか、評価ですか、人ですか。</span><span class="a"><b>本日の最重要質問</b>。この答えが事業計画のセグメント仮説そのものを検証する。</span></li>
+      <li><span class="q">新しいタスクを1つ立ち上げるとき、テレオペは何時間・何人日かかりますか。その工数は誰が払っているんですか。</span><span class="a">我々の価格の対抗軸。ここに具体的な数字が出れば、200万円/月が高いか安いかが即座に判定できる。</span></li>
+      <li><span class="q">失敗するのは、だいたいどういう場面ですか。照明ですか、遮蔽ですか、見たことのない物体ですか、レイアウト変更ですか。</span><span class="a"><b>そのまま我々の発注仕様書になる</b>。生成で埋められる失敗モードかどうかが分かる。</span></li>
+      <li><span class="q">導入先の工場ごとに再学習していますか、それとも汎化で吸収できていますか。</span><span class="a">現場適応コスト＝月産1,000台時代のスケール律速。ここが痛いなら我々の需要は継続的になる。</span></li>
+      <li><span class="q">性能はどうやって測っていますか。実機でしか測れない状態ですか。</span><span class="a"><b>裏の商材：評価用データ</b>。学習用より売りやすい場合がある（効果保証の議論を回避できる）。</span></li>
+      <li><span class="q">2027年の量産までのマイルストーンで、データが律速になりそうなのはどこですか。</span><span class="a">未来形で聞くと、現在の弱みを認めなくて済むので答えやすい。同じ情報が取れる。</span></li>
+    </ul>
+  </div>
+
+  <div class="qgroup">
+    <div class="ghead"><span class="gl">L3</span><h3>内製 vs 外部調達の境界線</h3><span class="why">障壁「内製が簡単なので自前でやるのでは」の直接検証</span></div>
+    <ul class="qlist">
+      <li><span class="q">データは全部自前で作る方針ですか。外から買ったことはありますか。</span><span class="a">Scale AI / FastLabel / AIRoA との接触歴。既に買っているなら購買プロセスが存在する＝売りやすい。</span></li>
+      <li><span class="q">逆に「これは買ってもいい」と思うデータの条件は何ですか。</span><span class="a"><b>内製と外注の境界線を相手に定義してもらう質問</b>。これが取れれば商品定義が決まる。</span></li>
+      <li><span class="q">生成AIで作った映像を学習に使ったことはありますか。Cosmos や GR00T-Dreams は試されましたか。</span><span class="a">シナリオS1〜S4の分岐点。ここで話の続きが決まる。</span></li>
+      <li><span class="q">（試していなければ）試していない理由は、品質ですか、権利ですか、優先度ですか、手が足りないからですか。</span><span class="a">「手が足りない」なら我々の出番。「品質」なら基準を聞き出す。「権利」なら我々が引き受ける価値がある。</span></li>
+      <li><span class="q">生成物を学習に使うことの法務判断は、社内のどなたが持っていますか。</span><span class="a">権利面の意思決定者。ここが未整備なら、そこを我々が肩代わりすること自体が価値になる。</span></li>
+    </ul>
+  </div>
+
+  <div class="qgroup">
+    <div class="ghead"><span class="gl">L4</span><h3>経済性と意思決定</h3><span class="why">深追いしない。1つ取れれば十分</span></div>
+    <ul class="qlist">
+      <li><span class="q">データまわりには年間どのくらいのオーダーで投じている感覚ですか。人件費込みで。</span><span class="a">価格の上限。答えにくければ「人数」で聞き直す（何人がデータ収集に張り付いているか）。</span></li>
+      <li><span class="q">こういう外部データの話は、どなたが決める話になりますか。</span><span class="a">意思決定者。CEOかCTOか、あるいは三菱自側の承認が要るのか。</span></li>
+    </ul>
+  </div>
+
+  <div class="qgroup">
+    <div class="ghead"><span class="gl">L5</span><h3>次につなげる ─ 帰る前に必ず1つ</h3><span class="why">受注ではなく、次の接点を確定させる</span></div>
+    <ul class="qlist">
+      <li><span class="q">検証だけでも一緒にやりませんか。HL Humanの映像を数十本お預かりできれば、こちらで生成→疑似行動復元→小型モデルで学習まで回して、効くか効かないかの数字をお持ちします。</span><span class="a"><b>今日のクロージング</b>。無償／低額の共同検証。相手にとってはリスクゼロ、我々にとっては初号ケーススタディと embodiment 適合の実素材が同時に手に入る。</span></li>
+      <li><span class="q">失敗しているシーンのログを何本かいただければ、それを狙って生成してみます。</span><span class="a">上の変化球。相手の痛みに直結するので通りやすい。</span></li>
+      <li><span class="q">工場（京都）の立ち上げは、いつ頃見学できる状態になりますか。</span><span class="a">次回訪問の口実を確保する。関係の継続。</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <div class="shead"><span class="snum">05</span><h2>起こりうるシナリオ</h2><span class="note">2軸マトリクス＋各シナリオの一手</span></div>
+  <p>軸は <b>「生成AI映像を使っているか」×「内製方針の固さ」</b>。L3の質問で15分以内にどのセルかが判明する。</p>
+
+  <div class="matrix">
+    <div class="mh"></div>
+    <div class="mh">内製方針が<b>固い</b></div>
+    <div class="mh">内製方針が<b>柔らかい</b>／手が足りない</div>
+
+    <div class="mv">生成映像を<b>使っている</b></div>
+    <div class="cell"><div class="cid">S1</div><div class="ct">既に使っていて自前で回す</div><div class="cn">商機は「量とオペレーション」。品質基準を聞き出す。</div></div>
+    <div class="cell"><div class="cid">S2</div><div class="ct">試したがうまくいかず放棄</div><div class="cn"><b>最良シナリオ。</b>失敗理由が製品仕様書になる。</div></div>
+
+    <div class="mv">生成映像を<b>使っていない</b></div>
+    <div class="cell"><div class="cid">S4</div><div class="ct">原理的に懐疑的</div><div class="cn">議論しない。数字だけ置いて評価用データへ話題転換。</div></div>
+    <div class="cell"><div class="cid">S3</div><div class="ct">知ってるが未着手・優先度低</div><div class="cn"><b>最も売れるセル。</b>我々が外注先になる。</div></div>
+  </div>
+  <p style="font-size:13px;color:var(--muted)">上記4セルに収まらない分岐が3つある（S5〜S7）。実際にはS7と重畳することが多い。</p>
+
+  <div class="scn p-mid">
+    <div class="sh"><span class="sid">S1</span><span class="st">既に生成映像を使っている</span><span class="tag">確率 中〜高</span></div>
+    <div class="rows">
+      <div class="row"><span class="rl">SIGN</span><span class="rv"><span class="say">「Cosmosは触ってます」「DreamGenの論文は読みました」「社内で少し実験してます」</span></span></div>
+      <div class="row"><span class="rl">読み</span><span class="rv">彼らがやっているのは<b>実験</b>。我々がやるのは<b>工場</b>。品質を安定させて量を出す部分は、研究者がいちばんやりたくない仕事。</span></div>
+      <div class="row"><span class="rl">その場の一手</span><span class="rv">絶対に「うちのほうが良いものを作れます」と言わない。<b>「どこまで効きましたか、どこで詰まりましたか」を全部聞く</b>。実験と量産の間の谷を一緒に言語化する。</span></div>
+      <div class="row"><span class="rl">逆質問</span><span class="rv">「実験で1本作るのに何日かかりますか？」／「<b>使える映像と使えない映像の判定は誰がどうやっていますか</b>」／「その判定を外に出せる形に書き下せますか」</span></div>
+      <div class="row"><span class="rl">持ち帰り</span><span class="rv"><b>彼らのQC基準</b>。それを我々の検品工程（工程3）の仕様にそのまま写す。これは全顧客に効く資産になる。</span></div>
+    </div>
+  </div>
+
+  <div class="scn p-win">
+    <div class="sh"><span class="sid">S2</span><span class="st">試したがうまくいかず放棄した</span><span class="tag good">最良</span><span class="tag">確率 中</span></div>
+    <div class="rows">
+      <div class="row"><span class="rl">SIGN</span><span class="rv"><span class="say">「一回やってみたんですけど微妙で」「絵は綺麗なんですけど使えなくて」「行動が取れなくて諦めました」</span></span></div>
+      <div class="row"><span class="rl">読み</span><span class="rv">失敗理由はほぼ3つのどれか — ①フレーム間の一貫性・物理破綻 ②行動ラベルが取れない（IDM未整備） ③embodiment不一致。<b>いずれも我々の工程で潰せる領域</b>。</span></div>
+      <div class="row"><span class="rl">その場の一手</span><span class="rv">同情も反論もせず、<b>失敗の詳細を根掘り葉掘り聞く</b>。「どのモデルで」「何本作って」「どこで落ちたか」「行動はどう取ろうとしたか」。ここが今日の最大の収穫になる。</span></div>
+      <div class="row"><span class="rl">逆質問</span><span class="rv">「行動系列はどうやって復元しようとしましたか？　IDMですか、latent actionですか」／「一貫性が壊れたのは何秒あたりからでしたか」／「<b>どこまで直っていれば使えましたか</b>」</span></div>
+      <div class="row"><span class="rl">持ち帰り</span><span class="rv">失敗リストをそのまま持ち帰り、<b>PoCの合格条件</b>にする。「これを解決したものを持ってきます」で次回アポが確定する。</span></div>
+    </div>
+  </div>
+
+  <div class="scn p-hi">
+    <div class="sh"><span class="sid">S3</span><span class="st">知っているが未着手・優先度が低い</span><span class="tag hot">最も売れる</span><span class="tag">確率 高</span></div>
+    <div class="rows">
+      <div class="row"><span class="rl">SIGN</span><span class="rv"><span class="say">「やりたいんですけど手が回ってなくて」「今は量産のほうが優先で」「人がいれば……」</span></span></div>
+      <div class="row"><span class="rl">読み</span><span class="rv">2027年量産に全リソースが向いている。<b>「やる価値はあると分かっているが、社内で着手できない」＝外注の定義そのもの</b>。</span></div>
+      <div class="row"><span class="rl">その場の一手</span><span class="rv">売り込まず、<b>「その優先度が低い仕事を、うちが外で回しておきます」</b>と置く。小さく始める提案（無償PoC）まで持っていく。</span></div>
+      <div class="row"><span class="rl">逆質問</span><span class="rv">「もし明日から誰かが勝手に作って持ってくるとしたら、<b>何を作ってきてほしいですか</b>」／「それが手元にあったら、何を試しますか」／「試すのに社内で何人日かかりますか」</span></div>
+      <div class="row"><span class="rl">持ち帰り</span><span class="rv"><b>発注仕様書の第1版</b>（何を何本、どういう条件で）。これがあればPoCを外して即作れる。</span></div>
+    </div>
+  </div>
+
+  <div class="scn p-mid">
+    <div class="sh"><span class="sid">S4</span><span class="st">原理的に懐疑的（物理が合わない派）</span><span class="tag">確率 中</span></div>
+    <div class="rows">
+      <div class="row"><span class="rl">SIGN</span><span class="rv"><span class="say">「動画は物理を分かってないので」「接触が再現できないなら意味がない」「うちは実機主義なので」</span></span></div>
+      <div class="row"><span class="rl">読み</span><span class="rv"><b>技術的に正しい指摘</b>。論破しようとすると関係が終わる。しかも彼らはこの分野の当事者なので、こちらの分が悪い。</span></div>
+      <div class="row"><span class="rl">その場の一手</span><span class="rv">まず全面的に同意する →「<b>だから実機の代替ではなく前段だと考えています</b>」→ DreamGenの数字を1つだけ置く → <b>すぐ話題を「評価用データ」に移す</b>。評価なら物理の厳密性への要求が低く、懐疑派にも刺さる。</span></div>
+      <div class="row"><span class="rl">逆質問</span><span class="rv">「事前学習の段階でも物理の厳密性は必要だとお考えですか」／「<b>視覚の多様性だけを足す</b>という用途ならどうですか」／「評価用の難しいシーンを作る、という使い方は？」</span></div>
+      <div class="row"><span class="rl">持ち帰り</span><span class="rv">懐疑の<b>具体的な中身</b>（どのレベルの物理が要るのか）。他社商談でも同じ壁に当たるので、標準の返しを作る材料になる。</span></div>
+    </div>
+  </div>
+
+  <div class="scn p-low">
+    <div class="sh"><span class="sid">S5</span><span class="st">データは足りている／別がボトルネック</span><span class="tag">確率 中</span></div>
+    <div class="rows">
+      <div class="row"><span class="rl">SIGN</span><span class="rv"><span class="say">「データより<b>ハードのほうが大変で</b>」「アクチュエータの歩留まりが」「実は評価が一番きつい」「そもそも人が採れない」</span></span></div>
+      <div class="row"><span class="rl">読み</span><span class="rv">ヒューマノイド企業の実態としてかなりありうる。量産前の会社の本当の痛みは<b>ハードと部品調達</b>である可能性が高い。</span></div>
+      <div class="row"><span class="rl">その場の一手</span><span class="rv"><b>深追い禁止・即撤退</b>。データの話を続けず、「では何が一番大変ですか」に切り替えて業界理解の時間に使う。5時間あるので焦らない。</span></div>
+      <div class="row"><span class="rl">逆質問</span><span class="rv">「データが律速になるのはどの段階からですか」（<b>時期をずらせば需要は存在する</b>）／「今それを解決している会社を知っていますか」（＝別の商機の情報源）</span></div>
+      <div class="row"><span class="rl">持ち帰り</span><span class="rv"><b>ヒューマノイドを本命業界に置く仮説そのものの再検討材料</b>。事業計画④に跳ね返る重要情報。ネガティブな結果ではなく、最も価値の高い検証結果のひとつ。</span></div>
+    </div>
+  </div>
+
+  <div class="scn p-mid">
+    <div class="sh"><span class="sid">S6</span><span class="st">相手のほうがデータを「売りたい」側だった</span><span class="tag">確率 低〜中 / 影響 大</span></div>
+    <div class="rows">
+      <div class="row"><span class="rl">SIGN</span><span class="rv"><span class="say">「arterieで集めたデータは将来外にも出していく構想で」「データ事業も考えていて」「うちのsimを使いませんか」</span></span></div>
+      <div class="row"><span class="rl">読み</span><span class="rv">タグラインが “The data flywheel for the physical world” である以上、<b>十分ありうる</b>。この場合、競合ではなく<b>仕入先・提携先</b>。</span></div>
+      <div class="row"><span class="rl">その場の一手</span><span class="rv">姿勢を切り替える。<b>「実機データ×生成データのハイブリッド供給」</b>という組み方を提示する。彼らの実データを種に我々が生成で増幅し、両者で外販する構図。</span></div>
+      <div class="row"><span class="rl">逆質問</span><span class="rv">「そのデータの<b>権利は誰が持ちますか</b>（三菱自の工場で撮ったものは？）」／「増幅して量を10倍にする話には興味ありますか」／「外販の相手として想定しているのはどの業界ですか」</span></div>
+      <div class="row"><span class="rl">持ち帰り</span><span class="rv">提携の可能性。<b>事業計画の「事業型2択」に第3の選択肢が増える話</b>なので、その場で決めずに必ず持ち帰る。</span></div>
+    </div>
+  </div>
+
+  <div class="scn p-low">
+    <div class="sh"><span class="sid">S7</span><span class="st">三菱自案件で手一杯・今日は雑談で終わる</span><span class="tag">確率 高（他と重畳）</span></div>
+    <div class="rows">
+      <div class="row"><span class="rl">SIGN</span><span class="rv">工場見学と会社紹介で時間が過ぎ、こちらの話に入る隙がない。</span></div>
+      <div class="row"><span class="rl">読み</span><span class="rv">MOUから2ヶ月弱。会社として最も忙しい時期。<b>これは失敗ではない</b>。</span></div>
+      <div class="row"><span class="rl">その場の一手</span><span class="rv">売り込みを完全に捨て、L1・L2の質問だけを会話の中に混ぜる。<b>会食フェーズが本番</b>と割り切る。関係の質を優先。</span></div>
+      <div class="row"><span class="rl">逆質問</span><span class="rv">「量産が立ち上がったあと、<b>次にAI側で効いてくるのは何ですか</b>」／「その頃にお役に立てそうなことを準備しておきたいので、いま何を作っておくべきですか」</span></div>
+      <div class="row"><span class="rl">持ち帰り</span><span class="rv">2027年前半のデータ需要ピークに向けた<b>種まきと再訪の約束</b>。それだけで十分。</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+  <div class="shead"><span class="snum">06</span><h2>相手から来る質問への返し</h2><span class="note">実績ゼロで行くので、構えを事前に決めておく</span></div>
+  <p class="lead"><b>大前提：実績は0社。これは今日ごまかさない。</b>ごまかすと、ML屋である相手には即座に見抜かれる。「初号顧客を探しているので、一緒に作らせてほしい」が最も強い立ち位置。</p>
+
+  <div class="qa">
+    <details><summary>「それ、うちで内製できますよね？」</summary>
+      <div class="ans">最も来る質問。<strong>否定しない。</strong>「技術的には完全にできると思います。作れないから頼む、という話ではないです」と先に認める。その上で —<br>「問題は<strong>誰の時間で作るか</strong>だと思っていて。御社のエンジニアの1日は、Keplerのアーキテクチャに使うほうが明らかに価値が高い。生成を回して不良を弾く作業は、外で回しておけるものです」<br>→ そのまま「今、その作業を誰がやることになりますか？」と質問で返す。相手が「手が空いてない」と言えばS3に入る。</div>
+    </details>
+    <details><summary>「実績はあるんですか。何社に納品してます？」</summary>
+      <div class="ans"><strong>「今はゼロです。初号顧客を探しています」</strong>と即答する。取り繕わない。続けて —<br>「だからこそ、最初の1社には<strong>結果が出るまで付き合う</strong>つもりで来ています。普通なら払っていただく検証コストを、こちらが持ちます」<br>→ 実績ゼロは、初号顧客にとっては<strong>「異常に手厚い対応が受けられる」という利点</strong>でもある。そう言い換える。</div>
+    </details>
+    <details><summary>「効いたという証拠は？」</summary>
+      <div class="ans">自社実績は無いので、<strong>他社の公開実証を借りる</strong>。「うちのデータで効きました」とは絶対に言わない。<br>「NVIDIAのGEAR LabのDreamGenが、1タスク1環境のテレオペだけで22の新規behaviorを出しています。11時間で78万軌跡、人間デモ6,500時間相当です。<strong>手法として効くことは実証済みで、我々がやろうとしているのは、それを毎月安定して回すオペレーションのほうです</strong>」<br>→ 論点を「効くか」から「回せるか」にずらすのが目的。</div>
+    </details>
+    <details><summary>「物理が合わない映像で学習して大丈夫なんですか」</summary>
+      <div class="ans"><strong>全面的に同意してから返す。</strong>「合いません。接触や変形は生成映像では担保できないと思っています」<br>「なので<strong>実機の代替ではなく前段</strong>として考えています。視覚の多様性と分布の広さは生成が圧倒的に安く出せる。最後の精密動作は実機でfine-tuneしていただく前提です」<br>→ ここで正直に弱点を言えるかどうかで、この後の会話の深さが決まる。</div>
+    </details>
+    <details><summary>「権利関係は大丈夫なんですか。生成AIの映像を学習に使って」</summary>
+      <div class="ans">相手が最も嫌うリスク。<strong>「そこはこちらで引き受けます」が答え。</strong><br>「学習用途での再配布権を契約で明文化した上でしか仕入れません。御社に法的リスクが残る形では出しません」<br>→ 逆にこれは<strong>売り物になる</strong>。「自社で生成すると社内法務を通す手間がかかりますが、我々から買えばその判断ごと外に出せます」。<span class="tag hot">注意</span> Runwayとのエンプラ契約はまだ未締結なので、<strong>「契約済み」とは言わない</strong>。「その条件でしか仕入れない方針」と現在形の方針として話す。</div>
+    </details>
+    <details><summary>「どこから仕入れているんですか」</summary>
+      <div class="ans"><strong>具体的な仕入先は言わない。</strong>ただし嘘もつかない。<br>「複数の生成モデルを使い分けています。用途によってはオープンウェイトを自社GPUで回すこともあります」<br>→ 仕入先が割れると内製に直結する。ここは事業の守りの部分。深追いされたら「その辺りは契約の話が固まってからお話しさせてください」で止める。</div>
+    </details>
+    <details><summary>「いくらですか」</summary>
+      <div class="ans"><strong>今日は数字を出さない。</strong>「規模と要求品質で全然変わるので、まず何がどれだけ必要かを教えてください」<br>どうしても、と言われたら幅で示す：「月額で数百万円のレンジです。実機のテレオペで同じ量を集める工数と比べていただくのが分かりやすいと思います」<br>→ そのまま「テレオペだと1タスクいくらくらいの感覚ですか？」と聞き返して、L2の質問に戻す。</div>
+    </details>
+    <details><summary>「うちのロボット向けの映像なんて作れるんですか」</summary>
+      <div class="ans">技術的に正しい懸念（embodiment適合）。<strong>正直に「素材をいただかないと作れません」と言う。</strong><br>「HL Humanの実機映像かCADをお預かりできれば、その見た目・関節構成に合わせ込めます。逆にそれ無しでは、御社にとって意味のあるものは作れません」<br>→ これが<strong>NDAと初期素材の受け渡し（工程0）に自然につながる、今日いちばん実務的な着地点</strong>。</div>
+    </details>
+    <details><summary>「なぜ我々のところに来たんですか」</summary>
+      <div class="ans">お世辞ではなく<strong>調べてきたことを見せる</strong>のが正解。<br>「Keplerが world model を中核に置いていること、arterieでフリートからデータを集める設計になっていることを見て、<strong>データを事業の中心に据えている会社だと思ったからです</strong>。データの話が通じる相手でないと、この商売は成立しないので」<br>→ 「実機が出そろうまでの間、どうされるのかを伺いたくて」と続けると、そのままL2に入れる。</div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section id="s7">
+  <div class="shead"><span class="snum">07</span><h2>地雷</h2><span class="note">やらないことのリスト</span></div>
+  <div class="grid g2">
+    <div class="box stop"><h4>「データ足りてないですよね」と決めつける</h4><p>相手はデータフライホイールを自社の強みとして対外的に打ち出している。弱点として指摘した瞬間に防御に入る。<b>足りているか否かは相手に言わせる。</b></p></div>
+    <div class="box stop"><h4>売り込む</h4><p>今日は聞く日。手持ちのPoCも実績もない状態で押すと、次がなくなる。提案はL5の「一緒に検証しませんか」1つだけ。</p></div>
+    <div class="box stop"><h4>効果を保証する</h4><p>事業設計上、効果保証は瑕疵責任が重いので売らないと決めている。口頭でも「効きます」と言い切らない。<b>「仕様は保証する、効果検証は伴走する」</b>が言い方。</p></div>
+    <div class="box stop"><h4>仕入先を明かす</h4><p>Runway／Cosmosという具体名を出すと、内製の設計図を渡すことになる。「複数の生成モデルを使い分けている」で止める。</p></div>
+    <div class="box stop"><h4>Runwayと契約済みのように話す</h4><p>エンタープライズ契約は未締結・未確認。<b>事実と方針を混ぜない。</b>後で発覚すると信用が一撃で消える。</p></div>
+    <div class="box stop"><h4>相手の技術を論破しにいく</h4><p>相手は10Bの基盤モデルを自前で学習させている。物理ギャップの指摘は正しい。<b>正しい指摘には正しいと言う。</b>そのほうが結果的に信用される。</p></div>
+  </div>
+</section>
+
+<!-- ============ 8 ============ -->
+<section id="s8">
+  <div class="shead"><span class="snum">08</span><h2>当日の運びと収穫定義</h2><span class="note">17:00–22:00</span></div>
+
+  <h3>時間の使い方（想定）</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>フェーズ</th><th>やること</th><th>この時間に取るもの</th></tr></thead>
+      <tbody>
+        <tr><td class="k">工場見学</td><td>質問しない。<b>見る</b>。実機は何台あるか、テレオペのブースはあるか、収録環境らしきものはあるか、人は何人いるか</td><td>arterieの実回転数の<b>目視での裏取り</b>。L1の答え合わせになる</td></tr>
+        <tr><td class="k">会社紹介・技術説明</td><td>聞き役。Keplerの話が出たら「大脳／小脳」「world model」の語で相槌を打つ</td><td>相手の技術的な自負がどこにあるか</td></tr>
+        <tr><td class="k">座っての会話</td><td>L1 → L2 を丁寧に。L3は自然に入れる隙があれば</td><td><b>ボトルネックの一言</b>（本日の最重要目標）</td></tr>
+        <tr><td class="k">会食（あれば）</td><td><b>ここが本番。</b>L2の再訪、L3、L4、そしてL5のクロージング</td><td>本音・内製の実態・意思決定者・次のアポ</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>持ち物・準備</h3>
+  <ul class="plain">
+    <li><b>NDAの雛形</b>を用意しておく（工程0の素材受け渡しの話になったとき、その場で前に進められる）</li>
+    <li>DreamGenの数字（<b>22 behavior / 11時間で78万軌跡 / 人間デモ6,500時間相当</b>）を暗記。資料は出さなくていい</li>
+    <li>Zachとの<b>役割分担を移動中に決める</b>：誰が聞き役で誰が技術の深い話に入るか。二人同時に質問しない</li>
+    <li>工場では撮影可否を必ず確認。安全靴・服装の指定があるか、事前に先方へ確認<span class="tag guess">未確認</span></li>
+  </ul>
+
+  <div class="box">
+    <h4>今日「成功した」と言える条件（5つ中3つ取れれば十分）</h4>
+    <ol class="blist" style="margin-top:12px">
+      <li><div><strong>Keplerの学習データ構成比とボトルネックを、相手の言葉で1つ持ち帰る</strong><span>L2の第1問の答え。これ単体で今日の元が取れる。</span></div></li>
+      <li><div><strong>生成AI映像への態度を確定させる（S1〜S6のどれか）</strong><span>これが決まらないと、この商売がヒューマノイド業界で成立するかの判断が進まない。</span></div></li>
+      <li><div><strong>「使えるデータ」の品質基準を1つ、具体で聞く</strong><span>検品工程の仕様になる。全顧客に効く資産。</span></div></li>
+      <li><div><strong>次アクションを確定させる</strong><span>共同検証の可否、素材の受け渡し、または再訪の約束。何かひとつ。</span></div></li>
+      <li><div><strong>事業計画の該当セルを更新する</strong><span>Highlandersのステータス「要補強確認」を確定値に。あわせて「汎用ヒューマノイド開発」セグメントの需要仮説そのものを再判定。</span></div></li>
+    </ol>
+  </div>
+
+  <div class="box warn">
+    <h4>帰ってすぐやること</h4>
+    <p style="margin:0">記憶が新しいうちに、<b>相手が使った言葉をそのまま</b>書き留める。要約しない。「多様性が足りない」なのか「レアケースが取れない」なのか「汎化しない」なのかで、作るべき商品が変わる。<b>言葉づかいそのものが仕様書になる。</b></p>
+  </div>
+</section>
+
+<footer>
+  <h4>SOURCES</h4>
+  <ul>
+    <li><a href="https://www.mitsubishi-motors.com/jp/newsroom/newsrelease/2026/20260709_1.html">三菱自動車 × Highlanders 基本合意書締結（三菱自動車 ニュースリリース 2026-07-09）</a></li>
+    <li><a href="https://www.itmedia.co.jp/news/articles/2607/09/news123.html">三菱自動車、国産ヒューマノイド量産へ 27年後半に月産1000台目指す（ITmedia NEWS）</a></li>
+    <li><a href="https://www.sbbit.jp/article/st/186076">三菱自動車と東大発Highlandersが協業、国産人型ロボットの月産1000台体制へ（Seizo Trend）</a></li>
+    <li><a href="https://response.jp/article/2026/07/09/413816.html">「日本発のヒューマノイドロボット」量産へ（Response.jp 2026-07-09）</a></li>
+    <li><a href="https://robotstart.info/article/2026/06/02/381972.html">東大発ベンチャーのHighlandersが量産化を本格始動、三菱自から出資受け入れ（ロボスタ）</a></li>
+    <li><a href="https://prtimes.jp/main/html/rd/p/000000007.000156831.html">Highlanders、国産ヒューマノイドロボット量産化に向け始動（PR TIMES）</a> ／ <a href="https://prtimes.jp/main/html/rd/p/000000003.000156831.html">HL Human 初公開</a> ／ <a href="https://prtimes.jp/main/html/rd/p/000000002.000156831.html">HLQ Pro ベータ提供開始</a></li>
+    <li><a href="https://digital-construction.jp/news/2180">HL Human 仕様（19自由度・3km/h・5指ハンド3kg）（デジコン）</a></li>
+    <li><a href="https://www.highlanders.ai/kepler">Kepler v1.0 — Highlanders 公式</a> ／ <a href="https://www.highlanders.ai/">Highlanders 公式サイト</a></li>
+    <li><a href="https://arxiv.org/abs/2505.12705">DreamGen: Unlocking Generalization in Robot Learning through Video World Models (arXiv:2505.12705)</a> ／ <a href="https://github.com/nvidia/gr00t-dreams">NVIDIA GR00T-Dreams</a></li>
+    <li><a href="https://developer.nvidia.com/blog/pretrained-to-imagine-fine-tuned-to-act-the-rise-of-world-action-models/">Pretrained to Imagine, Fine-Tuned to Act: The Rise of World-Action Models（NVIDIA Technical Blog）</a></li>
+    <li><a href="https://arxiv.org/html/2605.00080v1">World Model for Robot Learning: A Comprehensive Survey (arXiv:2605.00080)</a></li>
+  </ul>
+  <p>作成 2026-08-27 ／ 社外秘・内部ID等は含みません。<span class="tag guess">要確認</span>が付いた項目は公開情報から断定できていないため、当日の確認事項として扱うこと。</p>
+</footer>
+
+</div>
