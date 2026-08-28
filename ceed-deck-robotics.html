@@ -147,6 +147,15 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
 .rm .ph{margin-top:auto;border-top:1px solid var(--line);padding-top:15px}
 .rm .ph span{display:block;font-family:var(--mo);font-size:10.5px;letter-spacing:.24em;color:var(--mut);margin-bottom:8px}
 .rm .ph b{font-size:15px;font-weight:900;line-height:1.6}
+.rm.acc{background:#000;color:#fff;padding:26px 24px;margin:-26px 0}
+.rm.acc::before{background:#000}
+.rm.acc .dot{display:none}
+.rm.acc .mo{color:#9a9a9a}
+.rm.acc h4{color:#fff}
+.rm.acc p{color:#cfcfcf}
+.rm.acc .ph{border-top-color:#3a3a3a}
+.rm.acc .ph span{color:#8e8e8e}
+.rm.acc .ph b{color:#fff}
 .rm.sm .st{font-size:25px}
 .rm.sm h4{font-size:19px;margin:10px 0 10px}
 .rm.sm p{font-size:14px;line-height:1.75}
@@ -307,9 +316,9 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="rail"><span>Our Position</span></div>
   <div style="position:absolute;left:var(--padL);top:196px;right:120px">
     <div class="eyebrow">Our Position</div>
-    <h2 style="font-size:82px;font-weight:900;line-height:1.2;margin-top:26px;letter-spacing:-.01em">素材を、<br>売るのではなく。</h2>
+    <h2 style="font-size:76px;font-weight:900;line-height:1.24;margin-top:26px;letter-spacing:-.01em">本当に必要なデータを、<br>必要な場面にだけ。</h2>
     <p style="font-size:21px;line-height:2;color:#c9c9c9;margin-top:40px;max-width:1000px">
-      どの場面のデータを、どれだけ、どう作れば御社のモデルが良くなるのか。そこを一緒に決めるところから入ります。作って納品して終わりにはしません。効いたかどうかを測り、効かなければ設計を引き直します。<br>
+      どの場面のデータが、どれだけ足りていないのか。そこを一緒に見極めるところから始めます。量をまとめて納めるのではなく、効く場面に絞って作り、効いたかどうかを測り、効かなければ設計を引き直します。<br>
       <span style="color:#fff">最後は、その作り方ごと御社の中に置いていきます。</span>
     </p>
   </div>
@@ -322,7 +331,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>About</span></div>
   <div class="head">
-    <div class="h"><div class="n">02</div><div class="t">作れるチームであることを、先に。</div></div>
+    <div class="h"><div class="n">02</div><div class="t">私たちについて</div></div>
     <hr>
   </div>
   <div class="lead" style="top:190px;font-size:23px">生成AIで映像を量産してきた運用チームと、仕様の固まっていないものを動かすエンジニアが、同じ会社にいます。</div>
@@ -367,10 +376,10 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Evidence</span></div>
   <div class="head">
-    <div class="h"><div class="n">03</div><div class="t">合成データは、実データに乗せると効く。</div></div>
+    <div class="h"><div class="n">03</div><div class="t">実データのみ vs 実データ＋合成データの学習</div></div>
     <hr>
   </div>
-  <div class="lead" style="top:192px;font-size:24px">私たちの主張ではなく、海外の先行事例で数字が出ている領域です。</div>
+  <div class="lead" style="top:192px;font-size:24px;color:var(--mut2);font-weight:500">〜 先端事例にみるモデル性能向上のケーススタディ 〜</div>
   <div class="body" style="top:262px">
     <div class="ev">
       <div class="src">NVIDIA / Isaac GR00T N1<em>2025.03 ― Humanoid</em></div>
@@ -509,9 +518,9 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
         <p>合意した仕様で継続的にデータを供給します。検証結果を見ながら、どの場面にどれだけ配分するかを毎サイクル引き直します。</p>
         <div class="ph"><span>この段階で残るもの</span><b>効くシーン配分と、生成のレシピ</b></div>
       </div>
-      <div class="rm">
+      <div class="rm acc">
         <div class="dot"></div>
-        <span class="st">03</span><span class="mo">PHASE 3</span>
+        <span class="st">03</span><span class="mo">PHASE 3 ― 着地点</span>
         <h4>内製化</h4>
         <p>生成パイプラインと評価環境を御社の中に移します。私たちはレシピの更新とスポット相談だけを残します。</p>
         <div class="ph"><span>この段階で残るもの</span><b>生成パイプラインと、評価機一式</b></div>
@@ -662,27 +671,27 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Partner</span></div>
   <div class="head">
-    <div class="h"><div class="n">10</div><div class="t">最初の一社を、探しています。</div></div>
+    <div class="h"><div class="n">10</div><div class="t">国内でご一緒する、最初のパートナー様を募集中。</div></div>
     <hr>
   </div>
-  <div class="lead" style="top:192px;font-size:24px">正直に申し上げます。この形での納品実績は、御社が最初になります。</div>
+  <div class="lead" style="top:192px;font-size:24px">日本のロボティクス領域では、これから立ち上げていく座組みです。</div>
   <div class="body" style="top:280px">
     <div class="cmp">
-      <div class="ch">ま　だ　な　い　も　の</div>
+      <div class="ch">こ　れ　か　ら　作　る　も　の</div>
       <div class="ch">す　で　に　あ　る　も　の</div>
 
-      <div class="row lft"><b>01</b>この事業での納品実績とケーススタディ</div>
+      <div class="row lft"><b>01</b>国内での納品実績とケーススタディ</div>
       <div class="row rgt"><span class="ar">→</span>生成AI映像を日次で量産・検品してきた<span class="hl">運用体制</span></div>
 
-      <div class="row lft"><b>02</b>特定業界向けの、完成したレシピ</div>
+      <div class="row lft"><b>02</b>業界別に磨き込まれたレシピ</div>
       <div class="row rgt"><span class="ar">→</span>海外の先行事例が示す、合成＋実データの効果（P.06）</div>
 
       <div class="row lft"><b>03</b>すぐにお見せできるデモ映像</div>
       <div class="row rgt"><span class="ar">→</span>弱点診断から効果検証まで並走する体制と、素材調達の接点</div>
     </div>
-    <div class="bar" style="margin-top:40px">最初のパートナーには、立ち上げ期の条件でご一緒します。量・期間・費用は御社の状況に合わせて設計します。</div>
+    <div class="bar" style="margin-top:40px">まずは1つの場面・少量から。効果を測れる最小単位で、一緒に試すところから始めませんか。</div>
   </div>
-  <div class="note" style="bottom:44px">※ 実績づくりを一緒にしていただく前提のため、成果の公開可否も含めて個別にご相談させてください。まずは「いま落ちている場面」を1つ、お聞かせいただくところからで構いません。</div>
+  <div class="note" style="bottom:44px">※ 立ち上げ期のパートナー様には、量・期間・費用を御社の状況に合わせて設計します。成果の公開可否も含めて個別にご相談させてください。まずは「いま落ちている場面」を1つ、お聞かせいただくところからで構いません。</div>
   <div class="pnum">13</div>
 </section>
 
