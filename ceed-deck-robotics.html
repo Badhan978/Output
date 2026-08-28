@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceed 営業資料 — ロボット学習データの伴走支援</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Ceed Sales Deck — Physical AI / 学習データ伴走型
+   ceed-deck-clip.html のデザインシステムを踏襲（14枚版）
+   ============================================================ */
+:root{
+  --ink:#000;
+  --bg:#fff;
+  --mut:#8a8a8a;
+  --mut2:#6a6a6a;
+  --line:#e3e3e3;
+  --line2:#d0d0d0;
+  --soft:#f4f4f4;
+  --W:1440px;
+  --H:810px;
+  --padL:120px;
+  --padR:100px;
+  --jp:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  --dp:"Outfit","Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;
+  --mo:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:#3a3a3a;
+  font-family:var(--jp);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{width:var(--W);height:var(--H);position:relative;transform-origin:center center;background:#fff}
+
+.slide{
+  position:absolute;inset:0;width:var(--W);height:var(--H);
+  background:var(--bg);overflow:hidden;display:none;
+}
+.slide.on{display:block}
+
+/* ---------- 共通パーツ ---------- */
+.mark{position:absolute;left:0;top:0;width:40px;height:18px;background:#000}
+.vline{position:absolute;left:100px;top:0;bottom:0;width:1px;background:var(--line)}
+.rail{position:absolute;left:38px;top:0;height:100%;display:flex;align-items:center}
+.rail span{
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  font-family:var(--mo);font-size:11.5px;letter-spacing:.38em;
+  color:var(--mut);text-transform:uppercase;
+}
+.pnum{position:absolute;left:36px;bottom:34px;font-family:var(--dp);font-size:14px;font-weight:800;letter-spacing:.02em}
+
+.head{position:absolute;left:var(--padL);right:var(--padR);top:74px}
+.head .h{display:flex;align-items:baseline;gap:22px}
+.head .n{font-family:var(--dp);font-size:66px;font-weight:800;line-height:.9;letter-spacing:-.01em}
+.head .t{font-size:41px;font-weight:900;line-height:1.1;letter-spacing:.005em}
+.head hr{border:0;border-top:1px solid #111;margin-top:16px}
+.lead{position:absolute;left:var(--padL);right:var(--padR);top:196px;font-size:26px;font-weight:700;line-height:1.45}
+
+.body{position:absolute;left:var(--padL);right:var(--padR);top:290px}
+.note{position:absolute;left:var(--padL);right:var(--padR);font-size:14.5px;line-height:1.7;color:var(--mut2)}
+
+.bar{background:#000;color:#fff;padding:19px 30px;font-size:21px;font-weight:700;letter-spacing:.01em}
+
+.card{border:1px solid var(--line);padding:26px 26px 28px}
+.card.dark{background:#000;color:#fff;border-color:#000}
+.card .kicker{font-family:var(--mo);font-size:11px;letter-spacing:.34em;color:var(--mut);margin-bottom:14px;text-transform:uppercase}
+.card.dark .kicker{color:#9a9a9a}
+.card h4{font-size:22px;font-weight:900;line-height:1.35;margin-bottom:12px}
+.card p{font-size:15.5px;line-height:1.85;color:#3a3a3a}
+.card.dark p{color:#cfcfcf}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+
+.eyebrow{font-family:var(--mo);font-size:12px;letter-spacing:.32em;color:var(--mut);text-transform:uppercase}
+.eyebrow::before{content:"■";margin-right:12px;color:#000;font-size:9px;vertical-align:2px}
+
+/* ---------- 表紙 / 締め ---------- */
+.cover{display:grid;grid-template-columns:1008px 432px;height:100%}
+.cover .l{position:relative;padding:0 0 0 var(--padL)}
+.cover .r{background:#000;position:relative}
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;display:flex;align-items:center;
+  font-family:var(--mo);font-size:12.5px;letter-spacing:.18em;color:#7d7d7d}
+.topbar .a{position:absolute;left:56px}
+.topbar .b{position:absolute;left:50%;transform:translateX(-50%);font-family:var(--jp);letter-spacing:.06em}
+.vlabel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(180deg);
+  writing-mode:vertical-rl;font-family:var(--mo);font-size:12.5px;letter-spacing:.42em;color:#8e8e8e}
+.rlogo{position:absolute;right:40px;bottom:34px;color:#fff;font-family:var(--dp);font-size:26px;font-weight:800}
+.copy{position:absolute;left:56px;bottom:34px;font-family:var(--mo);font-size:12px;color:#8e8e8e}
+
+.ring{display:inline-block;width:34px;height:34px;border:3.4px solid currentColor;border-radius:50%;
+  border-right-color:transparent;transform:rotate(-45deg);vertical-align:-8px}
+.ring.lg{width:78px;height:78px;border-width:7px;vertical-align:-18px}
+
+/* ---------- Agenda ---------- */
+.ag{border-top:1px solid var(--line);padding:26px 0 24px;display:grid;grid-template-columns:110px 1fr;gap:0 30px}
+.ag:last-of-type{border-bottom:1px solid var(--line)}
+.ag .an{font-family:var(--dp);font-size:34px;font-weight:800;line-height:1}
+.ag h4{font-size:27px;font-weight:900;margin-bottom:10px}
+.ag p{font-size:15.5px;line-height:1.75;color:var(--mut2)}
+
+/* ---------- 黒スライド ---------- */
+.black{background:#000;color:#fff}
+.black .eyebrow{color:#9a9a9a}
+.black .eyebrow::before{color:#fff}
+
+/* ---------- 数値 ---------- */
+.statrow{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line)}
+.statrow div{padding:20px 16px 18px;border-left:1px solid var(--line)}
+.statrow div:first-child{border-left:0}
+.statrow .v{font-family:var(--dp);font-size:32px;font-weight:800;line-height:1;letter-spacing:-.01em}
+.statrow .v small{font-size:16px;font-weight:800;margin-left:2px}
+.statrow .k{font-size:12.5px;color:var(--mut2);margin-top:10px}
+
+/* ---------- 表 ---------- */
+table.spec{width:100%;border-collapse:collapse}
+table.spec td{border-top:1px solid var(--line);padding:18px 0;vertical-align:top}
+table.spec tr:last-child td{border-bottom:1px solid var(--line)}
+table.spec td.k{width:210px;font-family:var(--mo);font-size:12px;letter-spacing:.22em;color:var(--mut);padding-top:22px}
+table.spec td.v{font-size:17.5px;font-weight:700;line-height:1.7}
+table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:400;color:var(--mut2);margin-top:5px}
+
+/* ---------- 根拠リスト ---------- */
+.ev{border-top:1px solid var(--line);padding:19px 0 20px;display:grid;grid-template-columns:290px 1fr;gap:0 34px}
+.ev:last-of-type{border-bottom:1px solid var(--line)}
+.ev .src{font-size:17px;font-weight:900;line-height:1.4}
+.ev .src em{display:block;font-style:normal;font-family:var(--mo);font-size:11px;letter-spacing:.2em;color:var(--mut);margin-top:7px}
+.ev .txt{font-size:15px;line-height:1.8;color:#3a3a3a}
+.ev .txt b{background:#000;color:#fff;padding:1px 7px;font-weight:900}
+
+/* ---------- ロードマップ ---------- */
+.rm{position:relative;padding-top:26px;display:flex;flex-direction:column;height:100%}
+.rm::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--line2)}
+.rm .dot{position:absolute;left:0;top:-4px;width:9px;height:9px;background:#000}
+.rm .st{font-family:var(--dp);font-size:31px;font-weight:800;display:inline-block;margin-right:12px}
+.rm .mo{font-family:var(--mo);font-size:11.5px;letter-spacing:.22em;color:var(--mut)}
+.rm h4{font-size:23px;font-weight:900;margin:12px 0 12px}
+.rm p{font-size:15px;line-height:1.8;color:#3a3a3a}
+.rm .ph{margin-top:auto;border-top:1px solid var(--line);padding-top:15px}
+.rm .ph span{display:block;font-family:var(--mo);font-size:10.5px;letter-spacing:.24em;color:var(--mut);margin-bottom:8px}
+.rm .ph b{font-size:15px;font-weight:900;line-height:1.6}
+.rm.sm .st{font-size:25px}
+.rm.sm h4{font-size:19px;margin:10px 0 10px}
+.rm.sm p{font-size:14px;line-height:1.75}
+
+/* ---------- 比較リスト ---------- */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:0 60px}
+.cmp .ch{font-family:var(--mo);font-size:11.5px;letter-spacing:.3em;color:var(--mut);padding-bottom:16px}
+.cmp .row{border-top:1px solid var(--line);padding:27px 0;font-size:18px;line-height:1.5}
+.cmp .row:last-child{border-bottom:1px solid var(--line)}
+.cmp .lft{color:#9a9a9a}
+.cmp .lft b{font-family:var(--dp);margin-right:14px;font-weight:800}
+.cmp .rgt{font-weight:700}
+.cmp .rgt .ar{margin-right:14px}
+.hl{background:#000;color:#fff;padding:1px 8px}
+
+/* ---------- FAQ ---------- */
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:0 64px}
+.faq .q{border-top:1px solid var(--line);padding:20px 0 22px}
+.faq .q:last-child,.faq .q:nth-child(3){border-bottom:1px solid var(--line)}
+.faq .qt{display:flex;gap:20px;align-items:baseline;margin-bottom:9px}
+.faq .qn{font-family:var(--dp);font-size:17px;font-weight:800}
+.faq .qq{font-size:19px;font-weight:900}
+.faq .qa{font-size:14px;line-height:1.75;color:var(--mut2);padding-left:57px}
+
+/* ---------- ステップ矢印 ---------- */
+.flow{display:flex;align-items:stretch;gap:0}
+.flow .fc{flex:1;border:1px solid var(--line);padding:22px 18px 24px;text-align:center}
+.flow .fc.dark{background:#000;color:#fff;border-color:#000}
+.flow .fc h5{font-size:20px;font-weight:900;line-height:1.35;margin-bottom:12px}
+.flow .fc p{font-size:13.5px;line-height:1.7;color:#3a3a3a}
+.flow .fc.dark p{color:#cfcfcf}
+.flow .ar{display:flex;align-items:center;padding:0 16px;font-size:22px}
+.flow.six .fc{padding:26px 14px 26px;min-height:280px}
+.flow.six .fc h5{font-size:18px;margin-bottom:13px}
+.flow.six .fc p{font-size:13px;line-height:1.75}
+.flow.six .ar{padding:0 7px;font-size:16px;color:#b0b0b0}
+.flow .fc .st{font-family:var(--mo);font-size:11px;letter-spacing:.26em;color:var(--mut);display:block;margin-bottom:9px}
+.flow .fc.dark .st{color:#8e8e8e}
+
+/* ---------- toolbar ---------- */
+#tb{position:fixed;right:16px;bottom:14px;display:flex;gap:8px;align-items:center;z-index:50;
+  font-family:var(--mo);font-size:12px;color:#cfcfcf}
+#tb button{font:inherit;background:#111;color:#eee;border:1px solid #555;padding:6px 12px;cursor:pointer}
+#tb button:hover{background:#222}
+
+/* ---------- print ---------- */
+@page{size:1440px 810px;margin:0}
+@media print{
+  body{background:#fff;overflow:visible}
+  #stage{position:static;display:block}
+  #deck{width:auto;height:auto;transform:none!important}
+  .slide{position:relative;display:block!important;page-break-after:always;break-after:page}
+  #tb{display:none}
+}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+
+<!-- ═══════════════ 01 表紙 ═══════════════ -->
+<section class="slide on">
+  <div class="cover">
+    <div class="l">
+      <div class="topbar">
+        <span class="a">2026.08</span>
+        <span class="b">ロボット学習データの伴走支援　ご提案</span>
+      </div>
+      <div style="position:absolute;left:var(--padL);top:236px;right:70px">
+        <div class="eyebrow">実機だけでは、集めきれない企業さまへ</div>
+        <h1 style="font-size:88px;font-weight:900;line-height:1.16;margin-top:26px;letter-spacing:-.01em">
+          足りないデータを、<br>一緒に埋める。
+        </h1>
+        <p style="font-size:20px;line-height:1.85;color:#4a4a4a;margin-top:34px;max-width:730px">
+          ヒューマノイド・自動運転・建機。モデルが転ぶ場面を特定し、そこだけを埋めるデータを設計・生成し、効いたかどうかまで一緒に確かめます。
+        </p>
+      </div>
+      <div class="copy">© 2026 Ceed Inc.</div>
+    </div>
+    <div class="r">
+      <div class="vlabel">CEED&nbsp;·&nbsp;PHYSICAL&nbsp;AI&nbsp;DATA&nbsp;·&nbsp;2026</div>
+      <div class="rlogo"><span class="ring"></span>&nbsp;Ceed</div>
+      <div style="position:absolute;left:40px;bottom:34px;color:#8e8e8e;font-size:12.5px">株式会社Ceed</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 02 Agenda ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Agenda</span></div>
+  <div class="head">
+    <div class="eyebrow">Agenda</div>
+    <div class="h" style="margin-top:20px"><div class="t" style="font-size:44px">本日お話しすること</div></div>
+    <hr>
+  </div>
+  <div class="body" style="top:248px">
+    <div class="ag">
+      <div class="an">01</div>
+      <div>
+        <h4>実機データの限界と、私たち</h4>
+        <p>実機を増やしても埋まらない領域がどこにあるか。そして、なぜ私たちがそこを引き受けられるか。</p>
+      </div>
+    </div>
+    <div class="ag">
+      <div class="an">02</div>
+      <div>
+        <h4>埋め方と、進め方</h4>
+        <p>弱点の特定からデータ設計・生成・検証まで。そして、その仕組みを御社の中に移すまでの流れ。</p>
+      </div>
+    </div>
+    <div class="ag">
+      <div class="an">03</div>
+      <div>
+        <h4>ご質問と、これから</h4>
+        <p>よくいただく論点と、いまの私たちの状況。最初のパートナーを募集していることについて。</p>
+      </div>
+    </div>
+  </div>
+  <div class="pnum">02</div>
+</section>
+
+<!-- ═══════════════ 03 課題 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Context</span></div>
+  <div class="head">
+    <div class="h"><div class="n">01</div><div class="t">実機を走らせても、埋まらない領域がある。</div></div>
+    <hr>
+  </div>
+  <div class="lead">台数を増やしても、時間をかけても、届かない場面があります。</div>
+  <div class="body" style="top:294px">
+    <div class="grid3">
+      <div class="card" style="min-height:246px">
+        <div class="kicker">Cost</div>
+        <h4>集めるほど、<br>時間と費用が積み上がる</h4>
+        <p>走行・操作・撮影・整理。1シーンあたりの単価は下がらず、学習量を増やすほど費用がほぼ線形に伸びていきます。</p>
+      </div>
+      <div class="card" style="min-height:246px">
+        <div class="kicker">Rare</div>
+        <h4>危ない場面ほど、<br>集まらない</h4>
+        <p>ヒヤリハット、異常な挙動、悪天候、想定外の物体。安全上わざと起こせない場面ほど、モデルは必要としています。</p>
+      </div>
+      <div class="card" style="min-height:246px">
+        <div class="kicker">Local</div>
+        <h4>日本の現場は、<br>公開データに写っていない</h4>
+        <p>狭い道路、独自の標識や看板、現場ごとの設備や作業手順。海外由来のデータセットには、そもそも含まれていません。</p>
+      </div>
+    </div>
+    <div class="bar" style="margin-top:36px">足りないのは台数でも予算でもなく、「モデルがまだ見ていない場面」です。</div>
+  </div>
+  <div class="note" style="bottom:52px">※ 3つとも、実機の台数や予算を増やしても構造的には解けません。だからこそ「集める」以外の手段を、集めることと組み合わせて設計する必要があります。</div>
+  <div class="pnum">03</div>
+</section>
+
+<!-- ═══════════════ 04 ポジション（黒） ═══════════════ -->
+<section class="slide black">
+  <div class="mark" style="background:#fff"></div>
+  <div class="rail"><span>Our Position</span></div>
+  <div style="position:absolute;left:var(--padL);top:196px;right:120px">
+    <div class="eyebrow">Our Position</div>
+    <h2 style="font-size:82px;font-weight:900;line-height:1.2;margin-top:26px;letter-spacing:-.01em">素材を、<br>売るのではなく。</h2>
+    <p style="font-size:21px;line-height:2;color:#c9c9c9;margin-top:40px;max-width:1000px">
+      どの場面のデータを、どれだけ、どう作れば御社のモデルが良くなるのか。そこを一緒に決めるところから入ります。作って納品して終わりにはしません。効いたかどうかを測り、効かなければ設計を引き直します。<br>
+      <span style="color:#fff">最後は、その作り方ごと御社の中に置いていきます。</span>
+    </p>
+  </div>
+  <div style="position:absolute;left:var(--padL);bottom:46px;font-family:var(--mo);font-size:12.5px;letter-spacing:.2em;color:#7d7d7d">株式会社Ceed ― PHYSICAL AI DATA OPERATIONS</div>
+  <div class="pnum" style="color:#fff">04</div>
+</section>
+
+<!-- ═══════════════ 05 私たちについて ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>About</span></div>
+  <div class="head">
+    <div class="h"><div class="n">02</div><div class="t">作れるチームであることを、先に。</div></div>
+    <hr>
+  </div>
+  <div class="lead" style="top:190px;font-size:23px">生成AIで映像を量産してきた運用チームと、仕様の固まっていないものを動かすエンジニアが、同じ会社にいます。</div>
+  <div class="body" style="top:272px">
+    <div class="statrow">
+      <div><div class="v">2024<small>.01</small></div><div class="k">設立</div></div>
+      <div><div class="v">8<small>名</small></div><div class="k">チーム</div></div>
+      <div><div class="v">6<small>カ国</small></div><div class="k">メンバーの国籍</div></div>
+      <div><div class="v">300<small>+</small></div><div class="k">累計クライアント</div></div>
+      <div><div class="v">3</div><div class="k">自社プロダクト</div></div>
+      <div><div class="v">東京</div><div class="k">本社</div></div>
+    </div>
+    <div class="grid4" style="margin-top:26px">
+      <div class="card" style="padding:22px 20px 24px">
+        <div class="kicker">Team</div>
+        <h4 style="font-size:19px">日本とインドの<br>混成チーム</h4>
+        <p style="font-size:14px;line-height:1.8">日本側が現場と要件を、インド側がエンジニアリングを持ちます。開発と運用を外に出さず、同じチームの中で回します。</p>
+      </div>
+      <div class="card" style="padding:22px 20px 24px">
+        <div class="kicker">Video</div>
+        <h4 style="font-size:19px">生成AI映像の量産を、<br>実運用で回している</h4>
+        <p style="font-size:14px;line-height:1.8">3媒体150アカウント・月500〜750本、ピーク1日200本。生成から検品・配信までを日次で回してきた運用の実績があります。</p>
+      </div>
+      <div class="card" style="padding:22px 20px 24px">
+        <div class="kicker">Engineering</div>
+        <h4 style="font-size:19px">自律エージェントから<br>ブロックチェーンまで</h4>
+        <p style="font-size:14px;line-height:1.8">自社で3つのプロダクトを開発・運営しています。仕様が固まっていない領域を動くものにするところが本業です。</p>
+      </div>
+      <div class="card" style="padding:22px 20px 24px">
+        <div class="kicker">Network</div>
+        <h4 style="font-size:19px">アジア全域の<br>獲得支援で作った接点</h4>
+        <p style="font-size:14px;line-height:1.8">各国のコミュニティ・パートナーと直接つながっています。現地での映像・素材の調達先を、外注に頼らず自前で押さえられます。</p>
+      </div>
+    </div>
+  </div>
+  <div class="note" style="bottom:44px">※ 数字は2026年8月時点。映像量産の実績はエンタメIP領域での運用によるものです。詳細はご要望に応じて別途ご説明します。</div>
+  <div class="pnum">05</div>
+</section>
+
+<!-- ═══════════════ 06 効果の根拠 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Evidence</span></div>
+  <div class="head">
+    <div class="h"><div class="n">03</div><div class="t">合成データは、実データに乗せると効く。</div></div>
+    <hr>
+  </div>
+  <div class="lead" style="top:192px;font-size:24px">私たちの主張ではなく、海外の先行事例で数字が出ている領域です。</div>
+  <div class="body" style="top:262px">
+    <div class="ev">
+      <div class="src">NVIDIA / Isaac GR00T N1<em>2025.03 ― Humanoid</em></div>
+      <div class="txt">シミュレーションから78万本の合成軌跡を11時間で生成（人手デモ約6,500時間に相当）。実データのみで学習した場合と比べ、合成＋実データでの学習は性能が <b>+40%</b> 向上したと報告されています。</div>
+    </div>
+    <div class="ev">
+      <div class="src">MimicGen<em>NVIDIA / UT Austin ― CoRL 2023</em></div>
+      <div class="txt">200本未満の人手デモから <b>5万本超</b> のデモを自動生成し、18タスクで学習。追加で人手デモを集めた場合と<span style="font-weight:700">同等以上</span>の成功率に到達しています。</div>
+    </div>
+    <div class="ev">
+      <div class="src">NVIDIA Cosmos<em>2025 ― World Foundation Models</em></div>
+      <div class="txt">1X・Figure AI・Agility Robotics・Skild AI・Uber などが学習データ生成に採用。Sim2Real / Real2Real の映像変換が、研究ではなく実運用のパイプラインに入り始めています。</div>
+    </div>
+    <div class="ev">
+      <div class="src">Wayve / GAIA-3<em>2025.12 ― Autonomous Driving</em></div>
+      <div class="txt">150億パラメータの世界モデルで自動運転AIを評価・検証。合成テストの棄却率を <b>1/5</b> に低減。英政府出資のDriveSafeSimで、安全評価への適用が検証されています。</div>
+    </div>
+    <div class="bar" style="margin-top:26px">共通しているのは「実データの置き換え」ではなく、「実データに足す」使い方です。</div>
+  </div>
+  <div class="note" style="bottom:36px;font-size:13px">※ 出典：NVIDIA Newsroom（Isaac GR00T N1, 2025-03）／ MimicGen: A Data Generation System for Scalable Robot Learning（CoRL 2023）／ NVIDIA Newsroom（Cosmos World Foundation Models, 2025）／ Wayve プレスリリース（GAIA-3, 2025-12）。</div>
+  <div class="pnum">06</div>
+</section>
+
+<!-- ═══════════════ 07 アプローチ / 工程 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>How</span></div>
+  <div class="head">
+    <div class="h"><div class="n">04</div><div class="t">弱点から逆算して、データを作る。</div></div>
+    <hr>
+  </div>
+  <div class="lead" style="top:192px;font-size:24px">何を作るかを決めるところから、効いたかを見るところまで、同じチームが担当します。</div>
+  <div class="body" style="top:286px">
+    <div class="flow six">
+      <div class="fc">
+        <span class="st">00</span>
+        <h5>受入</h5>
+        <p>実走行ログ・現場映像・評価結果を、NDAのうえで参照素材としてお預かりします</p>
+      </div>
+      <div class="ar">▶</div>
+      <div class="fc dark">
+        <span class="st">01</span>
+        <h5>弱点の特定</h5>
+        <p>どの場面でモデルが落ちているかを、御社の評価結果と突き合わせて洗い出します</p>
+      </div>
+      <div class="ar">▶</div>
+      <div class="fc dark">
+        <span class="st">02</span>
+        <h5>仕様に翻訳</h5>
+        <p>「足りない場面」を、生成できる形の発注仕様に落とし込みます</p>
+      </div>
+      <div class="ar">▶</div>
+      <div class="fc">
+        <span class="st">03</span>
+        <h5>生成・収集</h5>
+        <p>生成モデルでシーンを作ります。必要なら現地での実素材の調達も並行します</p>
+      </div>
+      <div class="ar">▶</div>
+      <div class="fc">
+        <span class="st">04</span>
+        <h5>検品</h5>
+        <p>自動フィルタと目視の抜き取りで、学習に使えない映像を落とします</p>
+      </div>
+      <div class="ar">▶</div>
+      <div class="fc dark">
+        <span class="st">05</span>
+        <h5>効果検証</h5>
+        <p>小型モデルで学習させ、埋めにいった場面が実際に改善したかを見ます</p>
+      </div>
+    </div>
+    <div class="bar" style="margin-top:40px">自動化するのは量です。何を作るか・効いたかどうかの判断は、最後まで人が持ちます。</div>
+  </div>
+  <div class="note" style="bottom:48px">※ 黒の3工程（弱点の特定・仕様への翻訳・効果検証）が、私たちがいちばん時間をかけるところです。ここが単なる素材の受発注との違いになります。</div>
+  <div class="pnum">07</div>
+</section>
+
+<!-- ═══════════════ 08 効果検証 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Validation</span></div>
+  <div class="head">
+    <div class="h"><div class="n">05</div><div class="t">「効いた」を、確かめるところまでを1サイクルに。</div></div>
+    <hr>
+  </div>
+  <div class="lead" style="top:192px;font-size:24px">データを渡して終わりにしないために、検証の設計を最初に合意します。</div>
+  <div class="body" style="top:266px">
+    <table class="spec">
+      <tr>
+        <td class="k">SCOPE</td>
+        <td class="v">全体の精度ではなく、埋めにいった場面で見る
+          <em>「モデル全体が何％上がったか」は要因が混ざります。対象シーンを絞り、そこでの成功率・失敗パターンの前後比較で判断します。</em></td>
+      </tr>
+      <tr>
+        <td class="k">METHOD</td>
+        <td class="v">御社の評価環境に合わせる。無ければ作るところから
+          <em>既にお使いの評価セット・シミュレータがあれば、それに合わせて検証します。無い場合は、評価セットの設計から一緒に組み立てます。</em></td>
+      </tr>
+      <tr>
+        <td class="k">WE GUARANTEE</td>
+        <td class="v">仕様への適合と、検品基準の充足
+          <em>合意した発注仕様どおりのデータであること、検品基準を満たしていることは、私たちの責任範囲としてお約束します。</em></td>
+      </tr>
+      <tr>
+        <td class="k">WE DON'T</td>
+        <td class="v">モデルの最終的な性能そのものは保証しない
+          <em>学習側の設計に大きく依存するため、効果保証という形では売りません。代わりに、検証には最後まで同席し、結果を一緒に読みます。</em></td>
+      </tr>
+    </table>
+    <div class="bar" style="margin-top:30px">効かなかったときは、仕様を引き直します。そこまでを1サイクルとして設計しています。</div>
+  </div>
+  <div class="pnum">08</div>
+</section>
+
+<!-- ═══════════════ 09 導入の進め方 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Roadmap</span></div>
+  <div class="head">
+    <div class="h"><div class="n">06</div><div class="t">3ステップで、御社の中に残す。</div></div>
+    <hr>
+  </div>
+  <div class="lead" style="top:192px;font-size:24px">最初は私たちが作り、最後は御社が自分で作れる状態にします。</div>
+  <div class="body" style="top:292px">
+    <div class="grid3" style="gap:34px">
+      <div class="rm">
+        <div class="dot"></div>
+        <span class="st">01</span><span class="mo">PHASE 1</span>
+        <h4>弱点診断と、最初の一束</h4>
+        <p>現状の評価結果と実データを見て、埋めるべき場面を特定します。まず小さく作り、効果の測り方まで合意するところが目的です。</p>
+        <div class="ph"><span>この段階で残るもの</span><b>埋めるべき場面のリストと、効果の測り方</b></div>
+      </div>
+      <div class="rm">
+        <div class="dot"></div>
+        <span class="st">02</span><span class="mo">PHASE 2</span>
+        <h4>本番供給</h4>
+        <p>合意した仕様で継続的にデータを供給します。検証結果を見ながら、どの場面にどれだけ配分するかを毎サイクル引き直します。</p>
+        <div class="ph"><span>この段階で残るもの</span><b>効くシーン配分と、生成のレシピ</b></div>
+      </div>
+      <div class="rm">
+        <div class="dot"></div>
+        <span class="st">03</span><span class="mo">PHASE 3</span>
+        <h4>内製化</h4>
+        <p>生成パイプラインと評価環境を御社の中に移します。私たちはレシピの更新とスポット相談だけを残します。</p>
+        <div class="ph"><span>この段階で残るもの</span><b>生成パイプラインと、評価機一式</b></div>
+      </div>
+    </div>
+    <div class="bar" style="margin-top:42px">安くするための内製化ではありません。データを作る速度を、御社の判断だけで決めるための内製化です。</div>
+  </div>
+  <div class="note" style="bottom:48px">※ Phase 1 だけで終えていただいても構いません。効く設計が見つからなければ、量を増やす提案はしません。</div>
+  <div class="pnum">09</div>
+</section>
+
+<!-- ═══════════════ 10 内製化支援 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Handover</span></div>
+  <div class="head">
+    <div class="h"><div class="n">07</div><div class="t">評価機とパイプラインごと、渡します。</div></div>
+    <hr>
+  </div>
+  <div class="lead" style="top:192px;font-size:24px">私たちが使っている仕組みを、御社の環境に載せ替えるところまでが提案の範囲です。</div>
+  <div class="body" style="top:266px">
+    <table class="spec">
+      <tr>
+        <td class="k">PIPELINE</td>
+        <td class="v">生成パイプライン ― シーン設計から書き出しまで
+          <em>御社の素材形式・出力仕様・保管先に合わせて調整したうえでお渡しします。運用の手順書とプロンプト集も含みます。</em></td>
+      </tr>
+      <tr>
+        <td class="k">EVALUATION</td>
+        <td class="v">評価機 ― 「効いたか」を御社だけで測れる状態
+          <em>対象シーンの評価セット、前後比較の手順、合否の基準まで整えます。次に何を作るべきかを、御社の中で判断できるようになります。</em></td>
+      </tr>
+      <tr>
+        <td class="k">QC</td>
+        <td class="v">検品基準 ― 落とすべき映像の判断基準
+          <em>運用の中で溜まった不良パターン集を、そのままチェックリストとして引き渡します。ここは経験でしか溜まらない部分です。</em></td>
+      </tr>
+      <tr>
+        <td class="k">AFTER</td>
+        <td class="v">引き渡し後 ― レシピ更新とスポット相談
+          <em>生成テンプレートの更新は継続してお渡しします。制作は御社内で完結し、必要なときだけ相談窓口として残ります。</em></td>
+      </tr>
+    </table>
+    <div class="bar" style="margin-top:30px">作れるデータ量が、外注予算ではなく社内の判断で決まる状態にします。</div>
+  </div>
+  <div class="pnum">10</div>
+</section>
+
+<!-- ═══════════════ 11 スケジュール ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Schedule</span></div>
+  <div class="head">
+    <div class="h"><div class="n">08</div><div class="t">素材が手元にあれば、その週から始められます。</div></div>
+    <hr>
+  </div>
+  <div class="lead" style="top:192px;font-size:24px">新しく走らせて集め直す必要はありません。いま持っているログと映像から始めます。</div>
+  <div class="body" style="top:280px">
+    <div class="grid4" style="gap:30px">
+      <div class="rm sm">
+        <div class="dot"></div>
+        <span class="mo">WEEK 0</span>
+        <h4>お打ち合わせ</h4>
+        <p>対象タスク・いま落ちている場面・センサ構成をうかがい、扱える範囲を確認します。</p>
+      </div>
+      <div class="rm sm">
+        <div class="dot"></div>
+        <span class="mo">WEEK 1-2</span>
+        <h4>弱点診断</h4>
+        <p>評価結果と実データを突き合わせ、埋めるべき場面と、効果の測り方を合意します。</p>
+      </div>
+      <div class="rm sm">
+        <div class="dot"></div>
+        <span class="mo">WEEK 3-4</span>
+        <h4>最初の一束と検証</h4>
+        <p>効果を測れる最小量を作って納品し、学習と検証を一緒に回します。</p>
+      </div>
+      <div class="rm sm">
+        <div class="dot"></div>
+        <span class="mo">MONTH 3-</span>
+        <h4>内製化の設計へ</h4>
+        <p>効く設計が見つかった段階で、パイプラインと評価機の引き渡しを設計し始めます。</p>
+      </div>
+    </div>
+    <div style="margin-top:54px">
+      <div class="eyebrow">ご用意いただくもの</div>
+      <div class="grid3" style="margin-top:20px;gap:22px">
+        <div class="card" style="padding:24px 22px 26px">
+          <h4 style="font-size:18px;margin-bottom:9px">実データ</h4>
+          <p style="font-size:14px;line-height:1.75">実走行ログ・現場映像など。形式はそのままで構いません。参照用としてNDAのもとでお預かりします。</p>
+        </div>
+        <div class="card" style="padding:24px 22px 26px">
+          <h4 style="font-size:18px;margin-bottom:9px">現在の評価結果</h4>
+          <p style="font-size:14px;line-height:1.75">どの場面で落ちているかが分かるもの。無い場合は、その把握から一緒に始めます。</p>
+        </div>
+        <div class="card" style="padding:24px 22px 26px">
+          <h4 style="font-size:18px;margin-bottom:9px">窓口</h4>
+          <p style="font-size:14px;line-height:1.75">週1回30分、仕様と検証結果を確認いただけるML側の担当者を1名。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="note" style="bottom:36px;font-size:13.5px">※ WEEK 1-2 の弱点診断では、まだデータの制作には入りません。何を作るべきかが決まってから、はじめて生成を始めます。</div>
+  <div class="pnum">11</div>
+</section>
+
+<!-- ═══════════════ 12 FAQ ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>FAQ</span></div>
+  <div class="head">
+    <div class="h"><div class="n">09</div><div class="t">よくいただくご質問</div></div>
+    <hr>
+  </div>
+  <div class="body" style="top:212px">
+    <div class="faq">
+      <div class="q">
+        <div class="qt"><div class="qn">Q01</div><div class="qq">自前で生成すればよいのでは？</div></div>
+        <div class="qa">技術的には可能ですし、実際に内製されている企業もあります。私たちが引き受けるのは生成そのものより、「どの場面を、どれだけ作るか」の設計と、検品・効果検証を毎サイクル回す手間の部分です。希少なエンジニアの時間をそこに使うかどうかの判断だとお考えください。</div>
+      </div>
+      <div class="q">
+        <div class="qt"><div class="qn">Q04</div><div class="qq">マルチカメラ・センサ構成には対応できますか？</div></div>
+        <div class="qa">構成によります。カメラ本数・同期精度・解像度・付随させたい行動データの形式を最初の打ち合わせで確認し、対応できる範囲を先にお伝えします。できないものは、できないとお答えします。</div>
+      </div>
+      <div class="q">
+        <div class="qt"><div class="qn">Q02</div><div class="qq">権利関係はどうなりますか？</div></div>
+        <div class="qa">納品データの利用権は契約で明文化します。生成モデル側についても、第三者のAI学習用途に使える条件を確認したうえで進めます。お預かりする実データはNDAのもとで参照のみに使用し、他社案件には転用しません。</div>
+      </div>
+      <div class="q">
+        <div class="qt"><div class="qn">Q05</div><div class="qq">既存のシミュレータや内製データと併存できますか？</div></div>
+        <div class="qa">できます。置き換えではなく、既存の仕組みでは埋まらない部分だけを引き受ける形から始めるのが標準です。既にsim資産をお持ちの場合は、その出力を素材として使う構成も取れます。</div>
+      </div>
+      <div class="q">
+        <div class="qt"><div class="qn">Q03</div><div class="qq">合成映像で本当に学習できますか？</div></div>
+        <div class="qa">実データの置き換えとしては、お勧めしません。実データに足す形で足りない場面を補う使い方を前提に設計します。P.06の先行事例も、すべてこの使い方で成果が出ています。</div>
+      </div>
+      <div class="q">
+        <div class="qt"><div class="qn">Q06</div><div class="qq">どのくらいの量から始められますか？</div></div>
+        <div class="qa">効果を測れる最小量から始めます。いきなり大量に作らず、効く設計が見つかってから量を増やす順番です。最初の一束で効かなければ、量を増やす前に設計を変えます。</div>
+      </div>
+    </div>
+  </div>
+  <div class="pnum">12</div>
+</section>
+
+<!-- ═══════════════ 13 最初のパートナー募集 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Partner</span></div>
+  <div class="head">
+    <div class="h"><div class="n">10</div><div class="t">最初の一社を、探しています。</div></div>
+    <hr>
+  </div>
+  <div class="lead" style="top:192px;font-size:24px">正直に申し上げます。この形での納品実績は、御社が最初になります。</div>
+  <div class="body" style="top:280px">
+    <div class="cmp">
+      <div class="ch">ま　だ　な　い　も　の</div>
+      <div class="ch">す　で　に　あ　る　も　の</div>
+
+      <div class="row lft"><b>01</b>この事業での納品実績とケーススタディ</div>
+      <div class="row rgt"><span class="ar">→</span>生成AI映像を日次で量産・検品してきた<span class="hl">運用体制</span></div>
+
+      <div class="row lft"><b>02</b>特定業界向けの、完成したレシピ</div>
+      <div class="row rgt"><span class="ar">→</span>海外の先行事例が示す、合成＋実データの効果（P.06）</div>
+
+      <div class="row lft"><b>03</b>すぐにお見せできるデモ映像</div>
+      <div class="row rgt"><span class="ar">→</span>弱点診断から効果検証まで並走する体制と、素材調達の接点</div>
+    </div>
+    <div class="bar" style="margin-top:40px">最初のパートナーには、立ち上げ期の条件でご一緒します。量・期間・費用は御社の状況に合わせて設計します。</div>
+  </div>
+  <div class="note" style="bottom:44px">※ 実績づくりを一緒にしていただく前提のため、成果の公開可否も含めて個別にご相談させてください。まずは「いま落ちている場面」を1つ、お聞かせいただくところからで構いません。</div>
+  <div class="pnum">13</div>
+</section>
+
+<!-- ═══════════════ 14 締め ═══════════════ -->
+<section class="slide">
+  <div class="cover">
+    <div class="l">
+      <div class="topbar">
+        <span class="a">2026.08</span>
+        <span class="b">ロボット学習データの伴走支援　ご提案</span>
+      </div>
+      <div style="position:absolute;left:var(--padL);top:290px;right:70px">
+        <div class="eyebrow">Next Step</div>
+        <h2 style="font-size:80px;font-weight:900;line-height:1.2;letter-spacing:-.01em;margin-top:26px">まずは、<span class="hl" style="padding:2px 12px">1つの場面</span>から。</h2>
+        <p style="font-size:19px;line-height:1.9;color:#4a4a4a;margin-top:34px;max-width:720px">
+          いまモデルが落ちている場面を1つ挙げていただければ、それを埋めるために何を作るべきか、こちらで設計してお持ちします。
+        </p>
+      </div>
+      <div class="copy">© 2026 Ceed Inc.</div>
+    </div>
+    <div class="r">
+      <div class="vlabel">CEED&nbsp;·&nbsp;PHYSICAL&nbsp;AI&nbsp;DATA&nbsp;·&nbsp;2026</div>
+      <div class="rlogo"><span class="ring"></span>&nbsp;Ceed</div>
+      <div style="position:absolute;left:40px;bottom:34px;color:#8e8e8e;font-size:12.5px">株式会社Ceed</div>
+    </div>
+  </div>
+</section>
+
+</div></div>
+
+<div id="tb">
+  <span id="ctr">1 / 14</span>
+  <button id="prev">◀</button>
+  <button id="next">▶</button>
+  <button id="pr">PDF</button>
+</div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var deck=document.getElementById('deck');
+  var ctr=document.getElementById('ctr');
+  var i=0;
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(s,k){s.classList.toggle('on',k===i)});
+    ctr.textContent=(i+1)+' / '+slides.length;
+    location.hash='p'+(i+1);
+  }
+  function fit(){
+    var s=Math.min(window.innerWidth/1440,window.innerHeight/810);
+    deck.style.transform='scale('+s+')';
+  }
+  window.addEventListener('resize',fit);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(i+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+    if(e.key==='Home'){show(0)} if(e.key==='End'){show(slides.length-1)}
+  });
+  document.getElementById('next').onclick=function(){show(i+1)};
+  document.getElementById('prev').onclick=function(){show(i-1)};
+  document.getElementById('pr').onclick=function(){window.print()};
+  document.getElementById('stage').addEventListener('click',function(e){
+    if(e.target.closest('#tb'))return;
+    show(e.clientX>window.innerWidth/2?i+1:i-1);
+  });
+  var m=/^#p(\d+)$/.exec(location.hash);
+  fit(); show(m?parseInt(m[1],10)-1:0);
+})();
+</script>
+</body>
+</html>
