@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceed 営業資料 — アプリグロース型（AI × SNS 運用）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Ceed Sales Deck — アプリグロース型 (カロミータイプ)
+   AOM版デック (ceed-video-ax / 2026-08-25) のデザイン・構成を踏襲
+   型別スライド = ペイン / 強み / ケーススタディ（<!-- ▼型別 --> 印）
+   ============================================================ */
+:root{
+  --ink:#000;
+  --bg:#fff;
+  --mut:#8a8a8a;
+  --mut2:#6a6a6a;
+  --line:#e3e3e3;
+  --line2:#d0d0d0;
+  --soft:#f4f4f4;
+  --W:1440px;
+  --H:810px;
+  --padL:120px;
+  --padR:100px;
+  --jp:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  --dp:"Outfit","Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;
+  --mo:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:#3a3a3a;
+  font-family:var(--jp);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{width:var(--W);height:var(--H);position:relative;transform-origin:center center;background:#fff}
+
+.slide{
+  position:absolute;inset:0;width:var(--W);height:var(--H);
+  background:var(--bg);overflow:hidden;display:none;
+}
+.slide.on{display:block}
+
+/* ---------- 共通パーツ ---------- */
+.mark{position:absolute;left:0;top:0;width:40px;height:18px;background:#000}
+.vline{position:absolute;left:100px;top:0;bottom:0;width:1px;background:var(--line)}
+.rail{
+  position:absolute;left:38px;top:0;height:100%;
+  display:flex;align-items:center;
+}
+.rail span{
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  font-family:var(--mo);font-size:11.5px;letter-spacing:.38em;
+  color:var(--mut);text-transform:uppercase;
+}
+.pnum{position:absolute;left:36px;bottom:34px;font-family:var(--dp);font-size:14px;font-weight:800;letter-spacing:.02em}
+
+.head{position:absolute;left:var(--padL);right:var(--padR);top:74px}
+.head .h{display:flex;align-items:baseline;gap:22px}
+.head .n{font-family:var(--dp);font-size:66px;font-weight:800;line-height:.9;letter-spacing:-.01em}
+.head .t{font-size:41px;font-weight:900;line-height:1.1;letter-spacing:.005em}
+.head hr{border:0;border-top:1px solid #111;margin-top:16px}
+.lead{position:absolute;left:var(--padL);right:var(--padR);top:196px;font-size:26px;font-weight:700;line-height:1.45}
+
+.body{position:absolute;left:var(--padL);right:var(--padR);top:290px}
+.note{position:absolute;left:var(--padL);right:var(--padR);font-size:14.5px;line-height:1.7;color:var(--mut2)}
+
+.bar{background:#000;color:#fff;padding:19px 30px;font-size:21px;font-weight:700;letter-spacing:.01em}
+
+.card{border:1px solid var(--line);padding:26px 26px 28px}
+.card.dark{background:#000;color:#fff;border-color:#000}
+.card .kicker{font-family:var(--mo);font-size:11px;letter-spacing:.34em;color:var(--mut);margin-bottom:14px;text-transform:uppercase}
+.card.dark .kicker{color:#9a9a9a}
+.card h4{font-size:22px;font-weight:900;line-height:1.35;margin-bottom:12px}
+.card p{font-size:15.5px;line-height:1.85;color:#3a3a3a}
+.card.dark p{color:#cfcfcf}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+
+.eyebrow{font-family:var(--mo);font-size:12px;letter-spacing:.32em;color:var(--mut);text-transform:uppercase}
+.eyebrow::before{content:"■";margin-right:12px;color:#000;font-size:9px;vertical-align:2px}
+
+/* ---------- 表紙 / 締め ---------- */
+.cover{display:grid;grid-template-columns:1008px 432px;height:100%}
+.cover .l{position:relative;padding:0 0 0 var(--padL)}
+.cover .r{background:#000;position:relative}
+.topbar{position:absolute;left:0;right:0;top:0;height:60px;display:flex;align-items:center;
+  font-family:var(--mo);font-size:12.5px;letter-spacing:.18em;color:#7d7d7d}
+.topbar .a{position:absolute;left:56px}
+.topbar .b{position:absolute;left:50%;transform:translateX(-50%);font-family:var(--jp);letter-spacing:.06em}
+.vlabel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(180deg);
+  writing-mode:vertical-rl;font-family:var(--mo);font-size:12.5px;letter-spacing:.42em;color:#8e8e8e}
+.rlogo{position:absolute;right:40px;bottom:34px;color:#fff;font-family:var(--dp);font-size:26px;font-weight:800}
+.copy{position:absolute;left:56px;bottom:34px;font-family:var(--mo);font-size:12px;color:#8e8e8e}
+
+.ring{display:inline-block;width:34px;height:34px;border:3.4px solid currentColor;border-radius:50%;
+  border-right-color:transparent;transform:rotate(-45deg);vertical-align:-8px}
+.ring.lg{width:78px;height:78px;border-width:7px;vertical-align:-18px}
+
+/* ---------- 章扉 ---------- */
+.divider .ghost{
+  position:absolute;right:-30px;top:50%;transform:translateY(-50%);
+  font-family:var(--dp);font-size:400px;font-weight:800;color:#e2e2e2;line-height:.8;letter-spacing:-.03em;
+}
+.divider .dfoot{position:absolute;left:var(--padL);right:56px;bottom:38px;display:flex;justify-content:space-between;align-items:baseline}
+.divider .dfoot .l{font-size:17px;font-weight:900}
+.divider .dfoot .r{font-family:var(--dp);font-size:15px;color:var(--mut)}
+
+/* ---------- 黒スライド ---------- */
+.black{background:#000;color:#fff}
+.black .eyebrow{color:#9a9a9a}
+.black .eyebrow::before{color:#fff}
+
+/* ---------- 数値・バー ---------- */
+.stat{border:1px solid var(--line);padding:34px 20px 30px;text-align:center}
+.stat .lab{font-size:17px;font-weight:700;margin-bottom:16px}
+.stat .val{font-family:var(--dp);font-size:74px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.stat .val small{font-size:32px;font-weight:800;margin-left:2px}
+.stat .sub{font-size:13px;color:var(--mut2);margin-top:16px}
+
+.ratio{display:flex;align-items:center;gap:26px;margin-bottom:14px}
+.ratio .track{width:800px}
+.ratio .fill{color:#fff;display:flex;align-items:center;justify-content:space-between;padding:16px 22px;font-size:20px;font-weight:900}
+.ratio .fill .p{font-family:var(--dp);font-size:26px;font-weight:800}
+.ratio .fill .p small{font-size:15px}
+.ratio .desc{font-size:14.5px;color:var(--mut2)}
+
+/* ---------- 表 ---------- */
+table.spec{width:100%;border-collapse:collapse}
+table.spec td{border-top:1px solid var(--line);padding:18px 0;vertical-align:top}
+table.spec tr:last-child td{border-bottom:1px solid var(--line)}
+table.spec td.k{width:200px;font-family:var(--mo);font-size:12px;letter-spacing:.22em;color:var(--mut);padding-top:22px}
+table.spec td.v{font-size:17.5px;font-weight:700;line-height:1.7}
+table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:400;color:var(--mut2);margin-top:5px}
+
+/* ---------- 料金 ---------- */
+.price{border:1px solid var(--line);padding:30px 28px 32px}
+.price.dark{background:#000;color:#fff;border-color:#000}
+.price .step{font-family:var(--mo);font-size:11px;letter-spacing:.34em;color:var(--mut);margin-bottom:16px}
+.price.dark .step{color:#9a9a9a}
+.price h4{font-size:25px;font-weight:900;margin-bottom:10px}
+.price .amt{font-family:var(--dp);font-size:44px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.price .amt small{font-size:17px;font-weight:500;color:var(--mut2);margin-left:6px}
+.price.dark .amt small{color:#9a9a9a}
+.price ul{list-style:none;margin-top:22px;border-top:1px solid var(--line);padding-top:20px}
+.price.dark ul{border-top-color:#3a3a3a}
+.price li{font-size:14.5px;line-height:1.6;margin-bottom:11px;padding-left:16px;position:relative;color:#3a3a3a}
+.price.dark li{color:#d4d4d4}
+.price li::before{content:"■";position:absolute;left:0;top:1px;font-size:7px;color:#999}
+.price .fine{font-size:12.5px;color:var(--mut);line-height:1.65;margin-top:14px}
+.price.dark .fine{color:#8e8e8e}
+.tag{position:absolute;right:22px;top:24px;background:#fff;color:#000;font-size:12px;font-weight:700;padding:5px 11px}
+
+/* ---------- ロードマップ / 年表 ---------- */
+.rm{position:relative;padding-top:26px}
+.rm::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--line2)}
+.rm .dot{position:absolute;left:0;top:-4px;width:9px;height:9px;background:#000}
+.rm .st{font-family:var(--dp);font-size:31px;font-weight:800;display:inline-block;margin-right:12px}
+.rm .mo{font-family:var(--mo);font-size:11.5px;letter-spacing:.22em;color:var(--mut)}
+.rm h4{font-size:23px;font-weight:900;margin:12px 0 12px}
+.rm p{font-size:15px;line-height:1.8;color:#3a3a3a}
+
+/* ---------- 比較リスト ---------- */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:0 60px}
+.cmp .ch{font-family:var(--mo);font-size:11.5px;letter-spacing:.3em;color:var(--mut);padding-bottom:16px}
+.cmp .row{border-top:1px solid var(--line);padding:19px 0;font-size:18px;line-height:1.5}
+.cmp .row:last-child{border-bottom:1px solid var(--line)}
+.cmp .lft{color:#9a9a9a}
+.cmp .lft b{font-family:var(--dp);margin-right:14px;font-weight:800}
+.cmp .rgt{font-weight:700}
+.cmp .rgt .ar{margin-right:14px}
+.hl{background:#000;color:#fff;padding:1px 8px}
+
+/* ---------- FAQ ---------- */
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:0 64px}
+.faq .q{border-top:1px solid var(--line);padding:20px 0 22px}
+.faq .q:last-child,.faq .q:nth-child(3){border-bottom:1px solid var(--line)}
+.faq .qt{display:flex;gap:20px;align-items:baseline;margin-bottom:9px}
+.faq .qn{font-family:var(--dp);font-size:17px;font-weight:800}
+.faq .qq{font-size:19px;font-weight:900}
+.faq .qa{font-size:14px;line-height:1.75;color:var(--mut2);padding-left:57px}
+
+/* ---------- サイクル図 ---------- */
+.cycle{position:relative;width:480px;height:400px}
+.cyc{position:absolute;width:196px;border:1px solid var(--line);padding:16px 10px;text-align:center;background:#fff}
+.cyc .n{font-family:var(--dp);font-size:15px;font-weight:800;color:var(--mut);margin-bottom:6px}
+.cyc h5{font-size:20px;font-weight:900;margin-bottom:6px}
+.cyc p{font-size:12.5px;color:var(--mut2)}
+.cycle svg{position:absolute;inset:0;overflow:visible}
+
+/* ---------- ステップ矢印 ---------- */
+.flow{display:flex;align-items:stretch;gap:0}
+.flow .fc{flex:1;border:1px solid var(--line);padding:22px 18px 24px;text-align:center}
+.flow .fc.dark{background:#000;color:#fff;border-color:#000}
+.flow .fc h5{font-size:20px;font-weight:900;line-height:1.35;margin-bottom:12px}
+.flow .fc p{font-size:13.5px;line-height:1.7;color:#3a3a3a}
+.flow .fc.dark p{color:#cfcfcf}
+.flow .ar{display:flex;align-items:center;padding:0 16px;font-size:22px}
+
+/* ---------- ロゴ枠 ---------- */
+.logo{border:1px solid var(--line);height:206px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.logo .nm{font-family:var(--dp);font-size:27px;font-weight:800;text-align:center;line-height:1.15;letter-spacing:.01em}
+.logo .jp{font-size:12.5px;color:var(--mut2);margin-top:14px}
+.logo .rule{width:26px;height:1px;background:var(--line2);margin:11px 0}
+.logo .cat{font-size:13.5px}
+
+/* ---------- toolbar ---------- */
+#tb{position:fixed;right:16px;bottom:14px;display:flex;gap:8px;align-items:center;z-index:50;
+  font-family:var(--mo);font-size:12px;color:#cfcfcf}
+#tb button{font:inherit;background:#111;color:#eee;border:1px solid #555;padding:6px 12px;cursor:pointer}
+#tb button:hover{background:#222}
+
+/* ---------- print ---------- */
+@page{size:1440px 810px;margin:0}
+@media print{
+  body{background:#fff;overflow:visible}
+  #stage{position:static;display:block}
+  #deck{width:auto;height:auto;transform:none!important}
+  .slide{position:relative;display:block!important;page-break-after:always;break-after:page}
+  #tb{display:none}
+}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+
+<!-- ═══════════════ 01 表紙 ═══════════════ -->
+<section class="slide on">
+  <div class="cover">
+    <div class="l">
+      <div class="topbar"><span class="a">2026.08</span><span class="b">AI動画運用 ご提案</span></div>
+      <div style="position:absolute;left:0;top:296px">
+        <div style="font-size:25px;font-weight:900;letter-spacing:.01em">
+          <span style="display:inline-block;width:44px;height:2px;background:#000;vertical-align:8px;margin-right:18px"></span>自社アプリの獲得を、広告以外にも広げたい企業さまへ
+        </div>
+        <h1 style="font-size:88px;font-weight:900;line-height:1.16;margin-top:26px;letter-spacing:-.01em">
+          認知は、<br><span class="hl" style="padding:2px 10px">角度の数</span>で決まる。
+        </h1>
+        <div style="margin-top:52px;display:flex;align-items:center;gap:22px">
+          <span style="font-family:var(--dp);font-size:29px;font-weight:800"><span class="ring"></span>&nbsp;Ceed</span>
+          <span style="width:1px;height:30px;background:var(--line2)"></span>
+          <span style="font-size:20px;font-weight:700">多角度の検証を、AIとSNSのプロが高速で回す</span>
+        </div>
+      </div>
+      <div class="copy" style="left:0">© 2026 Ceed Inc.</div>
+    </div>
+    <div class="r">
+      <div class="vlabel">CEED&nbsp;·&nbsp;AI&nbsp;VIDEO&nbsp;OPERATIONS&nbsp;·&nbsp;2026</div>
+      <div style="position:absolute;right:40px;top:22px;font-size:12.5px;color:#8e8e8e">株式会社Ceed</div>
+      <div class="rlogo"><span class="ring" style="width:26px;height:26px;border-width:2.8px;vertical-align:-5px"></span>&nbsp;Ceed</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 02 アジェンダ ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Agenda</span></div>
+  <div class="head"><div class="h"><div class="t" style="font-size:47px">本日お話しすること</div></div><hr></div>
+  <div class="body" style="top:352px">
+    <div style="border-top:1px solid var(--line)">
+      <div style="display:flex;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line)">
+        <div style="font-family:var(--dp);font-size:26px;font-weight:800;width:120px">01</div>
+        <div style="font-size:25px;font-weight:900;flex:1">認知が伸びない理由と、私たち</div>
+        <div style="font-size:14.5px;color:var(--mut2)">会社と取引先、そして「角度が足りない」という詰まり</div>
+      </div>
+      <div style="display:flex;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line)">
+        <div style="font-family:var(--dp);font-size:26px;font-weight:800;width:120px">02</div>
+        <div style="font-size:25px;font-weight:900;flex:1">やり方と、導入の進め方</div>
+        <div style="font-size:14.5px;color:var(--mut2)">角度の設計から配信まで、最初の2ヶ月で勝ち筋を出す流れ</div>
+      </div>
+      <div style="display:flex;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line)">
+        <div style="font-family:var(--dp);font-size:26px;font-weight:800;width:120px">03</div>
+        <div style="font-size:25px;font-weight:900;flex:1">運用実績・料金・スケジュール</div>
+        <div style="font-size:14.5px;color:var(--mut2)">カロミー様での数字、料金と費用シミュレーション、開始までの流れ</div>
+      </div>
+    </div>
+  </div>
+  <div class="pnum">02</div>
+</section>
+
+<!-- ═══════════════ 03 私たちについて【共通】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>About</span></div>
+  <div class="head"><div class="h"><div class="n">01</div><div class="t">私たちについて</div></div><hr></div>
+  <div class="lead">「All for Value」— 人間とAgentが融合するインターネットで、あるべき場所に価値を届ける。</div>
+  <div class="body" style="top:288px;display:grid;grid-template-columns:1fr 560px;gap:56px">
+    <div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0 20px">
+        <div style="padding:0 0 26px"><div style="font-family:var(--dp);font-size:44px;font-weight:800">2024<small style="font-size:19px">年1月</small></div><div style="font-size:13px;color:var(--mut2);margin-top:6px">設立</div></div>
+        <div style="padding:0 0 26px 22px;border-left:1px solid var(--line)"><div style="font-family:var(--dp);font-size:44px;font-weight:800">8<small style="font-size:19px">名</small></div><div style="font-size:13px;color:var(--mut2);margin-top:6px">チーム</div></div>
+        <div style="padding:0 0 26px 22px;border-left:1px solid var(--line)"><div style="font-family:var(--dp);font-size:44px;font-weight:800">6<small style="font-size:19px">カ国</small></div><div style="font-size:13px;color:var(--mut2);margin-top:6px">メンバーの国籍</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0 20px;border-top:1px solid var(--line);padding-top:26px">
+        <div><div style="font-family:var(--dp);font-size:44px;font-weight:800">300<small style="font-size:19px">+</small></div><div style="font-size:13px;color:var(--mut2);margin-top:6px">累計クライアント</div></div>
+        <div style="padding-left:22px;border-left:1px solid var(--line)"><div style="font-family:var(--dp);font-size:44px;font-weight:800">3</div><div style="font-size:13px;color:var(--mut2);margin-top:6px">自社プロダクト</div></div>
+        <div style="padding-left:22px;border-left:1px solid var(--line)"><div style="font-family:var(--dp);font-size:44px;font-weight:800">東京</div><div style="font-size:13px;color:var(--mut2);margin-top:6px">本社</div></div>
+      </div>
+      <!-- ▼ Badhan FB: チーム構成の1行を追加 -->
+      <div class="bar" style="margin-top:34px;font-size:18px;padding:17px 24px;line-height:1.5">
+        ショート動画で結果を出した人材と、エージェント開発のエンジニアが、同じチームにいます。
+      </div>
+    </div>
+    <div class="card dark" style="padding:32px 30px">
+      <div class="kicker">Product 03 — VENE</div>
+      <h4 style="font-size:24px">自律的に動くAIエージェントを、<br>自社で設計・開発しています</h4>
+      <p style="font-size:15px">コンテンツを自ら生み出し、オーディエンスを育て、収益を生むところまでを担うエージェント。人を補助するツールではなく、クリエイターエコノミーの独立した参加者として設計しています。御社のSNS運用も、この基盤の上で回します。</p>
+    </div>
+  </div>
+  <div class="note" style="bottom:38px">Qube（web3向けGTMネットワーク）・Hyperbuilder（コミュニティ支援）と合わせて3つのプロダクトを自社運営しています。</div>
+  <div class="pnum">03</div>
+</section>
+
+<!-- ═══════════════ 04 ご一緒している企業【共通】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Clients</span></div>
+  <div class="head"><div class="h"><div class="n">02</div><div class="t">ご一緒している企業</div></div><hr></div>
+  <div class="lead">アプリ・エンタメIP・定期通販。領域はどれも「量と検証」が要る現場です。</div>
+  <div class="body" style="top:300px;display:grid;grid-template-columns:1fr 1fr;gap:0 60px">
+    <div>
+      <div class="eyebrow" style="margin-bottom:18px">導入企業 ― 運用・制作でご一緒しています</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div class="logo"><div class="nm">Calomy</div><div class="jp">カロミー</div><div class="rule"></div><div class="cat">ヘルスケアアプリ</div></div>
+        <div class="logo"><div class="nm">WHITE<br>SCORPION</div><div class="jp">ホワイトスコーピオン</div><div class="rule"></div><div class="cat">アイドル・エンタメIP</div></div>
+        <div class="logo"><div class="nm">YOMITE</div><div class="jp">ヨミテ</div><div class="rule"></div><div class="cat">定期通販・EC</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:18px">協業パートナー ― 広告領域で連携</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+        <div class="logo"><div class="nm">CARTA<br>HOLDINGS</div><div class="jp">カルタ ホールディングス</div><div class="rule"></div><div class="cat">広告・マーケティング</div></div>
+        <div class="logo"><div class="nm">ADWAYS</div><div class="jp">アドウェイズ</div><div class="rule"></div><div class="cat">インターネット広告</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" style="bottom:56px">※ SNS運用・動画量産の実行から、広告投資を判断するためのデータ基盤づくりまで。掲載は各社の許諾のうえ更新しています。</div>
+  <div class="pnum">04</div>
+</section>
+
+<!-- ═══════════════ 05 ペイン【▼型別：アプリグロース】 ═══════════════ -->
+<section class="slide" data-variant="app-growth">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Context</span></div>
+  <div class="head"><div class="h"><div class="n">03</div><div class="t">足りないのは、本数ではありません。</div></div><hr></div>
+  <div class="lead">アプリを入れる人は、違う角度から何度も触れて、はじめてインストールします。</div>
+  <div class="body" style="top:292px">
+    <div class="grid3">
+      <div class="card">
+        <div class="kicker">Angle</div>
+        <h4>当たる角度は、<br>事前には分からない</h4>
+        <p>どの悩み・どのシーン・どの訴求が刺さるかは、出してみるまで分かりません。ところが人手の制作では、月に数本ぶんの角度しか試せません。</p>
+      </div>
+      <div class="card">
+        <div class="kicker">Cost</div>
+        <h4>角度を増やす手段が、<br>そもそも重い</h4>
+        <p>インフルエンサー起用や実写制作で角度を足そうとすると、資本と時間がかかります。しかも「なぜ刺さったのか」の言語化に、さらに時間を要します。</p>
+      </div>
+      <div class="card">
+        <div class="kicker">Learning</div>
+        <h4>伸びた理由が、<br>次に残らない</h4>
+        <p>良し悪しを感覚で判断しているため、当たった角度が次の制作に引き継がれません。本数を出しても、精度が上がっていきません。</p>
+      </div>
+    </div>
+    <div class="bar" style="margin-top:38px">足りないのは制作本数ではありません。試せている「角度」の数です。</div>
+  </div>
+  <div class="pnum">05</div>
+</section>
+
+<!-- ═══════════════ 06 ポジション宣言【共通・黒】 ═══════════════ -->
+<section class="slide black">
+  <div style="position:absolute;left:var(--padL);top:250px">
+    <div class="eyebrow">Our Position</div>
+    <h2 style="font-size:82px;font-weight:900;line-height:1.2;margin-top:26px;letter-spacing:-.01em">代行で、<br>終わらせない。</h2>
+    <p style="font-size:21px;line-height:2;color:#cfcfcf;margin-top:44px;max-width:1080px">
+      動画制作を受託して終わりにしません。最初の2ヶ月は私たちが実際に回して、御社の題材でどの角度が伸びるかを数字で出します。<br>3ヶ月目からは、同じ成果を御社の中で出せる状態に移します。
+    </p>
+    <p style="font-size:16px;color:#8e8e8e;margin-top:40px">株式会社Ceed ― AI Video Operations</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 07 強み・やり方【▼型別：アプリグロース】 ═══════════════ -->
+<section class="slide" data-variant="app-growth">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>How</span></div>
+  <div class="head"><div class="h"><div class="n">04</div><div class="t">角度を並列で立てて、当たった角度だけ増やす。</div></div><hr></div>
+  <div class="lead">作るところだけでなく、配信して伸ばすところまで同じチームが担当します。</div>
+  <div class="body" style="top:294px">
+    <div class="flow">
+      <div class="fc"><h5>角度を<br>洗い出す</h5><p>既存の映像・写真・商品情報から、アプリの訴求になり得る切り口を並列に並べる</p></div>
+      <div class="ar">→</div>
+      <!-- ▼ Badhan FB: 「AIが企画して生成する」→「SNSのプロが角度を設計し、AIが量を出す」 -->
+      <div class="fc dark"><h5>SNSのプロが角度を設計し、<br>AIが量を出す</h5><p>切り口ごとの構成・台本・編集を型にして、検証に足る本数を一気に立ち上げる</p></div>
+      <div class="ar">→</div>
+      <div class="fc"><h5>人が最後に<br>判断する</h5><p>ブランドの基準に合うかは人が見る。合わないものは世に出さない</p></div>
+      <div class="ar">→</div>
+      <div class="fc"><h5>当たった角度だけ<br>増やす</h5><p>反応を角度単位で見て、伸びた角度に次の本数を寄せる</p></div>
+    </div>
+    <div class="bar" style="margin-top:38px">自動化するのは「量」。角度の設計と最終判断は、人が持ちます。</div>
+  </div>
+  <div class="pnum">06</div>
+</section>
+
+<!-- ═══════════════ 08 お手伝いできること【共通・SNS運用1本＋他にできること】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Services</span></div>
+  <div class="head"><div class="h"><div class="n">05</div><div class="t">お手伝いできること</div></div><hr></div>
+  <div class="lead">本日ご提案するのは、アプリのユーザー獲得を目的としたSNSアカウント運用です。</div>
+  <div class="body" style="top:290px;display:grid;grid-template-columns:520px 1fr;gap:44px">
+    <div class="card dark" style="padding:30px 28px">
+      <div class="kicker">Main — 本サービス</div>
+      <h4 style="font-size:27px">SNSアカウント運用</h4>
+      <p style="font-size:15.5px">立ち上げから企画・生成・投稿、インストール獲得までを一括で受け持ちます。0から伸ばした実績が中心です。</p>
+      <ul style="list-style:none;margin-top:22px;border-top:1px solid #3a3a3a;padding-top:20px">
+        <li style="font-size:15px;color:#d4d4d4;margin-bottom:11px;padding-left:16px;position:relative"><span style="position:absolute;left:0;top:1px;font-size:7px;color:#888">■</span>広告以外の獲得経路をつくりたい</li>
+        <li style="font-size:15px;color:#d4d4d4;margin-bottom:11px;padding-left:16px;position:relative"><span style="position:absolute;left:0;top:1px;font-size:7px;color:#888">■</span>認知からインストールまで繋げたい</li>
+        <li style="font-size:15px;color:#d4d4d4;padding-left:16px;position:relative"><span style="position:absolute;left:0;top:1px;font-size:7px;color:#888">■</span>素材はあるが、回す人員が足りない</li>
+      </ul>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:18px">他にできること ― ご要望に応じて</div>
+      <div style="display:grid;gap:14px">
+        <div class="card" style="padding:19px 22px">
+          <h4 style="font-size:19px;margin-bottom:7px">切り抜き動画の量産</h4>
+          <p style="font-size:14px">番組・ライブ・音声など、手元にある長尺素材をAIで解析し、媒体別の短尺へ変換します。</p>
+        </div>
+        <div class="card" style="padding:19px 22px">
+          <h4 style="font-size:19px;margin-bottom:7px">広告クリエイティブの量産</h4>
+          <p style="font-size:14px">訴求違いのクリエイティブを必要な本数だけ生成し、広告運用と一体で回します。</p>
+        </div>
+        <div class="card" style="padding:19px 22px">
+          <h4 style="font-size:19px;margin-bottom:7px">広告投資を判断するデータ基盤</h4>
+          <p style="font-size:14px">初回CVではなく継続売上・LTVで媒体と商品を判断できるよう、受注データの設計から入ります。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="note" style="bottom:38px">まずはSNSアカウント運用から始め、成果が出た段階で他の領域へ広げていくケースが多くなっています。</div>
+  <div class="pnum">07</div>
+</section>
+
+<!-- ═══════════════ 09 AI比率【共通】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>AI Ratio</span></div>
+  <div class="head"><div class="h"><div class="n">06</div><div class="t">どこまでAIが担い、どこから人が決めるか。</div></div><hr></div>
+  <div class="lead">量を出す工程は任せきります。角度の設計とブランド判断だけ、人が持ちます。</div>
+  <div class="body" style="top:320px">
+    <div class="ratio"><div class="track"><div class="fill" style="background:#000;width:100%"><span>素材の解析・切り出し</span><span class="p">95<small>%</small></span></div></div><div class="desc">長尺から使える箇所を自動で抽出する</div></div>
+    <div class="ratio"><div class="track"><div class="fill" style="background:#1f1f1f;width:89%"><span>構成・台本の生成</span><span class="p">85<small>%</small></span></div></div><div class="desc">切り口ごとに構成・字幕・尺を生成する</div></div>
+    <div class="ratio"><div class="track"><div class="fill" style="background:#3d3d3d;width:84%"><span>編集・書き出し</span><span class="p">80<small>%</small></span></div></div><div class="desc">テンプレートに沿って一括で仕上げる</div></div>
+    <div class="ratio"><div class="track" style="display:flex;align-items:center;gap:22px"><div style="background:#dedede;width:26%;height:58px"></div><span style="font-size:20px;font-weight:900">角度の設計・最終判断</span><span class="p" style="font-family:var(--dp);font-size:26px;font-weight:800">25<small style="font-size:15px">%</small></span></div><div class="desc">どの角度を立てるか、ブランド基準に合うかは人が決める</div></div>
+  </div>
+  <div class="note" style="bottom:56px">※ 標準的な運用時の設計値です。ブランドの基準が固まるほど、上3工程の比率は上げられます。</div>
+  <div class="pnum">08</div>
+</section>
+
+<!-- ═══════════════ 10 章扉 01【共通】 ═══════════════ -->
+<section class="slide divider">
+  <div class="ghost">01</div>
+  <div style="position:absolute;left:var(--padL);top:300px;width:640px">
+    <div class="eyebrow">How We Work</div>
+    <h2 style="font-size:66px;font-weight:900;margin-top:22px;letter-spacing:-.005em">導入の進め方</h2>
+    <p style="font-size:19px;line-height:1.9;color:var(--mut2);margin-top:24px">最初の2ヶ月は私たちが回して、勝ち筋を出します。<br>3ヶ月目からは、それを御社の中に移します。</p>
+  </div>
+  <div class="dfoot"><div class="l">株式会社Ceed</div><div class="r">09 / 22</div></div>
+</section>
+
+<!-- ═══════════════ 11 3ステップ【共通】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Roadmap</span></div>
+  <div class="head"><div class="h"><div class="n">07</div><div class="t">3ステップで、社内に移します。</div></div><hr></div>
+  <div class="lead">初月から成果が出て、半年後には私たちがいなくても回る。それが着地点です。</div>
+  <div class="body" style="top:320px;display:grid;grid-template-columns:repeat(3,1fr);gap:52px">
+    <div class="rm"><div class="dot"></div><span class="st">01</span><span class="mo">MONTH 1-2</span><h4>実証・運用代行</h4><p>私たちが実際にアカウントを回します。1アカウントあたり月20本を目安に配信し、御社の題材でどの角度が伸びるかを数字で特定します。</p></div>
+    <div class="rm"><div class="dot"></div><span class="st">02</span><span class="mo">MONTH 3-</span><h4>内製化支援</h4><p>見つかった勝ち筋を、手順書・プロンプト・ツールの形にして御社へ渡します。社内の担当者が同じ手順で回せるところまで伴走します。</p></div>
+    <div class="rm"><div class="dot"></div><span class="st">03</span><span class="mo">MONTH 6-</span><h4>自走 ＋ ツール提供</h4><p>運用は御社の中で完結します。私たちは生成ツールの提供と、必要なときのスポット相談だけを残します。</p></div>
+  </div>
+  <div style="position:absolute;left:var(--padL);right:var(--padR);bottom:76px"><div class="bar">まず結果を出してから、内製化の話をします。順番を逆にしません。</div></div>
+  <div class="pnum">10</div>
+</section>
+
+<!-- ═══════════════ 12 最初の2ヶ月【共通】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Phase 1</span></div>
+  <div class="head"><div class="h"><div class="n">08</div><div class="t">最初の2ヶ月で、勝ち筋を出す。</div></div><hr></div>
+  <div class="lead">2ヶ月あれば、御社の題材でどの角度が伸びるかは数字で出ます。</div>
+  <div class="body" style="top:286px;display:grid;grid-template-columns:520px 1fr;gap:60px">
+    <div class="cycle" style="height:360px">
+      <svg viewBox="0 0 480 360">
+        <path d="M330 78 A150 150 0 0 1 372 190" fill="none" stroke="#111" stroke-width="2" marker-end="url(#a)"/>
+        <path d="M360 262 A150 150 0 0 1 268 322" fill="none" stroke="#111" stroke-width="2" marker-end="url(#a)"/>
+        <path d="M186 322 A150 150 0 0 1 100 258" fill="none" stroke="#111" stroke-width="2" marker-end="url(#a)"/>
+        <path d="M92 176 A150 150 0 0 1 132 80" fill="none" stroke="#111" stroke-width="2" marker-end="url(#a)"/>
+        <defs><marker id="a" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 z" fill="#111"/></marker></defs>
+      </svg>
+      <div class="cyc" style="left:142px;top:8px"><div class="n">01</div><h5>仮説を出す</h5><p>刺さる角度を並べる</p></div>
+      <div class="cyc" style="left:272px;top:150px"><div class="n">02</div><h5>一気に作る</h5><p>角度ごとに量を出す</p></div>
+      <div class="cyc" style="left:142px;top:270px"><div class="n">03</div><h5>配信して測る</h5><p>反応を角度単位で見る</p></div>
+      <div class="cyc" style="left:12px;top:150px"><div class="n">04</div><h5>勝ち筋を残す</h5><p>次の本数をそこへ寄せる</p></div>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:20px">2ヶ月で、御社に残るもの</div>
+      <div style="border-top:1px solid var(--line);padding:20px 0 22px">
+        <h4 style="font-size:22px;font-weight:900;margin-bottom:9px">伸びる角度のリスト</h4>
+        <p style="font-size:15px;line-height:1.8;color:var(--mut2)">実際の配信結果に基づいて、御社の題材で何が反応を取れるかを角度単位で特定します。</p>
+      </div>
+      <div style="border-top:1px solid var(--line);padding:20px 0 22px">
+        <h4 style="font-size:22px;font-weight:900;margin-bottom:9px">再現できる制作手順</h4>
+        <p style="font-size:15px;line-height:1.8;color:var(--mut2)">その角度をどう作るか——構成・尺・テロップ・サムネの型を、手順として書き起こします。</p>
+      </div>
+      <div style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0 22px">
+        <h4 style="font-size:22px;font-weight:900;margin-bottom:9px">運用中のアカウント</h4>
+        <p style="font-size:15px;line-height:1.8;color:var(--mut2)">2ヶ月動かし続けた実アカウントが、止めずにそのまま次のフェーズへ引き継げます。</p>
+      </div>
+    </div>
+  </div>
+  <div class="pnum">11</div>
+</section>
+
+<!-- ═══════════════ 13 3ヶ月目から【共通】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Phase 2</span></div>
+  <div class="head"><div class="h"><div class="n">09</div><div class="t">3ヶ月目から、社内に移す。</div></div><hr></div>
+  <div class="lead">同じ手順・同じツールを、御社の担当者が回せるところまで伴走します。</div>
+  <div class="body" style="top:308px">
+    <div class="cmp">
+      <div class="ch">代 行 の ま ま だ と</div>
+      <div class="ch">内 製 化 す る と</div>
+      <div class="row lft"><b>01</b>作れる本数が、予算に比例する</div>
+      <div class="row rgt"><span class="ar">→</span>作れる本数が、<span class="hl">社内の人数</span>に比例するようになる</div>
+      <div class="row lft"><b>02</b>ノウハウが、外部に溜まっていく</div>
+      <div class="row rgt"><span class="ar">→</span>手順書・プロンプト・テンプレートが社内に残る</div>
+      <div class="row lft"><b>03</b>角度を変えたいとき、依頼から着手まで時差が出る</div>
+      <div class="row rgt"><span class="ar">→</span>思いついたその日に、担当者が自分で作れる</div>
+      <div class="row lft"><b>04</b>契約が切れると、制作も止まる</div>
+      <div class="row rgt"><span class="ar">→</span>ツールと手順は残り、体制は社内で維持できる</div>
+    </div>
+    <div class="bar" style="margin-top:36px">安くするための内製化ではありません。同じ予算で、出せる本数の上限を外すための内製化です。</div>
+  </div>
+  <div class="pnum">12</div>
+</section>
+
+<!-- ═══════════════ 14 ツール提供【共通】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Tool</span></div>
+  <div class="head"><div class="h"><div class="n">10</div><div class="t">生成ツールは、御社のIDでお渡しします。</div></div><hr></div>
+  <div class="lead">社内で使っている仕組みを、そのまま御社の環境に載せ替えます。</div>
+  <div class="body" style="top:280px">
+    <table class="spec">
+      <tr><td class="k">提供形態</td><td class="v">ブラウザから使える生成ツールとして、御社専用の環境をご用意します</td></tr>
+      <tr><td class="k">アカウント</td><td class="v">利用者ごとにIDを発行します／同時ログインは不可 ― IDの共有はできません<em>社内の編集担当にも、外注の制作パートナーにも、必要な人数分だけ配れます</em></td></tr>
+      <tr><td class="k">環境構築</td><td class="v">最短1週間、標準1ヶ月<em>御社の題材・ブランド基準に合わせて調整したうえでお渡しします</em></td></tr>
+      <tr><td class="k">含まれるもの</td><td class="v">生成テンプレート／運用手順書とプロンプト集／質問窓口（チャット）</td></tr>
+      <tr><td class="k">運用イメージ</td><td class="v">編集担当が自分のIDで生成し、そのまま投稿まで進めます<em>私たちは月次の振り返りとテンプレートの更新だけを担当します</em></td></tr>
+    </table>
+  </div>
+  <div class="note" style="bottom:44px">※ 環境構築の期間は、素材の形式と連携先（配信先アカウント・保管ストレージ）の数によって前後します。</div>
+  <div class="pnum">13</div>
+</section>
+
+<!-- ═══════════════ 15 章扉 02【共通】 ═══════════════ -->
+<section class="slide divider">
+  <div class="ghost">02</div>
+  <div style="position:absolute;left:var(--padL);top:300px;width:660px">
+    <div class="eyebrow">Proof &amp; Price</div>
+    <h2 style="font-size:60px;font-weight:900;margin-top:22px;letter-spacing:-.005em">実績・料金・スケジュール</h2>
+    <p style="font-size:19px;line-height:1.9;color:var(--mut2);margin-top:24px">アプリ領域で実際に出ている数字と、3ステップの料金、<br>開始までの流れをご説明します。</p>
+  </div>
+  <div class="dfoot"><div class="l">株式会社Ceed</div><div class="r">14 / 22</div></div>
+</section>
+
+<!-- ═══════════════ 16 数値実績【▼型別：アプリグロース】 ═══════════════ -->
+<section class="slide" data-variant="app-growth">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Numbers</span></div>
+  <div class="head"><div class="h"><div class="n">11</div><div class="t">SNSから、アプリのCVまで届いています。</div></div><hr></div>
+  <div class="lead">ヘルスケアアプリ「カロミー」様での運用実績です。</div>
+  <div class="body" style="top:302px">
+    <div class="grid3">
+      <div class="stat"><div class="lab">累計再生数</div><div class="val">1,000<small>万+</small></div><div class="sub">6アカウント・225投稿の合計（実績）</div></div>
+      <div class="stat"><div class="lab">10万再生を超えた投稿</div><div class="val">30<small>本</small></div><div class="sub">最高は単体で147万再生（実績）</div></div>
+      <div class="stat"><div class="lab">アプリインストール</div><div class="val">60<small>件</small></div><div class="sub">AppsFlyerで直接計測できた分（実績）</div></div>
+    </div>
+  </div>
+  <div class="note" style="bottom:66px">※ 大型投稿の拡散期には、アプリ全体の日次オーガニックインストールが平常時の約98件から3,400件超へ増加しました。投稿との直接の因果関係は現在検証中のため、上記には含めていません。</div>
+  <div class="pnum">15</div>
+</section>
+
+<!-- ═══════════════ 17 ケーススタディ【▼型別：アプリグロース】 ═══════════════ -->
+<section class="slide" data-variant="app-growth">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Case</span></div>
+  <div class="head"><div class="h"><div class="n">12</div><div class="t">角度を変えながら、当たりを見つけた。</div></div><hr></div>
+  <div class="lead">カロミー様｜ヘルスケアアプリ ― 広告以外の獲得経路をSNSでつくった取り組みです。</div>
+  <div class="body" style="top:292px;display:grid;grid-template-columns:1fr 1fr;gap:44px">
+    <div class="card" style="padding:26px 26px 22px">
+      <div style="display:flex;gap:22px;margin-bottom:20px"><div class="k" style="font-family:var(--mo);font-size:11px;letter-spacing:.28em;color:var(--mut);width:64px;padding-top:4px">ISSUE</div><p style="flex:1;font-size:15.5px;line-height:1.85;color:#3a3a3a">広告以外の獲得経路を作りたいが、SNSで再生とCVを継続的に生む型が無かった。</p></div>
+      <div style="display:flex;gap:22px;margin-bottom:20px;border-top:1px solid var(--line);padding-top:20px"><div style="font-family:var(--mo);font-size:11px;letter-spacing:.28em;color:var(--mut);width:64px;padding-top:4px">ACTION</div><p style="flex:1;font-size:15.5px;line-height:1.85;color:#3a3a3a">複数のSNSアカウントを立ち上げ、角度ごとにAIで企画・制作・投稿・分析を反復。AppsFlyerでインストールまで計測。</p></div>
+      <div style="display:flex;gap:22px;border-top:1px solid var(--line);padding-top:20px"><div style="font-family:var(--mo);font-size:11px;letter-spacing:.28em;color:var(--mut);width:64px;padding-top:4px">RESULT</div><p style="flex:1;font-size:16px;line-height:1.8;font-weight:700">6アカウント・225投稿で<span class="hl">累計1,000万+再生</span>。<br>インストール60件を直接計測。</p></div>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:16px">検証した角度と、残した角度</div>
+      <div style="border-top:1px solid var(--line);padding:16px 0;display:flex;gap:20px;align-items:baseline"><span style="font-family:var(--dp);font-size:15px;font-weight:800;color:var(--mut);width:30px">01</span><span style="font-size:18px;font-weight:700;flex:1">漫画形式で悩みを描く</span><span style="font-size:13.5px;color:var(--mut2)">継続</span></div>
+      <div style="border-top:1px solid var(--line);padding:16px 0;display:flex;gap:20px;align-items:baseline"><span style="font-family:var(--dp);font-size:15px;font-weight:800;color:var(--mut);width:30px">02</span><span style="font-size:18px;font-weight:700;flex:1">スライドで数字を見せる</span><span style="font-size:13.5px;color:var(--mut2)">継続</span></div>
+      <div style="border-top:1px solid var(--line);padding:16px 0;display:flex;gap:20px;align-items:baseline"><span style="font-family:var(--dp);font-size:15px;font-weight:800;color:var(--mut);width:30px">03</span><span style="font-size:18px;font-weight:700;flex:1">キャラクターに語らせる</span><span style="font-size:13.5px;color:var(--mut2)">継続</span></div>
+      <div style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;display:flex;gap:20px;align-items:baseline;color:#a5a5a5"><span style="font-family:var(--dp);font-size:15px;font-weight:800;width:30px">04</span><span style="font-size:18px;font-weight:700;flex:1">機能紹介を正面から出す</span><span style="font-size:13.5px">停止</span></div>
+      <div class="bar" style="margin-top:26px;font-size:17px;padding:16px 22px;line-height:1.55">当たらなかった角度は止め、当たった角度に本数を寄せる。これを毎週回しました。</div>
+    </div>
+  </div>
+  <div class="pnum">16</div>
+</section>
+
+<!-- ═══════════════ 18 料金【共通・AOM版を踏襲】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Pricing</span></div>
+  <div class="head"><div class="h"><div class="n">13</div><div class="t">料金</div></div><hr></div>
+  <div class="lead">フェーズが進むほど、私たちの関与は薄く、御社の実行力は厚くなります。</div>
+  <div class="body" style="top:288px;display:grid;grid-template-columns:repeat(3,1fr);gap:26px">
+    <div class="price">
+      <div class="step">Step 1</div><h4>実証・運用代行</h4>
+      <div class="amt">¥150,000<small>/ 月</small></div>
+      <ul><li>1アカウントあたり 動画 月20本を目安に制作</li><li>企画・生成・投稿まで代行</li><li>月次で数値の振り返りと改善提案</li><li>まずは2〜3ヶ月からお試しいただけます</li></ul>
+    </div>
+    <div class="price dark" style="position:relative">
+      <div class="step">Step 2</div><h4>内製化支援</h4>
+      <div class="amt">¥250,000<small>/ 月</small></div>
+      <ul><li>内製化の伴走 ¥200,000</li><li>生成ツールの利用 ¥50,000</li><li>手順書・プロンプトの引き渡し</li><li>社内担当者へのレクチャーと同席</li></ul>
+      <div class="fine">制作本数の上限を、予算ではなく人数で決められる状態にします</div>
+    </div>
+    <div class="price">
+      <div class="step">Step 3</div><h4>ツール提供</h4>
+      <div class="amt">¥50,000<small>/ 月</small></div>
+      <ul><li>ID 5名まで発行（同時ログイン不可）</li><li>生成テンプレートの更新を継続提供</li><li>運用は御社内で完結</li><li>相談が必要なときだけスポットで</li></ul>
+    </div>
+  </div>
+  <div class="note" style="bottom:44px">※ 価格はすべて税別。Step 1 から順に進むのが標準ですが、ツール提供のみのご利用も可能です。</div>
+  <div class="pnum">17</div>
+</section>
+
+<!-- ═══════════════ 19 シミュレーション【共通】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Simulation</span></div>
+  <div class="head"><div class="h"><div class="n">14</div><div class="t">本数が増えるほど、内製化が効きます。</div></div><hr></div>
+  <div class="lead">月に出したい本数を選ぶと、3つのステップの費用感が並びます。</div>
+  <div class="body" style="top:274px">
+    <div style="font-family:var(--mo);font-size:11.5px;letter-spacing:.24em;color:var(--mut);margin-bottom:14px">01 ― 月に出したい本数を選ぶ</div>
+    <div style="display:flex;gap:14px;margin-bottom:26px">
+      <div style="border:1px solid var(--line2);padding:13px 30px;font-size:19px;font-weight:800">20<small style="font-size:13px">本</small></div>
+      <div style="border:1px solid var(--line2);padding:13px 30px;font-size:19px;font-weight:800">60<small style="font-size:13px">本</small></div>
+      <div style="background:#000;color:#fff;padding:13px 30px;font-size:19px;font-weight:800">100<small style="font-size:13px">本</small></div>
+      <div style="border:1px solid var(--line2);padding:13px 30px;font-size:19px;font-weight:800">200<small style="font-size:13px">本</small></div>
+      <div style="border:1px solid var(--line2);padding:13px 30px;font-size:19px;font-weight:800">400<small style="font-size:13px">本</small></div>
+    </div>
+    <div style="font-family:var(--mo);font-size:11.5px;letter-spacing:.24em;color:var(--mut);margin-bottom:14px">02 ― 月額と、1本あたり</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+      <div class="price" style="padding:24px 24px 26px">
+        <div class="step">Step 1</div><h4 style="font-size:22px">運用代行</h4>
+        <div class="amt" style="font-size:38px">¥750,000<small style="font-size:15px">/月</small></div>
+        <div style="border-top:1px solid var(--line);margin-top:18px;padding-top:16px">
+          <div style="font-family:var(--dp);font-size:23px;font-weight:800">¥7,500 <span style="font-size:13.5px;font-weight:400;color:var(--mut2)">/ 本（100本で割った場合）</span></div>
+          <p style="font-size:13.5px;color:var(--mut2);margin-top:12px;line-height:1.7">5アカウント分。企画から投稿まで、私たちが回します</p>
+        </div>
+      </div>
+      <div class="price dark" style="padding:24px 24px 26px;position:relative">
+        <div class="tag">この本数ならこちらが安い</div>
+        <div class="step">Step 2</div><h4 style="font-size:22px">内製化支援</h4>
+        <div class="amt" style="font-size:38px">¥250,000<small style="font-size:15px">/月</small></div>
+        <div style="border-top:1px solid #3a3a3a;margin-top:18px;padding-top:16px">
+          <div style="font-family:var(--dp);font-size:23px;font-weight:800">¥2,500 <span style="font-size:13.5px;font-weight:400;color:#9a9a9a">/ 本（100本で割った場合）</span></div>
+          <p style="font-size:13.5px;color:#9a9a9a;margin-top:12px;line-height:1.7">伴走 ¥200,000 ＋ ツール ¥50,000。制作は御社の担当者。本数は人数で決まります</p>
+        </div>
+      </div>
+      <div class="price" style="padding:24px 24px 26px">
+        <div class="step">Step 3</div><h4 style="font-size:22px">ツール提供のみ</h4>
+        <div class="amt" style="font-size:38px">¥50,000<small style="font-size:15px">/月</small></div>
+        <div style="border-top:1px solid var(--line);margin-top:18px;padding-top:16px">
+          <div style="font-family:var(--dp);font-size:23px;font-weight:800">¥500 <span style="font-size:13.5px;font-weight:400;color:var(--mut2)">/ 本（100本で割った場合）</span></div>
+          <p style="font-size:13.5px;color:var(--mut2);margin-top:12px;line-height:1.7">ID 5名まで。型ができたあとの、自走フェーズ</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="note" style="bottom:30px">※ 税別。Step 2・3 は制作を御社の担当者が行う前提のため、月額は本数によらず一定です。まず Step 1 で型をつくり、本数が増える段になったら Step 2 へ移るのが標準の進め方です。</div>
+  <div class="pnum">18</div>
+</section>
+
+<!-- ═══════════════ 20 スケジュール【共通】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Schedule</span></div>
+  <div class="head"><div class="h"><div class="n">15</div><div class="t">ご契約から、2週間で配信を始められます。</div></div><hr></div>
+  <div class="lead">素材が手元にあれば、撮影を待たずに立ち上げられます。</div>
+  <div class="body" style="top:296px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:44px;position:relative">
+      <div style="position:absolute;left:0;right:0;top:4px;height:1px;background:#111"></div>
+      <div style="padding-top:26px;position:relative"><div style="position:absolute;left:0;top:0;width:9px;height:9px;background:#000"></div><div class="mo" style="font-family:var(--mo);font-size:11.5px;letter-spacing:.22em;color:var(--mut)">WEEK 0</div><h4 style="font-size:23px;font-weight:900;margin:10px 0 12px">お打ち合わせ</h4><p style="font-size:15px;line-height:1.8;color:#3a3a3a">題材・目標本数・配信先をうかがい、進め方をすり合わせます。</p></div>
+      <div style="padding-top:26px;position:relative"><div style="position:absolute;left:0;top:0;width:9px;height:9px;background:#000"></div><div style="font-family:var(--mo);font-size:11.5px;letter-spacing:.22em;color:var(--mut)">WEEK 1</div><h4 style="font-size:23px;font-weight:900;margin:10px 0 12px">設計</h4><p style="font-size:15px;line-height:1.8;color:#3a3a3a">角度の仮説を出し、生成の型と運用の環境を用意します。</p></div>
+      <div style="padding-top:26px;position:relative"><div style="position:absolute;left:0;top:0;width:9px;height:9px;background:#000"></div><div style="font-family:var(--mo);font-size:11.5px;letter-spacing:.22em;color:var(--mut)">WEEK 2</div><h4 style="font-size:23px;font-weight:900;margin:10px 0 12px">運用開始</h4><p style="font-size:15px;line-height:1.8;color:#3a3a3a">実際に配信を始めます。ここから2ヶ月が実証フェーズです。</p></div>
+      <div style="padding-top:26px;position:relative"><div style="position:absolute;left:0;top:0;width:9px;height:9px;background:#000"></div><div style="font-family:var(--mo);font-size:11.5px;letter-spacing:.22em;color:var(--mut)">MONTH 3</div><h4 style="font-size:23px;font-weight:900;margin:10px 0 12px">内製化へ移行</h4><p style="font-size:15px;line-height:1.8;color:#3a3a3a">勝ち筋と手順を引き渡し、社内担当者と並走を始めます。</p></div>
+    </div>
+    <div style="margin-top:56px;border-top:1px solid var(--line);padding-top:26px">
+      <div class="eyebrow" style="margin-bottom:18px">ご用意いただくもの</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:44px">
+        <div><h4 style="font-size:21px;font-weight:900;margin-bottom:8px">素材</h4><p style="font-size:14.5px;line-height:1.75;color:var(--mut2)">既存の映像・写真・商品画像。形式はそのままで構いません。</p></div>
+        <div><h4 style="font-size:21px;font-weight:900;margin-bottom:8px">アカウント</h4><p style="font-size:14.5px;line-height:1.75;color:var(--mut2)">配信先のSNS・広告アカウントの権限を1つお預かりします。</p></div>
+        <div><h4 style="font-size:21px;font-weight:900;margin-bottom:8px">窓口</h4><p style="font-size:14.5px;line-height:1.75;color:var(--mut2)">週1回30分、確認をお願いできる担当者を1名。</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="pnum">19</div>
+</section>
+
+<!-- ═══════════════ 21 FAQ【共通】 ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>FAQ</span></div>
+  <div class="head"><div class="h"><div class="n">16</div><div class="t">よくあるご質問</div></div><hr></div>
+  <div class="body" style="top:250px">
+    <div class="faq">
+      <div class="q"><div class="qt"><span class="qn">Q01</span><span class="qq">素材がないと依頼できませんか？</span></div><p class="qa">既存の映像・写真・商品情報があれば始められます。素材が足りない場合は、企画から撮影の設計までご相談ください。</p></div>
+      <div class="q"><div class="qt"><span class="qn">Q04</span><span class="qq">途中で内製化をやめることはできますか？</span></div><p class="qa">できます。運用代行のまま継続いただいても構いません。内製化は「そうしたほうが得だから」提案しているだけです。</p></div>
+      <div class="q"><div class="qt"><span class="qn">Q02</span><span class="qq">AIで作った動画だと分かってしまいませんか？</span></div><p class="qa">角度の設計と最終確認は必ず人が行います。御社のブランド基準に合わないものは配信しません。判断の基準も、最初のフェーズですり合わせます。</p></div>
+      <div class="q"><div class="qt"><span class="qn">Q05</span><span class="qq">ツールだけ使わせてもらうことはできますか？</span></div><p class="qa">可能です。ただし、まず2ヶ月の運用代行で御社の勝ち筋と型を作ってからのご利用を推奨しています。型がないとツールは活きません。</p></div>
+      <div class="q"><div class="qt"><span class="qn">Q03</span><span class="qq">本数はどこまで増やせますか？</span></div><p class="qa">代行フェーズは予算に比例します。内製化後は、ツールを使う社内の担当者数で決まります。人を増やせば本数も伸びます。</p></div>
+      <div class="q"><div class="qt"><span class="qn">Q06</span><span class="qq">既存の制作会社・代理店とは併存できますか？</span></div><p class="qa">できます。既存の体制を置き換えるのではなく、検証用の本数を出す部分だけを私たちが受け持つ形から始めるケースが多いです。</p></div>
+    </div>
+  </div>
+  <div class="pnum">20</div>
+</section>
+
+<!-- ═══════════════ 22 締め ═══════════════ -->
+<section class="slide">
+  <div class="cover">
+    <div class="l">
+      <div class="topbar"><span class="a">2026.08</span><span class="b">AI動画運用 ご提案</span></div>
+      <div style="position:absolute;left:0;top:230px;right:80px">
+        <h2 style="font-size:80px;font-weight:900;line-height:1.2;letter-spacing:-.01em">まずは、<span class="hl" style="padding:2px 12px">2ヶ月</span>。</h2>
+        <div style="margin-top:44px">
+          <div style="border-top:1px solid var(--line);padding:20px 0 18px;display:flex;gap:26px;align-items:baseline">
+            <span style="font-family:var(--dp);font-size:17px;font-weight:800">01</span>
+            <div><div style="font-size:24px;font-weight:900;margin-bottom:7px">素材を見せてください</div><p style="font-size:14.5px;color:var(--mut2)">手元の映像・写真・商品情報を拝見し、どんな角度が作れるかをその場でお伝えします。</p></div>
+          </div>
+          <div style="border-top:1px solid var(--line);padding:20px 0 18px;display:flex;gap:26px;align-items:baseline">
+            <span style="font-family:var(--dp);font-size:17px;font-weight:800">02</span>
+            <div><div style="font-size:24px;font-weight:900;margin-bottom:7px">1アカウントで始めましょう</div><p style="font-size:14.5px;color:var(--mut2)">いきなり全社展開はしません。1アカウント・2ヶ月で、数字が出るかを確かめます。</p></div>
+          </div>
+          <div style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0 18px;display:flex;gap:26px;align-items:baseline">
+            <span style="font-family:var(--dp);font-size:17px;font-weight:800">03</span>
+            <div><div style="font-size:24px;font-weight:900;margin-bottom:7px">回ったら、社内に移します</div><p style="font-size:14.5px;color:var(--mut2)">勝ち筋が出たら、手順とツールごと御社へ。私たちは後ろに下がります。</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="copy" style="left:0">© 2026 Ceed Inc.</div>
+    </div>
+    <div class="r">
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;width:340px">
+        <div style="font-family:var(--dp);font-size:52px;font-weight:800"><span class="ring lg" style="border-width:6px;width:64px;height:64px;vertical-align:-14px"></span>&nbsp;Ceed</div>
+        <div style="width:52px;height:1px;background:#5a5a5a;margin:34px auto"></div>
+        <div style="font-size:22px;font-weight:900;margin-bottom:14px">株式会社Ceed</div>
+        <div style="font-size:14.5px;color:#a5a5a5;line-height:1.9">AI Video Operations<br>コンテンツ生成・SNS運用・内製化支援</div>
+        <div style="font-size:14.5px;color:#a5a5a5;line-height:1.9;margin-top:20px">official@ceed.cloud<br>https://ceed.cloud/</div>
+      </div>
+      <div style="position:absolute;right:40px;bottom:34px;font-family:var(--dp);font-size:14px;color:#8e8e8e">22 / 22</div>
+    </div>
+  </div>
+</section>
+
+</div></div>
+
+<div id="tb">
+  <span id="ctr">1 / 22</span>
+  <button id="prev">◀</button>
+  <button id="next">▶</button>
+  <button id="pr">PDF</button>
+</div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var deck=document.getElementById('deck');
+  var ctr=document.getElementById('ctr');
+  var i=0;
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(s,k){s.classList.toggle('on',k===i)});
+    ctr.textContent=(i+1)+' / '+slides.length;
+    location.hash='p'+(i+1);
+  }
+  function fit(){
+    var s=Math.min(window.innerWidth/1440,window.innerHeight/810);
+    deck.style.transform='scale('+s+')';
+  }
+  window.addEventListener('resize',fit);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();show(i+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+    if(e.key==='Home'){show(0)} if(e.key==='End'){show(slides.length-1)}
+  });
+  document.getElementById('next').onclick=function(){show(i+1)};
+  document.getElementById('prev').onclick=function(){show(i-1)};
+  document.getElementById('pr').onclick=function(){window.print()};
+  document.getElementById('stage').addEventListener('click',function(e){
+    if(e.target.closest('#tb'))return;
+    show(e.clientX>window.innerWidth/2?i+1:i-1);
+  });
+  var m=/^#p(\d+)$/.exec(location.hash);
+  fit(); show(m?parseInt(m[1],10)-1:0);
+})();
+</script>
+</body>
+</html>
