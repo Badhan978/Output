@@ -107,6 +107,18 @@ body{
 .ag h4{font-size:27px;font-weight:900;margin-bottom:10px}
 .ag p{font-size:15.5px;line-height:1.75;color:var(--mut2)}
 
+/* ---------- 三層レイヤー ---------- */
+.lay{border-top:1px solid var(--line);padding:17px 0 19px;display:grid;grid-template-columns:178px 1fr;gap:0 26px;align-items:start}
+.lay:last-of-type{border-bottom:1px solid var(--line)}
+.lay .nm{font-size:19px;font-weight:900;line-height:1.4}
+.lay .nm em{display:block;font-style:normal;font-family:var(--mo);font-size:10px;letter-spacing:.16em;color:var(--mut);margin-top:8px;line-height:1.5}
+.lay .tx{font-size:14px;line-height:1.8;color:#3a3a3a}
+.lay .tx b{display:block;font-size:15.5px;font-weight:900;color:#000;margin-bottom:5px}
+.lay.hit{background:#000;color:#fff;border-color:#000;padding:19px 20px;margin:0 -20px}
+.lay.hit .nm em{color:#8e8e8e}
+.lay.hit .tx{color:#cfcfcf}
+.lay.hit .tx b{color:#fff}
+
 /* ---------- 黒スライド ---------- */
 .black{background:#000;color:#fff}
 .black .eyebrow{color:#9a9a9a}
@@ -256,7 +268,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       <div class="an">01</div>
       <div>
         <h4>実機データの限界と、私たち</h4>
-        <p>実機を増やしても埋まらない領域がどこにあるか。そして、なぜ私たちがそこを引き受けられるか。</p>
+        <p>学習データの三層構造と、実機だけでは埋まらない領域。そして、なぜ私たちがそこを引き受けられるか。</p>
       </div>
     </div>
     <div class="ag">
@@ -277,12 +289,56 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="pnum">02</div>
 </section>
 
+<!-- ═══════════════ 03 全体図（三層） ═══════════════ -->
+<section class="slide">
+  <div class="mark"></div><div class="vline"></div>
+  <div class="rail"><span>Landscape</span></div>
+  <div class="head">
+    <div class="h"><div class="n">01</div><div class="t">ロボットの学習データは、三層で積み上がる。</div></div>
+    <hr>
+  </div>
+  <div class="lead" style="top:192px;font-size:24px">量が多い層ほど、そのロボット固有の情報を持っていません。</div>
+  <div class="body" style="top:268px">
+    <div style="display:grid;grid-template-columns:440px 1fr;gap:0 56px;align-items:start">
+    <svg width="440" height="314" viewBox="0 0 440 314" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="220,8 285.1,105 154.9,105" fill="#fff" stroke="#000" stroke-width="1.5"/>
+      <polygon points="288.5,110 352.2,205 87.8,205 151.5,110" fill="#000"/>
+      <polygon points="355.6,210 420,306 20,306 84.4,210" fill="#fff" stroke="#000" stroke-width="1.5"/>
+      <text x="220" y="93" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="13.5" font-weight="900" fill="#000">実機データ</text>
+      <text x="220" y="168" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="16" font-weight="900" fill="#fff">合成データ</text>
+      <text x="220" y="285" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="13.5" font-weight="900" fill="#000">Web・人間の動画</text>
+      <line x1="4" y1="152" x2="112" y2="152" stroke="#000" stroke-width="1"/>
+      <rect x="4" y="149.5" width="5" height="5" fill="#000"/>
+      <text x="4" y="140" font-family="'Roboto Mono',monospace" font-size="10.5" letter-spacing="1.6" fill="#000">私たちが担う層</text>
+      <text x="436" y="28" text-anchor="end" font-family="'Roboto Mono',monospace" font-size="10" letter-spacing="1.4" fill="#8a8a8a">QTY ▼ / SPECIFICITY ▲</text>
+    </svg>
+    <div>
+      <div class="lay">
+        <div class="nm">実機データ<em>REAL — TELEOPERATION</em></div>
+        <div class="tx"><b>御社にしか作れない層</b>テレオペで集めた実軌跡。固有度は最大ですが、量は台数と人手の時間に比例するため、ここだけを増やしても伸びません。</div>
+      </div>
+      <div class="lay hit">
+        <div class="nm">合成データ<em>SYNTHETIC — SIM &amp; GENERATED</em></div>
+        <div class="tx"><b>外から足せる、唯一の層</b>シミュレータ生成と、生成モデルによる映像。実機の分布に寄せて作れれば、頂点の層の薄さを補えます。私たちが担うのはここです。</div>
+      </div>
+      <div class="lay">
+        <div class="nm">Web・人間の動画<em>WEB — HUMAN VIDEO</em></div>
+        <div class="tx"><b>すでに基盤モデルの中にある層</b>Ego4Dや公開動画、Webテキスト。量は最大ですが行動ラベルを持たず、いま追加で買い足す意味はほとんどありません。</div>
+      </div>
+    </div>
+    </div>
+    <div class="bar" style="margin-top:28px">伸びないのは頂点の層。そして中間の層は、まだ誰も御社のロボット向けには作っていません。</div>
+  </div>
+  <div class="note" style="bottom:44px;font-size:13.5px">※ NVIDIA「GR00T N1」（2025.03）の data pyramid に基づく整理。同モデルはこの三層を混ぜたバッチで事前学習されています。</div>
+  <div class="pnum">03</div>
+</section>
+
 <!-- ═══════════════ 03 課題 ═══════════════ -->
 <section class="slide">
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Context</span></div>
   <div class="head">
-    <div class="h"><div class="n">01</div><div class="t">実機を走らせても、埋まらない領域がある。</div></div>
+    <div class="h"><div class="n">02</div><div class="t">実機を走らせても、埋まらない領域がある。</div></div>
     <hr>
   </div>
   <div class="lead">台数を増やしても、時間をかけても、届かない場面があります。</div>
@@ -307,7 +363,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="bar" style="margin-top:36px">足りないのは台数でも予算でもなく、「モデルがまだ見ていない場面」です。</div>
   </div>
   <div class="note" style="bottom:52px">※ 3つとも、実機の台数や予算を増やしても構造的には解けません。だからこそ「集める」以外の手段を、集めることと組み合わせて設計する必要があります。</div>
-  <div class="pnum">03</div>
+  <div class="pnum">04</div>
 </section>
 
 <!-- ═══════════════ 04 ポジション（黒） ═══════════════ -->
@@ -323,7 +379,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </p>
   </div>
   <div style="position:absolute;left:var(--padL);bottom:46px;font-family:var(--mo);font-size:12.5px;letter-spacing:.2em;color:#7d7d7d">株式会社Ceed ― PHYSICAL AI DATA OPERATIONS</div>
-  <div class="pnum" style="color:#fff">04</div>
+  <div class="pnum" style="color:#fff">05</div>
 </section>
 
 <!-- ═══════════════ 05 私たちについて ═══════════════ -->
@@ -331,7 +387,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>About</span></div>
   <div class="head">
-    <div class="h"><div class="n">02</div><div class="t">私たちについて</div></div>
+    <div class="h"><div class="n">03</div><div class="t">私たちについて</div></div>
     <hr>
   </div>
   <div class="lead" style="top:190px;font-size:23px">生成AIで映像を量産してきた運用チームと、仕様の固まっていないものを動かすエンジニアが、同じ会社にいます。</div>
@@ -368,7 +424,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </div>
   </div>
   <div class="note" style="bottom:44px">※ 数字は2026年8月時点。映像量産の実績はエンタメIP領域での運用によるものです。詳細はご要望に応じて別途ご説明します。</div>
-  <div class="pnum">05</div>
+  <div class="pnum">06</div>
 </section>
 
 <!-- ═══════════════ 06 効果の根拠 ═══════════════ -->
@@ -376,7 +432,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Evidence</span></div>
   <div class="head">
-    <div class="h"><div class="n">03</div><div class="t">実データのみ vs 実データ＋合成データの学習</div></div>
+    <div class="h"><div class="n">04</div><div class="t">実データのみ vs 実データ＋合成データの学習</div></div>
     <hr>
   </div>
   <div class="lead" style="top:192px;font-size:24px;color:var(--mut2);font-weight:500">〜 先端事例にみるモデル性能向上のケーススタディ 〜</div>
@@ -400,7 +456,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="bar" style="margin-top:26px">共通しているのは「実データの置き換え」ではなく、「実データに足す」使い方です。</div>
   </div>
   <div class="note" style="bottom:36px;font-size:13px">※ 出典：NVIDIA Newsroom（Isaac GR00T N1, 2025-03）／ MimicGen: A Data Generation System for Scalable Robot Learning（CoRL 2023）／ NVIDIA Newsroom（Cosmos World Foundation Models, 2025）／ Wayve プレスリリース（GAIA-3, 2025-12）。</div>
-  <div class="pnum">06</div>
+  <div class="pnum">07</div>
 </section>
 
 <!-- ═══════════════ 07 アプローチ / 工程 ═══════════════ -->
@@ -408,7 +464,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>How</span></div>
   <div class="head">
-    <div class="h"><div class="n">04</div><div class="t">弱点から逆算して、データを作る。</div></div>
+    <div class="h"><div class="n">05</div><div class="t">弱点から逆算して、データを作る。</div></div>
     <hr>
   </div>
   <div class="lead" style="top:192px;font-size:24px">何を作るかを決めるところから、効いたかを見るところまで、同じチームが担当します。</div>
@@ -453,7 +509,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="bar" style="margin-top:40px">自動化するのは量です。何を作るか・効いたかどうかの判断は、最後まで人が持ちます。</div>
   </div>
   <div class="note" style="bottom:48px">※ 黒の3工程（弱点の特定・仕様への翻訳・効果検証）が、私たちがいちばん時間をかけるところです。ここが単なる素材の受発注との違いになります。</div>
-  <div class="pnum">07</div>
+  <div class="pnum">08</div>
 </section>
 
 <!-- ═══════════════ 08 効果検証 ═══════════════ -->
@@ -461,7 +517,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Validation</span></div>
   <div class="head">
-    <div class="h"><div class="n">05</div><div class="t">「効いた」を、確かめるところまでを1サイクルに。</div></div>
+    <div class="h"><div class="n">06</div><div class="t">「効いた」を、確かめるところまでを1サイクルに。</div></div>
     <hr>
   </div>
   <div class="lead" style="top:192px;font-size:24px">データを渡して終わりにしないために、検証の設計を最初に合意します。</div>
@@ -490,7 +546,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </table>
     <div class="bar" style="margin-top:30px">効かなかったときは、仕様を引き直します。そこまでを1サイクルとして設計しています。</div>
   </div>
-  <div class="pnum">08</div>
+  <div class="pnum">09</div>
 </section>
 
 <!-- ═══════════════ 09 導入の進め方 ═══════════════ -->
@@ -498,7 +554,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Roadmap</span></div>
   <div class="head">
-    <div class="h"><div class="n">06</div><div class="t">3ステップで、御社の中に残す。</div></div>
+    <div class="h"><div class="n">07</div><div class="t">3ステップで、御社の中に残す。</div></div>
     <hr>
   </div>
   <div class="lead" style="top:192px;font-size:24px">最初は私たちが作り、最後は御社が自分で作れる状態にします。</div>
@@ -529,7 +585,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="bar" style="margin-top:42px">安くするための内製化ではありません。データを作る速度を、御社の判断だけで決めるための内製化です。</div>
   </div>
   <div class="note" style="bottom:48px">※ Phase 1 だけで終えていただいても構いません。効く設計が見つからなければ、量を増やす提案はしません。</div>
-  <div class="pnum">09</div>
+  <div class="pnum">10</div>
 </section>
 
 <!-- ═══════════════ 10 内製化支援 ═══════════════ -->
@@ -537,7 +593,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Handover</span></div>
   <div class="head">
-    <div class="h"><div class="n">07</div><div class="t">評価機とパイプラインごと、渡します。</div></div>
+    <div class="h"><div class="n">08</div><div class="t">評価機とパイプラインごと、渡します。</div></div>
     <hr>
   </div>
   <div class="lead" style="top:192px;font-size:24px">私たちが使っている仕組みを、御社の環境に載せ替えるところまでが提案の範囲です。</div>
@@ -566,7 +622,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </table>
     <div class="bar" style="margin-top:30px">作れるデータ量が、外注予算ではなく社内の判断で決まる状態にします。</div>
   </div>
-  <div class="pnum">10</div>
+  <div class="pnum">11</div>
 </section>
 
 <!-- ═══════════════ 11 スケジュール ═══════════════ -->
@@ -574,7 +630,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Schedule</span></div>
   <div class="head">
-    <div class="h"><div class="n">08</div><div class="t">素材が手元にあれば、その週から始められます。</div></div>
+    <div class="h"><div class="n">09</div><div class="t">素材が手元にあれば、その週から始められます。</div></div>
     <hr>
   </div>
   <div class="lead" style="top:192px;font-size:24px">新しく走らせて集め直す必要はありません。いま持っているログと映像から始めます。</div>
@@ -624,7 +680,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </div>
   </div>
   <div class="note" style="bottom:36px;font-size:13.5px">※ WEEK 1-2 の弱点診断では、まだデータの制作には入りません。何を作るべきかが決まってから、はじめて生成を始めます。</div>
-  <div class="pnum">11</div>
+  <div class="pnum">12</div>
 </section>
 
 <!-- ═══════════════ 12 FAQ ═══════════════ -->
@@ -632,7 +688,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>FAQ</span></div>
   <div class="head">
-    <div class="h"><div class="n">09</div><div class="t">よくいただくご質問</div></div>
+    <div class="h"><div class="n">10</div><div class="t">よくいただくご質問</div></div>
     <hr>
   </div>
   <div class="body" style="top:212px">
@@ -655,7 +711,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       </div>
       <div class="q">
         <div class="qt"><div class="qn">Q03</div><div class="qq">合成映像で本当に学習できますか？</div></div>
-        <div class="qa">実データの置き換えとしては、お勧めしません。実データに足す形で足りない場面を補う使い方を前提に設計します。P.06の先行事例も、すべてこの使い方で成果が出ています。</div>
+        <div class="qa">実データの置き換えとしては、お勧めしません。実データに足す形で足りない場面を補う使い方を前提に設計します。P.07の先行事例も、すべてこの使い方で成果が出ています。</div>
       </div>
       <div class="q">
         <div class="qt"><div class="qn">Q06</div><div class="qq">どのくらいの量から始められますか？</div></div>
@@ -663,7 +719,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       </div>
     </div>
   </div>
-  <div class="pnum">12</div>
+  <div class="pnum">13</div>
 </section>
 
 <!-- ═══════════════ 13 最初のパートナー募集 ═══════════════ -->
@@ -671,7 +727,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Partner</span></div>
   <div class="head">
-    <div class="h"><div class="n">10</div><div class="t">国内でご一緒する、最初のパートナー様を募集中。</div></div>
+    <div class="h"><div class="n">11</div><div class="t">国内でご一緒する、最初のパートナー様を募集中。</div></div>
     <hr>
   </div>
   <div class="lead" style="top:192px;font-size:24px">日本のロボティクス領域では、これから立ち上げていく座組みです。</div>
@@ -684,7 +740,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       <div class="row rgt"><span class="ar">→</span>生成AI映像を日次で量産・検品してきた<span class="hl">運用体制</span></div>
 
       <div class="row lft"><b>02</b>業界別に磨き込まれたレシピ</div>
-      <div class="row rgt"><span class="ar">→</span>海外の先行事例が示す、合成＋実データの効果（P.06）</div>
+      <div class="row rgt"><span class="ar">→</span>海外の先行事例が示す、合成＋実データの効果（P.07）</div>
 
       <div class="row lft"><b>03</b>すぐにお見せできるデモ映像</div>
       <div class="row rgt"><span class="ar">→</span>弱点診断から効果検証まで並走する体制と、素材調達の接点</div>
@@ -692,7 +748,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="bar" style="margin-top:40px">まずは1つの場面・少量から。効果を測れる最小単位で、一緒に試すところから始めませんか。</div>
   </div>
   <div class="note" style="bottom:44px">※ 立ち上げ期のパートナー様には、量・期間・費用を御社の状況に合わせて設計します。成果の公開可否も含めて個別にご相談させてください。まずは「いま落ちている場面」を1つ、お聞かせいただくところからで構いません。</div>
-  <div class="pnum">13</div>
+  <div class="pnum">14</div>
 </section>
 
 <!-- ═══════════════ 14 締め ═══════════════ -->
@@ -723,7 +779,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
 </div></div>
 
 <div id="tb">
-  <span id="ctr">1 / 14</span>
+  <span id="ctr">1 / 15</span>
   <button id="prev">◀</button>
   <button id="next">▶</button>
   <button id="pr">PDF</button>
