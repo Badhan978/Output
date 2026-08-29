@@ -145,11 +145,14 @@ body{
 
 /* ---------- 数値 ---------- */
 .statrow{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line)}
-.statrow div{padding:20px 16px 18px;border-left:1px solid var(--line)}
+.statrow div{padding:17px 16px 15px;border-left:1px solid var(--line)}
 .statrow div:first-child{border-left:0}
 .statrow .v{font-family:var(--dp);font-size:32px;font-weight:800;line-height:1;letter-spacing:-.01em}
 .statrow .v small{font-size:16px;font-weight:800;margin-left:2px}
 .statrow .k{font-size:12.5px;color:var(--mut2);margin-top:10px}
+
+/* ---------- 社名リスト ---------- */
+.names{display:flex;flex-wrap:wrap;gap:7px 16px;font-family:var(--dp);font-size:13px;font-weight:700;color:#3a3a3a;line-height:1.5;white-space:nowrap}
 
 /* ---------- 表 ---------- */
 table.spec{width:100%;border-collapse:collapse}
@@ -521,7 +524,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <hr>
   </div>
   <div class="lead" style="top:190px;font-size:23px">生成AIで映像を量産してきた運用チームと、仕様の固まっていないものを動かすエンジニアが、同じ会社にいます。</div>
-  <div class="body" style="top:272px">
+  <div class="body" style="top:264px">
     <div class="statrow">
       <div><div class="v">2024<small>.01</small></div><div class="k">設立</div></div>
       <div><div class="v">8<small>名</small></div><div class="k">チーム</div></div>
@@ -530,30 +533,40 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       <div><div class="v">3</div><div class="k">自社プロダクト</div></div>
       <div><div class="v">東京</div><div class="k">本社</div></div>
     </div>
-    <div class="grid4" style="margin-top:26px">
-      <div class="card" style="padding:22px 20px 24px">
+    <div class="grid4" style="margin-top:22px">
+      <div class="card" style="padding:20px 20px 22px">
         <div class="kicker">Team</div>
         <h4 style="font-size:19px">日本とインドの<br>混成チーム</h4>
-        <p style="font-size:14px;line-height:1.8">日本側が現場と要件を、インド側がエンジニアリングを持ちます。開発と運用を外に出さず、同じチームの中で回します。</p>
+        <p style="font-size:14px;line-height:1.8">日本側が現場と要件を、インド側がエンジニアリングを。開発も運用も外には出しません。</p>
       </div>
-      <div class="card" style="padding:22px 20px 24px">
+      <div class="card" style="padding:20px 20px 22px">
         <div class="kicker">Video</div>
         <h4 style="font-size:19px">生成AI映像の量産を、<br>実運用で回している</h4>
-        <p style="font-size:14px;line-height:1.8">3媒体150アカウント・月500〜750本、ピーク1日200本。生成から検品・配信までを日次で回してきた運用の実績があります。</p>
+        <p style="font-size:14px;line-height:1.8">3媒体150アカウント・月500〜750本。生成から検品・配信までを日次で回しています。</p>
       </div>
-      <div class="card" style="padding:22px 20px 24px">
+      <div class="card" style="padding:20px 20px 22px">
         <div class="kicker">Engineering</div>
         <h4 style="font-size:19px">自律エージェントから<br>ブロックチェーンまで</h4>
-        <p style="font-size:14px;line-height:1.8">自社で3つのプロダクトを開発・運営しています。仕様が固まっていない領域を動くものにするところが本業です。</p>
+        <p style="font-size:14px;line-height:1.8">自社で3つのプロダクトを開発・運営。仕様が固まっていない領域を動かすのが本業です。</p>
       </div>
-      <div class="card" style="padding:22px 20px 24px">
+      <div class="card" style="padding:20px 20px 22px">
         <div class="kicker">Network</div>
         <h4 style="font-size:19px">アジア全域の<br>獲得支援で作った接点</h4>
-        <p style="font-size:14px;line-height:1.8">各国のコミュニティ・パートナーと直接つながっています。現地での映像・素材の調達先を、外注に頼らず自前で押さえられます。</p>
+        <p style="font-size:14px;line-height:1.8">各国のパートナーと直接つながり、現地の映像・素材の調達先を自前で押さえられます。</p>
+      </div>
+    </div>
+    <div style="margin-top:20px;border-top:1px solid var(--line);padding-top:16px;display:grid;grid-template-columns:520px 1fr;gap:0 40px">
+      <div>
+        <div class="eyebrow" style="margin-bottom:11px">主要株主</div>
+        <div class="names"><span>Adways Ventures</span><span>base partners</span><span>CARTA VENTURES</span><span>DECIMA</span><span>KUSABI</span><span>ZVC</span></div>
+      </div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:11px">ご一緒している企業</div>
+        <div class="names"><span>LINEヤフー</span><span>CARTA HOLDINGS</span><span>ADWAYS</span><span>東京通信</span><span>WHITE SCORPION</span><span>Calomy</span><span>YOMITE</span></div>
       </div>
     </div>
   </div>
-  <div class="note" style="bottom:44px">※ 数字は2026年8月時点。映像量産の実績はエンタメIP領域での運用によるものです。詳細はご要望に応じて別途ご説明します。</div>
+  <div class="note" style="bottom:38px;font-size:13.5px">※ 数字は2026年8月時点。映像量産の実績はエンタメIP領域での運用によるものです。掲載は各社の許諾のうえ更新しています。</div>
   <div class="pnum">07</div>
 </section>
 
@@ -692,21 +705,21 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="grid3" style="gap:34px">
       <div class="rm">
         <div class="dot"></div>
-        <span class="st">01</span><span class="mo">PHASE 1</span>
+        <span class="st">01</span><span class="mo">PHASE 1 ／ MONTH 1</span>
         <h4>弱点診断と、最初の一束</h4>
         <p>現状の評価結果と実データを見て、埋めるべき場面を特定します。まず小さく作り、効果の測り方まで合意するところが目的です。</p>
         <div class="ph"><span>この段階で残るもの</span><b>埋めるべき場面のリストと、効果の測り方</b></div>
       </div>
       <div class="rm">
         <div class="dot"></div>
-        <span class="st">02</span><span class="mo">PHASE 2</span>
+        <span class="st">02</span><span class="mo">PHASE 2 ／ MONTH 2-3</span>
         <h4>本番供給</h4>
         <p>合意した仕様で継続的にデータを供給します。検証結果を見ながら、どの場面にどれだけ配分するかを毎サイクル引き直します。</p>
         <div class="ph"><span>この段階で残るもの</span><b>効くシーン配分と、生成のレシピ</b></div>
       </div>
       <div class="rm acc">
         <div class="dot"></div>
-        <span class="st">03</span><span class="mo">PHASE 3 ― 着地点</span>
+        <span class="st">03</span><span class="mo">PHASE 3 ／ MONTH 4 -</span>
         <h4>内製化</h4>
         <p>生成パイプラインと評価環境を御社の中に移します。私たちはレシピの更新とスポット相談だけを残します。</p>
         <div class="ph"><span>この段階で残るもの</span><b>生成パイプラインと、評価機一式</b></div>
@@ -714,7 +727,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </div>
     <div class="bar" style="margin-top:42px">安くするための内製化ではありません。データを作る速度を、御社の判断だけで決めるための内製化です。</div>
   </div>
-  <div class="note" style="bottom:48px">※ Phase 1 だけで終えていただいても構いません。効く設計が見つからなければ、量を増やす提案はしません。</div>
+  <div class="note" style="bottom:48px">※ 期間は標準的な進み方です。効果検証のサイクルによって前後します。Phase 1 だけで終えていただいても構いません。効く設計が見つからなければ、量を増やす提案はしません。</div>
   <div class="pnum">11</div>
 </section>
 
@@ -786,7 +799,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       </div>
       <div class="rm sm">
         <div class="dot"></div>
-        <span class="mo">MONTH 3-</span>
+        <span class="mo">MONTH 3</span>
         <h4>内製化の設計へ</h4>
         <p>効く設計が見つかった段階で、パイプラインと評価機の引き渡しを設計し始めます。</p>
       </div>
