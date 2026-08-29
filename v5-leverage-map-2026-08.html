@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v5 レバレッジマップ</title>
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff;
+  --ink:#1b2430; --ink-2:#3a4658; --muted:#6a7585;
+  --line:#e1e5ea; --line-2:#eef1f4; --code-bg:#eef1f5;
+
+  --now:#0d8f7f;   --now-bg:#e7f6f3;  --now-ln:#a5dcd3;
+  --next:#2f5fd8;  --next-bg:#ecf1fe; --next-ln:#bfd0f8;
+  --human:#5b6673; --human-bg:#eef0f3;--human-ln:#cdd3da;
+
+  --accent:#2f5fd8;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.04);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141a; --card:#181c23;
+    --ink:#e5e9ef; --ink-2:#bcc4d0; --muted:#8f99a8;
+    --line:#282e38; --line-2:#20252d; --code-bg:#232933;
+
+    --now:#4fd0bd;   --now-bg:#0f2e2a;  --now-ln:#2a685f;
+    --next:#7fa4f5;  --next-bg:#182342; --next-ln:#3b528f;
+    --human:#9aa5b3; --human-bg:#242932;--human-ln:#3d444f;
+
+    --accent:#7fa4f5;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 1px 3px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11141a; --card:#181c23;
+  --ink:#e5e9ef; --ink-2:#bcc4d0; --muted:#8f99a8;
+  --line:#282e38; --line-2:#20252d; --code-bg:#232933;
+
+  --now:#4fd0bd;   --now-bg:#0f2e2a;  --now-ln:#2a685f;
+  --next:#7fa4f5;  --next-bg:#182342; --next-ln:#3b528f;
+  --human:#9aa5b3; --human-bg:#242932;--human-ln:#3d444f;
+
+  --accent:#7fa4f5;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 1px 3px rgba(0,0,0,.25);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.75}
+.wrap{max-width:1020px;margin:0 auto;padding:40px 22px 100px;display:flex;flex-direction:column;gap:40px}
+
+header{display:flex;flex-direction:column;gap:11px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+h1{font-size:31px;line-height:1.28;margin:0;letter-spacing:-.015em;text-wrap:balance}
+.lede{margin:0;color:var(--ink-2);font-size:15.5px;max-width:66ch}
+.meta{display:flex;flex-wrap:wrap;gap:5px 20px;font-size:12.5px;color:var(--muted)}
+.meta b{font-weight:700;color:var(--ink-2)}
+
+section{display:flex;flex-direction:column;gap:15px;scroll-margin-top:20px}
+h2{font-size:12.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin:0;display:flex;align-items:center;gap:11px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+h3{font-size:16px;margin:0;letter-spacing:-.005em;text-wrap:balance}
+p{margin:0;max-width:68ch}
+.note{font-size:13px;color:var(--muted);max-width:72ch}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+code{font-family:var(--mono);font-size:12.5px;background:var(--code-bg);padding:1px 5px;border-radius:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:4px 20px;font-size:13.5px}
+.toc a{text-decoration:none;display:flex;gap:9px;padding:3px 0}
+.toc a:hover{text-decoration:underline}
+.toc .num{font-family:var(--mono);font-size:12px;color:var(--muted);flex:none}
+
+.thesis{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:20px 24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.thesis .big{font-size:18.5px;font-weight:800;line-height:1.6;margin:0;text-wrap:balance}
+
+figure{margin:0;display:flex;flex-direction:column;gap:10px}
+figure svg{width:100%;height:auto;display:block;max-width:900px;margin:0 auto}
+figcaption{font-size:12.5px;color:var(--muted);text-align:center;max-width:74ch;margin:0 auto}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:12.5px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:7px}
+.sw{width:11px;height:11px;border-radius:3px;flex:none}
+.sw.now{background:var(--now)} .sw.next{background:var(--next)} .sw.human{background:var(--human)}
+
+.pill{display:inline-block;font-size:11.5px;font-weight:800;border-radius:5px;padding:2px 9px;white-space:nowrap;border:1px solid transparent}
+.pill.now{color:var(--now);background:var(--now-bg);border-color:var(--now-ln)}
+.pill.next{color:var(--next);background:var(--next-bg);border-color:var(--next-ln)}
+.pill.human{color:var(--human);background:var(--human-bg);border-color:var(--human-ln)}
+
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:660px}
+th,td{padding:11px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line-2)}
+thead th{background:var(--bg);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:800;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:none}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* case block */
+.case{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.case > .hd{padding:18px 22px;border-bottom:1px solid var(--line-2);display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}
+.case > .hd .nm{font-size:18px;font-weight:800;letter-spacing:-.01em}
+.case > .hd .sub{font-size:13px;color:var(--muted);flex:1;min-width:180px}
+.case > .bd{padding:6px 22px 20px;display:flex;flex-direction:column;gap:0}
+.blk{padding:16px 0;border-bottom:1px dashed var(--line);display:flex;flex-direction:column;gap:10px}
+.blk:last-child{border-bottom:none}
+.blk > .lb{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* stage strip */
+.stages{display:flex;flex-wrap:wrap;gap:6px}
+.stg{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13px;background:var(--bg)}
+.stg .i{font-family:var(--mono);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.stg.now{border-color:var(--now-ln);background:var(--now-bg);color:var(--now);font-weight:700}
+.stg.next{border-color:var(--next-ln);background:var(--next-bg);color:var(--next);font-weight:700}
+.stg.now .i,.stg.next .i{color:inherit;opacity:.75}
+
+/* goal metrics */
+.gm{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px}
+.gm .g{border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:var(--bg);display:flex;flex-direction:column;gap:1px}
+.gm .g .k{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.gm .g .v{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.gm .g .s{font-size:11.5px;color:var(--muted)}
+
+ul.tight{margin:0;padding-left:20px}
+ul.tight li{margin:5px 0}
+ul.tight li b{font-weight:700}
+
+/* base capability */
+.base{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:11px}
+.bc{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--next);border-radius:11px;padding:16px 18px;display:flex;flex-direction:column;gap:7px;box-shadow:var(--shadow)}
+.bc .t{font-weight:800;font-size:15px}
+.bc .d{font-size:13px;color:var(--ink-2)}
+.bc .u{font-size:12px;color:var(--muted);border-top:1px solid var(--line-2);padding-top:7px;margin-top:2px}
+
+footer{border-top:1px solid var(--line);padding-top:18px;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:8px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">案件 × v5 ／ 2026-08</div>
+  <h1>v5 レバレッジマップ</h1>
+  <p class="lede">いま動いている3つの案件タイプについて、それぞれのGoal・実際の作業工程・v5が現在担っている箇所を整理し、<b>人を増やさずに規模を伸ばすために v5 をどこに効かせるか</b>を特定するための資料。</p>
+  <div class="meta">
+    <span>基準日： <b>2026-08-29</b></span>
+    <span>対になる資料： <b><a href="./v5-spec-2026-08.html">v5 円環システム仕様</a></b></span>
+    <span>案件名： <b>タイプ名で表記</b>（クライアント名は伏せています）</span>
+  </div>
+</header>
+
+<nav class="card toc" aria-label="目次">
+  <a href="#s0"><span class="num">00</span>全体像</a>
+  <a href="#s1"><span class="num">01</span>3タイプの比較</a>
+  <a href="#s2"><span class="num">02</span>アプリグロース型</a>
+  <a href="#s3"><span class="num">03</span>切り抜き型</a>
+  <a href="#s4"><span class="num">04</span>クリエイティブ生成型</a>
+  <a href="#s5"><span class="num">05</span>共通基盤への収束</a>
+  <a href="#s6"><span class="num">06</span>ナレッジの橋渡し</a>
+  <a href="#s7"><span class="num">07</span>出典と未確認</a>
+</nav>
+
+<!-- ============ 00 ============ -->
+<section id="s0">
+  <h2>00 — 全体像</h2>
+  <div class="thesis">
+    <p class="big">3つの案件タイプは、工程の並びは違っても「v5に担わせたい箇所」が重なる。だから案件ごとに作るのではなく、共通基盤として1回作る。</p>
+    <p>各タイプの工程のうち色が付いている箇所が、v5が担うべき（＝人がやると規模が頭打ちになる）ところ。それらを横に貫くと、下段の3つの共通基盤に集約される。</p>
+  </div>
+
+  <div class="legend">
+    <span><i class="sw now"></i>いま v5 が実際に担っている</span>
+    <span><i class="sw next"></i>v5 に担わせたい（＝共通基盤で解く）</span>
+    <span><i class="sw human"></i>人が判断する</span>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 900 470" role="img" aria-label="3案件タイプの工程と、その下にある共通基盤としてのv5。アプリグロース型・切り抜き型・クリエイティブ生成型がそれぞれ工程を持ち、色付きの工程がv5共通基盤の3機能に集約される">
+      <defs>
+        <marker id="lm" markerWidth="9" markerHeight="9" refX="7.5" refY="3.6" orient="auto"><polygon points="0,0 8,3.6 0,7.2" fill="var(--next,#2f5fd8)"/></marker>
+      </defs>
+
+      <!-- columns -->
+      <g>
+        <rect x="14" y="14" width="278" height="266" rx="13" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/>
+        <text x="153" y="44" font-size="14" font-weight="800" fill="currentColor" text-anchor="middle">アプリグロース型</text>
+        <text x="153" y="63" font-size="10.5" fill="currentColor" opacity=".6" text-anchor="middle">アカウントを育ててCVまで運ぶ</text>
+
+        <rect x="311" y="14" width="278" height="266" rx="13" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/>
+        <text x="450" y="44" font-size="14" font-weight="800" fill="currentColor" text-anchor="middle">切り抜き型</text>
+        <text x="450" y="63" font-size="10.5" fill="currentColor" opacity=".6" text-anchor="middle">既存素材から大量に切り出す</text>
+
+        <rect x="608" y="14" width="278" height="266" rx="13" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/>
+        <text x="747" y="44" font-size="14" font-weight="800" fill="currentColor" text-anchor="middle">クリエイティブ生成型</text>
+        <text x="747" y="63" font-size="10.5" fill="currentColor" opacity=".6" text-anchor="middle">依頼された動画を作って納品</text>
+      </g>
+
+      <!-- app growth stages -->
+      <g font-size="12">
+        <text x="36" y="97" fill="var(--next,#2f5fd8)" font-weight="800">1. 市場分析</text>
+        <text x="36" y="124" fill="currentColor" opacity=".75">2. アカウント戦略</text>
+        <text x="36" y="151" fill="var(--next,#2f5fd8)" font-weight="800">3. シナリオ生成</text>
+        <text x="36" y="178" fill="var(--next,#2f5fd8)" font-weight="800">4. 動画生成</text>
+        <text x="36" y="205" fill="currentColor" opacity=".75">5. 投稿 → 分析</text>
+        <text x="36" y="232" fill="currentColor" opacity=".75">6. FBループ（2へ戻る）</text>
+        <rect x="26" y="245" width="150" height="21" rx="5" fill="var(--now-bg,#e7f6f3)" stroke="var(--now,#0d8f7f)" stroke-width="1.2"/>
+        <text x="101" y="260" font-size="10.5" font-weight="700" fill="var(--now,#0d8f7f)" text-anchor="middle">3〜5 は一部 v5 稼働中</text>
+      </g>
+
+      <!-- clip stages -->
+      <g font-size="12">
+        <text x="333" y="97" fill="var(--next,#2f5fd8)" font-weight="800">1. 市場分析</text>
+        <text x="333" y="124" fill="currentColor" opacity=".75">2. PDCA戦略</text>
+        <text x="333" y="151" fill="currentColor" opacity=".75">3. 素材分析</text>
+        <text x="333" y="178" fill="currentColor" opacity=".75">4. 切り抜き動画生成</text>
+        <text x="333" y="205" fill="currentColor" opacity=".75">5. 検品</text>
+        <text x="333" y="232" fill="currentColor" opacity=".75">6. 投稿 → 分析 → FBループ</text>
+        <rect x="323" y="245" width="150" height="21" rx="5" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45" stroke-dasharray="4 3"/>
+        <text x="398" y="260" font-size="10.5" font-weight="700" fill="currentColor" opacity=".7" text-anchor="middle">v5 は未導入</text>
+      </g>
+
+      <!-- creative stages -->
+      <g font-size="12">
+        <text x="630" y="97" fill="currentColor" opacity=".75">1. 依頼内容の整理</text>
+        <text x="630" y="124" fill="var(--next,#2f5fd8)" font-weight="800">2. 生成計画の立案</text>
+        <text x="630" y="151" fill="var(--next,#2f5fd8)" font-weight="800">3. 動画生成</text>
+        <text x="630" y="178" fill="currentColor" opacity=".75">4. FB反映</text>
+        <text x="630" y="205" fill="currentColor" opacity=".75">5. 納品</text>
+        <rect x="620" y="245" width="150" height="21" rx="5" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45" stroke-dasharray="4 3"/>
+        <text x="695" y="260" font-size="10.5" font-weight="700" fill="currentColor" opacity=".7" text-anchor="middle">型が揃った分だけ稼働</text>
+      </g>
+
+      <!-- converging arrows -->
+      <g stroke="var(--next,#2f5fd8)" stroke-width="1.5" fill="none" opacity=".85">
+        <path d="M153 288 L153 316" marker-end="url(#lm)"/>
+        <path d="M450 288 L450 316" marker-end="url(#lm)"/>
+        <path d="M747 288 L747 316" marker-end="url(#lm)"/>
+      </g>
+
+      <!-- base -->
+      <rect x="14" y="324" width="872" height="126" rx="13" fill="none" stroke="var(--next,#2f5fd8)" stroke-width="2"/>
+      <text x="80" y="372" font-size="24" font-weight="800" fill="var(--next,#2f5fd8)" text-anchor="middle">v5</text>
+      <text x="80" y="394" font-size="10.5" fill="currentColor" opacity=".65" text-anchor="middle">共通基盤</text>
+      <g font-size="13" fill="currentColor">
+        <text x="170" y="360">1. View予測システム</text>
+        <text x="170" y="388">2. 新規クリエイティブ生成（パイプライン）</text>
+        <text x="170" y="416">3. 案件別のナレッジ吸い上げ</text>
+      </g>
+      <g font-size="10.5" fill="currentColor" opacity=".6">
+        <text x="520" y="360">— 何を作れば伸びるかを、作る前に判定する</text>
+        <text x="520" y="388">— Refから生成方法を考案し、パイプラインを組む</text>
+        <text x="520" y="416">— 各案件の学びを吸い上げ、他の案件へ渡す</text>
+      </g>
+    </svg>
+    <figcaption>上段＝3つの案件タイプとその工程。青い工程がv5に担わせたい箇所で、それらは下段の共通基盤3機能に集約される。基盤は案件をまたいで共有されるため、1つ作れば3タイプすべてに効く。</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 01 ============ -->
+<section id="s1">
+  <h2>01 — 3タイプの比較</h2>
+  <div class="scroll">
+    <table>
+      <thead><tr><th></th><th>アプリグロース型</th><th>切り抜き型</th><th>クリエイティブ生成型</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>ねらい</b></td>
+          <td>アカウントを育て、Story等の導線でアプリのCVまで運ぶ</td>
+          <td>既存素材から大量に切り出し、総再生を取る</td>
+          <td>依頼された動画クリエイティブを作って納品する</td>
+        </tr>
+        <tr>
+          <td><b>成果の測り方</b></td>
+          <td>当たりアングルの発見速度 → 横展開できた体数 → CV</td>
+          <td>運用アカウント数 × 投稿数 → 総再生</td>
+          <td>納品本数と、外注に出さず内製で回せた割合</td>
+        </tr>
+        <tr>
+          <td><b>アカウント規模</b></td>
+          <td class="n">20〜50 / 案件</td>
+          <td class="n">100〜200 / 案件</td>
+          <td class="n">—（アカウント運用なし）</td>
+        </tr>
+        <tr>
+          <td><b>投稿頻度</b></td>
+          <td class="n">1 投稿 / 日</td>
+          <td class="n">2〜3 投稿 / 日</td>
+          <td class="n">—</td>
+        </tr>
+        <tr>
+          <td><b>工程数</b></td>
+          <td class="n">6（FBループあり）</td>
+          <td class="n">6（FBループあり）</td>
+          <td class="n">5（単発・ループなし）</td>
+        </tr>
+        <tr>
+          <td><b>v5の現在地</b></td>
+          <td><span class="pill now">一部稼働</span> シナリオ・動画生成・予約投稿</td>
+          <td><span class="pill human">未導入</span> 生成はスキルを人が起動</td>
+          <td><span class="pill now">型がある分だけ</span> 新規の型は人が組む</td>
+        </tr>
+        <tr>
+          <td><b>いちばんの制約</b></td>
+          <td>当たりを見つけるまでの試行回数</td>
+          <td>検品にかかる人手</td>
+          <td>依頼ごとに生成方法を人が考えること</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="s2">
+  <h2>02 — アプリグロース型</h2>
+  <div class="case">
+    <div class="hd">
+      <span class="nm">アプリグロース型</span>
+      <span class="sub">アカウント群を育て、コンテンツからアプリのCVへ運ぶ。数を撃って当たりのアングルを見つけ、当たったら同じ型で横展開する。</span>
+    </div>
+    <div class="bd">
+
+      <div class="blk">
+        <span class="lb">Goal</span>
+        <p><b>大量のPDCAを回して、当たりアングルを最速で見つける。</b>見つかったら同じ方向性で10体以上に横展開し、アカウント数と投稿数を積み上げる。</p>
+        <div class="gm">
+          <div class="g"><span class="k">Reel 平均View</span><span class="v">15,000</span><span class="s">アカウント単位の立ち上がりバー</span></div>
+          <div class="g"><span class="k">Story View</span><span class="v">5,000</span><span class="s">到達率 約5.5% 前提</span></div>
+          <div class="g"><span class="k">Link Click</span><span class="v">80〜100</span><span class="s">Story CTR 1.6〜2.0% 前提</span></div>
+        </div>
+        <p class="note"><b>アングル単位の横展開ゲート：</b>Story View 5,000・Link Click 150 に到達した時点で、CV 3以上なら横展開／1〜2なら継続観察／0ならkill。「Link Click 150 未満ではCVを語らない」という判定の順序まで決まっている。</p>
+      </div>
+
+      <div class="blk">
+        <span class="lb">実際の作業工程</span>
+        <div class="stages">
+          <span class="stg next"><span class="i">1</span>市場分析</span>
+          <span class="stg"><span class="i">2</span>アカウント戦略</span>
+          <span class="stg next"><span class="i">3</span>シナリオ生成</span>
+          <span class="stg next"><span class="i">4</span>動画生成</span>
+          <span class="stg"><span class="i">5</span>投稿 → 分析</span>
+          <span class="stg"><span class="i">6</span>FBループ（2へ戻る）</span>
+        </div>
+        <p class="note">立ち上げ時は人がリファレンスアカウントを選び、設計書を書き、初期バッチを生成する。ここが最も工数を食う。型が固まり一定のフォロワー規模に達したアカウントから順に v5 へ移譲し、人は次の新規立ち上げと Story 側のPDCAに移る、という運用になっている。</p>
+      </div>
+
+      <div class="blk">
+        <span class="lb">現状 v5 が使われている箇所</span>
+        <ul class="tight">
+          <li><b>シナリオ生成</b> — Planner が担い、台本の合否はAI検証会議が自動判定。<span class="pill now">稼働</span></li>
+          <li><b>動画生成</b> — 型が Playbook 化されたジャンルは自動で mp4 まで出る。漫画系のパイプラインは v5 への移行が完了済み。<span class="pill now">稼働</span></li>
+          <li><b>予約投稿・実績収集</b> — 全件自動。<span class="pill now">稼働</span></li>
+          <li><b>市場分析／アカウント戦略／FBループの回し込み</b> — 人。<span class="pill human">未導入</span></li>
+        </ul>
+        <p class="note">移譲の条件は「型化されている」ことと「一定のフォロワー規模に達している」こと。つまり <b>v5 が担えるのは “すでに勝ち筋が分かったアカウント” に限られ、勝ち筋を探す段階には入れていない。</b></p>
+      </div>
+
+      <div class="blk">
+        <span class="lb">レバレッジをかけたい場所</span>
+        <ul class="tight">
+          <li><b>市場分析からのアングル提案</b> — 当たりを見つけるまでの試行回数がこのタイプの律速。人が方針を与えたら、競合と伸びている投稿を大量に収集・整理して打ち出し方を複数案出せるようにする。ここが速くなると Goal そのものが速くなる。</li>
+          <li><b>シナリオの精度</b> — ジャンルごとの学習速度を上げれば解決する領域。横展開のたびに品質が落ちない状態を作る。</li>
+          <li><b>動画生成のシステム化</b> — 既存の型を自分で複製し、参考動画に寄せられる能力。新規アングルの立ち上げコストが直接下がる。</li>
+          <li><b>Story のデザイン選定</b> — 背景色・フォント・文字の置き方・スライドごとの情報量を最低限自動で決められるようにする。Story はCV導線の要でありながら、現在まったく自動化されていない。</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="s3">
+  <h2>03 — 切り抜き型</h2>
+  <div class="case">
+    <div class="hd">
+      <span class="nm">切り抜き型</span>
+      <span class="sub">既存の映像素材から切り出したコンテンツを、複数プラットフォームの大量のアカウントで回して総再生を取る。</span>
+    </div>
+    <div class="bd">
+
+      <div class="blk">
+        <span class="lb">Goal</span>
+        <p><b>運用アカウント数と投稿数を積み上げ、総再生を最大化する。</b>あわせて「伸びる切り抜き題材」を人ベースで見つけ、当たった題材を全アカウントに展開する。</p>
+        <div class="gm">
+          <div class="g"><span class="k">アカウント数</span><span class="v">100〜200</span><span class="s">案件あたり</span></div>
+          <div class="g"><span class="k">投稿頻度</span><span class="v">2〜3<span style="font-size:13px">/日</span></span><span class="s">アカウントあたり</span></div>
+          <div class="g"><span class="k">プラットフォーム</span><span class="v">3</span><span class="s">TikTok / Instagram / YouTube</span></div>
+        </div>
+      </div>
+
+      <div class="blk">
+        <span class="lb">実際の作業工程</span>
+        <div class="stages">
+          <span class="stg next"><span class="i">1</span>市場分析</span>
+          <span class="stg"><span class="i">2</span>PDCA戦略</span>
+          <span class="stg"><span class="i">3</span>素材分析</span>
+          <span class="stg"><span class="i">4</span>切り抜き動画生成</span>
+          <span class="stg"><span class="i">5</span>検品</span>
+          <span class="stg"><span class="i">6</span>投稿 → 分析 → FBループ</span>
+        </div>
+        <p class="note">大枠はアプリグロース型と変わらない。違いは「素材分析」が入ること ── ゼロから作るのではなく、既にある映像のどの区間を切り出すかを決める工程がある。市場分析は同ジャンルの他の切り抜きアカウントを見て仮説を立てる作業にあたる。</p>
+        <p class="note"><b>1本のつくり方：</b>設計書を読ませてテーマを出させる → テーマを確認してGo → 映像生成（素材のダウンロード・カット・字幕・仕上げ）→ 完成品に「伸びるかどうか」の観点でFBして最終版 → 保存先へのアップロードと制作台帳への記録。<b>検品は</b>専用のHTMLから動画を視聴し、FBがあれば該当欄に記載、なければGoとだけ書いて次へ。FBを付けた分だけ再生成が走り、終わったら再度検品に回る。</p>
+      </div>
+
+      <div class="blk">
+        <span class="lb">現状 v5 が使われている箇所</span>
+        <p><b>ない。</b>生成は Playbook 側の切り抜き専用スキルを人が起動して回しており、円環（v5）には接続していない。テーマ出しから最終FBまで、人が各ステップに立っている。</p>
+        <p class="note">つまりこのタイプは、<b>3タイプの中で最もv5の伸びしろが大きい</b>。工程は既に手順化されていて、リポジトリ側に正本があり、スキルとして自動化もされている。にもかかわらず円環に載っていないため、生成の学習も、実績の還流も起きていない。</p>
+      </div>
+
+      <div class="blk">
+        <span class="lb">レバレッジをかけたい場所</span>
+        <ul class="tight">
+          <li><b>検品の自動化</b> — 100〜200アカウント × 2〜3投稿/日 という物量に対し、検品は人が全件視聴している。掛け持ちができない工程なので、案件数を増やすときに真っ先に詰まる。</li>
+          <li><b>FB通りの自動修正</b> — 現在は指摘を書くと再生成が走るが、指摘の反映精度が上がるほど再検品の回数が減る。</li>
+          <li><b>生成のミスを減らす</b> — 字幕の大幅なズレ、顔の見切れ、声が途中で切れて意味が通らない、といった定型的な失敗が検品負荷の大半を占める。作る側で潰せれば検品自体が軽くなる。</li>
+          <li><b>全体PDCAの画策</b> — 市場分析から仮説立案までをv5が担えれば、案件リーダーの掛け持ち上限が上がる。</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="s4">
+  <h2>04 — クリエイティブ生成型</h2>
+  <div class="case">
+    <div class="hd">
+      <span class="nm">クリエイティブ生成型</span>
+      <span class="sub">アカウント運用を伴わない受託。依頼された動画クリエイティブを作って納品する。</span>
+    </div>
+    <div class="bd">
+
+      <div class="blk">
+        <span class="lb">Goal</span>
+        <p><b>依頼を受けてから納品までを、外注に出さず内製で回せる状態にする。</b>他の2タイプと違いアカウントを育てないため、成果は納品本数と、そのうち人手をかけずに作れた割合で測る。</p>
+        <p class="note">現在この種の制作は外部に発注しているものがあり、内製に置き換えるには「依頼ごとに異なる要件へ、その場で生成方法を組める」ことが条件になる。</p>
+      </div>
+
+      <div class="blk">
+        <span class="lb">実際の作業工程</span>
+        <div class="stages">
+          <span class="stg"><span class="i">1</span>依頼内容の整理</span>
+          <span class="stg next"><span class="i">2</span>生成計画の立案</span>
+          <span class="stg next"><span class="i">3</span>動画生成</span>
+          <span class="stg"><span class="i">4</span>FB反映</span>
+          <span class="stg"><span class="i">5</span>納品</span>
+        </div>
+        <p class="note">FBループがなく、一方向に流れて終わる点が他の2タイプと決定的に違う。学習が自然には溜まらないため、意識的に吸い上げないと案件をこなすほど賢くなる構造にならない。</p>
+      </div>
+
+      <div class="blk">
+        <span class="lb">現状 v5 が使われている箇所</span>
+        <ul class="tight">
+          <li><b>動画生成</b> — 依頼内容が既存の型に当てはまる場合は、Playbook 経由で自動生成できる。<span class="pill now">部分的に稼働</span></li>
+          <li><b>生成計画の立案</b> — 新しい表現・新しい構成が求められる依頼では、人がパイプラインを設計している。<span class="pill human">未導入</span></li>
+        </ul>
+        <p class="note">受託は「毎回ちがう要件が来る」のが前提なので、既存の型に当てはまらない依頼の比率がそのまま人の作業量になる。</p>
+      </div>
+
+      <div class="blk">
+        <span class="lb">レバレッジをかけたい場所</span>
+        <ul class="tight">
+          <li><b>Refから生成方法を考案する能力</b> — このタイプの本丸。参照素材を分析し、既存パイプラインの複製で足りるのか、新しい生成法が要るのかを判断し、シナリオ案つきで提案できること。これができると受けられる依頼の幅がそのまま広がる。</li>
+          <li><b>FB通りの自動修正</b> — 納品前の修正ラウンドが人の手戻りになっている。</li>
+          <li><b>案件をまたいだ型の再利用</b> — ある依頼で作った生成方法が、次の依頼や他タイプのアカウント運用でも使えるようにする。単発で終わらせないための仕組み。</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="s5">
+  <h2>05 — 共通基盤への収束</h2>
+  <p>3タイプの「v5に担わせたい箇所」を重ねると、案件固有の課題ではなく、同じ3つの能力に行き着く。案件ごとに個別対応するのではなく、共通基盤として1回作れば3タイプすべてに効く ── これが人を増やさずに規模を伸ばすための構造。</p>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>担わせたい箇所</th><th>アプリグロース</th><th>切り抜き</th><th>クリエイティブ生成</th><th>解く基盤</th></tr></thead>
+      <tbody>
+        <tr><td><b>何を作れば伸びるかの判断</b></td><td>市場分析・アングル提案</td><td>市場分析・題材選び</td><td>依頼要件の解釈</td><td>View予測システム</td></tr>
+        <tr><td><b>生成方法そのものを組む</b></td><td>シナリオ生成・動画生成</td><td>切り抜き生成・ミス削減</td><td>生成計画の立案・動画生成</td><td>新規クリエイティブ生成</td></tr>
+        <tr><td><b>学びを次に活かす</b></td><td>FBループの回し込み</td><td>FB通りの自動修正</td><td>案件をまたいだ型の再利用</td><td>ナレッジ吸い上げ</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="base">
+    <div class="bc">
+      <span class="t">1. View予測システム</span>
+      <span class="d">作る前に「これは伸びるか」を見積もる。当たりを引くまでの試行回数を減らし、伸びる題材に制作を寄せられるようにする。</span>
+      <span class="u">効く先：3タイプすべての「何を作るか」の判断。とくにアプリグロース型の当たり発見速度に直結する。</span>
+    </div>
+    <div class="bc">
+      <span class="t">2. 新規クリエイティブ生成（パイプライン）</span>
+      <span class="d">参照素材を分析し、既存パイプラインの複製か新しい生成法の考案かを判断して、実際に組み上げる。いま人が最も時間を使っている工程。</span>
+      <span class="u">効く先：アプリグロース型の立ち上げ、クリエイティブ生成型の受注可能範囲、切り抜き型の生成品質。</span>
+    </div>
+    <div class="bc">
+      <span class="t">3. 案件別のナレッジ吸い上げ</span>
+      <span class="d">各案件で得られた学びを吸い上げて蓄積し、他の案件でも使える形に整える。案件が増えるほど賢くなる状態をつくる。</span>
+      <span class="u">効く先：全タイプ。とくにFBループを持たないクリエイティブ生成型は、これがないと学習がまったく残らない。</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="s6">
+  <h2>06 — ナレッジの橋渡し</h2>
+  <div class="card">
+    <h3>v5 は各案件の中で働くだけでなく、案件と案件のあいだをつなぐ</h3>
+    <p>3つのタイプはコンテンツの作り方こそ違うが、「短い動画で人の指を止める」という一点は共通している。切り抜き型で見つかったHookの型はアプリグロース型のシナリオに効き、アプリグロース型で溜まった視聴維持のデータはクリエイティブ生成型の構成判断に効く。</p>
+    <p>いまはこの流通が起きていない。各案件がそれぞれのシートとリポジトリの中で学びを溜め、他の案件はそれを知らないまま同じ失敗を繰り返している。<b>v5が橋渡し役を担うというのは、この分断をなくすということ。</b></p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 840 220" role="img" aria-label="3つの案件タイプがそれぞれ学びを持ち、v5のナレッジ層を経由して互いに共有される図">
+      <defs><marker id="k1" markerWidth="9" markerHeight="9" refX="7.5" refY="3.6" orient="auto"><polygon points="0,0 8,3.6 0,7.2" fill="var(--now,#0d8f7f)"/></marker></defs>
+      <g font-size="12" text-anchor="middle">
+        <rect x="30" y="16" width="220" height="46" rx="9" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/>
+        <text x="140" y="44" fill="currentColor" font-weight="700">アプリグロース型</text>
+        <rect x="310" y="16" width="220" height="46" rx="9" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/>
+        <text x="420" y="44" fill="currentColor" font-weight="700">切り抜き型</text>
+        <rect x="590" y="16" width="220" height="46" rx="9" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/>
+        <text x="700" y="44" fill="currentColor" font-weight="700">クリエイティブ生成型</text>
+      </g>
+      <g stroke="var(--now,#0d8f7f)" stroke-width="1.6" fill="none">
+        <path d="M140 66 L140 100" marker-end="url(#k1)"/>
+        <path d="M420 66 L420 100" marker-end="url(#k1)"/>
+        <path d="M700 66 L700 100" marker-end="url(#k1)"/>
+      </g>
+      <rect x="30" y="106" width="780" height="52" rx="10" fill="var(--now-bg,#e7f6f3)" stroke="var(--now,#0d8f7f)" stroke-width="1.8"/>
+      <text x="420" y="128" font-size="13" font-weight="800" fill="var(--now,#0d8f7f)" text-anchor="middle">v5 — ナレッジ層（知見台帳・絶対ルール）</text>
+      <text x="420" y="147" font-size="11" fill="currentColor" opacity=".72" text-anchor="middle">吸い上げる → 名寄せして重複を消す → 古くなったものを失効させる → 使える形で各案件へ返す</text>
+      <g stroke="var(--now,#0d8f7f)" stroke-width="1.6" fill="none" stroke-dasharray="5 4">
+        <path d="M100 162 L100 190 L760 190 L760 162" marker-end="url(#k1)"/>
+      </g>
+      <text x="430" y="184" font-size="11" fill="var(--now,#0d8f7f)" font-weight="700" text-anchor="middle">ある案件の学びが、別の案件の生成品質を上げる</text>
+      <text x="420" y="212" font-size="11" fill="currentColor" opacity=".6" text-anchor="middle">実線＝各案件から上がってくる学び。破線＝案件をまたいで戻る経路（ここが今つながっていない）</text>
+    </svg>
+    <figcaption>ナレッジ層は既に仕組みとして実装されている（知見台帳・絶対ルール）。足りていないのは、各案件から学びを吸い上げる入口と、案件をまたいで返す出口。</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 07 ============ -->
+<section id="s7">
+  <h2>07 — 出典と未確認事項</h2>
+  <div class="card">
+    <h3>このページの根拠</h3>
+    <ul class="tight">
+      <li>案件タイプの区分と、各タイプでv5が担うべき箇所・共通基盤の3機能 — 全体像の整理図</li>
+      <li>Notion「案件運用リソース整理」— 各タイプの作業の流れ、運用規模、投稿頻度、v5にレバーが効く箇所</li>
+      <li>Notion「エンジニア採用向けのv5のロードマップ整理」— 工程の区切りと目標仕様</li>
+      <li>切り抜き型の生成マニュアル — 1本のつくり方、FB時のチェック観点、検品フロー</li>
+      <li>アプリグロース型の企画ドキュメント — アカウント単位の立ち上がりバー、アングル別の横展開ゲート、フェーズ計画</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>未確認 — 次に埋めるところ</h3>
+    <ul class="tight">
+      <li><b>案件とアカウントの対応表がない。</b>案件ごとのシートは存在するが、管理シート上の ACC 群とどう対応するかが一覧化されていない。「どの案件の何アカウントがv5に載っているか」を数値で言えないのはこのため</li>
+      <li><b>工程別の人時間の内訳。</b>タイプごとの合計工数は分かっているが、どの工程に何時間かかっているかの内訳がない。レバレッジ効果を時間で見積もるにはこれが要る</li>
+      <li><b>クリエイティブ生成型の実績。</b>他2タイプに比べて情報が薄い。受注実績と依頼内容の傾向が分かると、必要な生成方法の幅を具体化できる</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div>v5 レバレッジマップ — 2026-08-29 作成。案件の現況に応じて更新します。</div>
+  <div>関連：<a href="./v5-spec-2026-08.html">v5 円環システム仕様</a> ／ <a href="./onboarding-overview.html">全体像オンボーディング</a></div>
+</footer>
+
+</div>
+</body>
+</html>

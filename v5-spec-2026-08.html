@@ -271,6 +271,51 @@ footer{border-top:1px solid var(--line);padding-top:18px;font-size:12.5px;color:
 <!-- ================= 02 ================= -->
 <section id="s2">
   <h2>02 — システム構成</h2>
+  <figure>
+    <svg viewBox="0 0 840 250" role="img" aria-label="リポジトリの依存図。v5-agentsが正典と戦略・分析を持ち、content-pipelineが制作を担い、ceed-playbooksを呼び出して動画を作る。実績はContentOpsが集める">
+      <defs><marker id="r1" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><polygon points="0,0 9,4 0,8" fill="currentColor"/></marker></defs>
+      <g>
+        <rect x="16" y="20" width="230" height="86" rx="10" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/>
+        <text x="32" y="44" font-size="12.5" font-weight="700" fill="currentColor">v5-agents</text>
+        <text x="32" y="64" font-size="11" fill="currentColor" opacity=".7">円環の正典 / ARCHITECTURE.md</text>
+        <text x="32" y="81" font-size="11" fill="currentColor" opacity=".7">Agent1 戦略・Agent3 分析</text>
+        <text x="32" y="98" font-size="11" fill="currentColor" opacity=".7">知見台帳・業界知識</text>
+
+        <rect x="305" y="20" width="230" height="86" rx="10" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/>
+        <text x="321" y="44" font-size="12.5" font-weight="700" fill="currentColor">content-pipeline</text>
+        <text x="321" y="64" font-size="11" fill="currentColor" opacity=".7">Agent2 本体 / orchestrator</text>
+        <text x="321" y="81" font-size="11" fill="currentColor" opacity=".7">検証会議・実験・ルール登録</text>
+        <text x="321" y="98" font-size="11" fill="currentColor" opacity=".7">fb-memory / 絶対ルール</text>
+
+        <rect x="594" y="20" width="230" height="86" rx="10" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55"/>
+        <text x="610" y="44" font-size="12.5" font-weight="700" fill="currentColor">ceed-playbooks</text>
+        <text x="610" y="64" font-size="11" fill="currentColor" opacity=".7">ジャンル別の動画製造装置</text>
+        <text x="610" y="81" font-size="11" fill="currentColor" opacity=".7">台本を渡すと mp4 が出る</text>
+        <text x="610" y="98" font-size="11" fill="currentColor" opacity=".7">別プロセスで実行</text>
+
+        <rect x="160" y="170" width="240" height="62" rx="10" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".38" stroke-dasharray="5 4"/>
+        <text x="176" y="193" font-size="12" font-weight="700" fill="currentColor" opacity=".8">ig-competitor-research</text>
+        <text x="176" y="213" font-size="11" fill="currentColor" opacity=".65">競合リール取得＋動画構造分析</text>
+
+        <rect x="440" y="170" width="270" height="62" rx="10" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".38" stroke-dasharray="5 4"/>
+        <text x="456" y="193" font-size="12" font-weight="700" fill="currentColor" opacity=".8">ContentOps / content-performance-db</text>
+        <text x="456" y="213" font-size="11" fill="currentColor" opacity=".65">自動投稿・実績の定期収集・DB蓄積</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1.6" fill="none" opacity=".6">
+        <line x1="248" y1="63" x2="299" y2="63" marker-end="url(#r1)"/>
+        <line x1="537" y1="63" x2="588" y2="63" marker-end="url(#r1)"/>
+        <path d="M280 170 L280 140 L131 140 L131 110" marker-end="url(#r1)"/>
+        <path d="M575 170 L575 140 L420 140 L420 110" marker-end="url(#r1)"/>
+      </g>
+      <g font-size="10.5" fill="currentColor" opacity=".72" text-anchor="middle">
+        <text x="273" y="55">テーマ</text>
+        <text x="562" y="55">台本</text>
+        <text x="205" y="134">競合データ</text>
+        <text x="497" y="134">実績データ</text>
+      </g>
+    </svg>
+    <figcaption>上段＝円環を構成する3リポジトリ（左から右へ、戦略が動画になるまで）。下段の破線＝外部データを供給する周辺リポジトリ。</figcaption>
+  </figure>
   <div class="scroll">
     <table>
       <thead><tr><th>リポジトリ</th><th>円環上の位置</th><th>中身</th></tr></thead>
@@ -344,6 +389,50 @@ footer{border-top:1px solid var(--line);padding-top:18px;font-size:12.5px;color:
 <!-- ================= 04 ================= -->
 <section id="s4">
   <h2>04 — 機能仕様</h2>
+  <figure>
+    <svg viewBox="0 0 840 268" role="img" aria-label="スキルの呼び出し関係。orchestratorが中心にあり、検証会議を内部で開き、Playbookを別プロセスで呼び、インプ予測を参照し、結果をfb-memoryへ書き戻して絶対ルールが次回の生成に注入される">
+      <defs><marker id="s1" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><polygon points="0,0 9,4 0,8" fill="currentColor"/></marker></defs>
+      <rect x="270" y="14" width="300" height="58" rx="10" fill="none" stroke="currentColor" stroke-width="2"/>
+      <text x="420" y="38" font-size="13" font-weight="700" fill="currentColor" text-anchor="middle">video-creation-orchestrator</text>
+      <text x="420" y="58" font-size="11" fill="currentColor" opacity=".7" text-anchor="middle">サイクル全体を進行させる司令塔</text>
+
+      <g>
+        <rect x="20" y="112" width="196" height="56" rx="9" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/>
+        <text x="118" y="134" font-size="11.5" font-weight="700" fill="currentColor" text-anchor="middle">インプ予測</text>
+        <text x="118" y="153" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">作る前に再生数を見積もる</text>
+
+        <rect x="238" y="112" width="196" height="56" rx="9" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/>
+        <text x="336" y="134" font-size="11.5" font-weight="700" fill="currentColor" text-anchor="middle">検証会議</text>
+        <text x="336" y="153" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">台本の合否を3AIで自動判定</text>
+
+        <rect x="456" y="112" width="196" height="56" rx="9" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/>
+        <text x="554" y="134" font-size="11.5" font-weight="700" fill="currentColor" text-anchor="middle">Playbook</text>
+        <text x="554" y="153" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">別プロセスで mp4 を作る</text>
+
+        <rect x="674" y="112" width="146" height="56" rx="9" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/>
+        <text x="747" y="134" font-size="11.5" font-weight="700" fill="currentColor" text-anchor="middle">予約投稿</text>
+        <text x="747" y="153" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">Post Tracker へ</text>
+      </g>
+
+      <g stroke="currentColor" stroke-width="1.5" fill="none" opacity=".55">
+        <path d="M300 74 L118 74 L118 108" marker-end="url(#s1)"/>
+        <path d="M370 74 L336 74 L336 108" marker-end="url(#s1)"/>
+        <path d="M470 74 L554 74 L554 108" marker-end="url(#s1)"/>
+        <path d="M540 74 L747 74 L747 108" marker-end="url(#s1)"/>
+      </g>
+
+      <rect x="238" y="206" width="414" height="50" rx="9" fill="none" stroke="var(--part,#b8720b)" stroke-width="1.6"/>
+      <text x="445" y="228" font-size="11.5" font-weight="700" fill="var(--part,#b8720b)" text-anchor="middle">fb-memory ／ 絶対ルール</text>
+      <text x="445" y="246" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">レビューを溜める → 承認 → 次回の生成プロンプトに毎回注入</text>
+      <g stroke="var(--part,#b8720b)" stroke-width="1.5" fill="none" stroke-dasharray="5 4">
+        <path d="M336 170 L336 202" marker-end="url(#s1)"/>
+        <path d="M554 170 L554 186 L640 186 L640 202" marker-end="url(#s1)"/>
+        <path d="M238 231 L150 231 L150 172" marker-end="url(#s1)"/>
+      </g>
+      <text x="196" y="196" font-size="10" fill="var(--part,#b8720b)" font-weight="700" text-anchor="middle">注入</text>
+    </svg>
+    <figcaption>実線＝orchestrator が1サイクルの中で呼び出す順。オレンジの破線＝レビュー結果がルールとして溜まり、次のサイクルの生成に効き戻る学習の経路。</figcaption>
+  </figure>
 
   <div class="spec">
     <div class="hd"><span class="id">video-creation-orchestrator</span><span class="rl">Agent2 本体・最重要スキル</span><span class="pill done">実装済み</span></div>
@@ -449,6 +538,39 @@ footer{border-top:1px solid var(--line);padding-top:18px;font-size:12.5px;color:
 <!-- ================= 05 ================= -->
 <section id="s5">
   <h2>05 — データモデル</h2>
+  <figure>
+    <svg viewBox="0 0 840 190" role="img" aria-label="シート間のデータフロー。管理シートで仮説と制作を管理し、Post Trackerで投稿を管理し、performance_summaryが実績を集め、その結果が管理シートへ戻る">
+      <defs><marker id="d1" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><polygon points="0,0 9,4 0,8" fill="currentColor"/></marker></defs>
+      <g>
+        <rect x="14" y="26" width="238" height="76" rx="10" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="133" y="50" font-size="12.5" font-weight="700" fill="currentColor" text-anchor="middle">管理シート</text>
+        <text x="133" y="70" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">仮説テーマ → コンテンツ制作</text>
+        <text x="133" y="88" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">HYP_xxx / CNT_xxx で追跡</text>
+
+        <rect x="300" y="26" width="238" height="76" rx="10" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="419" y="50" font-size="12.5" font-weight="700" fill="currentColor" text-anchor="middle">Post Tracker</text>
+        <text x="419" y="70" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">投稿管理・予約</text>
+        <text x="419" y="88" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">ACC_xxxx 単位</text>
+
+        <rect x="586" y="26" width="238" height="76" rx="10" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <text x="705" y="50" font-size="12.5" font-weight="700" fill="currentColor" text-anchor="middle">performance_summary</text>
+        <text x="705" y="70" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">インサイトの自動収集</text>
+        <text x="705" y="88" font-size="10.5" fill="currentColor" opacity=".7" text-anchor="middle">1日2回、管理シートへ同期</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1.6" fill="none" opacity=".6">
+        <line x1="254" y1="64" x2="294" y2="64" marker-end="url(#d1)"/>
+        <line x1="540" y1="64" x2="580" y2="64" marker-end="url(#d1)"/>
+        <path d="M705 106 L705 148 L133 148 L133 106" marker-end="url(#d1)"/>
+      </g>
+      <g font-size="10.5" fill="currentColor" opacity=".72" text-anchor="middle">
+        <text x="274" y="56">動画</text>
+        <text x="560" y="56">投稿</text>
+        <text x="419" y="142">実績が次の仮説生成へ戻る</text>
+      </g>
+      <text x="419" y="176" font-size="10.5" fill="currentColor" opacity=".55" text-anchor="middle">1 ACC = 1 パイプライン。各ACCの処理は互いに干渉せず、バッチ内で並列に走る</text>
+    </svg>
+    <figcaption>3枚のシートが円環の実体。仕組みの状態はすべてここに載っており、実行制御もシート上の値で行う。</figcaption>
+  </figure>
   <div class="card">
     <h3>ID体系</h3>
     <div class="scroll" style="box-shadow:none;border:none">
@@ -489,6 +611,55 @@ footer{border-top:1px solid var(--line);padding-top:18px;font-size:12.5px;color:
 <!-- ================= 07 ================= -->
 <section id="s7">
   <h2>07 — これから作るもの</h2>
+  <figure>
+    <svg viewBox="0 0 840 210" role="img" aria-label="円環の7工程のうち、実装済みは生成と予約投稿、部分実装は分析、未実装は上流の市場分析とコンテンツ方針、出口の検品、そしてPDCA記録">
+      <defs><marker id="w1" markerWidth="9" markerHeight="9" refX="7.5" refY="3.6" orient="auto"><polygon points="0,0 8,3.6 0,7.2" fill="currentColor"/></marker></defs>
+      <g font-size="10.5" text-anchor="middle">
+        <rect x="8" y="52" width="106" height="52" rx="8" fill="var(--todo-bg,#ecf1fe)" stroke="var(--todo,#2f5fd8)" stroke-width="1.6"/>
+        <text x="61" y="74" font-weight="700" fill="var(--todo,#2f5fd8)">01 市場分析</text>
+        <text x="61" y="91" fill="currentColor" opacity=".7">未実装</text>
+
+        <rect x="126" y="52" width="106" height="52" rx="8" fill="var(--todo-bg,#ecf1fe)" stroke="var(--todo,#2f5fd8)" stroke-width="1.6"/>
+        <text x="179" y="74" font-weight="700" fill="var(--todo,#2f5fd8)">02 方針決定</text>
+        <text x="179" y="91" fill="currentColor" opacity=".7">未実装</text>
+
+        <rect x="244" y="52" width="106" height="52" rx="8" fill="var(--done-bg,#e7f6f3)" stroke="var(--done,#0d8f7f)" stroke-width="1.6"/>
+        <text x="297" y="74" font-weight="700" fill="var(--done,#0d8f7f)">03 生成</text>
+        <text x="297" y="91" fill="currentColor" opacity=".7">実装済み</text>
+
+        <rect x="362" y="52" width="106" height="52" rx="8" fill="var(--todo-bg,#ecf1fe)" stroke="var(--todo,#2f5fd8)" stroke-width="1.6"/>
+        <text x="415" y="74" font-weight="700" fill="var(--todo,#2f5fd8)">04 検品</text>
+        <text x="415" y="91" fill="currentColor" opacity=".7">未実装</text>
+
+        <rect x="480" y="52" width="106" height="52" rx="8" fill="var(--done-bg,#e7f6f3)" stroke="var(--done,#0d8f7f)" stroke-width="1.6"/>
+        <text x="533" y="74" font-weight="700" fill="var(--done,#0d8f7f)">05 予約投稿</text>
+        <text x="533" y="91" fill="currentColor" opacity=".7">実装済み</text>
+
+        <rect x="598" y="52" width="106" height="52" rx="8" fill="var(--part-bg,#fdf4e5)" stroke="var(--part,#b8720b)" stroke-width="1.6"/>
+        <text x="651" y="74" font-weight="700" fill="var(--part,#b8720b)">06 収集分析</text>
+        <text x="651" y="91" fill="currentColor" opacity=".7">部分実装</text>
+
+        <rect x="716" y="52" width="106" height="52" rx="8" fill="var(--todo-bg,#ecf1fe)" stroke="var(--todo,#2f5fd8)" stroke-width="1.6"/>
+        <text x="769" y="74" font-weight="700" fill="var(--todo,#2f5fd8)">07 次サイクル</text>
+        <text x="769" y="91" fill="currentColor" opacity=".7">未実装</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1.4" fill="none" opacity=".45">
+        <line x1="116" y1="78" x2="122" y2="78" marker-end="url(#w1)"/>
+        <line x1="234" y1="78" x2="240" y2="78" marker-end="url(#w1)"/>
+        <line x1="352" y1="78" x2="358" y2="78" marker-end="url(#w1)"/>
+        <line x1="470" y1="78" x2="476" y2="78" marker-end="url(#w1)"/>
+        <line x1="588" y1="78" x2="594" y2="78" marker-end="url(#w1)"/>
+        <line x1="706" y1="78" x2="712" y2="78" marker-end="url(#w1)"/>
+        <path d="M769 108 L769 140 L61 140 L61 108" marker-end="url(#w1)"/>
+      </g>
+      <text x="415" y="134" font-size="10.5" fill="currentColor" opacity=".6" text-anchor="middle">1周して戻る</text>
+      <text x="120" y="32" font-size="11" font-weight="700" fill="var(--todo,#2f5fd8)" text-anchor="middle">上流の判断が空いている</text>
+      <text x="415" y="32" font-size="11" font-weight="700" fill="var(--todo,#2f5fd8)" text-anchor="middle">出口の検品が空いている</text>
+      <text x="415" y="176" font-size="11" fill="currentColor" opacity=".72" text-anchor="middle">円環の中央（生成→投稿）は通っている。詰まっているのは入口の判断と、出口の品質保証。</text>
+      <text x="415" y="196" font-size="11" fill="currentColor" opacity=".72" text-anchor="middle">この2か所が空いている限り、円環は「回すほど賢くなる」状態に到達しない。</text>
+    </svg>
+    <figcaption>7工程の実装状況を一列に並べたもの。左右の未実装ブロックが、そのまま以下の作業項目に対応する。</figcaption>
+  </figure>
   <p>ここが参画後に取り組む領域。上から順に、円環の欠けている環をふさぐもの → 精度を上げるもの → 土台を広げるもの、と並べている。</p>
 
   <div class="work">
