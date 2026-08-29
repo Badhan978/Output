@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v5 円環システム仕様</title>
+<style>
+:root{
+  --bg:#f6f7f9;
+  --card:#ffffff;
+  --ink:#1b2430;
+  --ink-2:#3a4658;
+  --muted:#6a7585;
+  --line:#e1e5ea;
+  --line-2:#eef1f4;
+  --code-bg:#eef1f5;
+
+  --done:#0d8f7f;   --done-bg:#e7f6f3;  --done-ln:#a5dcd3;
+  --part:#b8720b;   --part-bg:#fdf4e5;  --part-ln:#eed49a;
+  --todo:#2f5fd8;   --todo-bg:#ecf1fe;  --todo-ln:#bfd0f8;
+
+  --accent:#2f5fd8;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.04);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141a;
+    --card:#181c23;
+    --ink:#e5e9ef;
+    --ink-2:#bcc4d0;
+    --muted:#8f99a8;
+    --line:#282e38;
+    --line-2:#20252d;
+    --code-bg:#232933;
+
+    --done:#4fd0bd;   --done-bg:#0f2e2a;  --done-ln:#2a685f;
+    --part:#e0a851;   --part-bg:#302511;  --part-ln:#75581f;
+    --todo:#7fa4f5;   --todo-bg:#182342;  --todo-ln:#3b528f;
+
+    --accent:#7fa4f5;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 1px 3px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11141a;
+  --card:#181c23;
+  --ink:#e5e9ef;
+  --ink-2:#bcc4d0;
+  --muted:#8f99a8;
+  --line:#282e38;
+  --line-2:#20252d;
+  --code-bg:#232933;
+
+  --done:#4fd0bd;   --done-bg:#0f2e2a;  --done-ln:#2a685f;
+  --part:#e0a851;   --part-bg:#302511;  --part-ln:#75581f;
+  --todo:#7fa4f5;   --todo-bg:#182342;  --todo-ln:#3b528f;
+
+  --accent:#7fa4f5;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 1px 3px rgba(0,0,0,.25);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.75}
+.wrap{max-width:1020px;margin:0 auto;padding:40px 22px 100px;display:flex;flex-direction:column;gap:40px}
+
+header{display:flex;flex-direction:column;gap:11px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+h1{font-size:31px;line-height:1.28;margin:0;letter-spacing:-.015em;text-wrap:balance}
+.lede{margin:0;color:var(--ink-2);font-size:15.5px;max-width:66ch}
+.meta{display:flex;flex-wrap:wrap;gap:5px 20px;font-size:12.5px;color:var(--muted)}
+.meta b{font-weight:700;color:var(--ink-2)}
+
+section{display:flex;flex-direction:column;gap:15px;scroll-margin-top:20px}
+h2{font-size:12.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin:0;display:flex;align-items:center;gap:11px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+h3{font-size:16px;margin:0;letter-spacing:-.005em;text-wrap:balance}
+h4{font-size:14px;margin:0;color:var(--ink-2)}
+p{margin:0;max-width:68ch}
+.note{font-size:13px;color:var(--muted);max-width:72ch}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+code{font-family:var(--mono);font-size:12.5px;background:var(--code-bg);padding:1px 5px;border-radius:4px;word-break:break-word}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+
+/* TOC */
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:4px 20px;font-size:13.5px}
+.toc a{text-decoration:none;display:flex;gap:9px;padding:3px 0}
+.toc a:hover{text-decoration:underline}
+.toc .num{font-family:var(--mono);font-size:12px;color:var(--muted);flex:none}
+
+/* thesis */
+.thesis{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:20px 24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.thesis .big{font-size:18.5px;font-weight:800;line-height:1.6;margin:0;text-wrap:balance}
+
+/* status */
+.pill{display:inline-block;font-size:11.5px;font-weight:800;border-radius:5px;padding:2px 9px;white-space:nowrap;border:1px solid transparent}
+.pill.done{color:var(--done);background:var(--done-bg);border-color:var(--done-ln)}
+.pill.part{color:var(--part);background:var(--part-bg);border-color:var(--part-ln)}
+.pill.todo{color:var(--todo);background:var(--todo-bg);border-color:var(--todo-ln)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:12.5px;color:var(--ink-2)}
+.legend span{display:flex;align-items:center;gap:7px}
+
+/* coverage */
+.cov{display:flex;flex-direction:column;gap:5px}
+.row{display:grid;grid-template-columns:26px 1fr 108px;gap:14px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:11px 15px;background:var(--card)}
+.row.done{border-left:4px solid var(--done)}
+.row.part{border-left:4px solid var(--part)}
+.row.todo{border-left:4px solid var(--todo)}
+.row .idx{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.row .nm{font-weight:700;font-size:14.5px}
+.row .nm small{display:block;font-weight:400;font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.6}
+.row .pill{justify-self:end}
+@media(max-width:640px){
+  .row{grid-template-columns:24px 1fr}
+  .row .pill{grid-column:2;justify-self:start;margin-top:5px}
+}
+
+/* spec blocks */
+.spec{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.spec > .hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;padding:15px 20px;border-bottom:1px solid var(--line-2)}
+.spec > .hd .id{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink)}
+.spec > .hd .rl{font-size:13px;color:var(--muted);flex:1;min-width:160px}
+.spec > .bd{padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.kv{display:grid;grid-template-columns:96px 1fr;gap:6px 16px;font-size:13.5px;align-items:baseline}
+.kv dt{font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.kv dd{margin:0;color:var(--ink-2)}
+@media(max-width:620px){.kv{grid-template-columns:1fr;gap:2px 0}.kv dd{margin-bottom:8px}}
+
+/* pipeline steps */
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12.5px}
+.chain b{background:var(--code-bg);border-radius:6px;padding:3px 10px;font-weight:700}
+.chain i{font-style:normal;color:var(--muted)}
+
+/* tables */
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:580px}
+th,td{padding:10px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line-2)}
+thead th{background:var(--bg);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:800;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:none}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* figure */
+figure{margin:0;display:flex;flex-direction:column;gap:10px}
+figure svg{width:100%;height:auto;display:block;max-width:860px;margin:0 auto}
+figcaption{font-size:12.5px;color:var(--muted);text-align:center;max-width:72ch;margin:0 auto}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 16px;display:flex;flex-direction:column;gap:2px;box-shadow:var(--shadow)}
+.stat .k{font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--muted);text-transform:uppercase}
+.stat .v{font-size:23px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.3}
+.stat .v em{font-style:normal;font-size:13px;font-weight:700;color:var(--muted);margin-left:3px}
+.stat .s{font-size:12px;color:var(--muted)}
+
+/* work items */
+.work{display:flex;flex-direction:column;gap:9px}
+.wi{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--todo);border-radius:10px;padding:14px 18px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow)}
+.wi .t{font-weight:700;font-size:14.5px;display:flex;flex-wrap:wrap;gap:9px;align-items:baseline}
+.wi .t .tag{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--todo);background:var(--todo-bg);border:1px solid var(--todo-ln);border-radius:4px;padding:1px 7px}
+.wi .d{font-size:13px;color:var(--ink-2);max-width:74ch}
+.wi .why{font-size:12.5px;color:var(--muted)}
+
+ul.tight{margin:0;padding-left:20px}
+ul.tight li{margin:5px 0}
+details{border:1px solid var(--line);border-radius:10px;padding:11px 16px;background:var(--card)}
+summary{cursor:pointer;font-weight:700;font-size:13.5px}
+details .body{margin-top:10px;font-size:13px;color:var(--ink-2);display:flex;flex-direction:column;gap:8px}
+
+footer{border-top:1px solid var(--line);padding-top:18px;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:8px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">System Specification ／ 2026-08</div>
+  <h1>v5 円環システム仕様</h1>
+  <p class="lede">AI生成のショート動画を多数のSNSアカウントで量産・運用し、収益化するまでを自走させるエージェントシステム「v5」の仕様書。何がすでに動いているか、どういう仕組みで動いているか、そして次に作るべきものは何かをまとめている。</p>
+  <div class="meta">
+    <span>基準日： <b>2026-08-28</b></span>
+    <span>対象読者： <b>v5の開発に参画するエンジニア</b></span>
+    <span>前提知識： <b>不要</b>（用語はその都度定義）</span>
+  </div>
+</header>
+
+<nav class="card toc" aria-label="目次">
+  <a href="#s1"><span class="num">01</span>プロダクトの定義</a>
+  <a href="#s2"><span class="num">02</span>システム構成</a>
+  <a href="#s3"><span class="num">03</span>担える範囲の一覧</a>
+  <a href="#s4"><span class="num">04</span>機能仕様</a>
+  <a href="#s5"><span class="num">05</span>データモデル</a>
+  <a href="#s6"><span class="num">06</span>実行環境</a>
+  <a href="#s7"><span class="num">07</span>これから作るもの</a>
+  <a href="#s8"><span class="num">08</span>規模と精度の実測値</a>
+  <a href="#s9"><span class="num">09</span>出典と未確認事項</a>
+</nav>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <h2>01 — プロダクトの定義</h2>
+  <div class="thesis">
+    <p class="big">3つのAIエージェントがバトンを渡し合い、動画を作って投稿し、その結果を学んで次に活かす。この「円環」を回すほど賢くなる構造が、v5というプロダクトの核。</p>
+    <p>成果指標は<b>各アカウントのアフィリエイト売上 月5万円</b>。すべての機能追加・改善は「これは月5万円に効くか」で評価される。</p>
+    <p class="note">設計上の優先順位も明示されている ——「すたれるもの」＝AIの進化で誰でもできるようになる作業（動画を作る配管など）は薄く最小限に。「育つもの」＝自社にしか貯まらない資産（投稿結果データ・何が売れたか・Hookや型の辞書・学びの台帳）に投資する。</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 860 430" role="img" aria-label="円環の構成図。Agent1戦略がテーマを決め、Agent2が動画を制作、投稿して実績を集め、Agent3が分析し、学びがAgent1とAgent2へ戻る">
+      <defs>
+        <marker id="a1" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><polygon points="0,0 9,4 0,8" fill="currentColor"/></marker>
+        <marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><polygon points="0,0 9,4 0,8" fill="#0d8f7f"/></marker>
+      </defs>
+      <g>
+        <rect x="30" y="30" width="248" height="92" rx="11" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
+        <text x="46" y="56" font-size="13" font-weight="700" fill="currentColor">① Agent1 — 戦略</text>
+        <text x="46" y="77" font-size="11.5" fill="currentColor" opacity=".7">skill: ceo-run</text>
+        <text x="46" y="96" font-size="11.5" fill="currentColor" opacity=".7">戦略に沿って投稿テーマを確定</text>
+        <text x="46" y="114" font-size="11.5" fill="currentColor" opacity=".7">出力: アカウント一覧シート</text>
+
+        <rect x="582" y="30" width="248" height="92" rx="11" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
+        <text x="598" y="56" font-size="13" font-weight="700" fill="currentColor">② Agent2 — 制作</text>
+        <text x="598" y="77" font-size="11.5" fill="currentColor" opacity=".7">video-creation-orchestrator</text>
+        <text x="598" y="96" font-size="11.5" fill="currentColor" opacity=".7">シナリオ→検証会議→動画→予約</text>
+        <text x="598" y="114" font-size="11.5" fill="currentColor" opacity=".7">出力: マスタータブ</text>
+
+        <rect x="582" y="308" width="248" height="92" rx="11" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
+        <text x="598" y="334" font-size="13" font-weight="700" fill="currentColor">③ 投稿・実績収集</text>
+        <text x="598" y="355" font-size="11.5" fill="currentColor" opacity=".7">Post Tracker / ContentOps</text>
+        <text x="598" y="374" font-size="11.5" fill="currentColor" opacity=".7">予約投稿の実行と数値の収集</text>
+        <text x="598" y="392" font-size="11.5" fill="currentColor" opacity=".7">出力: performance_summary</text>
+
+        <rect x="30" y="308" width="248" height="92" rx="11" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
+        <text x="46" y="334" font-size="13" font-weight="700" fill="currentColor">④ Agent3 — 分析</text>
+        <text x="46" y="355" font-size="11.5" fill="currentColor" opacity=".7">skill: ig-post-analysis ほか</text>
+        <text x="46" y="374" font-size="11.5" fill="currentColor" opacity=".7">伸びた／伸びない理由を知見化</text>
+        <text x="46" y="392" font-size="11.5" fill="currentColor" opacity=".7">出力: 分析DB / 知見台帳</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1.8" fill="none" opacity=".6">
+        <line x1="280" y1="76" x2="576" y2="76" marker-end="url(#a1)"/>
+        <line x1="706" y1="124" x2="706" y2="302" marker-end="url(#a1)"/>
+        <line x1="576" y1="354" x2="284" y2="354" marker-end="url(#a1)"/>
+      </g>
+      <g font-size="11.5" fill="currentColor" opacity=".78" text-anchor="middle">
+        <text x="428" y="67">テーマ・戦略</text>
+        <text x="740" y="216" text-anchor="start">完成動画</text>
+        <text x="430" y="345">再生数・視聴維持・保存</text>
+      </g>
+      <g stroke="#0d8f7f" stroke-width="1.7" fill="none" stroke-dasharray="6 5">
+        <line x1="154" y1="304" x2="154" y2="126" marker-end="url(#a2)"/>
+        <line x1="284" y1="320" x2="572" y2="120" marker-end="url(#a2)"/>
+      </g>
+      <g font-size="11" fill="#0d8f7f" font-weight="700">
+        <text x="165" y="222">知見を戦略へ還流</text>
+        <text x="340" y="248">絶対ルールとして制作へ還流</text>
+      </g>
+      <g>
+        <circle cx="430" cy="215" r="62" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".22"/>
+        <text x="430" y="211" font-size="12.5" font-weight="800" fill="currentColor" text-anchor="middle" opacity=".65">円環</text>
+        <text x="430" y="230" font-size="10.5" fill="currentColor" text-anchor="middle" opacity=".5">1周ごとに賢くなる</text>
+      </g>
+    </svg>
+    <figcaption>実線＝実物（テーマ→動画→実績）の流れ。緑の破線＝Agent3が抽出した学びが上流に戻り、円環が閉じる経路。</figcaption>
+  </figure>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <h2>02 — システム構成</h2>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>リポジトリ</th><th>円環上の位置</th><th>中身</th></tr></thead>
+      <tbody>
+        <tr><td><code>v5-agents</code></td><td>Agent1・Agent3＋横断</td><td>円環の正典（全体仕様）、Agent1（戦略）、Agent3（分析）、知見台帳、共有の業界知識</td></tr>
+        <tr><td><code>content-pipeline</code></td><td>Agent2</td><td>動画制作のすべて。<code>video-creation-orchestrator</code> 本体、<code>scenario-experiment</code>、<code>manual-rule-input</code>、ワークフロー仕様書</td></tr>
+        <tr><td><code>ceed-playbooks</code></td><td>Agent2 が呼び出す</td><td>ジャンル別の「Playbook」群（妖怪／江戸／歴史／ライフハック等）。台本を渡すと mp4 が出てくる製造装置</td></tr>
+        <tr><td><code>ig-competitor-research</code></td><td>Agent3 周辺</td><td>競合リールの取得と Gemini による動画構造分析（Apify 連携、週次稼働）</td></tr>
+        <tr><td><code>ContentOps</code> / <code>content-performance-db</code></td><td>③ 投稿・実績収集</td><td>実績の定期収集・DB蓄積・自動投稿の基盤</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">本番では <code>content-pipeline</code> と <code>ceed-playbooks</code> を同じ親フォルダに並べて配置する前提。正典（SSOT）ファイルは <code>v5-agents/ARCHITECTURE.md</code>（円環全体）、<code>content-pipeline/.claude/skills/video-creation-orchestrator/SKILL.md</code> と <code>docs/sheet-relay-workflow/SPEC.md</code>（Agent2）、<code>v5-agents/agent1-ceo/CLAUDE.md</code> / <code>agent3-analyzer/CLAUDE.md</code>、<code>v5-agents/knowledge-ledger/README.md</code>（知見台帳）。</p>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <h2>03 — v5が担える範囲</h2>
+  <div class="legend">
+    <span><span class="pill done">実装済み</span> 平常運転で自走している</span>
+    <span><span class="pill part">部分実装</span> 動くが目標仕様に届いていない</span>
+    <span><span class="pill todo">未実装</span> これから作る領域</span>
+  </div>
+  <div class="cov">
+    <div class="row todo">
+      <span class="idx">01</span>
+      <span class="nm">市場分析 → アカウント方針の決定
+        <small>目標仕様：人が与えた方針に沿って、競合と伸びている／伸びていない投稿を大量収集・整理し、アカウントの打ち出し方を複数案で提案する</small></span>
+      <span class="pill todo">未実装</span>
+    </div>
+    <div class="row todo">
+      <span class="idx">02</span>
+      <span class="nm">コンテンツ方針の決定
+        <small>目標仕様：人が決めたRef映像を分析し、既存Pipelineの複製 or 新規生成法の考案を、シナリオ案つきで提案する</small></span>
+      <span class="pill todo">未実装</span>
+    </div>
+    <div class="row done">
+      <span class="idx">03</span>
+      <span class="nm">コンテンツ生成（テーマ確定・シナリオ・動画）
+        <small>orchestrator が自走。台本の合否はAI検証会議が自動判定し、不合格は自動で書き直して再提出する</small></span>
+      <span class="pill done">実装済み</span>
+    </div>
+    <div class="row todo">
+      <span class="idx">04</span>
+      <span class="nm">一次検品
+        <small>目標仕様：字幕ズレ・誤字／難読漢字・話途中カット・色の見えづらさ・顔の見切れを機械／LLM的に検出し、指摘分を自動で再生成する</small></span>
+      <span class="pill todo">未実装</span>
+    </div>
+    <div class="row done">
+      <span class="idx">05</span>
+      <span class="nm">予約投稿
+        <small>Post Tracker 連携で全件実施</small></span>
+      <span class="pill done">実装済み</span>
+    </div>
+    <div class="row part">
+      <span class="idx">06</span>
+      <span class="nm">パフォーマンス収集・分析
+        <small>収集は自動（1日2回同期）。目標仕様の「数値の羅列ではなく次の改善点を提案の形で出す」には未到達</small></span>
+      <span class="pill part">部分実装</span>
+    </div>
+    <div class="row todo">
+      <span class="idx">07</span>
+      <span class="nm">PDCAの記録と次サイクルへの接続
+        <small>目標仕様：決定を受けて1に戻り次サイクルを自走。PDCAを設計書に記録する</small></span>
+      <span class="pill todo">未実装</span>
+    </div>
+  </div>
+  <p class="note">工程の区切りと目標仕様は Notion「v5の理想系」に準拠。円環の下流（生成・投稿・収集）は動いており、<b>上流の判断（何を作るか・どう出すか）と、出口の検品が空いている</b>という構図になっている。</p>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <h2>04 — 機能仕様</h2>
+
+  <div class="spec">
+    <div class="hd"><span class="id">video-creation-orchestrator</span><span class="rl">Agent2 本体・最重要スキル</span><span class="pill done">実装済み</span></div>
+    <div class="bd">
+      <p>戦略を受けて作業を組み立て、シナリオから投稿予約までを自動で進める司令塔。1台のマシンで完結し、動画ビルドだけを別プロセスに切り出して Playbook を呼び出す。</p>
+      <div class="chain"><b>サイクル開始</b><i>→</i><b>シナリオ作成</b><i>→</i><b>検証会議</b><i>→</i><b>動画ビルド</b><i>→</i><b>投稿予約</b></div>
+      <dl class="kv">
+        <dt>品質保証</dt><dd>シナリオ・動画それぞれに自動チェックが入り、合格分だけが次工程へ進む</dd>
+        <dt>学習</dt><dd>レビューの合否・指摘を受けて学びを記録し、自身の仕様も更新する</dd>
+        <dt>入力</dt><dd>アカウント一覧シート（戦略・テーマ・投稿時間）</dd>
+        <dt>出力</dt><dd>マスタータブ／投稿管理シート、完成 mp4</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="hd"><span class="id">hypothesis-verification-council</span><span class="rl">台本の合否を自動判定する検証会議</span><span class="pill done">実装済み</span></div>
+    <div class="bd">
+      <p>台本1本ごとに<b>3体のAI検査員（ルール／伸び／事実）が同時に検査</b>し、合否をシートへ自動記入する。不合格は人間を待たずに書き直しへ回り、最後にAIとは別の計算プログラムが検算する。通常は orchestrator の中で自動的に開かれ、<code>/hypothesis-verification-council</code> で単独起動もできる。</p>
+      <p class="note">人間が判断して記入する欄へAIが書き込むことは原則禁止されており、この台本合否だけが唯一の承認済み例外になっている。動画の合否判定は引き続き人間側の欄。</p>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="hd"><span class="id">インプ予測</span><span class="rl">投稿前に再生数を予測する仕組み（Instagram専用）</span><span class="pill part">部分実装</span></div>
+    <div class="bd">
+      <p>本番稼働中。毎週、予測と実測の答え合わせをして学習する。ただし的中率を信頼するには答え合わせが約100件必要なところ、現在39件で、<b>直近の的中率50%はまだ信頼区間に入っていない</b>。</p>
+      <div class="chain"><b>① 実力</b><i>×</i><b>② クセ補正</b><i>×</i><b>③ 期待度</b><i>=</i><b>予測値（÷3.8〜×3.8のレンジ付き）</b></div>
+      <dl class="kv">
+        <dt>① 実力</dt><dd>そのアカウントの直近10本の48h再生数の中央値（新規アカウントは仮値 2,700）。これを入れるだけで的中率が 25.4% → 50.4% に倍増することを過去307件で確認済み</dd>
+        <dt>② クセ補正</dt><dd>予測と実測のズレを毎週自動で補正する倍率（1.0開始、0.5〜2.0）。データが8件未満のときは発動しない</dd>
+        <dt>③ 期待度</dt><dd>AIが7段階（0.33 / 0.5 / 0.7 / 1.0 / 1.4 / 2.0 / 3.0）から選ぶ。刻みは実測分布（下位10%＝実力の0.30倍、上位10%＝3.39倍）と一致させて決定</dd>
+        <dt>換算</dt><dd>48h時点の再生数 → 最終再生数は 1.35倍</dd>
+      </dl>
+      <details>
+        <summary>③期待度をAIがどう判断するか（レールの引き方）</summary>
+        <div class="body">
+          <p><b>効く指標の序列（確定済み）：</b>視聴維持 0.47 ＞ シェア率 0.36 ＞ リプレイ度 0.27 ＞ 保存率 0.23 ＞ いいね率 0.07。Meta公式の一次情報（Transparency Center・Mosseri発言）と、自社IG 1,591投稿の実測分析の両方で順番が一致したため確定した。いいねはほぼ無関係と実証されたため、<b>予測の根拠に使うことを禁止</b>している。</p>
+          <p><b>反映のしかた：</b>相関は因果ではないため、序列を式の係数にはしていない。代わりに③を選ぶ直前のプロンプトへ「見るべき4観点」として注入する ── 1位 視聴維持の設計、2位 シェア誘発、3位 過去実績の類似、4位 保存価値。あわせて、過去に伸びた／滑った実例集と、①実力・②補正の値も渡す。</p>
+          <p><b>暴走防止：</b>選べるのは7択のみ、迷ったら1.0。根拠は「＋要因／−要因／参照実績」の3パート必須で、ラベルが欠けると機械検査で不合格。いいねや目標値を根拠にした場合も自動スキャンで不合格になる。さらに<b>AIの目利きが4週連続で外れたら③を1.0固定に戻し</b>、機械計算だけの運用へ自動的に後退する。</p>
+          <p><b>改善の余地：</b>改善パラメータは58項目がカタログ化され、経路A＝式に入れる／経路B＝AI判断に注入／経路C＝学習の回し方 に分類済み。多くは「AI判断には注入済み・式への組込は未」の状態で、この昇格判断が次の作業になる。</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="hd"><span class="id">fb-memory / 絶対ルール</span><span class="rl">学びをルールに育てる仕組み</span><span class="pill part">部分実装</span></div>
+    <div class="bd">
+      <div class="chain"><b>ためる</b><i>→</i><b>まとめる</b><i>→</i><b>人が承認</b><i>→</i><b>絶対ルール化</b><i>→</i><b>次回の生成に必ず注入</b></div>
+      <p>承認されたルールは、次回から台本生成AIのプロンプト冒頭に毎回注入される。ルールが増える経路は3つ ── 失敗フィードバック由来、Agent3の分析知見由来、週次の能動抽出。</p>
+      <p class="note"><b>ここが現在の最大のボトルネック。</b>登録済みルールは全アカウント共通15件＋アカウント別8件の計23件しかない一方、江戸系3アカウントだけでフィードバックが194行／190行／214行と溜まっている。さらに、ルールは「AIに読ませる」だけで、機械チェックで強制されているのは32件中2件（それも試験運用）にとどまる。</p>
+      <details>
+        <summary>なぜ学びがルールにならないのか — 3つの関門</summary>
+        <div class="body">
+          <p><b>関門1：</b>同じ失敗が2回以上出ないと候補にならない（1回きりのフィードバックは対象外）。</p>
+          <p><b>関門2：</b>候補になっても人間の承認を待つ。誤ったルールを恒久的に注入してしまうことを防ぐ安全弁として機能している。</p>
+          <p><b>関門3：</b>フィードバックの大半は「この台本のここを直せ」という個別指示で、一般化できる教訓だけがルールに昇格できる。</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="hd"><span class="id">知見台帳（L8）</span><span class="rl">知見の名寄せと失効管理</span><span class="pill done">実装済み</span></div>
+    <div class="bd">
+      <p>各所に散らばっていた知見を共通IDで1件にまとめ、「古くなったら失効・再検証する」というライフサイクル管理を付けた仕組み。古い前提のまま誤った判断をすることを防ぐ。Agent3が生み出す知見もこの流れに合流する。</p>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="hd"><span class="id">scenario-experiment</span><span class="rl">シナリオ品質の対照実験</span><span class="pill part">部分実装</span></div>
+    <div class="bd">
+      <p>「動画の質を決めるのは上流のシナリオ」という前提に立ち、シナリオ生成だけを対象に、条件を1つだけ変えて比較する対照実験を回すスキル。評価軸は再生数（Imp）の最大化。</p>
+      <p class="note">4パターン目にあたる競合タグ分析が未実施のまま停止しており、再開してルール収束ループに合流させるかは未決。</p>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="hd"><span class="id">ceo-run</span><span class="rl">Agent1・戦略スキル</span><span class="pill done">実装済み</span></div>
+    <div class="bd">
+      <p>戦略に沿って投稿テーマを絞り込み、確定させる。出力はアカウント一覧シート（戦略・テーマ・投稿時間）。戦略とテーマが未記入の週は、Agent2の司令塔AIが ceo-run を自動で呼び出し、AI同士の会話で確定まで代行する。</p>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="hd"><span class="id">manual-rule-input</span><span class="rl">人間のルールを直接登録する</span><span class="pill done">実装済み</span></div>
+    <div class="bd">
+      <p>人間が言語化したルールを、対話で既存ルールとの重複・矛盾を確認しながら「絶対ルール」へ直接登録する。明示的な承認を経てはじめて反映される。</p>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="hd"><span class="id">動画生成パイプライン</span><span class="rl">ceed-playbooks 側・ジャンルごとの製造装置</span><span class="pill done">実装済み</span></div>
+    <div class="bd">
+      <p>各ジャンルのフォルダにある skill を起動すると、以下が順に走る。人がやるのは起動と完成品の確認だけ。</p>
+      <div class="chain"><b>台本バリデーション</b><i>→</i><b>画像生成</b><i>→</i><b>カットの動画化</b><i>→</i><b>音声(TTS)＋字幕</b><i>→</i><b>SFX・BGM</b><i>→</i><b>mp4 出力・Driveへ</b></div>
+      <p class="note">動画の標準仕様は 40〜60秒・13カット程度。ジャンルによって画づくりは異なる（例：江戸系は浮世絵風イラストの紙芝居、男性ナレーション1人＋画面中央の大テロップ、音を消しても内容が分かる作り）。Pipeline ごとに使うAPIキーが異なり、その紐付けは各 Playbook スキル内に内包されている。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <h2>05 — データモデル</h2>
+  <div class="card">
+    <h3>ID体系</h3>
+    <div class="scroll" style="box-shadow:none;border:none">
+      <table style="min-width:460px">
+        <thead><tr><th>ID</th><th>形式</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td><code>ACC_ID</code></td><td><code>ACC_0001</code></td><td>プラットフォーム別アカウントの識別。Post Tracker と共通</td></tr>
+          <tr><td><code>SET_ID</code></td><td><code>SET_001</code></td><td>同一キャラクターのプラットフォーム別ACCをグループ化</td></tr>
+          <tr><td><code>HYP_ID</code></td><td><code>HYP_xxxxxxxx</code></td><td>仮説テーマの識別（UUID短縮8文字・コード自動生成）</td></tr>
+          <tr><td><code>CNT_ID</code></td><td><code>CNT_xxxxxxxx</code></td><td>コンテンツの識別（同上）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>1 ACC = 1 パイプライン</b>で、日次の仮説立案→動画制作を管理する。各ACCの処理は互いに干渉せず、バッチ内で並列に実行される。</p>
+  </div>
+
+  <div class="card">
+    <h3>シート間のデータフロー</h3>
+    <div class="chain"><b>管理シート（仮説生成→制作）</b><i>→</i><b>Post Tracker（投稿管理）</b><i>→</i><b>performance_summary（インサイト収集）</b><i>→</i><b>管理シート（次の仮説へ反映）</b></div>
+    <p class="note">管理シートのタブ構成は システム設定／アカウント一覧／競合情報／仮説テーマ／コンテンツ制作／投稿パフォーマンス。仮説テーマは A-O列15列で、プランナー生成→CEOレビュー→承認／却下の自動フローを HYP_ID で追跡する。コンテンツ制作は A-R列18列で、うち L-R列は<b>チェックポイント</b>となっており、動画生成が途中で失敗しても完了済みステップから再開できる。パフォーマンス指標は performance_summary から1日2回自動同期される。</p>
+    <p class="note">実行制御はスプレッドシート上の値で行い、再デプロイを必要としない（<code>batch_size</code>＝並列処理するアカウント数、<code>max_retries</code>＝CEOが仮説を却下したときの再生成上限、<code>production_enabled</code>＝FALSEなら仮説生成のみで停止）。タイムゾーンはすべて日本時間で扱う。</p>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <h2>06 — 実行環境</h2>
+  <div class="card">
+    <ul class="tight">
+      <li><b>本番は1台の Mac mini 上で動く。</b>定期ジョブと常駐プロセスが自動で回っており、動画作成や分析がバックグラウンドで走っている。</li>
+      <li><b>各エージェントは最上位モデルを最も深く考える設定で使う。</b>現在は Fable 5。提供終了や混雑で使えないときは Opus 4.8 へ自動的に切り替わり、処理は止まらない。</li>
+      <li><b>Git運用に癖がある。</b>バックグラウンドの自動コミットが走るため、変更は <code>add</code> から <code>commit</code> まで続けて行うか別ブランチで作業する。対話中の main への直接 push は仕組み上ブロックされ、自動 push で後から反映される。</li>
+      <li><b>UIは現状 Terminal ベース。</b>アプリのように制御する方式への移行が課題として挙がっている。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <h2>07 — これから作るもの</h2>
+  <p>ここが参画後に取り組む領域。上から順に、円環の欠けている環をふさぐもの → 精度を上げるもの → 土台を広げるもの、と並べている。</p>
+
+  <div class="work">
+    <div class="wi">
+      <div class="t"><span class="tag">工程01</span>市場分析からのアカウント方針提案</div>
+      <div class="d">人が方針を与えたら、それに沿って競合と伸びている／伸びていない投稿を大量に収集・整理し、アカウントの打ち出し方を複数案で提案するところまでを担う。</div>
+      <div class="why">既存資産：競合リール取得と Gemini 動画分析の <code>ig-competitor-research</code> が週次で稼働済み。取得系の配管はあるので、分析と提案生成が主戦場になる。</div>
+    </div>
+    <div class="wi">
+      <div class="t"><span class="tag">工程02</span>Ref映像の分析と生成方法の考案</div>
+      <div class="d">人が決めた参照コンテンツの映像を分析し、既存Pipelineの複製で作れるのか、新しい生成方法を考案する必要があるのかを判断し、シナリオ案つきで提案する。</div>
+      <div class="why">新規アカウント立ち上げで最も工数がかかる工程であり、ここが空いているために「新規設計のサポートがほぼできない」状態になっている。</div>
+    </div>
+    <div class="wi">
+      <div class="t"><span class="tag">工程04</span>一次検品の自動化</div>
+      <div class="d">字幕のズレ、誤字・難読漢字、話の途中でのカット、色の見えづらさ、顔の見切れを機械的／LLM的に検出し、指摘が出た分は自動で再生成に回す。人は差し戻し分の二次確認だけを行う。</div>
+      <div class="why">現在は生成された動画を人が全件視聴している。自動化の効果が最も直接的に効く工程。</div>
+    </div>
+    <div class="wi">
+      <div class="t"><span class="tag">工程06</span>分析の提案化</div>
+      <div class="d">収集した数値の羅列ではなく、「次にどこを改善すべきか」を提案の形で出す。人は提案の採否だけを判断する。</div>
+      <div class="why">収集の配管は完成済み。出力の形を変える部分が残っている。</div>
+    </div>
+    <div class="wi">
+      <div class="t"><span class="tag">構造</span>CV紐付け（売上と投稿の接続）</div>
+      <div class="d">どの売上がどの投稿から来たのかを結びつける。</div>
+      <div class="why">プロダクトの成果指標である「月5万円」に最も直結する改善として最優先に位置づけられているが、データ準備待ちのまま着手できていない。</div>
+    </div>
+    <div class="wi">
+      <div class="t"><span class="tag">構造</span>知見の収集・学習ループの強化</div>
+      <div class="d">コンテンツのフィードバック、新規生成、運用のそれぞれで得られた知見を収集し、ルールとして定着させる速度を上げる。ルールの機械強制（現在32件中2件）を広げることも含む。</div>
+      <div class="why">学びは大量に溜まっているのにルール化が追いついておらず、円環が「回すほど賢くなる」という設計思想を実現しきれていない。</div>
+    </div>
+    <div class="wi">
+      <div class="t"><span class="tag">機能</span>Story の運用</div>
+      <div class="d">Instagram の Story を v5 が扱えるようにする。デザイン選定（背景色・フォント・文字の置き方・スライドごとの情報量）を最低限自動で決められるところまでが目標。</div>
+      <div class="why">Story はプロフィールとリンクへ送る導線を担う面で、CVの律速になりやすい。現在 v5 は非対応。</div>
+    </div>
+    <div class="wi">
+      <div class="t"><span class="tag">機能</span>予測精度の向上</div>
+      <div class="d">答え合わせ件数を100件へ到達させて的中率を信頼できる数字にし、そのうえで58項目のパラメータカタログから「式へ昇格させる指標」を選ぶ。</div>
+      <div class="why">仕様・記録シート・競合アカウント候補まで確定済みで、データ取得の実行から再開できる状態にある。</div>
+    </div>
+    <div class="wi">
+      <div class="t"><span class="tag">機能</span>他ジャンルでのシナリオ生成能力</div>
+      <div class="d">ジャンルごとのシナリオ学習を進め、江戸系以外へ横展開したときの生成品質を担保する。</div>
+      <div class="why">台本の一発合格率が直近週に25.0%まで落ちており、品質の安定化そのものが課題になっている。</div>
+    </div>
+    <div class="wi">
+      <div class="t"><span class="tag">基盤</span>UI（Terminal → アプリ的な制御へ）</div>
+      <div class="d">現在 Terminal ベースの操作を、アプリのように制御できる形に置き換える。</div>
+      <div class="why">操作できる人が限られていることが、システムを扱える人数の上限を決めてしまっている。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 08 ================= -->
+<section id="s8">
+  <h2>08 — 規模と精度の実測値</h2>
+  <div class="stats">
+    <div class="stat"><span class="k">登録アカウント</span><span class="v">133<em>ACC</em></span><span class="s">うち実行対象 40</span></div>
+    <div class="stat"><span class="k">稼働中（Live）</span><span class="v">44<em>件</em></span><span class="s">Paused 51 ／ Dead 21 ／ Flagged 9</span></div>
+    <div class="stat"><span class="k">プラットフォーム</span><span class="v">3<em>種</em></span><span class="s">IG 52 ／ YT 39 ／ TT 37</span></div>
+    <div class="stat"><span class="k">インプ予測 的中率</span><span class="v">50<em>%</em></span><span class="s">答え合わせ 39 / 100 件</span></div>
+    <div class="stat"><span class="k">台本 一発合格率</span><span class="v">73<em>%</em></span><span class="s">通算。直近週は 25.0%</span></div>
+    <div class="stat"><span class="k">絶対ルール</span><span class="v">23<em>件</em></span><span class="s">共通15 ＋ アカウント別8</span></div>
+  </div>
+  <p class="note">ジャンルは Lifehack 40・GreatFigures 27 が主力で、江戸雑学系6アカが品質改善の実験対象になっている。投稿頻度は案件タイプにより 1〜3投稿/日、1案件あたりの運用アカウント数は 20〜200 の幅がある。出典：content-pipeline 管理シート「アカウント一覧」タブ（2026-08-28 取得）。</p>
+</section>
+
+<!-- ================= 09 ================= -->
+<section id="s9">
+  <h2>09 — 出典と未確認事項</h2>
+  <div class="card">
+    <h3>このページの根拠</h3>
+    <ul class="tight">
+      <li>Notion「エンジニア採用向けのv5のロードマップ整理」 — 工程の区切り、目標仕様（v5の理想系）、Issue一覧</li>
+      <li>「Ceed AI KOL 事業 — 全体像オンボーディング」（<a href="./onboarding-overview.html">リポジトリ内</a>）— 円環・エージェント・スキル・リポジトリ地図・実行環境</li>
+      <li>「インプ機能・シナリオ機能 品質向上 — 検討・決定ログ」(2026-08-04) — インプ予測の式と序列、合格率、ルール件数、FB蓄積の実測</li>
+      <li>content-pipeline 管理シート (2026-08-28取得) — ID体系、タブ構成、実行設定、アカウント実数</li>
+      <li>Notion「案件運用リソース整理」 — 案件タイプ別の運用規模、v5にレバーが効く箇所</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>未確認 — 次に埋めるところ</h3>
+    <ul class="tight">
+      <li><b>各リポジトリの正典を直接読めていない。</b><code>v5-agents/ARCHITECTURE.md</code>、<code>content-pipeline</code> の SKILL.md・SPEC.md は未読。本ページは資料とシート側の記述に基づいており、コードとの差分は取れていない</li>
+      <li><b>運用KPIの実数。</b>生成本数、平均iter数などマスタータブ／Post Tracker 由来の値は未取得</li>
+      <li><b>各機能のインターフェース定義。</b>スキル間の入出力スキーマ、エラー時の挙動は正典の確認が必要</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div>v5 円環システム仕様 — 2026-08-29 作成。実装の最新仕様は各リポジトリの正典ファイルが優先します。</div>
+  <div>関連：<a href="./onboarding-overview.html">全体像オンボーディング</a> ／ <a href="./v5-overall-design.html">V5 全体設計</a> ／ <a href="./v5-improvement-plan.html">v5 改善プラン</a></div>
+</footer>
+
+</div>
+</body>
+</html>
