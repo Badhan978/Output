@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>生成リクエスト 叩き</title>
+<style>
+  :root{
+    --bg:#f5f6f5;
+    --surface:#ffffff;
+    --surface-2:#eef0ef;
+    --border:#dde1df;
+    --text:#1c2422;
+    --text-muted:#5b6764;
+    --accent:#0f6b64;
+    --accent-weak:#e3efed;
+    --state-gray-bg:#e9eae8; --state-gray-fg:#5b6764;
+    --state-amber-bg:#fbe9c9; --state-amber-fg:#8a5a10;
+    --state-blue-bg:#dde8f7; --state-blue-fg:#2b5590;
+    --state-green-bg:#dcefe4; --state-green-fg:#1f7a49;
+    --state-darkgreen-bg:#183d2c; --state-darkgreen-fg:#e7f3ec;
+    --card-border-go:#8fcda9;
+    --shadow: 0 1px 3px rgba(20,30,28,0.08), 0 1px 2px rgba(20,30,28,0.06);
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14181a;
+      --surface:#1d2325;
+      --surface-2:#242b2d;
+      --border:#33393b;
+      --text:#eef1ef;
+      --text-muted:#a2adaa;
+      --accent:#4fc3b5;
+      --accent-weak:#1d3632;
+      --state-gray-bg:#2c3234; --state-gray-fg:#b7c0bd;
+      --state-amber-bg:#3d3113; --state-amber-fg:#e0b25c;
+      --state-blue-bg:#1c2c3e; --state-blue-fg:#8fb6e8;
+      --state-green-bg:#173726; --state-green-fg:#79d19e;
+      --state-darkgreen-bg:#0d2419; --state-darkgreen-fg:#9fe3bd;
+      --card-border-go:#2f6b48;
+      --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14181a;
+    --surface:#1d2325;
+    --surface-2:#242b2d;
+    --border:#33393b;
+    --text:#eef1ef;
+    --text-muted:#a2adaa;
+    --accent:#4fc3b5;
+    --accent-weak:#1d3632;
+    --state-gray-bg:#2c3234; --state-gray-fg:#b7c0bd;
+    --state-amber-bg:#3d3113; --state-amber-fg:#e0b25c;
+    --state-blue-bg:#1c2c3e; --state-blue-fg:#8fb6e8;
+    --state-green-bg:#173726; --state-green-fg:#79d19e;
+    --state-darkgreen-bg:#0d2419; --state-darkgreen-fg:#9fe3bd;
+    --card-border-go:#2f6b48;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", system-ui, sans-serif;
+    line-height:1.5;
+  }
+  a{color:var(--accent);}
+  button{font-family:inherit;}
+
+  /* ---------- Header ---------- */
+  .app-header{
+    position:sticky; top:0; z-index:40;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    padding:10px 20px;
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .header-left{display:flex; flex-direction:column; gap:2px; min-width:180px;}
+  .header-title{font-size:15px; font-weight:700;}
+  .header-batch{font-size:12px; color:var(--text-muted);}
+  .header-right{display:flex; align-items:center; gap:10px; margin-left:auto;}
+  .btn-primary{
+    background:var(--accent); color:#fff; border:none; border-radius:8px;
+    padding:9px 16px; font-size:13px; font-weight:700; cursor:pointer;
+    white-space:nowrap; text-decoration:none; display:inline-flex; align-items:center;
+  }
+  .btn-primary:disabled{background:var(--surface-2); color:var(--text-muted); cursor:not-allowed;}
+  .tag-v0{
+    font-size:10px; color:var(--text-muted); border:1px dashed var(--border);
+    border-radius:6px; padding:3px 7px; white-space:nowrap;
+  }
+  .btn-secondary{
+    background:var(--surface-2); color:var(--text); border:1px solid var(--border);
+    border-radius:8px; padding:9px 16px; font-size:13px; font-weight:700; cursor:pointer;
+  }
+  .btn-secondary.small{padding:6px 12px; font-size:12px;}
+
+  /* ---------- Layout ---------- */
+  .layout{
+    display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+    gap:20px; padding:20px; align-items:start;
+  }
+  @media (max-width:860px){
+    .layout{grid-template-columns:1fr;}
+    .preview-col{position:static !important;}
+  }
+  .form-col{display:flex; flex-direction:column; gap:16px; min-width:0;}
+  .preview-col{position:sticky; top:70px; display:flex; flex-direction:column; gap:10px;}
+
+  /* ---------- Section card ---------- */
+  .section-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:16px 18px; display:flex; flex-direction:column; gap:12px;
+  }
+  .section-head{display:flex; align-items:center; gap:10px;}
+  .section-num{
+    width:22px; height:22px; border-radius:50%; background:var(--accent-weak); color:var(--accent);
+    font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .section-title{font-size:13px; font-weight:700;}
+
+  /* ---------- Chips (shared) ---------- */
+  .chip-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .chip{
+    border:1px solid var(--border); background:var(--surface);
+    color:var(--text); border-radius:999px; padding:5px 12px;
+    font-size:12px; cursor:pointer;
+  }
+  .chip.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+
+  /* ---------- Section 1: accounts ---------- */
+  .acc-rows{display:flex; flex-direction:column; gap:8px;}
+  .acc-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:8px 10px; border:1px solid var(--border); border-radius:8px; background:var(--surface-2);
+  }
+  .acc-row-label{font-size:12px; font-weight:700;}
+  .stepper{display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--border); border-radius:999px; padding:3px;}
+  .stepper-btn{
+    width:22px; height:22px; border-radius:50%; border:none; background:var(--surface-2); color:var(--text);
+    font-size:13px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .stepper-btn:disabled{opacity:.4; cursor:not-allowed;}
+  .stepper-val{font-size:12px; font-weight:700; min-width:14px; text-align:center;}
+  .total-line{font-size:12px; color:var(--text-muted);}
+  .total-line b{color:var(--text); font-size:14px;}
+
+  /* ---------- Section 2: references ---------- */
+  .ref-rows{display:flex; flex-direction:column; gap:10px;}
+  .url-row{display:flex; flex-direction:column; gap:6px; padding:10px; border:1px solid var(--border); border-radius:8px; background:var(--surface-2);}
+  .input-text{
+    border:1px solid var(--border); border-radius:7px; padding:7px 9px; font-size:12px;
+    background:var(--surface); color:var(--text); font-family:inherit; width:100%;
+  }
+  .input-text::placeholder{color:var(--text-muted);}
+
+  /* ---------- Section 3: background ---------- */
+  .upload-box{
+    border:1px dashed var(--border); border-radius:10px; padding:16px; text-align:center;
+    font-size:12px; color:var(--text-muted); cursor:pointer; background:var(--surface-2);
+  }
+  .upload-box:hover{border-color:var(--accent); color:var(--accent);}
+  .upload-hint{display:block; font-size:11px; margin-top:3px;}
+
+  /* ---------- Section 4: text toggle ---------- */
+  .switch-wrap{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600;}
+  .switch{position:relative; width:38px; height:22px; display:inline-block; flex-shrink:0;}
+  .switch input{opacity:0; width:0; height:0; position:absolute;}
+  .switch .track{
+    position:absolute; inset:0; background:var(--surface-2); border:1px solid var(--border);
+    border-radius:999px; transition:background .15s ease, border-color .15s ease; cursor:pointer;
+  }
+  .switch .thumb{
+    position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%;
+    background:var(--text-muted); transition:transform .15s ease, background .15s ease;
+  }
+  .switch input:checked + .track{background:var(--accent-weak); border-color:var(--accent);}
+  .switch input:checked + .track .thumb{transform:translateX(16px); background:var(--accent);}
+  .manual-text-list{display:flex; flex-direction:column; gap:10px;}
+  .manual-text-item{display:flex; flex-direction:column; gap:4px;}
+  .manual-text-label{font-size:11px; font-weight:700; color:var(--text-muted);}
+  .manual-text-area{
+    width:100%; resize:vertical; min-height:44px; border-radius:7px; border:1px solid var(--border);
+    background:var(--surface); color:var(--text); font-size:12px; padding:7px 9px; font-family:inherit;
+  }
+  .caption-note{font-size:11px; color:var(--text-muted); margin:0;}
+
+  /* ---------- Preview ---------- */
+  .preview-frame{
+    width:260px; max-width:100%; height:462px; flex:none; margin:0 auto; border-radius:14px; color:#fff;
+    display:flex; flex-direction:column; align-items:center; padding:16px 12px 0; position:relative; overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .preview-frame .app-icon{width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,0.85); margin-top:6px; box-shadow:0 2px 6px rgba(0,0,0,0.25);}
+  .preview-frame .appeal-text{margin-top:16px; font-size:15px; font-weight:800; text-align:center; text-shadow:0 1px 6px rgba(0,0,0,0.35); padding:0 6px; line-height:1.35; white-space:pre-line;}
+  .preview-nav{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:28px; height:28px; border-radius:50%; border:none; padding:0;
+    background:rgba(255,255,255,0.2); color:#fff; font-size:16px; line-height:1;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease;
+  }
+  .preview-nav:hover{background:rgba(255,255,255,0.36);}
+  .preview-nav.prev{left:8px;}
+  .preview-nav.next{right:8px;}
+  .preview-nav[hidden]{display:none;}
+  .preview-indicator{
+    position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+    background:rgba(0,0,0,0.35); color:#fff; font-size:11px; font-weight:700;
+    padding:3px 11px; border-radius:999px; letter-spacing:.02em;
+  }
+  .preview-note{font-size:11px; color:var(--text-muted); text-align:center; margin:0;}
+  .preview-head{font-size:13px; font-weight:700; text-align:center;}
+
+  /* ---------- Modal ---------- */
+  .modal{
+    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:min(720px, 92vw); max-height:84vh; background:var(--surface);
+    border-radius:14px; border:1px solid var(--border); z-index:71;
+    display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal[hidden]{display:none;}
+  .modal-overlay[hidden]{display:none;}
+  .modal-overlay{position:fixed; inset:0; background:rgba(10,15,14,0.5); z-index:70;}
+  .modal-head{padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;}
+  .modal-head h3{margin:0; font-size:15px;}
+  .modal-close{border:none; background:none; font-size:18px; cursor:pointer; color:var(--text-muted); line-height:1;}
+  .modal-body{padding:16px 20px; overflow:auto;}
+  .modal-desc{font-size:12px; color:var(--text-muted); margin:0 0 12px;}
+  .table-scroll{overflow-x:auto; border:1px solid var(--border); border-radius:8px;}
+  table{border-collapse:collapse; width:100%; min-width:420px; font-size:12px;}
+  th, td{padding:8px 10px; border-bottom:1px solid var(--border); text-align:left; white-space:nowrap;}
+  th{background:var(--surface-2); color:var(--text-muted); font-weight:700; font-size:11px;}
+  tr:last-child td{border-bottom:none;}
+  .summary-list{display:flex; flex-direction:column; gap:6px; font-size:12px; margin-top:12px;}
+  .summary-list div{display:flex; justify-content:space-between; gap:12px; color:var(--text-muted);}
+  .summary-list b{color:var(--text);}
+  .modal-foot{padding:14px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:10px;}
+
+  .progress-label{font-size:13px; font-weight:700; margin:0 0 10px;}
+  .progress-bar-wrap{height:10px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); overflow:hidden;}
+  .progress-bar-fill{height:100%; background:var(--accent); width:0%; transition:width .3s ease;}
+  .complete-wrap{text-align:center; padding:12px 0;}
+  .complete-title{font-size:15px; font-weight:700; margin:0 0 6px;}
+  .complete-sub{font-size:12px; color:var(--text-muted); margin:0 0 18px;}
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translate(-50%, 12px);
+    background:var(--text); color:var(--bg); padding:10px 18px; border-radius:8px;
+    font-size:13px; z-index:90; opacity:0; transition:opacity .2s ease, transform .2s ease;
+    pointer-events:none;
+  }
+  .toast.show{opacity:1; transform:translate(-50%, 0);}
+
+  /* ---------- Footer ---------- */
+  .app-footer{
+    padding:16px 20px 28px; border-top:1px solid var(--border);
+  }
+  .flow-steps{
+    display:flex; gap:6px; flex-wrap:wrap; align-items:center; justify-content:center;
+    font-size:11px; color:var(--text-muted);
+  }
+  .flow-steps .step{
+    padding:5px 10px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2);
+  }
+  .flow-steps .step.current{
+    background:var(--accent-weak); border-color:var(--accent); color:var(--accent); font-weight:700;
+  }
+  .flow-steps .arrow{color:var(--border);}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-left">
+    <div class="header-title">生成リクエスト</div>
+    <div class="header-batch">バッチ: 2026-09-01 生成分</div>
+  </div>
+  <div class="header-right">
+    <span class="tag-v0">叩き v0</span>
+    <button class="btn-primary" id="generateBtn">生成を開始 (0 本)</button>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="form-col">
+
+    <div class="section-card">
+      <div class="section-head"><span class="section-num">1</span><span class="section-title">アカウントと本数</span></div>
+      <div class="chip-row" id="accChipRow"></div>
+      <div class="acc-rows" id="accRows"></div>
+      <div class="total-line">合計 <b id="totalCount">0</b> 本</div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span class="section-num">2</span><span class="section-title">参考コンテンツ</span></div>
+      <div class="ref-rows" id="refRows"></div>
+      <div>
+        <button class="btn-secondary small" id="addRowBtn">行を追加</button>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span class="section-num">3</span><span class="section-title">背景画像イメージ</span></div>
+      <div class="chip-row" id="bgChipRow"></div>
+      <input type="text" class="input-text" id="bgFreeText" placeholder="例: ネオンの繁華街、雨上がり">
+      <div class="upload-box" id="uploadBox">
+        画像をアップロード
+        <span class="upload-hint">クリックして選択 (モック)</span>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><span class="section-num">4</span><span class="section-title">スライド構成 (枚数と文字)</span></div>
+      <div class="acc-row">
+        <span class="acc-row-label">1 本あたりのスライド枚数</span>
+        <div class="stepper">
+          <button type="button" class="stepper-btn" id="slideCountMinus">&minus;</button>
+          <span class="stepper-val" id="slideCountVal">3</span>
+          <button type="button" class="stepper-btn" id="slideCountPlus">+</button>
+        </div>
+      </div>
+      <div class="switch-wrap">
+        <label class="switch">
+          <input type="checkbox" id="autoTextToggle" checked>
+          <span class="track"><span class="thumb"></span></span>
+        </label>
+        <span>自動生成に任せる</span>
+      </div>
+      <div class="manual-text-list" id="manualTextWrap" hidden></div>
+      <p class="caption-note" id="captionNote">スライド枚数分の文言が参考コンテンツとテーマから自動で案出しされます</p>
+    </div>
+
+  </div>
+
+  <div class="preview-col">
+    <div class="preview-head">プレビュー</div>
+    <div class="preview-frame" id="previewFrame">
+      <div class="app-icon" id="previewIcon"></div>
+      <div class="appeal-text" id="previewAppeal"></div>
+      <button type="button" class="preview-nav prev" id="slidePrevBtn" aria-label="前のスライド">&lsaquo;</button>
+      <button type="button" class="preview-nav next" id="slideNextBtn" aria-label="次のスライド">&rsaquo;</button>
+      <div class="preview-indicator" id="slideIndicator">1 / 3</div>
+    </div>
+    <p class="preview-note">プレビューはイメージです。実際は参考コンテンツを解析して生成されます。</p>
+  </div>
+</div>
+
+<div class="app-footer">
+  <div class="flow-steps" id="flowSteps"></div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" hidden></div>
+<div class="modal" id="genModal" hidden>
+  <div class="modal-head">
+    <h3 id="modalTitle">生成内容の確認</h3>
+    <button class="modal-close" id="modalCloseBtn">&times;</button>
+  </div>
+  <div class="modal-body" id="modalBody"></div>
+  <div class="modal-foot" id="modalFoot"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var ACCOUNTS = ["acc_01","acc_02","acc_03","acc_04","acc_05"];
+  var accSelected = { acc_01:true, acc_02:true, acc_03:true, acc_04:false, acc_05:false };
+  var accCount = { acc_01:2, acc_02:3, acc_03:2, acc_04:2, acc_05:3 };
+
+  var BG_PRESETS = ["夜の街","ゲーム画面風","抽象グラデーション","キャラ寄り","おまかせ"];
+  var BG_HUE = { "夜の街":222, "ゲーム画面風":150, "抽象グラデーション":280, "キャラ寄り":340, "おまかせ":200 };
+  var bgPreset = "夜の街";
+
+  var refRows = [
+    { url:"https://www.tiktok.com/@ref_account_09/video/7312456789012345678", memo:"" },
+    { url:"https://www.tiktok.com/@ref_account_11/video/7298765432109876543", memo:"この構成を踏襲" }
+  ];
+  var refRowSeq = refRows.length;
+
+  var slideCount = 3;
+  var SLIDE_COUNT_MIN = 2, SLIDE_COUNT_MAX = 6;
+  var currentSlide = 0;
+  var manualTexts = ["無課金でも最強パーティ組めた","このエフェクト見た瞬間鳥肌立った","今からでも間に合う攻略ルート"];
+
+  var accChipRow = document.getElementById("accChipRow");
+  var accRowsEl = document.getElementById("accRows");
+  var totalCountEl = document.getElementById("totalCount");
+  var refRowsEl = document.getElementById("refRows");
+  var bgChipRow = document.getElementById("bgChipRow");
+  var bgFreeText = document.getElementById("bgFreeText");
+  var uploadBox = document.getElementById("uploadBox");
+  var autoTextToggle = document.getElementById("autoTextToggle");
+  var manualTextWrap = document.getElementById("manualTextWrap");
+  var captionNote = document.getElementById("captionNote");
+  var slideCountVal = document.getElementById("slideCountVal");
+  var slideCountMinus = document.getElementById("slideCountMinus");
+  var slideCountPlus = document.getElementById("slideCountPlus");
+  var previewFrame = document.getElementById("previewFrame");
+  var previewIcon = document.getElementById("previewIcon");
+  var previewAppeal = document.getElementById("previewAppeal");
+  var slidePrevBtn = document.getElementById("slidePrevBtn");
+  var slideNextBtn = document.getElementById("slideNextBtn");
+  var slideIndicator = document.getElementById("slideIndicator");
+  var generateBtn = document.getElementById("generateBtn");
+  var flowSteps = document.getElementById("flowSteps");
+  var toast = document.getElementById("toast");
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(function(){ toast.classList.remove("show"); }, 2400);
+  }
+
+  function totalBon(){
+    var t = 0;
+    ACCOUNTS.forEach(function(a){ if(accSelected[a]) t += accCount[a]; });
+    return t;
+  }
+
+  function renderAccounts(){
+    accChipRow.innerHTML = "";
+    ACCOUNTS.forEach(function(a){
+      var chip = document.createElement("button");
+      chip.className = "chip" + (accSelected[a] ? " active" : "");
+      chip.textContent = a;
+      chip.addEventListener("click", function(){
+        accSelected[a] = !accSelected[a];
+        renderAll();
+      });
+      accChipRow.appendChild(chip);
+    });
+
+    accRowsEl.innerHTML = "";
+    ACCOUNTS.forEach(function(a){
+      if(!accSelected[a]) return;
+      var row = document.createElement("div");
+      row.className = "acc-row";
+      row.innerHTML =
+        '<span class="acc-row-label">' + a + '</span>' +
+        '<div class="stepper">' +
+          '<button type="button" class="stepper-btn" data-acc="' + a + '" data-step="-1" ' + (accCount[a] <= 1 ? "disabled" : "") + '>&minus;</button>' +
+          '<span class="stepper-val">' + accCount[a] + '</span>' +
+          '<button type="button" class="stepper-btn" data-acc="' + a + '" data-step="1" ' + (accCount[a] >= 5 ? "disabled" : "") + '>+</button>' +
+        '</div>';
+      accRowsEl.appendChild(row);
+    });
+    accRowsEl.querySelectorAll(".stepper-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var a = btn.getAttribute("data-acc");
+        var d = Number(btn.getAttribute("data-step"));
+        accCount[a] = Math.max(1, Math.min(5, accCount[a] + d));
+        renderAll();
+      });
+    });
+
+    totalCountEl.textContent = totalBon();
+    generateBtn.textContent = "生成を開始 (" + totalBon() + " 本)";
+    generateBtn.disabled = totalBon() === 0;
+  }
+
+  function renderRefRows(){
+    refRowsEl.innerHTML = "";
+    refRows.forEach(function(r){
+      var row = document.createElement("div");
+      row.className = "url-row";
+      row.innerHTML =
+        '<input type="text" class="input-text ref-url" placeholder="https://www.tiktok.com/@.../video/..." value="' + (r.url || "").replace(/"/g,"&quot;") + '">' +
+        '<input type="text" class="input-text ref-memo" placeholder="任意メモ (例: この構成を踏襲)" value="' + (r.memo || "").replace(/"/g,"&quot;") + '">';
+      var urlInput = row.querySelector(".ref-url");
+      var memoInput = row.querySelector(".ref-memo");
+      urlInput.addEventListener("input", function(){ r.url = urlInput.value; });
+      memoInput.addEventListener("input", function(){ r.memo = memoInput.value; });
+      refRowsEl.appendChild(row);
+    });
+  }
+
+  function renderBg(){
+    bgChipRow.innerHTML = "";
+    BG_PRESETS.forEach(function(p){
+      var chip = document.createElement("button");
+      chip.className = "chip" + (bgPreset === p ? " active" : "");
+      chip.textContent = p;
+      chip.addEventListener("click", function(){ bgPreset = p; renderAll(); });
+      bgChipRow.appendChild(chip);
+    });
+  }
+
+  function getSlideText(idx){
+    if(autoTextToggle.checked){
+      if(idx === 0) return "（自動生成 — テーマに合わせて提案されます）";
+      return "スライド " + (idx + 1) + " の文言 (自動生成)";
+    }
+    var raw = manualTexts[idx] || "";
+    return raw.trim() ? raw : "(自動補完)";
+  }
+
+  function renderText(){
+    manualTextWrap.hidden = autoTextToggle.checked;
+    captionNote.hidden = !autoTextToggle.checked;
+  }
+
+  function syncManualTexts(){
+    while(manualTexts.length < slideCount) manualTexts.push("");
+    while(manualTexts.length > slideCount) manualTexts.pop();
+  }
+
+  function renderManualTextRows(){
+    manualTextWrap.innerHTML = "";
+    var hint = document.createElement("p");
+    hint.className = "caption-note";
+    hint.id = "manualTextHint";
+    hint.textContent = "欄内の改行はスライド内の改行になります。空欄は自動補完されます";
+    manualTextWrap.appendChild(hint);
+
+    for(var i = 0; i < slideCount; i++){
+      (function(idx){
+        var item = document.createElement("div");
+        item.className = "manual-text-item";
+        var label = document.createElement("div");
+        label.className = "manual-text-label";
+        label.textContent = "スライド " + (idx + 1);
+        var ta = document.createElement("textarea");
+        ta.className = "input-text manual-text-area";
+        ta.rows = 2;
+        ta.value = manualTexts[idx] || "";
+        ta.addEventListener("input", function(){
+          manualTexts[idx] = ta.value;
+          renderPreview();
+        });
+        item.appendChild(label);
+        item.appendChild(ta);
+        manualTextWrap.appendChild(item);
+      })(i);
+    }
+  }
+
+  function renderSlideCount(){
+    if(currentSlide > slideCount - 1) currentSlide = slideCount - 1;
+    if(currentSlide < 0) currentSlide = 0;
+    slideCountVal.textContent = slideCount;
+    slideCountMinus.disabled = slideCount <= SLIDE_COUNT_MIN;
+    slideCountPlus.disabled = slideCount >= SLIDE_COUNT_MAX;
+    syncManualTexts();
+    renderManualTextRows();
+  }
+
+  function renderPreview(){
+    var hue = BG_HUE[bgPreset];
+    previewFrame.style.background = "linear-gradient(160deg, hsl(" + hue + ",55%,42%), hsl(" + (hue + 40) + ",60%,28%))";
+    previewIcon.hidden = currentSlide !== 0;
+    previewAppeal.textContent = getSlideText(currentSlide);
+    slidePrevBtn.hidden = currentSlide === 0;
+    slideNextBtn.hidden = currentSlide === slideCount - 1;
+    slideIndicator.textContent = (currentSlide + 1) + " / " + slideCount;
+  }
+
+  function renderFlow(){
+    var steps = ["Claude コマンド","情報入力","生成","クリエイティブ確認 (Go/FB)","予約投稿"];
+    flowSteps.innerHTML = steps.map(function(s, i){
+      var el = '<span class="step' + (i === 1 ? ' current' : '') + '">' + s + '</span>';
+      if(i < steps.length - 1) el += '<span class="arrow">→</span>';
+      return el;
+    }).join("");
+  }
+
+  function renderAll(){
+    renderAccounts();
+    renderBg();
+    renderText();
+    renderSlideCount();
+    renderPreview();
+  }
+
+  document.getElementById("addRowBtn").addEventListener("click", function(){
+    refRowSeq++;
+    refRows.push({ url:"", memo:"" });
+    renderRefRows();
+  });
+
+  uploadBox.addEventListener("click", function(){
+    showToast("モック: アップロードは実装時に対応");
+  });
+
+  slideCountMinus.addEventListener("click", function(){
+    slideCount = Math.max(SLIDE_COUNT_MIN, slideCount - 1);
+    renderAll();
+  });
+  slideCountPlus.addEventListener("click", function(){
+    slideCount = Math.min(SLIDE_COUNT_MAX, slideCount + 1);
+    renderAll();
+  });
+
+  slidePrevBtn.addEventListener("click", function(){
+    if(currentSlide > 0){ currentSlide--; renderPreview(); }
+  });
+  slideNextBtn.addEventListener("click", function(){
+    if(currentSlide < slideCount - 1){ currentSlide++; renderPreview(); }
+  });
+
+  autoTextToggle.addEventListener("change", renderAll);
+  bgFreeText.addEventListener("input", function(){ /* 自由記述は生成サマリのみ反映 */ });
+
+  // ---- generation modal ----
+  var modalOverlay = document.getElementById("modalOverlay");
+  var genModal = document.getElementById("genModal");
+  var modalTitle = document.getElementById("modalTitle");
+  var modalBody = document.getElementById("modalBody");
+  var modalFoot = document.getElementById("modalFoot");
+  var progressTimer = null;
+
+  function closeModal(){
+    if(progressTimer){ clearInterval(progressTimer); progressTimer = null; }
+    genModal.hidden = true;
+    modalOverlay.hidden = true;
+  }
+
+  function openSummaryModal(){
+    modalTitle.textContent = "生成内容の確認";
+    var n = totalBon();
+    var accHtml = ACCOUNTS.filter(function(a){ return accSelected[a]; }).map(function(a){
+      return '<tr><td>' + a + '</td><td>' + accCount[a] + ' 本</td></tr>';
+    }).join("");
+    var refCount = refRows.filter(function(r){ return r.url && r.url.trim(); }).length;
+    var bgLabel = bgPreset + (bgFreeText.value.trim() ? "・自由記述: " + bgFreeText.value.trim() : "");
+    var filledCount = manualTexts.slice(0, slideCount).filter(function(s){ return (s || "").trim(); }).length;
+    var textLabel = autoTextToggle.checked
+      ? "自動生成に任せる"
+      : "手動指定 (" + slideCount + " 枚中 " + filledCount + " 枚記入)";
+
+    modalBody.innerHTML =
+      '<p class="modal-desc">この内容で生成を開始します。</p>' +
+      '<div class="table-scroll"><table><thead><tr><th>アカウント</th><th>本数</th></tr></thead><tbody>' + accHtml + '</tbody></table></div>' +
+      '<div class="summary-list">' +
+        '<div><span>合計本数</span><b>' + n + ' 本</b></div>' +
+        '<div><span>参考コンテンツ</span><b>' + refCount + ' 件</b></div>' +
+        '<div><span>背景イメージ</span><b>' + bgLabel + '</b></div>' +
+        '<div><span>スライド枚数</span><b>' + slideCount + ' 枚 / 本</b></div>' +
+        '<div><span>訴求テキスト</span><b>' + textLabel + '</b></div>' +
+      '</div>';
+
+    modalFoot.innerHTML =
+      '<button class="btn-secondary" id="modalCancelBtn">閉じる</button>' +
+      '<button class="btn-primary" id="modalConfirmBtn">生成を開始する</button>';
+    document.getElementById("modalCancelBtn").addEventListener("click", closeModal);
+    document.getElementById("modalConfirmBtn").addEventListener("click", function(){ startProgress(n); });
+
+    genModal.hidden = false;
+    modalOverlay.hidden = false;
+  }
+
+  function startProgress(n){
+    modalTitle.textContent = "生成中";
+    modalFoot.innerHTML = "";
+    modalBody.innerHTML =
+      '<div class="progress-label" id="progressLabel">生成中 0/' + n + '…</div>' +
+      '<div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>';
+    var label = document.getElementById("progressLabel");
+    var fill = document.getElementById("progressFill");
+    var i = 0;
+    progressTimer = setInterval(function(){
+      i++;
+      label.textContent = "生成中 " + i + "/" + n + "…";
+      fill.style.width = Math.round((i / n) * 100) + "%";
+      if(i >= n){
+        clearInterval(progressTimer);
+        progressTimer = null;
+        setTimeout(function(){ showComplete(n); }, 400);
+      }
+    }, 450);
+  }
+
+  function showComplete(n){
+    modalTitle.textContent = "生成完了";
+    modalBody.innerHTML =
+      '<div class="complete-wrap">' +
+        '<p class="complete-title">' + n + ' 本の生成が完了しました</p>' +
+        '<p class="complete-sub">クリエイティブ確認画面から Go / FB を判定してください。</p>' +
+      '</div>';
+    modalFoot.innerHTML =
+      '<button class="btn-secondary" id="modalCloseBtn2">閉じる</button>' +
+      '<a class="btn-primary" href="https://badhan978.github.io/Output/tiktok-creative-review-mock.html">クリエイティブ確認画面へ</a>';
+    document.getElementById("modalCloseBtn2").addEventListener("click", closeModal);
+  }
+
+  generateBtn.addEventListener("click", function(){
+    if(!generateBtn.disabled) openSummaryModal();
+  });
+  document.getElementById("modalCloseBtn").addEventListener("click", closeModal);
+  modalOverlay.addEventListener("click", closeModal);
+
+  renderRefRows();
+  renderFlow();
+  renderAll();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>クリエイティブ確認 叩き</title>
+<style>
+  :root{
+    --bg:#f5f6f5;
+    --surface:#ffffff;
+    --surface-2:#eef0ef;
+    --border:#dde1df;
+    --text:#1c2422;
+    --text-muted:#5b6764;
+    --accent:#0f6b64;
+    --accent-weak:#e3efed;
+    --state-gray-bg:#e9eae8; --state-gray-fg:#5b6764;
+    --state-amber-bg:#fbe9c9; --state-amber-fg:#8a5a10;
+    --state-blue-bg:#dde8f7; --state-blue-fg:#2b5590;
+    --state-green-bg:#dcefe4; --state-green-fg:#1f7a49;
+    --state-darkgreen-bg:#183d2c; --state-darkgreen-fg:#e7f3ec;
+    --card-border-go:#8fcda9;
+    --shadow: 0 1px 3px rgba(20,30,28,0.08), 0 1px 2px rgba(20,30,28,0.06);
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14181a;
+      --surface:#1d2325;
+      --surface-2:#242b2d;
+      --border:#33393b;
+      --text:#eef1ef;
+      --text-muted:#a2adaa;
+      --accent:#4fc3b5;
+      --accent-weak:#1d3632;
+      --state-gray-bg:#2c3234; --state-gray-fg:#b7c0bd;
+      --state-amber-bg:#3d3113; --state-amber-fg:#e0b25c;
+      --state-blue-bg:#1c2c3e; --state-blue-fg:#8fb6e8;
+      --state-green-bg:#173726; --state-green-fg:#79d19e;
+      --state-darkgreen-bg:#0d2419; --state-darkgreen-fg:#9fe3bd;
+      --card-border-go:#2f6b48;
+      --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14181a;
+    --surface:#1d2325;
+    --surface-2:#242b2d;
+    --border:#33393b;
+    --text:#eef1ef;
+    --text-muted:#a2adaa;
+    --accent:#4fc3b5;
+    --accent-weak:#1d3632;
+    --state-gray-bg:#2c3234; --state-gray-fg:#b7c0bd;
+    --state-amber-bg:#3d3113; --state-amber-fg:#e0b25c;
+    --state-blue-bg:#1c2c3e; --state-blue-fg:#8fb6e8;
+    --state-green-bg:#173726; --state-green-fg:#79d19e;
+    --state-darkgreen-bg:#0d2419; --state-darkgreen-fg:#9fe3bd;
+    --card-border-go:#2f6b48;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", system-ui, sans-serif;
+    line-height:1.5;
+  }
+  a{color:var(--accent);}
+  button{font-family:inherit;}
+
+  /* ---------- Header ---------- */
+  .app-header{
+    position:sticky; top:0; z-index:40;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    padding:10px 20px;
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .header-left{display:flex; flex-direction:column; gap:2px; min-width:180px;}
+  .header-title{font-size:15px; font-weight:700;}
+  .header-batch{font-size:12px; color:var(--text-muted);}
+  .header-center{
+    flex:1; display:flex; justify-content:center; gap:8px; flex-wrap:wrap;
+  }
+  .pill{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:5px 12px; border-radius:999px; font-size:12px; font-weight:600;
+    background:var(--surface-2); color:var(--text-muted); border:1px solid var(--border);
+  }
+  .pill .dot{width:7px; height:7px; border-radius:50%;}
+  .pill.go .dot{background:var(--state-green-fg);}
+  .pill.fb .dot{background:var(--state-amber-fg);}
+  .pill.regen .dot{background:var(--state-blue-fg);}
+  .pill.unchecked .dot{background:var(--state-gray-fg);}
+  .header-right{display:flex; align-items:center; gap:10px;}
+  .btn-primary{
+    background:var(--accent); color:#fff; border:none; border-radius:8px;
+    padding:9px 16px; font-size:13px; font-weight:700; cursor:pointer;
+    white-space:nowrap;
+  }
+  .btn-primary:disabled{background:var(--surface-2); color:var(--text-muted); cursor:not-allowed;}
+  .tag-v0{
+    font-size:10px; color:var(--text-muted); border:1px dashed var(--border);
+    border-radius:6px; padding:3px 7px; white-space:nowrap;
+  }
+
+  /* ---------- Filter row ---------- */
+  .filter-row{
+    padding:12px 20px; display:flex; gap:20px; flex-wrap:wrap;
+    border-bottom:1px solid var(--border); background:var(--surface);
+  }
+  .filter-group{display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+  .filter-label{font-size:11px; color:var(--text-muted); margin-right:4px;}
+  .chip{
+    border:1px solid var(--border); background:var(--surface);
+    color:var(--text); border-radius:999px; padding:5px 12px;
+    font-size:12px; cursor:pointer;
+  }
+  .chip.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+
+  /* ---------- Grid ---------- */
+  .grid-wrap{padding:20px;}
+  .card-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:16px;
+  }
+  @media (max-width:560px){ .card-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:380px){ .card-grid{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column;
+    transition:border-color .15s ease;
+  }
+  .card.state-go{border-color:var(--card-border-go);}
+  .card[hidden]{display:none;}
+
+  .preview{
+    position:relative; aspect-ratio:9/16; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    padding:14px 12px 0; color:#fff; overflow:hidden;
+  }
+  .preview .app-icon{
+    width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,0.85);
+    margin-top:6px; box-shadow:0 2px 6px rgba(0,0,0,0.25);
+  }
+  .preview .appeal-text{
+    margin-top:16px; font-size:15px; font-weight:800; text-align:center;
+    text-shadow:0 1px 6px rgba(0,0,0,0.35); padding:0 6px; line-height:1.35;
+  }
+  .preview .badge-version{
+    position:absolute; top:8px; left:8px; background:rgba(0,0,0,0.4); color:#fff;
+    font-size:10px; font-weight:700; padding:2px 7px; border-radius:6px;
+  }
+  .preview .badge-state{
+    position:absolute; top:8px; right:8px; font-size:10px; font-weight:700;
+    padding:3px 8px; border-radius:999px;
+  }
+  .preview .slide-strip{
+    margin-top:auto; width:100%; display:flex; gap:2px; padding:8px;
+  }
+  .slide-strip .seg{
+    flex:1; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3);
+    border-radius:4px; font-size:9px; text-align:center; padding:3px 2px; color:rgba(255,255,255,0.9);
+  }
+  .spinner-overlay{
+    position:absolute; inset:0; background:rgba(0,0,0,0.45);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .spinner{
+    width:26px; height:26px; border-radius:50%;
+    border:3px solid rgba(255,255,255,0.35); border-top-color:#fff;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .state-chip{font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px;}
+  .state-chip.st-unchecked{background:var(--state-gray-bg); color:var(--state-gray-fg);}
+  .state-chip.st-fb{background:var(--state-amber-bg); color:var(--state-amber-fg);}
+  .state-chip.st-regen{background:var(--state-blue-bg); color:var(--state-blue-fg);}
+  .state-chip.st-go{background:var(--state-green-bg); color:var(--state-green-fg);}
+  .state-chip.st-scheduled{background:var(--state-darkgreen-bg); color:var(--state-darkgreen-fg);}
+
+  .card-body{padding:10px 12px 12px; display:flex; flex-direction:column; gap:8px; flex:1;}
+  .meta-line{font-size:12px; color:var(--text-muted);}
+  .meta-acc{font-size:13px; font-weight:700; color:var(--text);}
+  .meta-line b{color:var(--text); font-weight:600;}
+
+  .card-actions{display:flex; gap:8px;}
+  .btn{
+    flex:1; border-radius:7px; border:1px solid var(--border); background:var(--surface-2);
+    color:var(--text); font-size:12px; font-weight:700; padding:7px 0; cursor:pointer;
+  }
+  .btn.btn-go{background:var(--state-green-bg); color:var(--state-green-fg); border-color:var(--card-border-go);}
+  .btn.btn-fb{background:var(--state-amber-bg); color:var(--state-amber-fg); border-color:transparent;}
+  .btn:disabled{opacity:.45; cursor:not-allowed;}
+
+  .undo-link{font-size:11px; color:var(--text-muted); text-decoration:underline; cursor:pointer; align-self:flex-start;}
+
+  .fb-panel{display:flex; flex-direction:column; gap:6px; border-top:1px dashed var(--border); padding-top:8px;}
+  .fb-panel textarea{
+    resize:vertical; min-height:52px; border-radius:7px; border:1px solid var(--border);
+    background:var(--surface); color:var(--text); font-size:12px; padding:7px; font-family:inherit;
+  }
+  .fb-panel button{
+    align-self:flex-end; background:var(--accent); color:#fff; border:none; border-radius:7px;
+    font-size:12px; font-weight:700; padding:6px 12px; cursor:pointer;
+  }
+  .fb-history{font-size:11px; color:var(--text-muted); background:var(--surface-2); border-radius:6px; padding:6px 8px;}
+
+  /* ---------- Drawer ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(10,15,14,0.4); z-index:60;
+  }
+  .overlay[hidden]{display:none;}
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(420px, 92vw);
+    background:var(--surface); border-left:1px solid var(--border); z-index:61;
+    display:flex; flex-direction:column; box-shadow:-8px 0 24px rgba(0,0,0,0.15);
+  }
+  .drawer[hidden]{display:none;}
+  .drawer-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 16px; border-bottom:1px solid var(--border);
+  }
+  .drawer-head h3{margin:0; font-size:14px;}
+  .drawer-close{border:none; background:none; font-size:18px; cursor:pointer; color:var(--text-muted); line-height:1;}
+  .drawer-body{padding:16px; overflow-y:auto; display:flex; flex-direction:column; gap:16px; flex:1;}
+  .drawer-preview{
+    aspect-ratio:9/16; max-height:280px; margin:0 auto; border-radius:10px; color:#fff;
+    display:flex; flex-direction:column; align-items:center; padding:14px 10px; position:relative; overflow:hidden;
+  }
+  .drawer-preview .app-icon{width:40px; height:40px; border-radius:10px; background:rgba(255,255,255,0.85); margin-top:4px;}
+  .drawer-preview .appeal-text{margin-top:14px; font-weight:800; font-size:14px; text-align:center; text-shadow:0 1px 6px rgba(0,0,0,.35);}
+  .drawer-section h4{margin:0 0 8px; font-size:12px; color:var(--text-muted); font-weight:700;}
+  .slide-edit-row{display:flex; align-items:center; gap:8px; margin-bottom:6px;}
+  .slide-edit-row span{font-size:11px; color:var(--text-muted); width:52px; flex-shrink:0;}
+  .slide-edit-row input{
+    flex:1; border:1px solid var(--border); border-radius:6px; padding:6px 8px;
+    background:var(--surface); color:var(--text); font-size:12px; font-family:inherit;
+  }
+  .schedule-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .schedule-row select, .schedule-row input{
+    border:1px solid var(--border); border-radius:6px; padding:6px 8px;
+    background:var(--surface); color:var(--text); font-size:12px; font-family:inherit;
+  }
+  .drawer-actions{display:flex; gap:8px; padding:14px 16px; border-top:1px solid var(--border);}
+  .drawer-actions .btn{flex:1; padding:9px 0;}
+
+  /* ---------- Modal ---------- */
+  .modal{
+    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:min(880px, 92vw); max-height:84vh; background:var(--surface);
+    border-radius:14px; border:1px solid var(--border); z-index:71;
+    display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal[hidden]{display:none;}
+  .modal-overlay[hidden]{display:none;}
+  .modal-overlay{position:fixed; inset:0; background:rgba(10,15,14,0.5); z-index:70;}
+  .modal-head{padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;}
+  .modal-head h3{margin:0; font-size:15px;}
+  .modal-body{padding:16px 20px; overflow:auto;}
+  .modal-desc{font-size:12px; color:var(--text-muted); margin:0 0 12px;}
+  .table-scroll{overflow-x:auto; border:1px solid var(--border); border-radius:8px;}
+  table{border-collapse:collapse; width:100%; min-width:720px; font-size:12px;}
+  th, td{padding:8px 10px; border-bottom:1px solid var(--border); text-align:left; white-space:nowrap;}
+  th{background:var(--surface-2); color:var(--text-muted); font-weight:700; font-size:11px;}
+  tr:last-child td{border-bottom:none;}
+  .modal-foot{padding:14px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:10px;}
+  .btn-secondary{
+    background:var(--surface-2); color:var(--text); border:1px solid var(--border);
+    border-radius:8px; padding:9px 16px; font-size:13px; font-weight:700; cursor:pointer;
+  }
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translate(-50%, 12px);
+    background:var(--text); color:var(--bg); padding:10px 18px; border-radius:8px;
+    font-size:13px; z-index:90; opacity:0; transition:opacity .2s ease, transform .2s ease;
+    pointer-events:none;
+  }
+  .toast.show{opacity:1; transform:translate(-50%, 0);}
+
+  /* ---------- Footer ---------- */
+  .app-footer{
+    padding:16px 20px 28px; border-top:1px solid var(--border);
+  }
+  .flow-steps{
+    display:flex; gap:6px; flex-wrap:wrap; align-items:center; justify-content:center;
+    font-size:11px; color:var(--text-muted);
+  }
+  .flow-steps .step{
+    padding:5px 10px; border-radius:999px; border:1px solid var(--border); background:var(--surface-2);
+  }
+  .flow-steps .step.current{
+    background:var(--accent-weak); border-color:var(--accent); color:var(--accent); font-weight:700;
+  }
+  .flow-steps .arrow{color:var(--border);}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-left">
+    <div class="header-title">クリエイティブ確認</div>
+    <div class="header-batch">2026-09-01 生成分 · 8本</div>
+  </div>
+  <div class="header-center" id="pillRow"></div>
+  <div class="header-right">
+    <button class="btn-primary" id="openModalBtn">Go 分を予約投稿へ (0)</button>
+  </div>
+</div>
+
+<div class="filter-row">
+  <div class="filter-group" id="accFilterGroup">
+    <span class="filter-label">アカウント</span>
+  </div>
+  <div class="filter-group" id="stateFilterGroup">
+    <span class="filter-label">状態</span>
+  </div>
+</div>
+
+<div class="grid-wrap">
+  <div class="card-grid" id="cardGrid"></div>
+</div>
+
+<div class="app-footer">
+  <div class="flow-steps" id="flowSteps"></div>
+</div>
+
+<div class="overlay" id="drawerOverlay" hidden></div>
+<div class="drawer" id="drawer" hidden>
+  <div class="drawer-head">
+    <h3 id="drawerTitle">詳細</h3>
+    <button class="drawer-close" id="drawerCloseBtn">&times;</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-actions" id="drawerActions"></div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" hidden></div>
+<div class="modal" id="reserveModal" hidden>
+  <div class="modal-head">
+    <h3>予約投稿</h3>
+    <button class="drawer-close" id="modalCloseBtn">&times;</button>
+  </div>
+  <div class="modal-body">
+    <p class="modal-desc">この内容で専用 ADB シートに追記されます。</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>アカウント</th><th>端末</th><th>投稿日時</th><th>動画ファイル名</th><th>キャプション</th><th>ハッシュタグ</th>
+          </tr>
+        </thead>
+        <tbody id="reserveTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-foot">
+    <button class="btn-secondary" id="modalCancelBtn">閉じる</button>
+    <button class="btn-primary" id="writeSheetBtn">シートに書き込む</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var STATE_LABEL = {
+    unchecked: "未確認",
+    fb: "FB待ち",
+    regen: "再生成中",
+    go: "Go",
+    scheduled: "予約済"
+  };
+  var STATE_CLASS = {
+    unchecked: "st-unchecked",
+    fb: "st-fb",
+    regen: "st-regen",
+    go: "st-go",
+    scheduled: "st-scheduled"
+  };
+
+  var cards = [
+    {
+      id:"c1", acc:"acc_01", device:"device_01", hue:200,
+      theme:"序盤攻略", ref:"@ref_account_01",
+      appeal:"無課金でも最強パーティ組めた", version:1, state:"go",
+      date:"9/1", time:"19:00",
+      slides:["序盤で詰まってた自分へ","このパーティで一気に突破","次のパートも見て"],
+      fbHistory:[]
+    },
+    {
+      id:"c2", acc:"acc_02", device:"device_01", hue:260,
+      theme:"ガチャ演出", ref:"@ref_account_02",
+      appeal:"このエフェクト鳥肌ものだった", version:2, state:"go",
+      date:"9/1", time:"20:00",
+      slides:["新ガチャ来た瞬間","演出が神すぎた","結果は最後に"],
+      fbHistory:["v1 → 「演出の間をもっと長く」 → v2"]
+    },
+    {
+      id:"c3", acc:"acc_03", device:"device_01", hue:10,
+      theme:"あるある", ref:"@ref_account_03",
+      appeal:"これ全プレイヤーがやってる", version:1, state:"go",
+      date:"9/2", time:"12:00",
+      slides:["起動して真っ先にやること","気づいたらこの動き","わかる人だけ保存して"],
+      fbHistory:[]
+    },
+    {
+      id:"c4", acc:"acc_04", device:"device_01", hue:140,
+      theme:"無課金攻略", ref:"@ref_account_04",
+      appeal:"課金なしでここまで行ける", version:1, state:"fb",
+      date:"9/2", time:"19:00",
+      slides:["課金一切なしで挑戦","ここまで育成できた","詳しいやり方は次で"],
+      fbHistory:[]
+    },
+    {
+      id:"c5", acc:"acc_05", device:"device_01", hue:320,
+      theme:"キャラ紹介", ref:"@ref_account_05",
+      appeal:"このキャラだけで勝てる理由", version:1, state:"regen",
+      date:"9/2", time:"21:00",
+      slides:["注目の新キャラ登場","強い理由はここ","編成例は次スライド"],
+      fbHistory:[]
+    },
+    {
+      id:"c6", acc:"acc_01", device:"device_01", hue:40,
+      theme:"リセマラ", ref:"@ref_account_06",
+      appeal:"初日で当たり引いた結果", version:1, state:"unchecked",
+      date:"9/3", time:"18:00",
+      slides:["初日リセマラ挑戦","この結果は引くべき","基準ラインを解説"],
+      fbHistory:[]
+    },
+    {
+      id:"c7", acc:"acc_02", device:"device_01", hue:180,
+      theme:"イベント攻略", ref:"@ref_account_07",
+      appeal:"今のうちにやるべきこと", version:1, state:"unchecked",
+      date:"9/3", time:"19:00",
+      slides:["今開催中のイベント","今日やるべき優先度","報酬ラインの目安"],
+      fbHistory:[]
+    },
+    {
+      id:"c8", acc:"acc_03", device:"device_01", hue:300,
+      theme:"裏技", ref:"@ref_account_08",
+      appeal:"知らないと損する小技", version:1, state:"unchecked",
+      date:"9/3", time:"20:00",
+      slides:["意外と知られてない小技","こうすると効率化できる","他にもまだある"],
+      fbHistory:[]
+    }
+  ];
+
+  var prevState = {}; // for Go undo
+  var accFilter = "全";
+  var stateFilter = "全";
+  var stateFilterKeys = { "全":"全", "未確認":"unchecked", "FB待ち":"fb", "再生成中":"regen", "Go":"go" };
+
+  var accList = ["全","acc_01","acc_02","acc_03","acc_04","acc_05"];
+  var stateList = ["全","未確認","FB待ち","再生成中","Go"];
+
+  var accFilterGroup = document.getElementById("accFilterGroup");
+  var stateFilterGroup = document.getElementById("stateFilterGroup");
+  var cardGrid = document.getElementById("cardGrid");
+  var pillRow = document.getElementById("pillRow");
+  var openModalBtn = document.getElementById("openModalBtn");
+  var flowSteps = document.getElementById("flowSteps");
+
+  function fileName(c){
+    return "creative_" + c.date.replace("/","").padStart(4,"0") + "_" + c.acc + "_v" + c.version + ".mp4";
+  }
+  function caption(c){
+    return c.appeal + " #" + c.theme;
+  }
+  function hashtags(c){
+    return "#無課金 #攻略 #" + c.theme.replace(/\s/g,"");
+  }
+
+  function renderFilters(){
+    accFilterGroup.querySelectorAll(".chip").forEach(function(el){ el.remove(); });
+    accList.forEach(function(a){
+      var chip = document.createElement("button");
+      chip.className = "chip" + (accFilter===a ? " active" : "");
+      chip.textContent = a;
+      chip.addEventListener("click", function(){ accFilter = a; renderAll(); });
+      accFilterGroup.appendChild(chip);
+    });
+    stateFilterGroup.querySelectorAll(".chip").forEach(function(el){ el.remove(); });
+    stateList.forEach(function(s){
+      var chip = document.createElement("button");
+      chip.className = "chip" + (stateFilter===s ? " active" : "");
+      chip.textContent = s;
+      chip.addEventListener("click", function(){ stateFilter = s; renderAll(); });
+      stateFilterGroup.appendChild(chip);
+    });
+  }
+
+  function renderPills(){
+    var counts = { unchecked:0, fb:0, regen:0, go:0 };
+    cards.forEach(function(c){ if(counts[c.state] !== undefined) counts[c.state]++; });
+    pillRow.innerHTML =
+      '<span class="pill go"><span class="dot"></span>Go ' + counts.go + '</span>' +
+      '<span class="pill fb"><span class="dot"></span>FB待ち ' + counts.fb + '</span>' +
+      '<span class="pill regen"><span class="dot"></span>再生成中 ' + counts.regen + '</span>' +
+      '<span class="pill unchecked"><span class="dot"></span>未確認 ' + counts.unchecked + '</span>';
+    var goCards = cards.filter(function(c){ return c.state === "go"; });
+    openModalBtn.textContent = "Go 分を予約投稿へ (" + goCards.length + ")";
+    openModalBtn.disabled = goCards.length === 0;
+  }
+
+  function previewStyle(c){
+    return "background:linear-gradient(160deg, hsl(" + c.hue + ",55%,42%), hsl(" + (c.hue+40) + ",60%,28%));";
+  }
+
+  function cardMatchesFilter(c){
+    var accOk = accFilter === "全" || c.acc === accFilter;
+    var stOk = stateFilter === "全" || c.state === stateFilterKeys[stateFilter];
+    return accOk && stOk;
+  }
+
+  function renderCards(){
+    cardGrid.innerHTML = "";
+    cards.forEach(function(c){
+      var visible = cardMatchesFilter(c);
+      var card = document.createElement("div");
+      card.className = "card" + (c.state === "go" ? " state-go" : "");
+      if(!visible) card.hidden = true;
+
+      var fbPanelHtml = "";
+      if(c._fbOpen){
+        fbPanelHtml =
+          '<div class="fb-panel">' +
+            '<textarea placeholder="例: 文字をもっと大きく、背景は夜の街に" id="fbtext-' + c.id + '"></textarea>' +
+            '<button data-action="submit-fb" data-id="' + c.id + '">再生成を依頼</button>' +
+          '</div>';
+      }
+      var historyHtml = c.fbHistory.map(function(h){
+        return '<div class="fb-history">' + h + '</div>';
+      }).join("");
+
+      var undoHtml = c.state === "go" ? '<div class="undo-link" data-action="undo-go" data-id="' + c.id + '">取り消し</div>' : "";
+
+      card.innerHTML =
+        '<div class="preview" style="' + previewStyle(c) + '" data-action="open-drawer" data-id="' + c.id + '">' +
+          '<div class="badge-version">v' + c.version + '</div>' +
+          '<div class="badge-state state-chip ' + STATE_CLASS[c.state] + '">' + STATE_LABEL[c.state] + '</div>' +
+          '<div class="app-icon"></div>' +
+          '<div class="appeal-text">' + c.appeal + '</div>' +
+          '<div class="slide-strip">' +
+            '<div class="seg">スライド1</div><div class="seg">スライド2</div><div class="seg">スライド3</div>' +
+          '</div>' +
+          (c.state === "regen" ? '<div class="spinner-overlay"><div class="spinner"></div></div>' : '') +
+        '</div>' +
+        '<div class="card-body">' +
+          '<div class="meta-acc">' + c.acc + '</div>' +
+          '<div class="meta-line">テーマ: <b>' + c.theme + '</b></div>' +
+          '<div class="meta-line">参考元: ' + c.ref + '</div>' +
+          '<div class="meta-line">投稿予定: ' + c.date + ' ' + c.time + '</div>' +
+          historyHtml +
+          '<div class="card-actions">' +
+            '<button class="btn btn-go" data-action="go" data-id="' + c.id + '" ' + (c.state==="go"||c.state==="scheduled"?"disabled":"") + '>Go</button>' +
+            '<button class="btn btn-fb" data-action="toggle-fb" data-id="' + c.id + '" ' + (c.state==="scheduled"?"disabled":"") + '>FB</button>' +
+          '</div>' +
+          undoHtml +
+          fbPanelHtml +
+        '</div>';
+      cardGrid.appendChild(card);
+    });
+  }
+
+  function renderFlow(){
+    var steps = ["Claude コマンド","情報入力","生成","この画面で Go/FB","予約投稿 (ADB シート)"];
+    flowSteps.innerHTML = steps.map(function(s, i){
+      var el = '<span class="step' + (i === 3 ? ' current' : '') + '">' + s + '</span>';
+      if(i < steps.length - 1) el += '<span class="arrow">→</span>';
+      return el;
+    }).join("");
+  }
+
+  function renderAll(){
+    renderFilters();
+    renderPills();
+    renderCards();
+  }
+
+  function showToast(msg){
+    var t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(function(){ t.classList.remove("show"); }, 2400);
+  }
+
+  // ---- event delegation on grid ----
+  cardGrid.addEventListener("click", function(e){
+    var target = e.target.closest("[data-action]");
+    if(!target) return;
+    var action = target.getAttribute("data-action");
+    var id = target.getAttribute("data-id");
+    var card = cards.find(function(c){ return c.id === id; });
+    if(!card) return;
+
+    if(action === "open-drawer"){
+      openDrawer(card);
+    } else if(action === "go"){
+      prevState[card.id] = card.state;
+      card.state = "go";
+      renderAll();
+    } else if(action === "undo-go"){
+      card.state = prevState[card.id] || "unchecked";
+      renderAll();
+    } else if(action === "toggle-fb"){
+      card._fbOpen = !card._fbOpen;
+      renderAll();
+    } else if(action === "submit-fb"){
+      var ta = document.getElementById("fbtext-" + card.id);
+      var text = ta && ta.value.trim() ? ta.value.trim() : "(未入力)";
+      card._fbOpen = false;
+      card.state = "regen";
+      renderAll();
+      setTimeout(function(){
+        var oldV = card.version;
+        card.version = card.version + 1;
+        card.state = "unchecked";
+        card.fbHistory.push("v" + oldV + " → 「" + text + "」 → v" + card.version);
+        renderAll();
+      }, 2000);
+    }
+  });
+
+  // ---- drawer ----
+  var drawer = document.getElementById("drawer");
+  var drawerOverlay = document.getElementById("drawerOverlay");
+  var drawerBody = document.getElementById("drawerBody");
+  var drawerActions = document.getElementById("drawerActions");
+  var drawerTitle = document.getElementById("drawerTitle");
+
+  function openDrawer(card){
+    drawerTitle.textContent = card.acc + " · " + card.theme;
+    var accOptions = accList.filter(function(a){ return a !== "全"; }).map(function(a){
+      return '<option value="' + a + '"' + (a === card.acc ? " selected" : "") + '>' + a + '</option>';
+    }).join("");
+
+    drawerBody.innerHTML =
+      '<div class="drawer-preview" style="' + previewStyle(card) + '">' +
+        '<div class="app-icon"></div>' +
+        '<div class="appeal-text">' + card.appeal + '</div>' +
+      '</div>' +
+      '<div class="drawer-section">' +
+        '<h4>スライド文言 (編集可・モック)</h4>' +
+        card.slides.map(function(s, i){
+          return '<div class="slide-edit-row"><span>スライド' + (i+1) + '</span><input type="text" value="' + s.replace(/"/g,"&quot;") + '" data-slide-idx="' + i + '"></div>';
+        }).join("") +
+      '</div>' +
+      '<div class="drawer-section">' +
+        '<h4>FB 履歴</h4>' +
+        (card.fbHistory.length ? card.fbHistory.map(function(h){ return '<div class="fb-history">' + h + '</div>'; }).join("") : '<div class="meta-line">まだ FB はありません (v1)</div>') +
+      '</div>' +
+      '<div class="drawer-section">' +
+        '<h4>投稿予定</h4>' +
+        '<div class="schedule-row">' +
+          '<select id="drawerAccSel">' + accOptions + '</select>' +
+          '<input type="text" id="drawerDateInput" value="' + card.date + ' ' + card.time + '">' +
+        '</div>' +
+      '</div>';
+
+    drawerBody.querySelectorAll("[data-slide-idx]").forEach(function(inp){
+      inp.addEventListener("input", function(){
+        card.slides[Number(inp.getAttribute("data-slide-idx"))] = inp.value;
+      });
+    });
+    var accSel = drawerBody.querySelector("#drawerAccSel");
+    accSel.addEventListener("change", function(){ card.acc = accSel.value; });
+    var dateInp = drawerBody.querySelector("#drawerDateInput");
+    dateInp.addEventListener("change", function(){
+      var parts = dateInp.value.split(" ");
+      if(parts[0]) card.date = parts[0];
+      if(parts[1]) card.time = parts[1];
+    });
+
+    drawerActions.innerHTML =
+      '<button class="btn btn-go" data-action="go" data-id="' + card.id + '">Go</button>' +
+      '<button class="btn btn-fb" data-action="toggle-fb" data-id="' + card.id + '">FB</button>';
+    drawerActions.querySelectorAll("[data-action]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var action = btn.getAttribute("data-action");
+        if(action === "go"){
+          prevState[card.id] = card.state;
+          card.state = "go";
+        } else if(action === "fb-toggle" || action === "toggle-fb"){
+          card._fbOpen = true;
+        }
+        closeDrawer();
+        renderAll();
+      });
+    });
+
+    drawer.hidden = false;
+    drawerOverlay.hidden = false;
+  }
+  function closeDrawer(){
+    drawer.hidden = true;
+    drawerOverlay.hidden = true;
+  }
+  document.getElementById("drawerCloseBtn").addEventListener("click", closeDrawer);
+  drawerOverlay.addEventListener("click", closeDrawer);
+
+  // ---- reservation modal ----
+  var modalOverlay = document.getElementById("modalOverlay");
+  var reserveModal = document.getElementById("reserveModal");
+  var reserveTableBody = document.getElementById("reserveTableBody");
+
+  function openModal(){
+    var goCards = cards.filter(function(c){ return c.state === "go"; });
+    reserveTableBody.innerHTML = goCards.map(function(c){
+      return '<tr>' +
+        '<td>' + c.acc + '</td>' +
+        '<td>' + c.device + '</td>' +
+        '<td>' + c.date + ' ' + c.time + '</td>' +
+        '<td>' + fileName(c) + '</td>' +
+        '<td>' + caption(c) + '</td>' +
+        '<td>' + hashtags(c) + '</td>' +
+      '</tr>';
+    }).join("");
+    reserveModal.hidden = false;
+    modalOverlay.hidden = false;
+  }
+  function closeModal(){
+    reserveModal.hidden = true;
+    modalOverlay.hidden = true;
+  }
+  openModalBtn.addEventListener("click", function(){
+    if(!openModalBtn.disabled) openModal();
+  });
+  document.getElementById("modalCloseBtn").addEventListener("click", closeModal);
+  document.getElementById("modalCancelBtn").addEventListener("click", closeModal);
+  modalOverlay.addEventListener("click", closeModal);
+
+  document.getElementById("writeSheetBtn").addEventListener("click", function(){
+    var goCards = cards.filter(function(c){ return c.state === "go"; });
+    var n = goCards.length;
+    goCards.forEach(function(c){ c.state = "scheduled"; });
+    closeModal();
+    renderAll();
+    showToast("モック: " + n + " 件を予約投稿キューへ追加しました");
+  });
+
+  renderFlow();
+  renderAll();
+})();
+</script>
+
+</body>
+</html>
