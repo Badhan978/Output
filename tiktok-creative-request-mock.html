@@ -303,7 +303,15 @@
     </div>
 
     <div class="section-card">
-      <div class="section-head"><span class="section-num">4</span><span class="section-title">入れる文字 (訴求テキスト)</span></div>
+      <div class="section-head"><span class="section-num">4</span><span class="section-title">スライド構成 (枚数と文字)</span></div>
+      <div class="acc-row">
+        <span class="acc-row-label">1 本あたりのスライド枚数</span>
+        <div class="stepper">
+          <button type="button" class="stepper-btn" id="slideCountMinus">&minus;</button>
+          <span class="stepper-val" id="slideCountVal">3</span>
+          <button type="button" class="stepper-btn" id="slideCountPlus">+</button>
+        </div>
+      </div>
       <div class="switch-wrap">
         <label class="switch">
           <input type="checkbox" id="autoTextToggle" checked>
@@ -312,11 +320,12 @@
         <span>自動生成に任せる</span>
       </div>
       <div class="textarea-list" id="manualTextWrap" hidden>
+        <p class="caption-note" id="manualTextHint">1 行 = 1 スライド分の文言。枚数と行数が合わない場合は自動補完されます</p>
         <textarea id="manualTextArea" rows="4">無課金でも最強パーティ組めた
 このエフェクト見た瞬間鳥肌立った
 今からでも間に合う攻略ルート</textarea>
       </div>
-      <p class="caption-note" id="captionNote">参考コンテンツとテーマから自動で案出しされます</p>
+      <p class="caption-note" id="captionNote">スライド枚数分の文言が参考コンテンツとテーマから自動で案出しされます</p>
     </div>
 
   </div>
@@ -326,9 +335,7 @@
     <div class="preview-frame" id="previewFrame">
       <div class="app-icon"></div>
       <div class="appeal-text" id="previewAppeal"></div>
-      <div class="slide-strip">
-        <div class="seg">スライド1</div><div class="seg">スライド2</div><div class="seg">スライド3</div>
-      </div>
+      <div class="slide-strip" id="slideStrip"></div>
     </div>
     <p class="preview-note">プレビューはイメージです。実際は参考コンテンツを解析して生成されます。</p>
   </div>
@@ -366,6 +373,9 @@
   ];
   var refRowSeq = refRows.length;
 
+  var slideCount = 3;
+  var SLIDE_COUNT_MIN = 2, SLIDE_COUNT_MAX = 6;
+
   var accChipRow = document.getElementById("accChipRow");
   var accRowsEl = document.getElementById("accRows");
   var totalCountEl = document.getElementById("totalCount");
@@ -377,8 +387,12 @@
   var manualTextWrap = document.getElementById("manualTextWrap");
   var manualTextArea = document.getElementById("manualTextArea");
   var captionNote = document.getElementById("captionNote");
+  var slideCountVal = document.getElementById("slideCountVal");
+  var slideCountMinus = document.getElementById("slideCountMinus");
+  var slideCountPlus = document.getElementById("slideCountPlus");
   var previewFrame = document.getElementById("previewFrame");
   var previewAppeal = document.getElementById("previewAppeal");
+  var slideStrip = document.getElementById("slideStrip");
   var generateBtn = document.getElementById("generateBtn");
   var flowSteps = document.getElementById("flowSteps");
   var toast = document.getElementById("toast");
@@ -474,10 +488,21 @@
     captionNote.hidden = !autoTextToggle.checked;
   }
 
+  function renderSlideCount(){
+    slideCountVal.textContent = slideCount;
+    slideCountMinus.disabled = slideCount <= SLIDE_COUNT_MIN;
+    slideCountPlus.disabled = slideCount >= SLIDE_COUNT_MAX;
+  }
+
   function renderPreview(){
     var hue = BG_HUE[bgPreset];
     previewFrame.style.background = "linear-gradient(160deg, hsl(" + hue + ",55%,42%), hsl(" + (hue + 40) + ",60%,28%))";
     previewAppeal.textContent = getAppealText();
+    var segs = "";
+    for(var i = 1; i <= slideCount; i++){
+      segs += '<div class="seg">スライド' + i + '</div>';
+    }
+    slideStrip.innerHTML = segs;
   }
 
   function renderFlow(){
@@ -493,6 +518,7 @@
     renderAccounts();
     renderBg();
     renderText();
+    renderSlideCount();
     renderPreview();
   }
 
@@ -504,6 +530,15 @@
 
   uploadBox.addEventListener("click", function(){
     showToast("モック: アップロードは実装時に対応");
+  });
+
+  slideCountMinus.addEventListener("click", function(){
+    slideCount = Math.max(SLIDE_COUNT_MIN, slideCount - 1);
+    renderAll();
+  });
+  slideCountPlus.addEventListener("click", function(){
+    slideCount = Math.min(SLIDE_COUNT_MAX, slideCount + 1);
+    renderAll();
   });
 
   autoTextToggle.addEventListener("change", renderAll);
@@ -543,6 +578,7 @@
         '<div><span>合計本数</span><b>' + n + ' 本</b></div>' +
         '<div><span>参考コンテンツ</span><b>' + refCount + ' 件</b></div>' +
         '<div><span>背景イメージ</span><b>' + bgLabel + '</b></div>' +
+        '<div><span>スライド枚数</span><b>' + slideCount + ' 枚 / 本</b></div>' +
         '<div><span>訴求テキスト</span><b>' + textLabel + '</b></div>' +
       '</div>';
 
@@ -586,7 +622,7 @@
       '</div>';
     modalFoot.innerHTML =
       '<button class="btn-secondary" id="modalCloseBtn2">閉じる</button>' +
-      '<a class="btn-primary" href="tiktok-creative-review-mock.html">クリエイティブ確認画面へ</a>';
+      '<a class="btn-primary" href="https://badhan978.github.io/Output/tiktok-creative-review-mock.html">クリエイティブ確認画面へ</a>';
     document.getElementById("modalCloseBtn2").addEventListener("click", closeModal);
   }
 
