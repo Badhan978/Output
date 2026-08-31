@@ -62,6 +62,7 @@
   }
 
   *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
   body{
     margin:0;
     background:var(--bg);
@@ -181,9 +182,12 @@
   }
   .switch input:checked + .track{background:var(--accent-weak); border-color:var(--accent);}
   .switch input:checked + .track .thumb{transform:translateX(16px); background:var(--accent);}
-  .textarea-list textarea{
-    width:100%; resize:vertical; min-height:84px; border-radius:7px; border:1px solid var(--border);
-    background:var(--surface); color:var(--text); font-size:12px; padding:8px; font-family:inherit;
+  .manual-text-list{display:flex; flex-direction:column; gap:10px;}
+  .manual-text-item{display:flex; flex-direction:column; gap:4px;}
+  .manual-text-label{font-size:11px; font-weight:700; color:var(--text-muted);}
+  .manual-text-area{
+    width:100%; resize:vertical; min-height:44px; border-radius:7px; border:1px solid var(--border);
+    background:var(--surface); color:var(--text); font-size:12px; padding:7px 9px; font-family:inherit;
   }
   .caption-note{font-size:11px; color:var(--text-muted); margin:0;}
 
@@ -194,7 +198,7 @@
     box-shadow:var(--shadow);
   }
   .preview-frame .app-icon{width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,0.85); margin-top:6px; box-shadow:0 2px 6px rgba(0,0,0,0.25);}
-  .preview-frame .appeal-text{margin-top:16px; font-size:15px; font-weight:800; text-align:center; text-shadow:0 1px 6px rgba(0,0,0,0.35); padding:0 6px; line-height:1.35;}
+  .preview-frame .appeal-text{margin-top:16px; font-size:15px; font-weight:800; text-align:center; text-shadow:0 1px 6px rgba(0,0,0,0.35); padding:0 6px; line-height:1.35; white-space:pre-line;}
   .preview-nav{
     position:absolute; top:50%; transform:translateY(-50%);
     width:28px; height:28px; border-radius:50%; border:none; padding:0;
@@ -330,12 +334,7 @@
         </label>
         <span>自動生成に任せる</span>
       </div>
-      <div class="textarea-list" id="manualTextWrap" hidden>
-        <p class="caption-note" id="manualTextHint">1 行 = 1 スライド分の文言。枚数と行数が合わない場合は自動補完されます</p>
-        <textarea id="manualTextArea" rows="4">無課金でも最強パーティ組めた
-このエフェクト見た瞬間鳥肌立った
-今からでも間に合う攻略ルート</textarea>
-      </div>
+      <div class="manual-text-list" id="manualTextWrap" hidden></div>
       <p class="caption-note" id="captionNote">スライド枚数分の文言が参考コンテンツとテーマから自動で案出しされます</p>
     </div>
 
@@ -389,6 +388,7 @@
   var slideCount = 3;
   var SLIDE_COUNT_MIN = 2, SLIDE_COUNT_MAX = 6;
   var currentSlide = 0;
+  var manualTexts = ["無課金でも最強パーティ組めた","このエフェクト見た瞬間鳥肌立った","今からでも間に合う攻略ルート"];
 
   var accChipRow = document.getElementById("accChipRow");
   var accRowsEl = document.getElementById("accRows");
@@ -399,7 +399,6 @@
   var uploadBox = document.getElementById("uploadBox");
   var autoTextToggle = document.getElementById("autoTextToggle");
   var manualTextWrap = document.getElementById("manualTextWrap");
-  var manualTextArea = document.getElementById("manualTextArea");
   var captionNote = document.getElementById("captionNote");
   var slideCountVal = document.getElementById("slideCountVal");
   var slideCountMinus = document.getElementById("slideCountMinus");
@@ -495,19 +494,52 @@
   }
 
   function getSlideText(idx){
-    if(idx === 0){
-      if(autoTextToggle.checked) return "（自動生成 — テーマに合わせて提案されます）";
-      var lines0 = manualTextArea.value.split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
-      return lines0.length ? lines0[0] : "（文言が未入力です）";
+    if(autoTextToggle.checked){
+      if(idx === 0) return "（自動生成 — テーマに合わせて提案されます）";
+      return "スライド " + (idx + 1) + " の文言 (自動生成)";
     }
-    if(autoTextToggle.checked) return "スライド " + (idx + 1) + " の文言 (自動生成)";
-    var lines = manualTextArea.value.split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
-    return lines[idx] || "(自動補完)";
+    var raw = manualTexts[idx] || "";
+    return raw.trim() ? raw : "(自動補完)";
   }
 
   function renderText(){
     manualTextWrap.hidden = autoTextToggle.checked;
     captionNote.hidden = !autoTextToggle.checked;
+  }
+
+  function syncManualTexts(){
+    while(manualTexts.length < slideCount) manualTexts.push("");
+    while(manualTexts.length > slideCount) manualTexts.pop();
+  }
+
+  function renderManualTextRows(){
+    manualTextWrap.innerHTML = "";
+    var hint = document.createElement("p");
+    hint.className = "caption-note";
+    hint.id = "manualTextHint";
+    hint.textContent = "欄内の改行はスライド内の改行になります。空欄は自動補完されます";
+    manualTextWrap.appendChild(hint);
+
+    for(var i = 0; i < slideCount; i++){
+      (function(idx){
+        var item = document.createElement("div");
+        item.className = "manual-text-item";
+        var label = document.createElement("div");
+        label.className = "manual-text-label";
+        label.textContent = "スライド " + (idx + 1);
+        var ta = document.createElement("textarea");
+        ta.className = "input-text manual-text-area";
+        ta.rows = 2;
+        ta.value = manualTexts[idx] || "";
+        ta.addEventListener("input", function(){
+          manualTexts[idx] = ta.value;
+          renderPreview();
+        });
+        item.appendChild(label);
+        item.appendChild(ta);
+        manualTextWrap.appendChild(item);
+      })(i);
+    }
   }
 
   function renderSlideCount(){
@@ -516,6 +548,8 @@
     slideCountVal.textContent = slideCount;
     slideCountMinus.disabled = slideCount <= SLIDE_COUNT_MIN;
     slideCountPlus.disabled = slideCount >= SLIDE_COUNT_MAX;
+    syncManualTexts();
+    renderManualTextRows();
   }
 
   function renderPreview(){
@@ -572,7 +606,6 @@
   });
 
   autoTextToggle.addEventListener("change", renderAll);
-  manualTextArea.addEventListener("input", renderPreview);
   bgFreeText.addEventListener("input", function(){ /* 自由記述は生成サマリのみ反映 */ });
 
   // ---- generation modal ----
@@ -597,9 +630,10 @@
     }).join("");
     var refCount = refRows.filter(function(r){ return r.url && r.url.trim(); }).length;
     var bgLabel = bgPreset + (bgFreeText.value.trim() ? "・自由記述: " + bgFreeText.value.trim() : "");
+    var filledCount = manualTexts.slice(0, slideCount).filter(function(s){ return (s || "").trim(); }).length;
     var textLabel = autoTextToggle.checked
       ? "自動生成に任せる"
-      : "手動指定 (" + manualTextArea.value.split("\n").map(function(s){return s.trim();}).filter(Boolean).length + " 案)";
+      : "手動指定 (" + slideCount + " 枚中 " + filledCount + " 枚記入)";
 
     modalBody.innerHTML =
       '<p class="modal-desc">この内容で生成を開始します。</p>' +
