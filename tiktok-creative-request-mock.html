@@ -195,10 +195,21 @@
   }
   .preview-frame .app-icon{width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,0.85); margin-top:6px; box-shadow:0 2px 6px rgba(0,0,0,0.25);}
   .preview-frame .appeal-text{margin-top:16px; font-size:15px; font-weight:800; text-align:center; text-shadow:0 1px 6px rgba(0,0,0,0.35); padding:0 6px; line-height:1.35;}
-  .preview-frame .slide-strip{margin-top:auto; width:100%; display:flex; gap:2px; padding:8px;}
-  .slide-strip .seg{
-    flex:1; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3);
-    border-radius:4px; font-size:9px; text-align:center; padding:3px 2px; color:rgba(255,255,255,0.9);
+  .preview-nav{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:28px; height:28px; border-radius:50%; border:none; padding:0;
+    background:rgba(255,255,255,0.2); color:#fff; font-size:16px; line-height:1;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease;
+  }
+  .preview-nav:hover{background:rgba(255,255,255,0.36);}
+  .preview-nav.prev{left:8px;}
+  .preview-nav.next{right:8px;}
+  .preview-nav[hidden]{display:none;}
+  .preview-indicator{
+    position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+    background:rgba(0,0,0,0.35); color:#fff; font-size:11px; font-weight:700;
+    padding:3px 11px; border-radius:999px; letter-spacing:.02em;
   }
   .preview-note{font-size:11px; color:var(--text-muted); text-align:center; margin:0;}
   .preview-head{font-size:13px; font-weight:700; text-align:center;}
@@ -333,9 +344,11 @@
   <div class="preview-col">
     <div class="preview-head">プレビュー</div>
     <div class="preview-frame" id="previewFrame">
-      <div class="app-icon"></div>
+      <div class="app-icon" id="previewIcon"></div>
       <div class="appeal-text" id="previewAppeal"></div>
-      <div class="slide-strip" id="slideStrip"></div>
+      <button type="button" class="preview-nav prev" id="slidePrevBtn" aria-label="前のスライド">&lsaquo;</button>
+      <button type="button" class="preview-nav next" id="slideNextBtn" aria-label="次のスライド">&rsaquo;</button>
+      <div class="preview-indicator" id="slideIndicator">1 / 3</div>
     </div>
     <p class="preview-note">プレビューはイメージです。実際は参考コンテンツを解析して生成されます。</p>
   </div>
@@ -375,6 +388,7 @@
 
   var slideCount = 3;
   var SLIDE_COUNT_MIN = 2, SLIDE_COUNT_MAX = 6;
+  var currentSlide = 0;
 
   var accChipRow = document.getElementById("accChipRow");
   var accRowsEl = document.getElementById("accRows");
@@ -391,8 +405,11 @@
   var slideCountMinus = document.getElementById("slideCountMinus");
   var slideCountPlus = document.getElementById("slideCountPlus");
   var previewFrame = document.getElementById("previewFrame");
+  var previewIcon = document.getElementById("previewIcon");
   var previewAppeal = document.getElementById("previewAppeal");
-  var slideStrip = document.getElementById("slideStrip");
+  var slidePrevBtn = document.getElementById("slidePrevBtn");
+  var slideNextBtn = document.getElementById("slideNextBtn");
+  var slideIndicator = document.getElementById("slideIndicator");
   var generateBtn = document.getElementById("generateBtn");
   var flowSteps = document.getElementById("flowSteps");
   var toast = document.getElementById("toast");
@@ -477,10 +494,15 @@
     });
   }
 
-  function getAppealText(){
-    if(autoTextToggle.checked) return "（自動生成 — テーマに合わせて提案されます）";
+  function getSlideText(idx){
+    if(idx === 0){
+      if(autoTextToggle.checked) return "（自動生成 — テーマに合わせて提案されます）";
+      var lines0 = manualTextArea.value.split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
+      return lines0.length ? lines0[0] : "（文言が未入力です）";
+    }
+    if(autoTextToggle.checked) return "スライド " + (idx + 1) + " の文言 (自動生成)";
     var lines = manualTextArea.value.split("\n").map(function(s){ return s.trim(); }).filter(Boolean);
-    return lines.length ? lines[0] : "（文言が未入力です）";
+    return lines[idx] || "(自動補完)";
   }
 
   function renderText(){
@@ -489,6 +511,8 @@
   }
 
   function renderSlideCount(){
+    if(currentSlide > slideCount - 1) currentSlide = slideCount - 1;
+    if(currentSlide < 0) currentSlide = 0;
     slideCountVal.textContent = slideCount;
     slideCountMinus.disabled = slideCount <= SLIDE_COUNT_MIN;
     slideCountPlus.disabled = slideCount >= SLIDE_COUNT_MAX;
@@ -497,12 +521,11 @@
   function renderPreview(){
     var hue = BG_HUE[bgPreset];
     previewFrame.style.background = "linear-gradient(160deg, hsl(" + hue + ",55%,42%), hsl(" + (hue + 40) + ",60%,28%))";
-    previewAppeal.textContent = getAppealText();
-    var segs = "";
-    for(var i = 1; i <= slideCount; i++){
-      segs += '<div class="seg">スライド' + i + '</div>';
-    }
-    slideStrip.innerHTML = segs;
+    previewIcon.hidden = currentSlide !== 0;
+    previewAppeal.textContent = getSlideText(currentSlide);
+    slidePrevBtn.hidden = currentSlide === 0;
+    slideNextBtn.hidden = currentSlide === slideCount - 1;
+    slideIndicator.textContent = (currentSlide + 1) + " / " + slideCount;
   }
 
   function renderFlow(){
@@ -539,6 +562,13 @@
   slideCountPlus.addEventListener("click", function(){
     slideCount = Math.min(SLIDE_COUNT_MAX, slideCount + 1);
     renderAll();
+  });
+
+  slidePrevBtn.addEventListener("click", function(){
+    if(currentSlide > 0){ currentSlide--; renderPreview(); }
+  });
+  slideNextBtn.addEventListener("click", function(){
+    if(currentSlide < slideCount - 1){ currentSlide++; renderPreview(); }
   });
 
   autoTextToggle.addEventListener("change", renderAll);
