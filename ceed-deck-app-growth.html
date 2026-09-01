@@ -96,14 +96,14 @@ body{
 .topbar .b{position:absolute;left:50%;transform:translateX(-50%);font-family:var(--jp);letter-spacing:.06em}
 .vlabel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(180deg);
   writing-mode:vertical-rl;font-family:var(--mo);font-size:12.5px;letter-spacing:.42em;color:#8e8e8e}
-.rlogo{position:absolute;right:40px;bottom:34px;color:#fff;font-family:var(--dp);font-size:26px;font-weight:800}
+.rlogo{position:absolute;right:40px;bottom:34px;color:#fff}
 .copy{position:absolute;left:56px;bottom:34px;font-family:var(--mo);font-size:12px;color:#8e8e8e}
 
-.ring{display:inline-block;width:34px;height:34px;vertical-align:-8px;
-  background:no-repeat center/contain;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23000' stroke-width='11' stroke-dasharray='231 33' transform='rotate(66 50 50)'/%3E%3C/svg%3E")}
-.ring.inv{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23fff' stroke-width='11' stroke-dasharray='231 33' transform='rotate(66 50 50)'/%3E%3C/svg%3E")}
-.ring.lg{width:78px;height:78px;vertical-align:-18px}
-.wordmark{font-family:"Noto Serif JP",Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:.005em}
+.ceed{display:inline-flex;align-items:center;gap:.30em;line-height:1;
+  font-family:"Noto Serif JP",Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:.005em}
+.ceed .ring{width:1.14em;height:1.14em;flex:none;background:no-repeat center/contain;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='none' stroke='%23000' stroke-width='10' stroke-dasharray='258 18.5' transform='rotate(43 50 50)'/%3E%3C/svg%3E")}
+.ceed.inv .ring{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='none' stroke='%23fff' stroke-width='10' stroke-dasharray='258 18.5' transform='rotate(43 50 50)'/%3E%3C/svg%3E")}
 
 /* ---------- 章扉 ---------- */
 .divider .ghost{
@@ -245,7 +245,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
           認知は、<br><span class="hl" style="padding:2px 10px">打ち手の数</span>で決まる。
         </h1>
         <div style="margin-top:52px;display:flex;align-items:center;gap:22px">
-          <span style="font-family:var(--dp);font-size:29px;font-weight:800"><span class="ring"></span>&nbsp;<span class="wordmark">Ceed</span></span>
+          <span class="ceed" style="font-size:30px"><i class="ring"></i>Ceed</span>
           <span style="width:1px;height:30px;background:var(--line2)"></span>
           <span style="font-size:20px;font-weight:700">多角度の検証を、AIとSNSのプロが高速で回す</span>
         </div>
@@ -255,7 +255,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="r">
       <div class="vlabel">CEED&nbsp;·&nbsp;AI&nbsp;VIDEO&nbsp;OPERATIONS&nbsp;·&nbsp;2026</div>
       <div style="position:absolute;right:40px;top:22px;font-size:12.5px;color:#8e8e8e">株式会社Ceed</div>
-      <div class="rlogo"><span class="ring inv" style="width:26px;height:26px;vertical-align:-5px"></span>&nbsp;<span class="wordmark">Ceed</span></div>
+      <div class="rlogo"><span class="ceed inv" style="font-size:26px"><i class="ring"></i>Ceed</span></div>
     </div>
   </div>
 </section>
@@ -733,7 +733,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </div>
     <div class="r">
       <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;width:340px">
-        <div style="font-family:var(--dp);font-size:52px;font-weight:800"><span class="ring inv lg" style="width:64px;height:64px;vertical-align:-14px"></span>&nbsp;<span class="wordmark">Ceed</span></div>
+        <div><span class="ceed inv" style="font-size:52px"><i class="ring"></i>Ceed</span></div>
         <div style="width:52px;height:1px;background:#5a5a5a;margin:34px auto"></div>
         <div style="font-size:22px;font-weight:900;margin-bottom:14px">株式会社Ceed</div>
         <div style="font-size:14.5px;color:#a5a5a5;line-height:1.9">AI Video Operations<br>コンテンツ生成・SNS運用・内製化支援</div>
