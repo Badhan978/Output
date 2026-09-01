@@ -6,7 +6,7 @@
 <title>Ceed 営業資料 — 切り抜き型（切り抜き動画の量産）</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700&family=Outfit:wght@400;500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    Ceed Sales Deck — 切り抜き型 (WHITE SCORPION タイプ)
@@ -99,9 +99,11 @@ body{
 .rlogo{position:absolute;right:40px;bottom:34px;color:#fff;font-family:var(--dp);font-size:26px;font-weight:800}
 .copy{position:absolute;left:56px;bottom:34px;font-family:var(--mo);font-size:12px;color:#8e8e8e}
 
-.ring{display:inline-block;width:34px;height:34px;border:3.4px solid currentColor;border-radius:50%;
-  border-right-color:transparent;transform:rotate(-45deg);vertical-align:-8px}
-.ring.lg{width:78px;height:78px;border-width:7px;vertical-align:-18px}
+.ring{display:inline-block;width:34px;height:34px;vertical-align:-8px;
+  background:no-repeat center/contain;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23000' stroke-width='11' stroke-dasharray='231 33' transform='rotate(66 50 50)'/%3E%3C/svg%3E")}
+.ring.inv{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23fff' stroke-width='11' stroke-dasharray='231 33' transform='rotate(66 50 50)'/%3E%3C/svg%3E")}
+.ring.lg{width:78px;height:78px;vertical-align:-18px}
+.wordmark{font-family:"Noto Serif JP",Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:.005em}
 
 /* ---------- 章扉 ---------- */
 .divider .ghost{
@@ -234,18 +236,18 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
 <section class="slide on">
   <div class="cover">
     <div class="l">
-      <div class="topbar"><span class="a">2026.08</span><span class="b">切り抜き動画の量産 ご提案</span></div>
+      <div class="topbar"><span class="a">2026.08</span><span class="b">AI clippingを活用した「常時発信体制」構築のご提案</span></div>
       <div style="position:absolute;left:0;top:296px">
         <div style="font-size:25px;font-weight:900;letter-spacing:.01em">
-          <span style="display:inline-block;width:44px;height:2px;background:#000;vertical-align:8px;margin-right:18px"></span>長尺の素材を、活かしきれていない企業さまへ
+          <span style="display:inline-block;width:44px;height:2px;background:#000;vertical-align:8px;margin-right:18px"></span>毎日の短尺動画投稿に、リソースが追いつかない企業さまへ
         </div>
         <h1 style="font-size:88px;font-weight:900;line-height:1.16;margin-top:26px;letter-spacing:-.01em">
-          素材を、<br><span class="hl" style="padding:2px 10px">供給ライン</span>へ。
+          素材を、<br><span class="hl" style="padding:2px 10px">無限のコンテンツ</span>へ。
         </h1>
         <div style="margin-top:52px;display:flex;align-items:center;gap:22px">
-          <span style="font-family:var(--dp);font-size:29px;font-weight:800"><span class="ring"></span>&nbsp;Ceed</span>
+          <span style="font-family:var(--dp);font-size:29px;font-weight:800"><span class="ring"></span>&nbsp;<span class="wordmark">Ceed</span></span>
           <span style="width:1px;height:30px;background:var(--line2)"></span>
-          <span style="font-size:20px;font-weight:700">眠っている長尺から、短尺が出続ける状態をつくる</span>
+          <span style="font-size:20px;font-weight:700">眠っている長尺動画から、24時間稼働する短尺営業マンを生み出す</span>
         </div>
       </div>
       <div class="copy" style="left:0">© 2026 Ceed Inc.</div>
@@ -253,7 +255,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="r">
       <div class="vlabel">CEED&nbsp;·&nbsp;AI&nbsp;VIDEO&nbsp;OPERATIONS&nbsp;·&nbsp;2026</div>
       <div style="position:absolute;right:40px;top:22px;font-size:12.5px;color:#8e8e8e">株式会社Ceed</div>
-      <div class="rlogo"><span class="ring" style="width:26px;height:26px;border-width:2.8px;vertical-align:-5px"></span>&nbsp;Ceed</div>
+      <div class="rlogo"><span class="ring inv" style="width:26px;height:26px;vertical-align:-5px"></span>&nbsp;<span class="wordmark">Ceed</span></div>
     </div>
   </div>
 </section>
@@ -328,7 +330,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Clients</span></div>
   <div class="head"><div class="h"><div class="n">02</div><div class="t">ご一緒している企業</div></div><hr></div>
-  <div class="lead">アプリ・エンタメIP・定期通販から、広告プラットフォームまで。</div>
+  <div class="lead">アプリ・エンタメIPから、広告プラットフォームまで。</div>
   <div class="body" style="top:296px">
     <div class="eyebrow" style="margin-bottom:18px">ご一緒している企業 ― 運用・制作・広告領域で連携しています</div>
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:12px">
@@ -349,7 +351,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
 <section class="slide" data-variant="clip">
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Context</span></div>
-  <div class="head"><div class="h"><div class="n">03</div><div class="t">素材は眠っているのに、露出が増えない。</div></div><hr></div>
+  <div class="head"><div class="h"><div class="n">03</div><div class="t">資産（長尺）はあるのに、リーチが伸びない。</div></div><hr></div>
   <div class="lead">番組・ライブ・配信。手元に長尺があるのに、届く量が増えません。</div>
   <div class="body" style="top:292px">
     <div class="grid3">
@@ -369,7 +371,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
         <p>当たる型が分かっても、それを一気に増やす本数とアカウント数がなければ、インプレッションは積み上がりません。</p>
       </div>
     </div>
-    <div class="bar" style="margin-top:38px">足りないのは素材でも企画でもありません。勝ち筋を見つけ、そこへ一気に寄せる「供給ライン」です。</div>
+    <div class="bar" style="margin-top:38px">足りないのは企画ではありません。勝ち筋を見つけ、一気に量産・拡散する「コンテンツ生産エンジン」です。</div>
   </div>
   <div class="pnum">05</div>
 </section>
@@ -378,9 +380,9 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
 <section class="slide black" data-variant="clip">
   <div style="position:absolute;left:var(--padL);top:250px">
     <div class="eyebrow">Our Position</div>
-    <h2 style="font-size:82px;font-weight:900;line-height:1.2;margin-top:26px;letter-spacing:-.01em">本数を、<br>詰まらせない。</h2>
+    <h2 style="font-size:82px;font-weight:900;line-height:1.2;margin-top:26px;letter-spacing:-.01em">露出の、<br>上限を突破する。</h2>
     <p style="font-size:21px;line-height:2;color:#cfcfcf;margin-top:44px;max-width:1080px">
-      1本ずつ受注して納品する形にはしません。素材が入れば短尺が出続ける状態を、供給ラインごと引き受けます。<br>ラインが安定したら、同じ仕組みを御社の中に移します。
+      単なる制作代行ではありません。長尺を入れれば短尺が出続ける「コンテンツ生産インフラ」ごと提供します。<br>ラインが安定したら、同じ仕組みを御社の中に移します。
     </p>
     <p style="font-size:16px;color:#8e8e8e;margin-top:40px">株式会社Ceed ― AI Video Operations</p>
   </div>
@@ -708,7 +710,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
 <section class="slide">
   <div class="cover">
     <div class="l">
-      <div class="topbar"><span class="a">2026.08</span><span class="b">切り抜き動画の量産 ご提案</span></div>
+      <div class="topbar"><span class="a">2026.08</span><span class="b">AI clippingを活用した「常時発信体制」構築のご提案</span></div>
       <div style="position:absolute;left:0;top:230px;right:80px">
         <h2 style="font-size:80px;font-weight:900;line-height:1.2;letter-spacing:-.01em">まずは、<span class="hl" style="padding:2px 12px">1ヶ月</span>。</h2>
         <div style="margin-top:44px">
@@ -730,7 +732,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </div>
     <div class="r">
       <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;width:340px">
-        <div style="font-family:var(--dp);font-size:52px;font-weight:800"><span class="ring lg" style="border-width:6px;width:64px;height:64px;vertical-align:-14px"></span>&nbsp;Ceed</div>
+        <div style="font-family:var(--dp);font-size:52px;font-weight:800"><span class="ring inv lg" style="width:64px;height:64px;vertical-align:-14px"></span>&nbsp;<span class="wordmark">Ceed</span></div>
         <div style="width:52px;height:1px;background:#5a5a5a;margin:34px auto"></div>
         <div style="font-size:22px;font-weight:900;margin-bottom:14px">株式会社Ceed</div>
         <div style="font-size:14.5px;color:#a5a5a5;line-height:1.9">AI Video Operations<br>コンテンツ生成・SNS運用・内製化支援</div>

@@ -6,7 +6,7 @@
 <title>Ceed 営業資料 — クリエイティブ生成型（広告クリエイティブの量産）</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700&family=Outfit:wght@400;500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    Ceed Sales Deck — クリエイティブ生成型
@@ -99,9 +99,11 @@ body{
 .rlogo{position:absolute;right:40px;bottom:34px;color:#fff;font-family:var(--dp);font-size:26px;font-weight:800}
 .copy{position:absolute;left:56px;bottom:34px;font-family:var(--mo);font-size:12px;color:#8e8e8e}
 
-.ring{display:inline-block;width:34px;height:34px;border:3.4px solid currentColor;border-radius:50%;
-  border-right-color:transparent;transform:rotate(-45deg);vertical-align:-8px}
-.ring.lg{width:78px;height:78px;border-width:7px;vertical-align:-18px}
+.ring{display:inline-block;width:34px;height:34px;vertical-align:-8px;
+  background:no-repeat center/contain;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23000' stroke-width='11' stroke-dasharray='231 33' transform='rotate(66 50 50)'/%3E%3C/svg%3E")}
+.ring.inv{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23fff' stroke-width='11' stroke-dasharray='231 33' transform='rotate(66 50 50)'/%3E%3C/svg%3E")}
+.ring.lg{width:78px;height:78px;vertical-align:-18px}
+.wordmark{font-family:"Noto Serif JP",Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:.005em}
 
 /* ---------- 章扉 ---------- */
 .divider .ghost{
@@ -239,10 +241,10 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
           <span style="display:inline-block;width:44px;height:2px;background:#000;vertical-align:8px;margin-right:18px"></span>クリエイティブの差し替えが、配信に追いついていない企業さまへ
         </div>
         <h1 style="font-size:88px;font-weight:900;line-height:1.16;margin-top:26px;letter-spacing:-.01em">
-          勝ちは、<br><span class="hl" style="padding:2px 10px">必ず摩耗</span>する。
+          勝ちクリエイティブは、<br><span class="hl" style="padding:2px 10px">必ず摩耗</span>する。
         </h1>
         <div style="margin-top:52px;display:flex;align-items:center;gap:22px">
-          <span style="font-family:var(--dp);font-size:29px;font-weight:800"><span class="ring"></span>&nbsp;Ceed</span>
+          <span style="font-family:var(--dp);font-size:29px;font-weight:800"><span class="ring"></span>&nbsp;<span class="wordmark">Ceed</span></span>
           <span style="width:1px;height:30px;background:var(--line2)"></span>
           <span style="font-size:20px;font-weight:700">摩耗する速さに追いつく本数を、AIで供給する</span>
         </div>
@@ -252,7 +254,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="r">
       <div class="vlabel">CEED&nbsp;·&nbsp;AI&nbsp;VIDEO&nbsp;OPERATIONS&nbsp;·&nbsp;2026</div>
       <div style="position:absolute;right:40px;top:22px;font-size:12.5px;color:#8e8e8e">株式会社Ceed</div>
-      <div class="rlogo"><span class="ring" style="width:26px;height:26px;border-width:2.8px;vertical-align:-5px"></span>&nbsp;Ceed</div>
+      <div class="rlogo"><span class="ring inv" style="width:26px;height:26px;vertical-align:-5px"></span>&nbsp;<span class="wordmark">Ceed</span></div>
     </div>
   </div>
 </section>
@@ -266,7 +268,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       <div style="display:flex;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line)">
         <div style="font-family:var(--dp);font-size:26px;font-weight:800;width:120px">01</div>
         <div style="font-size:25px;font-weight:900;flex:1">配信が止まる理由と、私たち</div>
-        <div style="font-size:14.5px;color:var(--mut2)">会社と取引先、そして「摩耗に差し替えが追いつかない」という詰まり</div>
+        <div style="font-size:14.5px;color:var(--mut2)">自社と取引先、そして「摩耗に差し替えが追いつかない」という課題</div>
       </div>
       <div style="display:flex;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line)">
         <div style="font-family:var(--dp);font-size:26px;font-weight:800;width:120px">02</div>
@@ -314,7 +316,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="card dark" style="padding:32px 30px">
       <div class="kicker">Product 03 — VENE</div>
       <h4 style="font-size:24px">自律的に動くAIエージェントを、<br>自社で設計・開発しています</h4>
-      <p style="font-size:15px">コンテンツを自ら生み出し、オーディエンスを育て、収益を生むところまでを担うエージェント。人を補助するツールではなく、クリエイターエコノミーの独立した参加者として設計しています。御社の切り抜き運用も、この基盤の上で回します。</p>
+      <p style="font-size:15px">コンテンツを自ら生み出し、オーディエンスを育て、収益を生むところまでを担うエージェント。人を補助するツールではなく、クリエイターエコノミーの独立した参加者として設計しています。御社のクリエイティブ運用も、この基盤の上で回します。</p>
     </div>
   </div>
   <div class="note" style="bottom:38px">Qube（web3向けGTMネットワーク）・Hyperbuilder（コミュニティ支援）と合わせて3つのプロダクトを自社運営しています。</div>
@@ -325,7 +327,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Clients</span></div>
   <div class="head"><div class="h"><div class="n">02</div><div class="t">ご一緒している企業</div></div><hr></div>
-  <div class="lead">アプリ・エンタメIP・定期通販から、広告プラットフォームまで。</div>
+  <div class="lead">アプリ・エンタメIPから、広告プラットフォームまで。</div>
   <div class="body" style="top:296px">
     <div class="eyebrow" style="margin-bottom:18px">ご一緒している企業 ― 運用・制作・広告領域で連携しています</div>
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:12px">
@@ -347,7 +349,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Context</span></div>
   <div class="head"><div class="h"><div class="n">03</div><div class="t">クリエイティブが、配信に追いつかない。</div></div><hr></div>
-  <div class="lead">当たりが摩耗するのは数週間。それより速く、次の訴求を出せていません。</div>
+  <div class="lead">当たりが摩耗するのは数週間。そのスピードで、次の訴求を出せていません。</div>
   <div class="body" style="top:292px">
     <div class="grid3">
       <div class="card">
@@ -391,15 +393,15 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="lead">作るところだけでなく、配信結果を見て次を出すところまで同じチームが担当します。</div>
   <div class="body" style="top:294px">
     <div class="flow">
-      <div class="fc"><h5>訴求を<br>洗い出す</h5><p>商品情報・既存素材・競合の当たりから、試す価値のある切り口を並べる</p></div>
+      <div class="fc"><h5>訴求を<br>洗い出す</h5><p>商品情報・既存素材・競合の成功事例から、試す価値のある切り口を並べる</p></div>
       <div class="ar">→</div>
       <div class="fc dark"><h5>運用者が訴求を設計し、<br>AIが本数を出す</h5><p>切り口ごとの構成・コピー・尺を型にして、検証に足る本数を一気に立ち上げる</p></div>
       <div class="ar">→</div>
       <div class="fc"><h5>人が最後に<br>判断する</h5><p>表現・薬機・ブランドの基準に合うかは人が見る。合わないものは配信しない</p></div>
       <div class="ar">→</div>
-      <div class="fc"><h5>摩耗を待たずに<br>差し替える</h5><p>フリークエンシーとCPAの推移を見て、落ちる前に次の訴求へ寄せる</p></div>
+      <div class="fc"><h5>摩耗を待たずに<br>差し替える</h5><p>フリークエンシーとCPAの推移を見て、落ちる前に次の訴求へ切り替える</p></div>
     </div>
-    <div class="bar" style="margin-top:38px">自動化するのは「量」。訴求の設計と最終判断は、人が持ちます。</div>
+    <div class="bar" style="margin-top:38px">自動化するのは「量」。訴求の設計と最終判断は、人が行います。</div>
   </div>
   <div class="pnum">06</div>
 </section>
@@ -408,7 +410,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>AI Ratio</span></div>
   <div class="head"><div class="h"><div class="n">05</div><div class="t">どこまでAIが担い、どこから人が決めるか。</div></div><hr></div>
-  <div class="lead">量を出す工程は任せきります。表現とブランドに関わる判断だけ、人が持ちます。</div>
+  <div class="lead">量を出す工程はAIに任せます。表現とブランドに関わる判断だけ、人が行います。</div>
   <div class="body" style="top:320px">
     <div class="ratio"><div class="track"><div class="fill" style="background:#000;width:100%"><span>素材の解析・パーツ化</span><span class="p">95<small>%</small></span></div></div><div class="desc">商品画像・既存クリエイティブから使える要素を抽出する</div></div>
     <div class="ratio"><div class="track"><div class="fill" style="background:#1f1f1f;width:89%"><span>コピー・構成の生成</span><span class="p">85<small>%</small></span></div></div><div class="desc">訴求ごとにコピー・構成・尺を生成する</div></div>
@@ -439,7 +441,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="rm"><div class="dot"></div><span class="st">02</span><span class="mo">MONTH 2-</span><h4>量産・差し替え</h4><p>配信結果を見て当たった訴求に寄せ、摩耗する前に次を出します。差し替えの判断ルールを固めます。</p></div>
     <div class="rm"><div class="dot"></div><span class="st">03</span><span class="mo">MONTH 6-</span><h4>内製化 ＋ ツール提供</h4><p>型とツールを御社へ渡します。制作は御社の中で完結し、私たちはテンプレート更新とスポット相談だけを残します。</p></div>
   </div>
-  <div style="position:absolute;left:var(--padL);right:var(--padR);bottom:76px"><div class="bar">まず供給を回してから、内製化の話をします。順番を逆にしません。</div></div>
+  <div style="position:absolute;left:var(--padL);right:var(--padR);bottom:76px"><div class="bar">まず供給を回してから、内製化の話をします。この順番は変わりません。</div></div>
   <div class="pnum">10</div>
 </section>
 
@@ -460,7 +462,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       <div class="cyc" style="left:142px;top:8px"><div class="n">01</div><h5>訴求を並べる</h5><p>試す切り口を洗い出す</p></div>
       <div class="cyc" style="left:272px;top:150px"><div class="n">02</div><h5>一気に作る</h5><p>訴求ごとに本数を出す</p></div>
       <div class="cyc" style="left:142px;top:270px"><div class="n">03</div><h5>配信して測る</h5><p>訴求単位でCPAを見る</p></div>
-      <div class="cyc" style="left:12px;top:150px"><div class="n">04</div><h5>摩耗前に差し替える</h5><p>落ちる前に次へ寄せる</p></div>
+      <div class="cyc" style="left:12px;top:150px"><div class="n">04</div><h5>摩耗前に差し替える</h5><p>落ちる前に次へ切り替える</p></div>
     </div>
     <div>
       <div class="eyebrow" style="margin-bottom:20px">1ヶ月で、御社に残るもの</div>
@@ -512,7 +514,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="body" style="top:280px">
     <table class="spec">
       <tr><td class="k">提供形態</td><td class="v">ブラウザから使える生成ツールとして、御社専用の環境をご用意します</td></tr>
-      <tr><td class="k">アカウント</td><td class="v">利用者ごとにIDを発行します／同時ログインは不可 ― IDの共有はできません<em>社内の運用担当にも、外注の制作パートナーにも、必要な人数分だけ配れます</em></td></tr>
+      <tr><td class="k">アカウント</td><td class="v">利用者ごとにIDを発行します／同時ログインは不可 ― IDの共有はできません<em>社内の運用担当にも、外注の制作パートナーにも、必要な人数分だけ発行できます</em></td></tr>
       <tr><td class="k">環境構築</td><td class="v">最短1週間、標準1ヶ月<em>御社の素材・表現基準に合わせて調整したうえでお渡しします</em></td></tr>
       <tr><td class="k">含まれるもの</td><td class="v">生成テンプレート／訴求の型とプロンプト集／NGワード・表現基準の設定／質問窓口（チャット）</td></tr>
       <tr><td class="k">運用イメージ</td><td class="v">運用担当が自分のIDで生成し、そのまま入稿まで進めます<em>私たちは月次の振り返りとテンプレートの更新だけを担当します</em></td></tr>
@@ -558,7 +560,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="body" style="top:292px;display:grid;grid-template-columns:1fr 1fr;gap:44px">
     <div class="card" style="padding:26px 26px 22px">
       <div style="display:flex;gap:22px;margin-bottom:20px"><div style="font-family:var(--mo);font-size:11px;letter-spacing:.28em;color:var(--mut);width:64px;padding-top:4px">ISSUE</div><p style="flex:1;font-size:15.5px;line-height:1.85;color:#3a3a3a">どの訴求が刺さるか分からないまま、制作コストの都合で1〜2案しか試せていなかった。</p></div>
-      <div style="display:flex;gap:22px;margin-bottom:20px;border-top:1px solid var(--line);padding-top:20px"><div style="font-family:var(--mo);font-size:11px;letter-spacing:.28em;color:var(--mut);width:64px;padding-top:4px">ACTION</div><p style="flex:1;font-size:15.5px;line-height:1.85;color:#3a3a3a">訴求を4種類に分けて並列で生成し、反応を訴求単位で計測。当たらないものは止め、当たったものに本数を寄せた。</p></div>
+      <div style="display:flex;gap:22px;margin-bottom:20px;border-top:1px solid var(--line);padding-top:20px"><div style="font-family:var(--mo);font-size:11px;letter-spacing:.28em;color:var(--mut);width:64px;padding-top:4px">ACTION</div><p style="flex:1;font-size:15.5px;line-height:1.85;color:#3a3a3a">訴求を4種類に分けて並列で生成し、反応を訴求単位で計測。当たらないものは止め、当たったものに本数を集中させた。</p></div>
       <div style="display:flex;gap:22px;border-top:1px solid var(--line);padding-top:20px"><div style="font-family:var(--mo);font-size:11px;letter-spacing:.28em;color:var(--mut);width:64px;padding-top:4px">RESULT</div><p style="flex:1;font-size:16px;line-height:1.8;font-weight:700">225投稿で<span class="hl">累計1,000万+再生</span>。<br>10万再生超えは30本。</p></div>
     </div>
     <div>
@@ -567,7 +569,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       <div style="border-top:1px solid var(--line);padding:16px 0;display:flex;gap:20px;align-items:baseline"><span style="font-family:var(--dp);font-size:15px;font-weight:800;color:var(--mut);width:30px">02</span><span style="font-size:18px;font-weight:700;flex:1">スライドで数字を見せる</span><span style="font-size:13.5px;color:var(--mut2)">継続</span></div>
       <div style="border-top:1px solid var(--line);padding:16px 0;display:flex;gap:20px;align-items:baseline"><span style="font-family:var(--dp);font-size:15px;font-weight:800;color:var(--mut);width:30px">03</span><span style="font-size:18px;font-weight:700;flex:1">キャラクターに語らせる</span><span style="font-size:13.5px;color:var(--mut2)">継続</span></div>
       <div style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;display:flex;gap:20px;align-items:baseline;color:#a5a5a5"><span style="font-family:var(--dp);font-size:15px;font-weight:800;width:30px">04</span><span style="font-size:18px;font-weight:700;flex:1">機能紹介を正面から出す</span><span style="font-size:13.5px">停止</span></div>
-      <div class="bar" style="margin-top:26px;font-size:17px;padding:16px 22px;line-height:1.55">当たらなかった訴求は止め、当たった訴求に本数を寄せる。これを毎週回しました。</div>
+      <div class="bar" style="margin-top:26px;font-size:17px;padding:16px 22px;line-height:1.55">当たらなかった訴求は止め、当たった訴求に本数を集中させる。これを毎週回しました。</div>
     </div>
   </div>
   <div class="pnum">16</div>
@@ -617,7 +619,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px">
       <div class="card"><h4>制作待ちの運用</h4><p>依頼から納品まで数週間。摩耗に気づいてから動くため、必ず後手に回ります。</p></div>
-      <div class="card dark"><h4>本数が手元にある運用</h4><p>摩耗の兆しが出た時点で次の訴求へ寄せられるため、CPAを落とし切る前に戻せます。</p></div>
+      <div class="card dark"><h4>本数が手元にある運用</h4><p>摩耗の兆しが出た時点で次の訴求へ切り替えられるため、CPAを落とし切る前に改善できます。</p></div>
     </div>
     <div class="bar" style="margin-top:30px">差し替えが間に合うかどうかは、判断の速さではなく、手元にある本数で決まります。</div>
   </div>
@@ -692,7 +694,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </div>
     <div class="r">
       <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;width:340px">
-        <div style="font-family:var(--dp);font-size:52px;font-weight:800"><span class="ring lg" style="border-width:6px;width:64px;height:64px;vertical-align:-14px"></span>&nbsp;Ceed</div>
+        <div style="font-family:var(--dp);font-size:52px;font-weight:800"><span class="ring inv lg" style="width:64px;height:64px;vertical-align:-14px"></span>&nbsp;<span class="wordmark">Ceed</span></div>
         <div style="width:52px;height:1px;background:#5a5a5a;margin:34px auto"></div>
         <div style="font-size:22px;font-weight:900;margin-bottom:14px">株式会社Ceed</div>
         <div style="font-size:14.5px;color:#a5a5a5;line-height:1.9">AI Video Operations<br>コンテンツ生成・SNS運用・内製化支援</div>

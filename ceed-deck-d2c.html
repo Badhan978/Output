@@ -6,7 +6,7 @@
 <title>Ceed 営業資料 — D2C型（広告投資を判断するデータ基盤）</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700&family=Outfit:wght@400;500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    Ceed Sales Deck — D2C型 (YOMITE タイプ)
@@ -99,9 +99,11 @@ body{
 .rlogo{position:absolute;right:40px;bottom:34px;color:#fff;font-family:var(--dp);font-size:26px;font-weight:800}
 .copy{position:absolute;left:56px;bottom:34px;font-family:var(--mo);font-size:12px;color:#8e8e8e}
 
-.ring{display:inline-block;width:34px;height:34px;border:3.4px solid currentColor;border-radius:50%;
-  border-right-color:transparent;transform:rotate(-45deg);vertical-align:-8px}
-.ring.lg{width:78px;height:78px;border-width:7px;vertical-align:-18px}
+.ring{display:inline-block;width:34px;height:34px;vertical-align:-8px;
+  background:no-repeat center/contain;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23000' stroke-width='11' stroke-dasharray='231 33' transform='rotate(66 50 50)'/%3E%3C/svg%3E")}
+.ring.inv{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23fff' stroke-width='11' stroke-dasharray='231 33' transform='rotate(66 50 50)'/%3E%3C/svg%3E")}
+.ring.lg{width:78px;height:78px;vertical-align:-18px}
+.wordmark{font-family:"Noto Serif JP",Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:.005em}
 
 /* ---------- 章扉 ---------- */
 .divider .ghost{
@@ -242,7 +244,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
           採算は、<br><span class="hl" style="padding:2px 10px">F2の先</span>で決まる。
         </h1>
         <div style="margin-top:52px;display:flex;align-items:center;gap:22px">
-          <span style="font-family:var(--dp);font-size:29px;font-weight:800"><span class="ring"></span>&nbsp;Ceed</span>
+          <span style="font-family:var(--dp);font-size:29px;font-weight:800"><span class="ring"></span>&nbsp;<span class="wordmark">Ceed</span></span>
           <span style="width:1px;height:30px;background:var(--line2)"></span>
           <span style="font-size:20px;font-weight:700">初回CVではなく、継続売上で媒体と商品を判断する</span>
         </div>
@@ -252,7 +254,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="r">
       <div class="vlabel">CEED&nbsp;·&nbsp;AI&nbsp;VIDEO&nbsp;OPERATIONS&nbsp;·&nbsp;2026</div>
       <div style="position:absolute;right:40px;top:22px;font-size:12.5px;color:#8e8e8e">株式会社Ceed</div>
-      <div class="rlogo"><span class="ring" style="width:26px;height:26px;border-width:2.8px;vertical-align:-5px"></span>&nbsp;Ceed</div>
+      <div class="rlogo"><span class="ring inv" style="width:26px;height:26px;vertical-align:-5px"></span>&nbsp;<span class="wordmark">Ceed</span></div>
     </div>
   </div>
 </section>
@@ -266,7 +268,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       <div style="display:flex;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line)">
         <div style="font-family:var(--dp);font-size:26px;font-weight:800;width:120px">01</div>
         <div style="font-size:25px;font-weight:900;flex:1">採算が見えない理由と、私たち</div>
-        <div style="font-size:14.5px;color:var(--mut2)">会社と取引先、そして「初回CVで計測が切れる」という詰まり</div>
+        <div style="font-size:14.5px;color:var(--mut2)">システム間の分断と、「初回CVで計測が切れる」という課題</div>
       </div>
       <div style="display:flex;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--line)">
         <div style="font-family:var(--dp);font-size:26px;font-weight:800;width:120px">02</div>
@@ -314,7 +316,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="card dark" style="padding:32px 30px">
       <div class="kicker">Product 03 — VENE</div>
       <h4 style="font-size:24px">自律的に動くAIエージェントを、<br>自社で設計・開発しています</h4>
-      <p style="font-size:15px">コンテンツを自ら生み出し、オーディエンスを育て、収益を生むところまでを担うエージェント。人を補助するツールではなく、クリエイターエコノミーの独立した参加者として設計しています。御社の切り抜き運用も、この基盤の上で回します。</p>
+      <p style="font-size:15px">コンテンツを自ら生み出し、オーディエンスを育て、収益を生むところまでを担うエージェント。人を補助するツールではなく、クリエイターエコノミーの独立した参加者として設計しています。御社のデータ基盤運用も、この基盤の上で回します。</p>
     </div>
   </div>
   <div class="note" style="bottom:38px">Qube（web3向けGTMネットワーク）・Hyperbuilder（コミュニティ支援）と合わせて3つのプロダクトを自社運営しています。</div>
@@ -325,7 +327,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Clients</span></div>
   <div class="head"><div class="h"><div class="n">02</div><div class="t">ご一緒している企業</div></div><hr></div>
-  <div class="lead">アプリ・エンタメIP・定期通販から、広告プラットフォームまで。</div>
+  <div class="lead">アプリ・エンタメIPから、広告プラットフォームまで。</div>
   <div class="body" style="top:296px">
     <div class="eyebrow" style="margin-bottom:18px">ご一緒している企業 ― 運用・制作・広告領域で連携しています</div>
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:12px">
@@ -377,7 +379,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     <div class="eyebrow">Our Position</div>
     <h2 style="font-size:82px;font-weight:900;line-height:1.2;margin-top:26px;letter-spacing:-.01em">初回CVで、<br>判断しない。</h2>
     <p style="font-size:21px;line-height:2;color:#cfcfcf;margin-top:44px;max-width:1080px">
-      レポートを作って終わりにしません。受注データの設計から入り、媒体・LP・商品別に利益まで見える状態をつくります。<br>土台ができたら、日々の判断は御社の中で回せるようにします。
+      レポートを作って終わりにしません。受注データの設計から入り、媒体・LP・商品別に利益まで見える状態をつくります。<br>土台ができたら、日々の判断は御社内で完結できるようにします。
     </p>
     <p style="font-size:16px;color:#8e8e8e;margin-top:40px">株式会社Ceed ― AI Video Operations</p>
   </div>
@@ -397,9 +399,9 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       <div class="ar">→</div>
       <div class="fc"><h5>人が判断の<br>基準を決める</h5><p>どの利益水準で止め・伸ばしを決めるかは、事業側が持つ</p></div>
       <div class="ar">→</div>
-      <div class="fc"><h5>日々の運用に<br>載せる</h5><p>媒体別の止め・伸ばしを、月次ではなく週次で回せる形にする</p></div>
+      <div class="fc"><h5>日々の運用に<br>乗せる</h5><p>媒体別の止め・伸ばしを、月次ではなく週次で回せる形にする</p></div>
     </div>
-    <div class="bar" style="margin-top:38px">自動化するのは「集計と突合」。どこに賭けるかの判断は、人が持ちます。</div>
+    <div class="bar" style="margin-top:38px">自動化するのは「集計と突合」。どこに投資するかの判断は、貴社が担います。</div>
   </div>
   <div class="pnum">06</div>
 </section>
@@ -433,10 +435,10 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Roadmap</span></div>
   <div class="head"><div class="h"><div class="n">06</div><div class="t">3ステップで、社内に移します。</div></div><hr></div>
-  <div class="lead">2ヶ月で数字が出て、半年後には私たちがいなくても回る。それが着地点です。</div>
+  <div class="lead">2ヶ月で数値化し、半年後には社内だけで運用できる状態を着地点とします。</div>
   <div class="body" style="top:320px;display:grid;grid-template-columns:repeat(3,1fr);gap:52px">
     <div class="rm"><div class="dot"></div><span class="st">01</span><span class="mo">MONTH 1-2</span><h4>現状監査・基盤設計</h4><p>受注データを監査し、定期購入IDを軸にコホート集計を再構築します。まず数字が正しく出る状態をつくります。</p></div>
-    <div class="rm"><div class="dot"></div><span class="st">02</span><span class="mo">MONTH 3-</span><h4>運用への実装</h4><p>媒体・LP・商品別の利益が週次で見える状態にし、止め・伸ばしの判断に載せます。</p></div>
+    <div class="rm"><div class="dot"></div><span class="st">02</span><span class="mo">MONTH 3-</span><h4>運用への定着</h4><p>媒体・LP・商品別の利益が週次で見える状態にし、止め・伸ばしの判断に載せます。</p></div>
     <div class="rm"><div class="dot"></div><span class="st">03</span><span class="mo">MONTH 6-</span><h4>内製化 ＋ 保守</h4><p>更新は御社の中で完結します。私たちは指標の追加・改善と、必要なときのスポット相談だけを残します。</p></div>
   </div>
   <div style="position:absolute;left:var(--padL);right:var(--padR);bottom:76px"><div class="bar">まず数字が正しく出る状態にしてから、施策の話をします。順番を逆にしません。</div></div>
@@ -447,7 +449,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="mark"></div><div class="vline"></div>
   <div class="rail"><span>Phase 1</span></div>
   <div class="head"><div class="h"><div class="n">07</div><div class="t">最初の2ヶ月で、利益が見える状態にする。</div></div><hr></div>
-  <div class="lead">2ヶ月あれば、どの媒体・どの商品が儲かっているかは数字で出ます。</div>
+  <div class="lead">2ヶ月で、どの媒体・どの商品で利益が出ているかが明確になります。</div>
   <div class="body" style="top:286px;display:grid;grid-template-columns:520px 1fr;gap:60px">
     <div class="cycle" style="height:360px">
       <svg viewBox="0 0 480 360">
@@ -512,7 +514,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
   <div class="body" style="top:280px">
     <table class="spec">
       <tr><td class="k">提供形態</td><td class="v">ブラウザから見られる判断用ダッシュボードとして、御社専用の環境をご用意します</td></tr>
-      <tr><td class="k">アカウント</td><td class="v">利用者ごとにIDを発行します／閲覧範囲は役割ごとに設定できます<em>広告運用の担当者にも、経営層にも、必要な粒度で配れます</em></td></tr>
+      <tr><td class="k">アカウント</td><td class="v">利用者ごとにIDを発行します／閲覧範囲は役割ごとに設定できます<em>現場の担当者にも経営層にも、最適な閲覧権限を付与できます</em></td></tr>
       <tr><td class="k">環境構築</td><td class="v">データ監査に2週間、基盤の実装まで含めて標準2ヶ月<em>連携先の数と受注データの状態によって前後します</em></td></tr>
       <tr><td class="k">含まれるもの</td><td class="v">指標の定義書／集計ロジックとクエリ／質問窓口（チャット）</td></tr>
       <tr><td class="k">運用イメージ</td><td class="v">週次で自動更新され、担当者はそのまま止め・伸ばしを判断できます<em>私たちは月次の振り返りと指標の追加だけを担当します</em></td></tr>
@@ -562,7 +564,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       <div style="display:flex;gap:22px;border-top:1px solid var(--line);padding-top:20px"><div style="font-family:var(--mo);font-size:11px;letter-spacing:.28em;color:var(--mut);width:64px;padding-top:4px">RESULT</div><p style="flex:1;font-size:16px;line-height:1.8;font-weight:700">媒体・LP・商品別に、<span class="hl">利益まで見て投資判断できる基盤</span>を共同開発中。</p></div>
     </div>
     <div>
-      <div class="eyebrow" style="margin-bottom:16px">監査でよく見つかる詰まり</div>
+      <div class="eyebrow" style="margin-bottom:16px">監査でよく見つかるボトルネック</div>
       <div style="border-top:1px solid var(--line);padding:15px 0;display:flex;gap:18px;align-items:baseline"><span style="font-family:var(--dp);font-size:14px;font-weight:800;color:var(--mut);width:26px">01</span><span style="font-size:16.5px;font-weight:700;flex:1">定期購入IDと初回注文が繋がっていない</span></div>
       <div style="border-top:1px solid var(--line);padding:15px 0;display:flex;gap:18px;align-items:baseline"><span style="font-family:var(--dp);font-size:14px;font-weight:800;color:var(--mut);width:26px">02</span><span style="font-size:16.5px;font-weight:700;flex:1">広告パラメータが受注テーブルに残っていない</span></div>
       <div style="border-top:1px solid var(--line);padding:15px 0;display:flex;gap:18px;align-items:baseline"><span style="font-family:var(--dp);font-size:14px;font-weight:800;color:var(--mut);width:26px">03</span><span style="font-size:16.5px;font-weight:700;flex:1">解約・スキップが売上から差し引かれていない</span></div>
@@ -655,7 +657,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
       <div class="q"><div class="qt"><span class="qn">Q04</span><span class="qq">どのくらいで数字が出ますか？</span></div><p class="qa">データ監査に2週間、コホート集計の再構築まで含めて標準2ヶ月です。連携先の数と受注データの状態によって前後します。</p></div>
       <div class="q"><div class="qt"><span class="qn">Q02</span><span class="qq">既存のBIツールと置き換えになりますか？</span></div><p class="qa">なりません。私たちの役割はデータの設計と積み直しです。可視化は既存のツールに載せることもできます。</p></div>
       <div class="q"><div class="qt"><span class="qn">Q05</span><span class="qq">カートがecforce以外でも対応できますか？</span></div><p class="qa">できます。受注データが取り出せる形であれば、カートの種類は問いません。取り出し方法は監査のなかで確認します。</p></div>
-      <div class="q"><div class="qt"><span class="qn">Q03</span><span class="qq">社内にエンジニアがいなくても大丈夫ですか？</span></div><p class="qa">大丈夫です。参照権限をいただければ実装まで行います。運用フェーズで、担当者が自分で見られるところまで引き継ぎます。</p></div>
+      <div class="q"><div class="qt"><span class="qn">Q03</span><span class="qq">社内にエンジニアがいなくても大丈夫ですか？</span></div><p class="qa">大丈夫です。参照権限をいただければ実装まで行います。運用フェーズで、担当者が自ら運用できるところまで引き継ぎます。</p></div>
       <div class="q"><div class="qt"><span class="qn">Q06</span><span class="qq">広告運用そのものもお願いできますか？</span></div><p class="qa">判断の土台づくりが本サービスですが、クリエイティブの制作やSNS運用は別途お手伝いできます。巻末をご覧ください。</p></div>
     </div>
   </div>
@@ -687,7 +689,7 @@ table.spec td.v em{display:block;font-style:normal;font-size:13.5px;font-weight:
     </div>
     <div class="r">
       <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;width:340px">
-        <div style="font-family:var(--dp);font-size:52px;font-weight:800"><span class="ring lg" style="border-width:6px;width:64px;height:64px;vertical-align:-14px"></span>&nbsp;Ceed</div>
+        <div style="font-family:var(--dp);font-size:52px;font-weight:800"><span class="ring inv lg" style="width:64px;height:64px;vertical-align:-14px"></span>&nbsp;<span class="wordmark">Ceed</span></div>
         <div style="width:52px;height:1px;background:#5a5a5a;margin:34px auto"></div>
         <div style="font-size:22px;font-weight:900;margin-bottom:14px">株式会社Ceed</div>
         <div style="font-size:14.5px;color:#a5a5a5;line-height:1.9">AI Video Operations<br>コンテンツ生成・SNS運用・内製化支援</div>
