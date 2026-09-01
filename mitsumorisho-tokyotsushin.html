@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>御見積書 - 株式会社東京通信御中</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #dcdcdc;
+    font-family: "Hiragino Mincho ProN", "Hiragino Sans", serif;
+    color: #1a1a1a;
+  }
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 10mm auto;
+    padding: 15mm;
+    background: #ffffff;
+    box-shadow: 0 0 8mm rgba(0, 0, 0, 0.18);
+    position: relative;
+  }
+  .doc-meta {
+    text-align: right;
+    font-size: 10.5pt;
+    line-height: 1.7;
+    margin-bottom: 6mm;
+  }
+  .doc-meta .label {
+    color: #444;
+    letter-spacing: 0.02em;
+  }
+  h1.title {
+    text-align: center;
+    font-size: 26pt;
+    font-weight: 600;
+    letter-spacing: 0.5em;
+    text-indent: 0.5em;
+    margin: 0 0 12mm 0;
+    padding-bottom: 3mm;
+    border-bottom: 2.5pt double #1a1a1a;
+  }
+  .top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8mm;
+    margin-bottom: 8mm;
+  }
+  .addressee {
+    flex: 1.35;
+  }
+  .company-to {
+    font-size: 17pt;
+    font-weight: 600;
+    border-bottom: 1.5pt solid #1a1a1a;
+    padding-bottom: 3mm;
+    margin-bottom: 5mm;
+    letter-spacing: 0.02em;
+  }
+  .greeting {
+    font-size: 11pt;
+    margin-bottom: 6mm;
+  }
+  .amount-box {
+    border: 1.5pt solid #1a1a1a;
+    background: #fafafa;
+    padding: 4mm 5mm;
+    margin-bottom: 6mm;
+    display: flex;
+    align-items: baseline;
+    gap: 4mm;
+  }
+  .amount-box .amount-label {
+    font-size: 11pt;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .amount-box .amount {
+    font-size: 21pt;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .amount-box .amount-tax {
+    font-size: 10.5pt;
+    color: #333;
+    white-space: nowrap;
+  }
+  table.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5pt;
+  }
+  table.info-table th,
+  table.info-table td {
+    text-align: left;
+    padding: 2mm 0;
+    vertical-align: top;
+  }
+  table.info-table th {
+    width: 22mm;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+  }
+  .issuer {
+    flex: 1;
+    font-size: 10pt;
+    line-height: 1.75;
+    position: relative;
+    padding-top: 1mm;
+  }
+  .issuer-name {
+    font-size: 13pt;
+    font-weight: 600;
+    margin-bottom: 3mm;
+  }
+  .issuer-addr {
+    margin-bottom: 3mm;
+  }
+  .issuer-person {
+    margin-bottom: 4mm;
+  }
+  .issuer-reg {
+    margin-bottom: 6mm;
+    white-space: nowrap;
+  }
+  .stamp-wrap {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .stamp-box {
+    width: 22mm;
+    height: 22mm;
+    border: 0.75pt solid #999;
+  }
+  table.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5pt;
+    margin-bottom: 5mm;
+  }
+  table.items-table th {
+    background: #eeeeee;
+    border: 0.75pt solid #999;
+    padding: 2.5mm 2mm;
+    font-weight: 600;
+    text-align: center;
+  }
+  table.items-table td {
+    border: 0.75pt solid #999;
+    padding: 2.5mm 3mm;
+  }
+  table.items-table td.col-no {
+    text-align: center;
+    width: 8mm;
+  }
+  table.items-table td.col-item {
+    text-align: left;
+  }
+  table.items-table td.col-qty,
+  table.items-table td.col-unit {
+    text-align: center;
+    width: 16mm;
+  }
+  table.items-table td.col-amount {
+    text-align: right;
+    width: 32mm;
+    white-space: nowrap;
+  }
+  .totals {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8mm;
+  }
+  table.totals-table {
+    border-collapse: collapse;
+    font-size: 10.5pt;
+    width: 70mm;
+  }
+  table.totals-table td {
+    padding: 1.8mm 3mm;
+  }
+  table.totals-table td.tk-label {
+    text-align: left;
+    color: #333;
+  }
+  table.totals-table td.tk-amount {
+    text-align: right;
+    white-space: nowrap;
+  }
+  table.totals-table tr.grand td {
+    border-top: 1.25pt solid #1a1a1a;
+    font-size: 13pt;
+    font-weight: 700;
+    padding-top: 2.5mm;
+  }
+  .bank-line {
+    font-size: 10.5pt;
+    margin-bottom: 8mm;
+    padding-bottom: 3mm;
+    border-bottom: 0.5pt solid #bbb;
+  }
+  .bank-line .underline {
+    display: inline-block;
+    border-bottom: 0.5pt solid #666;
+    width: 120mm;
+    height: 4.5mm;
+    vertical-align: middle;
+    margin-left: 2mm;
+  }
+  .notes {
+    font-size: 9.5pt;
+    line-height: 1.9;
+    color: #222;
+  }
+  .notes .notes-title {
+    font-weight: 600;
+    margin-bottom: 1.5mm;
+  }
+  .notes ul {
+    margin: 0;
+    padding-left: 4.5mm;
+  }
+
+  @media print {
+    html, body {
+      background: #ffffff;
+    }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      width: auto;
+      min-height: auto;
+    }
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="doc-meta">
+    <div><span class="label">見積書番号</span>　CE-20260901-01</div>
+    <div><span class="label">発行日</span>　2026年9月1日</div>
+    <div><span class="label">有効期限</span>　発行日より30日</div>
+  </div>
+
+  <h1 class="title">御見積書</h1>
+
+  <div class="top-section">
+    <div class="addressee">
+      <div class="company-to">株式会社東京通信 御中</div>
+      <div class="greeting">下記の通りお見積り申し上げます。</div>
+
+      <div class="amount-box">
+        <span class="amount-label">御見積金額</span>
+        <span class="amount">¥660,000</span>
+        <span class="amount-tax">(税込)</span>
+      </div>
+
+      <table class="info-table">
+        <tr><th>件名</th><td>TikTok 運用基盤 構築一式</td></tr>
+        <tr><th>納期</th><td>2026年12月末日</td></tr>
+        <tr><th>支払条件</th><td>納品検収後一括 (翌月末お振込み)</td></tr>
+      </table>
+    </div>
+
+    <div class="issuer">
+      <div class="issuer-name">株式会社Ceed</div>
+      <div class="issuer-addr">
+        〒103-0025 東京都中央区日本橋茅場町1丁目8番1号<br>
+        茅場町一丁目平和ビル7階
+      </div>
+      <div class="issuer-person">担当: 高橋 勇作</div>
+      <div class="issuer-reg">登録番号: ______________________</div>
+      <div class="stamp-wrap">
+        <div class="stamp-box"></div>
+      </div>
+    </div>
+  </div>
+
+  <table class="items-table">
+    <colgroup>
+      <col style="width:8mm">
+      <col>
+      <col style="width:16mm">
+      <col style="width:16mm">
+      <col style="width:32mm">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>品目</th>
+        <th>数量</th>
+        <th>単位</th>
+        <th>金額</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-no">1</td>
+        <td class="col-item">クリエイティブ生成基盤 (参考アカウント模倣スライド自動生成・Fal AI 接続)</td>
+        <td class="col-qty">1</td>
+        <td class="col-unit">式</td>
+        <td class="col-amount">一式に含む</td>
+      </tr>
+      <tr>
+        <td class="col-no">2</td>
+        <td class="col-item">検品・承認フロー (プレビュー確認・フィードバック・承認画面)</td>
+        <td class="col-qty">1</td>
+        <td class="col-unit">式</td>
+        <td class="col-amount">一式に含む</td>
+      </tr>
+      <tr>
+        <td class="col-no">3</td>
+        <td class="col-item">投稿基盤 (ADB 実機構成・投稿キュー・シャドウバン回避設計)</td>
+        <td class="col-qty">1</td>
+        <td class="col-unit">式</td>
+        <td class="col-amount">一式に含む</td>
+      </tr>
+      <tr>
+        <td class="col-no">4</td>
+        <td class="col-item">数値回収・実績一覧</td>
+        <td class="col-qty">1</td>
+        <td class="col-unit">式</td>
+        <td class="col-amount">一式に含む</td>
+      </tr>
+      <tr>
+        <td class="col-no">5</td>
+        <td class="col-item">環境構築・運用マニュアル・お引き渡し (ソースコード納品含む)</td>
+        <td class="col-qty">1</td>
+        <td class="col-unit">式</td>
+        <td class="col-amount">一式に含む</td>
+      </tr>
+      <tr>
+        <td class="col-no">6</td>
+        <td class="col-item">TikTok 運用基盤 構築一式</td>
+        <td class="col-qty">1</td>
+        <td class="col-unit">式</td>
+        <td class="col-amount">¥600,000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="totals">
+    <table class="totals-table">
+      <tr>
+        <td class="tk-label">小計</td>
+        <td class="tk-amount">¥600,000</td>
+      </tr>
+      <tr>
+        <td class="tk-label">消費税 (10%)</td>
+        <td class="tk-amount">¥60,000</td>
+      </tr>
+      <tr class="grand">
+        <td class="tk-label">合計</td>
+        <td class="tk-amount">¥660,000</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="bank-line">振込先:<span class="underline"></span></div>
+
+  <div class="notes">
+    <div class="notes-title">備考</div>
+    <ul>
+      <li>本見積の作業範囲は別紙「TikTok 運用基盤 構築のご提案」に準じます。</li>
+      <li>本見積範囲外の追加開発・運用サポートは別途お見積りいたします。</li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>
