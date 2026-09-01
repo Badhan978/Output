@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>データフロー全体図</title>
+<style>
+  :root{
+    --bg:#f5f6f5;
+    --surface:#ffffff;
+    --surface-2:#eef0ef;
+    --border:#dde1df;
+    --text:#1c2422;
+    --text-muted:#5b6764;
+    --accent:#0f6b64;
+    --accent-weak:#e3efed;
+    --shadow: 0 1px 3px rgba(20,30,28,0.08), 0 1px 2px rgba(20,30,28,0.06);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+    font-size:13.5px;line-height:1.6;
+  }
+
+  .hero{
+    background:linear-gradient(135deg,#0f172a,#123a34,#0f6b64);
+    color:#fff;padding:26px 28px 22px;
+  }
+  .hero-inner{max-width:1100px;margin:0 auto;}
+  .kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9fd8cf;font-weight:700;margin:0 0 8px;}
+  .hero h1{margin:0;font-size:24px;font-weight:800;}
+  .hero .lead{margin:8px 0 0;color:#cfe6e2;font-size:13px;max-width:720px;}
+
+  main{max-width:1100px;margin:0 auto;padding:22px 20px 10px;}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    box-shadow:var(--shadow);margin-bottom:20px;overflow:hidden;}
+  .card h2{margin:0;padding:14px 20px;font-size:15px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:9px;}
+  .mark{width:11px;height:11px;border-radius:3px;background:var(--accent);flex:0 0 auto;}
+  .card .note{padding:9px 20px;background:var(--surface-2);color:var(--text-muted);
+    font-size:12px;border-bottom:1px solid var(--border);}
+
+  .diagram-wrap{padding:14px 12px 6px;overflow-x:auto;}
+  .diagram-wrap svg{display:block;margin:0 auto;width:100%;max-width:1000px;height:auto;}
+
+  .legend{display:flex;flex-direction:column;gap:0;}
+  .legend-row{display:flex;gap:12px;align-items:flex-start;padding:11px 20px;border-bottom:1px solid var(--border);}
+  .legend-row:last-child{border-bottom:none;}
+  .legend-row .num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;
+    font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin-top:1px;}
+  .legend-row .txt{font-size:12.5px;color:var(--text);}
+  .legend-row .txt b{color:var(--accent);}
+
+  .footbar{border:1px dashed #c3c9c7;border-radius:10px;background:transparent;
+    padding:12px 20px;margin:6px 0 28px;font-size:11.5px;color:var(--text-muted);}
+  .footbar b{color:var(--text);}
+
+  footer{max-width:1100px;margin:0 auto;padding:6px 20px 40px;color:var(--text-muted);font-size:11px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="kicker">Data Flow</p>
+    <h1>データフロー全体図</h1>
+    <p class="lead">画面・生成・投稿・数値がどこを通るか</p>
+  </div>
+</header>
+
+<main>
+
+  <section id="diagram">
+    <div class="card">
+      <h2><span class="mark"></span>システム全体のデータフロー</h2>
+      <div class="note">4つの領域(貴社オフィス / Cloudflare / Googleスプレッドシート / 外部サービス)を、番号付きの矢印がリクエストから投稿・実績回収まで一周します。</div>
+      <div class="diagram-wrap">
+<svg viewBox="0 0 1040 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="データフロー全体図">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0f6b64"/>
+    </marker>
+    <marker id="arrMuted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8a9491"/>
+    </marker>
+  </defs>
+
+  <!-- ============ ZONES ============ -->
+  <rect x="20" y="60" width="230" height="410" rx="14" fill="#eef2f5" stroke="#c9d3d9"/>
+  <text x="34" y="82" font-size="12" font-weight="800" fill="#3d4a55">貴社オフィス</text>
+
+  <rect x="290" y="60" width="230" height="410" rx="14" fill="#fdf2e3" stroke="#eddcb8"/>
+  <text x="304" y="82" font-size="12" font-weight="800" fill="#8a6416">Cloudflare</text>
+
+  <rect x="560" y="60" width="230" height="410" rx="14" fill="#f3eef7" stroke="#ddd0e8"/>
+  <text x="574" y="82" font-size="12" font-weight="800" fill="#6b4a86">外部サービス</text>
+
+  <rect x="20" y="500" width="930" height="150" rx="16" fill="#e3efed" stroke="#0f6b64" stroke-width="1.6"/>
+
+  <!-- ============ CONNECTORS ============ -->
+  <g fill="none" stroke="#0f6b64" stroke-width="2">
+    <!-- 1: A1 -> B1 -> B2 -> D (登録) -->
+    <path d="M230,118 L310,118" marker-end="url(#arr)"/>
+    <path d="M405,170 L405,225" marker-end="url(#arr)"/>
+    <path d="M500,267.5 L540,267.5 L540,500" marker-end="url(#arr)"/>
+
+    <!-- 2: D -> A2 (読取) / A2 <-> Fal AI (生成) -->
+    <path d="M270,500 L270,300 L230,300" marker-end="url(#arr)"/>
+    <path d="M230,255 L270,255 L270,200 L540,200 L540,180 L580,180" marker-start="url(#arr)" marker-end="url(#arr)"/>
+
+    <!-- 3: A2 -> R2(保存) / A2 -> D(書込) -->
+    <path d="M135,310 L135,340 L405,340 L405,360" marker-end="url(#arr)"/>
+    <path d="M230,225 L282,225 L282,500" marker-end="url(#arr)"/>
+
+    <!-- 4: D -> B2(状態) / B3 -> B2(プレビュー) / B2 -> B1 / B1 -> A1 / 実績閲覧 D -> B1 -->
+    <path d="M600,500 L600,267.5 L500,267.5" marker-end="url(#arr)"/>
+    <path d="M405,360 L405,310" marker-end="url(#arr)"/>
+    <path d="M405,225 L405,170" marker-end="url(#arr)"/>
+    <path d="M310,150 L230,150" marker-end="url(#arr)"/>
+    <path d="M555,500 L555,150 L500,150" marker-end="url(#arr)" stroke-dasharray="1,0"/>
+
+    <!-- 5: D -> A3(キュー読取) / R2 -> A3(動画取得) / A3 -> TikTok(投稿) -->
+    <path d="M135,500 L135,445" marker-end="url(#arr)"/>
+    <path d="M310,395 L230,395" marker-end="url(#arr)"/>
+    <path d="M230,410 L230,460 L675,460 L675,400" marker-end="url(#arr)"/>
+
+    <!-- 6: TikTok -> D(実績回収) -->
+    <path d="M675,400 L675,440 L675,500" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- FB loop (dotted) -->
+  <path d="M160,170 L160,225" fill="none" stroke="#8a9491" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrMuted)"/>
+  <text x="167" y="202" font-size="9.5" fill="#5b6764">FB</text>
+
+  <!-- ============ BADGES ============ -->
+  <circle cx="270" cy="102" r="11" fill="#0f6b64"/><text x="270" y="106" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">1</text>
+  <circle cx="270" cy="236" r="11" fill="#0f6b64"/><text x="270" y="240" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">2</text>
+  <circle cx="270" cy="340" r="11" fill="#0f6b64"/><text x="270" y="344" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">3</text>
+  <circle cx="600" cy="420" r="11" fill="#0f6b64"/><text x="600" y="424" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">4</text>
+  <circle cx="450" cy="460" r="11" fill="#0f6b64"/><text x="450" y="464" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">5</text>
+  <circle cx="675" cy="420" r="11" fill="#0f6b64"/><text x="675" y="424" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">6</text>
+
+  <!-- ============ NODES: 貴社オフィス ============ -->
+  <g>
+    <rect x="40" y="95" width="190" height="75" rx="10" fill="#ffffff" stroke="#c9d3d9" stroke-width="1.4"/>
+    <text x="135" y="122" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">担当者ブラウザ</text>
+    <text x="135" y="140" font-size="10" fill="#5b6764" text-anchor="middle">生成リクエスト画面/</text>
+    <text x="135" y="154" font-size="10" fill="#5b6764" text-anchor="middle">検品・承認画面を開く</text>
+  </g>
+
+  <g>
+    <rect x="40" y="225" width="190" height="85" rx="10" fill="#ffffff" stroke="#c9d3d9" stroke-width="1.4"/>
+    <text x="135" y="252" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">Mac mini</text>
+    <text x="135" y="269" font-size="10" fill="#5b6764" text-anchor="middle">AIエージェント</text>
+    <text x="135" y="283" font-size="10" fill="#5b6764" text-anchor="middle">Claude/Codex対応スキル</text>
+    <text x="135" y="297" font-size="10" fill="#5b6764" text-anchor="middle">+ 納品repo</text>
+  </g>
+
+  <g>
+    <rect x="40" y="360" width="190" height="85" rx="10" fill="#ffffff" stroke="#c9d3d9" stroke-width="1.4"/>
+    <text x="135" y="387" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">ADB投稿マシン</text>
+    <text x="135" y="404" font-size="10" fill="#5b6764" text-anchor="middle">実機Android端末</text>
+    <text x="135" y="418" font-size="10" fill="#5b6764" text-anchor="middle">(1台 5アカウント)</text>
+  </g>
+
+  <!-- ============ NODES: Cloudflare ============ -->
+  <g>
+    <rect x="310" y="95" width="190" height="75" rx="10" fill="#ffffff" stroke="#eddcb8" stroke-width="1.4"/>
+    <text x="405" y="122" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">Pages</text>
+    <text x="405" y="140" font-size="10" fill="#5b6764" text-anchor="middle">画面ホスティング</text>
+    <text x="405" y="154" font-size="10" fill="#5b6764" text-anchor="middle">(生成リクエスト/検品承認)</text>
+  </g>
+
+  <g>
+    <rect x="310" y="225" width="190" height="85" rx="10" fill="#ffffff" stroke="#eddcb8" stroke-width="1.4"/>
+    <text x="405" y="255" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">Workers</text>
+    <text x="405" y="273" font-size="10" fill="#5b6764" text-anchor="middle">中継API</text>
+    <text x="405" y="287" font-size="10" fill="#5b6764" text-anchor="middle">(画面⇄シート仲介)</text>
+  </g>
+
+  <g>
+    <rect x="310" y="360" width="190" height="85" rx="10" fill="#ffffff" stroke="#eddcb8" stroke-width="1.4"/>
+    <text x="405" y="390" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">R2</text>
+    <text x="405" y="408" font-size="10" fill="#5b6764" text-anchor="middle">生成物ストレージ</text>
+    <text x="405" y="422" font-size="10" fill="#5b6764" text-anchor="middle">(画像・スライド動画)</text>
+  </g>
+
+  <!-- ============ NODES: 外部サービス ============ -->
+  <g>
+    <rect x="580" y="140" width="190" height="80" rx="10" fill="#ffffff" stroke="#ddd0e8" stroke-width="1.4"/>
+    <text x="675" y="172" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">Fal AI</text>
+    <text x="675" y="190" font-size="10" fill="#5b6764" text-anchor="middle">画像生成API</text>
+  </g>
+
+  <g>
+    <rect x="580" y="320" width="190" height="80" rx="10" fill="#ffffff" stroke="#ddd0e8" stroke-width="1.4"/>
+    <text x="675" y="352" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">TikTok</text>
+    <text x="675" y="370" font-size="10" fill="#5b6764" text-anchor="middle">(実機アプリから投稿)</text>
+  </g>
+
+  <!-- ============ NODE: Google スプレッドシート ============ -->
+  <g>
+    <text x="485" y="535" font-size="16" font-weight="800" fill="#0f6b64" text-anchor="middle">Googleスプレッドシート</text>
+    <text x="485" y="554" font-size="11.5" fill="#5b6764" text-anchor="middle">全データの台帳(SSOT)</text>
+
+    <g font-size="10.5" font-weight="700" fill="#0f6b64">
+      <rect x="45" y="590" width="160" height="30" rx="8" fill="#ffffff" stroke="#0f6b64" stroke-width="1"/>
+      <text x="125" y="609" text-anchor="middle">リクエスト</text>
+
+      <rect x="225" y="590" width="160" height="30" rx="8" fill="#ffffff" stroke="#0f6b64" stroke-width="1"/>
+      <text x="305" y="609" text-anchor="middle">生成ステータス</text>
+
+      <rect x="405" y="590" width="160" height="30" rx="8" fill="#ffffff" stroke="#0f6b64" stroke-width="1"/>
+      <text x="485" y="609" text-anchor="middle">検品状態</text>
+
+      <rect x="585" y="590" width="160" height="30" rx="8" fill="#ffffff" stroke="#0f6b64" stroke-width="1"/>
+      <text x="665" y="609" text-anchor="middle">投稿キュー</text>
+
+      <rect x="765" y="590" width="160" height="30" rx="8" fill="#ffffff" stroke="#0f6b64" stroke-width="1"/>
+      <text x="845" y="609" text-anchor="middle">実績</text>
+    </g>
+  </g>
+
+</svg>
+      </div>
+    </div>
+  </section>
+
+  <section id="legend">
+    <div class="card">
+      <h2><span class="mark"></span>フローの説明</h2>
+      <div class="legend">
+        <div class="legend-row"><span class="num">1</span><span class="txt">担当者が<b>Pages</b>の画面から生成リクエスト → <b>Workers</b> → <b>シート</b>に登録</span></div>
+        <div class="legend-row"><span class="num">2</span><span class="txt"><b>Mac mini</b>のAIエージェントがシートのリクエストを読取 → <b>Fal AI</b>で画像生成 → スライド動画を組立</span></div>
+        <div class="legend-row"><span class="num">3</span><span class="txt">生成物を<b>R2</b>へ保存、ステータス+URLを<b>シート</b>へ書込</span></div>
+        <div class="legend-row"><span class="num">4</span><span class="txt">検品画面(<b>Pages</b>)が<b>Workers</b>経由でシートの状態+R2のプレビューを表示 → Go/FB(FBは②に戻り再生成)</span></div>
+        <div class="legend-row"><span class="num">5</span><span class="txt"><b>ADBマシン</b>が承認済みキューをシートから読取 → <b>R2</b>から動画取得 → 実機が<b>TikTok</b>へ自動投稿</span></div>
+        <div class="legend-row"><span class="num">6</span><span class="txt">投稿実績(再生数など)を<b>シート</b>の実績タブへ回収 → 画面で閲覧</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footbar">
+    認証情報は貴社発行・貴社管理です(<b>Fal AIキー</b> / <b>Googleアカウント</b> / <b>Cloudflareアカウント</b>)。ソースコード・マニュアル込みで納品します。
+  </div>
+
+</main>
+
+<footer>作成: 2026-09-01</footer>
+
+</body>
+</html>
