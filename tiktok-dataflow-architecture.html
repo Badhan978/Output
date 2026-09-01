@@ -7,249 +7,704 @@
 <title>データフロー全体図</title>
 <style>
   :root{
-    --bg:#f5f6f5;
-    --surface:#ffffff;
-    --surface-2:#eef0ef;
-    --border:#dde1df;
-    --text:#1c2422;
-    --text-muted:#5b6764;
-    --accent:#0f6b64;
-    --accent-weak:#e3efed;
-    --shadow: 0 1px 3px rgba(20,30,28,0.08), 0 1px 2px rgba(20,30,28,0.06);
+    --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --bg:#f7f8fa; --card:#fff;
+    --front:#2563eb; --frontbg:#eff5ff; --frontln:#bcd4fb;  /* フロント 青 */
+    --back:#4f46e5;  --backbg:#eef2ff;  --backln:#c7d2fe;   /* バック 藍 */
+    --data:#86198f;  --databg:#fdf4ff;  --dataln:#f5d0fe;   /* データ マゼンタ */
+    --ext:#475569;   --extbg:#f8fafc;   --extln:#e2e8f0;    /* 外部 スレート */
+    --file:#d97706;  --filebg:#fffbeb;  --fileln:#fde68a;   /* ファイル アンバー */
+    --gen:#7c3aed;   --genbg:#f5f3ff;   --genln:#ddd6fe;    /* 生成API 紫 */
+    --dev:#0d9488;   --devbg:#effbf8;   --devln:#b9ece3;    /* 実機 ティール */
+    --ok:#16a34a;    --okbg:#f0fdf4;    --okln:#bbf7d0;
+    --claude:#d97757;
+    --accent:#1d4ed8;
   }
   *{box-sizing:border-box}
-  body{
-    margin:0;background:var(--bg);color:var(--text);
-    font-family:-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
-    font-size:13.5px;line-height:1.6;
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    line-height:1.75;font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px 90px}
+  .progress{position:fixed;top:0;left:0;width:100%;height:4px;z-index:100;
+    background:linear-gradient(90deg,var(--front),var(--back),var(--data),var(--dev));
+    transform:scaleX(0);transform-origin:0 50%;transition:transform .05s linear}
+  svg{display:block}
+
+  header.hero{position:relative;overflow:hidden;border-radius:0 0 24px 24px;margin:0 -22px 8px;
+    padding:44px 34px 34px;color:#fff;
+    background:linear-gradient(125deg,#0f172a 0%,#1d4ed8 52%,#0d9488 100%)}
+  header.hero::after{content:"";position:absolute;inset:0;opacity:.13;
+    background:radial-gradient(circle at 84% 16%,#fff 0,transparent 42%),
+               radial-gradient(circle at 10% 90%,#fff 0,transparent 40%)}
+  .hero .kick{position:relative;font-size:12.5px;font-weight:700;letter-spacing:.1em;
+    opacity:.9;margin-bottom:12px}
+  .hero h1{position:relative;font-size:27px;line-height:1.42;margin:0 0 12px;font-weight:800}
+  .hero h1 .hl{background:linear-gradient(transparent 62%,rgba(255,255,255,.28) 62%);padding:0 3px}
+  .hero .lead{position:relative;font-size:14px;opacity:.96;max-width:820px;margin:0}
+  .hero .meta{position:relative;margin-top:16px;font-size:12px;opacity:.9}
+
+  h2{font-size:20px;margin:42px 0 8px;display:flex;align-items:center;gap:10px}
+  h2 .n{flex:none;width:27px;height:27px;border-radius:8px;background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+  h2 .ic{font-size:22px;line-height:1}
+  .lead-p{color:var(--muted);font-size:13.5px;margin:2px 0 16px}
+
+  .banner{display:flex;gap:16px;align-items:flex-start;
+    background:var(--okbg);border:1.5px solid var(--okln);border-left:6px solid var(--ok);
+    border-radius:14px;padding:16px 20px;margin:22px 0}
+  .banner .ic{flex:none;width:38px;height:38px;border-radius:50%;background:var(--ok);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:20px}
+  .banner b{color:#15803d;font-size:15.5px}
+  .banner ul{margin:6px 0 0;padding-left:18px}
+  .banner li{font-size:13px;margin:4px 0}
+
+  /* Claude Code イントロ */
+  .cintro{display:flex;gap:14px;align-items:center;background:#fff8f4;border:1px solid #ecd5c8;
+    border-left:5px solid var(--claude);border-radius:14px;padding:14px 18px;margin:18px 0}
+  .cintro .ava{flex:none;width:40px;height:40px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.14))}
+  .cintro b{color:#9a4a2f;font-size:14px}
+  .cintro p{margin:3px 0 0;font-size:12.5px;color:var(--muted);line-height:1.7}
+
+  /* ── 層の説明 ── */
+  .layers{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:16px 0}
+  .layer{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;
+    border-top:4px solid var(--front)}
+  .layer.l2{border-top-color:var(--back)}
+  .layer.l3{border-top-color:var(--data)}
+  .layer.l4{border-top-color:var(--ext)}
+  .layer .lh{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+  .layer .lh .sq{width:12px;height:12px;border-radius:4px;background:var(--front);flex:none}
+  .layer.l2 .lh .sq{background:var(--back)}
+  .layer.l3 .lh .sq{background:var(--data)}
+  .layer.l4 .lh .sq{background:var(--ext)}
+  .layer .lh b{font-size:13.5px}
+  .layer p{margin:0;font-size:12px;color:var(--muted);line-height:1.65}
+  .layer p .k{color:var(--ink);font-weight:700}
+
+  /* ── 図カード ── */
+  .fig{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px 18px 14px;margin:16px 0}
+  .figttl{font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:10px;letter-spacing:.04em}
+  .figscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .fig svg.d{width:100%;height:auto}
+  .figcap{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.65}
+  .legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px;font-size:12px}
+  .legend span{display:flex;align-items:center;gap:6px;color:var(--muted)}
+  .legend .dot{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .legend .pill{display:inline-block;font-size:10.5px;font-weight:800;border-radius:999px;padding:1px 8px}
+
+  /* ── フロー説明 ── */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin:16px 0}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px;
+    border-top:4px solid var(--front)}
+  .step.s2{border-top-color:var(--gen)}
+  .step.s3{border-top-color:var(--file)}
+  .step.s4{border-top-color:var(--front)}
+  .step.s5{border-top-color:var(--dev)}
+  .step.s6{border-top-color:var(--ok)}
+  .step .sh{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+  .step .sh .b{flex:none;width:24px;height:24px;border-radius:7px;background:var(--front);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+  .step.s2 .sh .b{background:var(--gen)}
+  .step.s3 .sh .b{background:var(--file)}
+  .step.s4 .sh .b{background:var(--front)}
+  .step.s5 .sh .b{background:var(--dev)}
+  .step.s6 .sh .b{background:var(--ok)}
+  .step .sh b{font-size:13.5px}
+  .step p{margin:0;font-size:12px;color:var(--muted);line-height:1.68}
+  .step p .k{color:var(--ink);font-weight:700}
+  .step .path{display:block;margin-top:7px;font-size:11px;font-weight:800;color:#94a3b8}
+
+  /* ── 依存サービス ── */
+  .items{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}
+  .item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .item .ih{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .item .ih .ii{flex:none;width:26px;height:26px}
+  .item .ih b{font-size:13.5px}
+  .item p{margin:0;font-size:12px;color:var(--muted);line-height:1.62}
+
+  .note{font-size:12px;color:var(--muted);background:#fff;border:1px dashed var(--line);
+    border-radius:10px;padding:12px 15px;margin:14px 0}
+  .note b{color:var(--ink)}
+
+  footer{margin-top:46px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);
+    padding-top:16px;line-height:1.8}
+  footer b{color:var(--ink)}
+
+  @media(max-width:640px){
+    .hero h1{font-size:22px} .wrap{padding:0 16px 70px}
+    header.hero{margin:0 -16px 8px;padding:36px 22px 28px}
   }
-
-  .hero{
-    background:linear-gradient(135deg,#0f172a,#123a34,#0f6b64);
-    color:#fff;padding:26px 28px 22px;
+  @media print{
+    header.hero,.banner .ic,h2 .n,.step .sh .b{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .progress{display:none}
   }
-  .hero-inner{max-width:1100px;margin:0 auto;}
-  .kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9fd8cf;font-weight:700;margin:0 0 8px;}
-  .hero h1{margin:0;font-size:24px;font-weight:800;}
-  .hero .lead{margin:8px 0 0;color:#cfe6e2;font-size:13px;max-width:720px;}
-
-  main{max-width:1100px;margin:0 auto;padding:22px 20px 10px;}
-
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;
-    box-shadow:var(--shadow);margin-bottom:20px;overflow:hidden;}
-  .card h2{margin:0;padding:14px 20px;font-size:15px;border-bottom:1px solid var(--border);
-    display:flex;align-items:center;gap:9px;}
-  .mark{width:11px;height:11px;border-radius:3px;background:var(--accent);flex:0 0 auto;}
-  .card .note{padding:9px 20px;background:var(--surface-2);color:var(--text-muted);
-    font-size:12px;border-bottom:1px solid var(--border);}
-
-  .diagram-wrap{padding:14px 12px 6px;overflow-x:auto;}
-  .diagram-wrap svg{display:block;margin:0 auto;width:100%;max-width:1000px;height:auto;}
-
-  .legend{display:flex;flex-direction:column;gap:0;}
-  .legend-row{display:flex;gap:12px;align-items:flex-start;padding:11px 20px;border-bottom:1px solid var(--border);}
-  .legend-row:last-child{border-bottom:none;}
-  .legend-row .num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;
-    font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin-top:1px;}
-  .legend-row .txt{font-size:12.5px;color:var(--text);}
-  .legend-row .txt b{color:var(--accent);}
-
-  .footbar{border:1px dashed #c3c9c7;border-radius:10px;background:transparent;
-    padding:12px 20px;margin:6px 0 28px;font-size:11.5px;color:var(--text-muted);}
-  .footbar b{color:var(--text);}
-
-  footer{max-width:1100px;margin:0 auto;padding:6px 20px 40px;color:var(--text-muted);font-size:11px;}
 </style>
 </head>
 <body>
 
+<div class="progress" id="prog"></div>
+
+<!-- ============ アイコン定義 ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-gas" viewBox="0 0 48 48">
+      <rect x="7" y="8" width="34" height="32" rx="4" fill="#eff5ff" stroke="#2563eb" stroke-width="2.2"/>
+      <path d="M18 19l-5 5 5 5M30 19l5 5-5 5" fill="none" stroke="#2563eb"
+            stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-mac" viewBox="0 0 48 48">
+      <rect x="8" y="12" width="32" height="21" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="2.2"/>
+      <rect x="12" y="16" width="24" height="13" rx="1.4" fill="#4f46e5" opacity=".5"/>
+      <path d="M14 37h20" stroke="#4f46e5" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M24 33v4" stroke="#4f46e5" stroke-width="2.4"/>
+    </symbol>
+    <symbol id="i-sheet" viewBox="0 0 48 48">
+      <rect x="9" y="5" width="30" height="38" rx="3" fill="#fdf4ff" stroke="#86198f" stroke-width="2.2"/>
+      <rect x="13" y="11" width="22" height="5" rx="1" fill="#86198f" opacity=".85"/>
+      <g stroke="#86198f" stroke-width="1.6" opacity=".55">
+        <path d="M13 22h22M13 28h22M13 34h22M24 19v18"/>
+      </g>
+    </symbol>
+    <symbol id="i-drive" viewBox="0 0 48 48">
+      <path d="M18 6h12l12 21H30Z" fill="#fffbeb" stroke="#d97706" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M18 6 6 27l6 10 12-21Z" fill="#fffbeb" stroke="#d97706" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M12 37h24l6-10H18Z" fill="#fffbeb" stroke="#d97706" stroke-width="2.2" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 48 48">
+      <path d="M24 7l4.2 10.8L39 22l-10.8 4.2L24 37l-4.2-10.8L9 22l10.8-4.2Z"
+            fill="#f5f3ff" stroke="#7c3aed" stroke-width="2.2" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Claude（Claude Code のマーク） -->
+    <symbol id="claudeMark" viewBox="0 0 24 24">
+      <title>Claude</title>
+      <path clip-rule="evenodd" fill-rule="evenodd" fill="#D97757" d="M20.998 10.949H24v3.102h-3v3.028h-1.487V20H18v-2.921h-1.487V20H15v-2.921H9V20H7.488v-2.921H6V20H4.487v-2.921H3V14.05H0V10.95h3V5h17.998v5.949zM6 10.949h1.488V8.102H6v2.847zm10.51 0H18V8.102h-1.49v2.847z"/>
+    </symbol>
+
+    <!-- 矢印マーカー（用途別に色分け） -->
+    <marker id="ar-ui" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#2563eb"/></marker>
+    <marker id="ar-sh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#86198f"/></marker>
+    <marker id="ar-fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#d97706"/></marker>
+    <marker id="ar-gen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#7c3aed"/></marker>
+    <marker id="ar-dev" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#0d9488"/></marker>
+    <marker id="ar-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#16a34a"/></marker>
+    <marker id="ar-gy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#cbd5e1"/></marker>
+  </defs>
+</svg>
+
 <header class="hero">
-  <div class="hero-inner">
-    <p class="kicker">Data Flow</p>
-    <h1>データフロー全体図</h1>
-    <p class="lead">画面・生成・投稿・数値がどこを通るか</p>
+  <div class="wrap" style="padding-bottom:0">
+    <div class="kick">DATA FLOW ARCHITECTURE</div>
+    <h1>データフロー全体図 —<br><span class="hl">画面・生成・投稿・実績</span>がどこを通るか</h1>
+    <p class="lead">担当者のリクエストから、素材の生成・検品・実機投稿・実績回収までを1周で示します。
+      画面は <b>Google Apps Script</b>、データは <b>スプレッドシートと Google Drive</b>。
+      処理はすべて <b>Mac mini の Claude Code</b> が担います。</p>
+    <div class="meta">対象：TikTok 運用自動化基盤</div>
   </div>
 </header>
 
-<main>
+<div class="wrap">
 
-  <section id="diagram">
-    <div class="card">
-      <h2><span class="mark"></span>システム全体のデータフロー</h2>
-      <div class="note">4つの領域(貴社オフィス / Cloudflare / Googleスプレッドシート / 外部サービス)を、番号付きの矢印がリクエストから投稿・実績回収まで一周します。</div>
-      <div class="diagram-wrap">
-<svg viewBox="0 0 970 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="データフロー全体図">
-  <defs>
-    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#0f6b64"/>
-    </marker>
-    <marker id="arrMuted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#8a9491"/>
-    </marker>
-  </defs>
+<div class="banner">
+  <div class="ic">✓</div>
+  <div>
+    <b>Googleの中だけで完結します — 追加のインフラ契約は不要です</b>
+    <ul>
+      <li>画面は <b>Apps Script</b>。ホスティングも認証も Google 側の標準機能で賄えます</li>
+      <li>状態は <b>スプレッドシート</b>、素材やファイルの実体は <b>Google Drive</b></li>
+      <li>処理エンジンは <b>Claude Code 1つだけ</b>。素材の生成から実機投稿まで通しで動きます</li>
+    </ul>
+  </div>
+</div>
 
-  <!-- ============ ZONES ============ -->
-  <rect x="20" y="60" width="290" height="410" rx="14" fill="#eef2f5" stroke="#c9d3d9"/>
-  <text x="34" y="82" font-size="12" font-weight="800" fill="#3d4a55">貴社オフィス</text>
+<div class="cintro">
+  <svg class="ava" viewBox="0 0 24 24"><use href="#claudeMark"/></svg>
+  <div>
+    <b>このシステムの中核は Mac mini 上の Claude Code です</b>
+    <p>Mac mini には Claude Code の<b>tmux セッションが常時起動したまま</b>置かれており、
+      <b>launchd</b> が定期的にそこへプロンプトを送ると、Claude Code が該当の<b>スキル</b>を呼び出します。
+      あとは自分でスプレッドシートと Drive を見に行き、何をすべきか判断して処理を進めます。
+      素材づくりのスキルは外部の生成APIで画像・動画をつくり、投稿のスキルは
+      <b>adb を通じて実機のスマホを人間と同じように操作</b>します。
+      サーバー側に処理を持たないので、増やすのも止めるのもこの1台の中で完結します。</p>
+  </div>
+</div>
 
-  <rect x="340" y="60" width="290" height="410" rx="14" fill="#fdf2e3" stroke="#eddcb8"/>
-  <text x="354" y="82" font-size="12" font-weight="800" fill="#8a6416">Cloudflare</text>
+<h2><span class="n">1</span><span class="ic">🧱</span>領域の分け方 — 4つの層</h2>
+<p class="lead-p">「どこに置いてあるか」ではなく「どんな役割か」で分けています。上から下へ読むと、そのままデータの流れる順番になります。</p>
 
-  <rect x="660" y="60" width="290" height="410" rx="14" fill="#f3eef7" stroke="#ddd0e8"/>
-  <text x="674" y="82" font-size="12" font-weight="800" fill="#6b4a86">外部サービス</text>
+<div class="layers">
+  <div class="layer l1">
+    <div class="lh"><span class="sq"></span><b>フロントエンド（画面・表示）</b></div>
+    <p>人が触る唯一の層。<span class="k">Apps Script Web アプリ</span>が、リクエスト・検品承認・実績確認の
+      3画面をまとめて担います。データは持たず、表示と入力だけを担当します。</p>
+  </div>
+  <div class="layer l2">
+    <div class="lh"><span class="sq"></span><b>バックエンド（処理・自動化）</b></div>
+    <p>実際に仕事をする層は <span class="k">Claude Code</span> ひとつだけ。素材生成から実機投稿、
+      実績の回収までを担います。定期実行で起こされ、自分でデータ層を見て判断します。</p>
+  </div>
+  <div class="layer l3">
+    <div class="lh"><span class="sq"></span><b>データ層（台帳・ストレージ）</b></div>
+    <p>状態の唯一の置き場。<span class="k">スプレッドシート</span>が進行状況の台帳、
+      <span class="k">Google Drive</span> が素材やファイルの実体を持ちます。</p>
+  </div>
+  <div class="layer l4">
+    <div class="lh"><span class="sq"></span><b>外部サービス・配信先</b></div>
+    <p>自社の外に出る境界。<span class="k">fal.ai</span>（画像・動画の生成API）と、
+      <span class="k">実機スマホの TikTokアプリ</span>（配信先）。ここだけ外部の都合に左右されます。</p>
+  </div>
+</div>
 
-  <rect x="20" y="500" width="930" height="150" rx="16" fill="#e3efed" stroke="#0f6b64" stroke-width="1.6"/>
+<h2><span class="n">2</span><span class="ic">🗺️</span>システム全体のデータフロー</h2>
+<p class="lead-p">線の色は用途を表します。青＝画面まわりの通信、マゼンタ＝台帳の読み書き、アンバー＝ファイル、紫＝生成API、ティール＝実機操作、緑＝実績回収。</p>
 
-  <!-- ============ CONNECTORS ============ -->
-  <g fill="none" stroke="#0f6b64" stroke-width="2">
-    <!-- 1: A1 -> B1 -> B2 -> D (登録) -->
-    <path d="M290,118 L360,118" marker-end="url(#arr)"/>
-    <path d="M485,170 L485,225" marker-end="url(#arr)"/>
-    <path d="M610,267.5 L628,267.5 L628,500" marker-end="url(#arr)"/>
+<div class="fig">
+  <div class="figttl">図1 ／ 4層構成でみるリクエストから投稿・実績回収までの一周</div>
+  <div class="figscroll">
+  <svg class="d" viewBox="0 0 960 952" style="min-width:780px" role="img"
+       aria-label="4層構成のデータフロー図。フロントエンド層に担当者とApps Script Webアプリ、バックエンド層にMac miniのClaude Code、データ層にスプレッドシートとGoogle Drive、外部サービス層にfal.aiと実機スマホのTikTokアプリを配置。Claude Codeがスキルを呼び出してfal.aiで素材を生成し、ファイルをDriveへ、状態をスプレッドシートへ保存。adbで実機スマホのTikTokアプリを操作して投稿し、実績がデータ層へ戻る。">
 
-    <!-- 2: D -> A2 (読取) / A2 <-> Fal AI (生成) -->
-    <path d="M325,500 L325,300 L290,300" marker-end="url(#arr)"/>
-    <path d="M290,255 L325,255 L325,200 L628,200 L628,180 L680,180" marker-start="url(#arr)" marker-end="url(#arr)"/>
+    <!-- ============ 層（バンド） ============ -->
+    <rect x="16" y="48"  width="928" height="140" rx="16" fill="#eff5ff" stroke="#bcd4fb"/>
+    <rect x="32" y="62"  width="11" height="11" rx="3" fill="#2563eb"/>
+    <text x="52" y="72" font-size="12.5" font-weight="800" fill="#1d4ed8">フロントエンド ／ 画面・表示層</text>
 
-    <!-- 3: A2 -> R2(保存) / A2 -> D(書込) -->
-    <path d="M165,310 L165,340 L485,340 L485,360" marker-end="url(#arr)"/>
-    <path d="M290,225 L336,225 L336,500" marker-end="url(#arr)"/>
+    <rect x="16" y="232" width="928" height="220" rx="16" fill="#eef2ff" stroke="#c7d2fe"/>
+    <rect x="32" y="246" width="11" height="11" rx="3" fill="#4f46e5"/>
+    <text x="52" y="256" font-size="12.5" font-weight="800" fill="#4338ca">バックエンド ／ 処理・自動化層</text>
 
-    <!-- 4: D -> B2(状態) / B3 -> B2(プレビュー) / B2 -> B1 / B1 -> A1 / 実績閲覧 D -> B1 -->
-    <path d="M663,500 L663,267.5 L610,267.5" marker-end="url(#arr)"/>
-    <path d="M485,360 L485,310" marker-end="url(#arr)"/>
-    <path d="M485,225 L485,170" marker-end="url(#arr)"/>
-    <path d="M360,150 L290,150" marker-end="url(#arr)"/>
-    <path d="M645,500 L645,150 L610,150" marker-end="url(#arr)" stroke-dasharray="1,0"/>
+    <rect x="16" y="484" width="928" height="152" rx="16" fill="#fdf4ff" stroke="#f5d0fe"/>
+    <rect x="32" y="498" width="11" height="11" rx="3" fill="#86198f"/>
+    <text x="52" y="508" font-size="12.5" font-weight="800" fill="#86198f">データ層 ／ 台帳・ストレージ</text>
 
-    <!-- 5: D -> A3(キュー読取) / R2 -> A3(動画取得) / A3 -> TikTok(投稿) -->
-    <path d="M165,500 L165,445" marker-end="url(#arr)"/>
-    <path d="M360,395 L290,395" marker-end="url(#arr)"/>
-    <path d="M290,410 L290,460 L805,460 L805,400" marker-end="url(#arr)"/>
+    <rect x="16" y="688" width="928" height="232" rx="16" fill="#f8fafc" stroke="#e2e8f0"/>
+    <rect x="32" y="702" width="11" height="11" rx="3" fill="#475569"/>
+    <text x="52" y="712" font-size="12.5" font-weight="800" fill="#475569">外部サービス ／ 配信先</text>
 
-    <!-- 6: TikTok -> D(実績回収) -->
-    <path d="M805,400 L805,440 L805,500" marker-end="url(#arr)"/>
-  </g>
-
-  <!-- FB loop (dotted) -->
-  <path d="M190,170 L190,225" fill="none" stroke="#8a9491" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrMuted)"/>
-  <text x="197" y="202" font-size="9.5" fill="#5b6764">FB</text>
-
-  <!-- ============ BADGES ============ -->
-  <circle cx="325" cy="102" r="11" fill="#0f6b64"/><text x="325" y="106" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">1</text>
-  <circle cx="325" cy="236" r="11" fill="#0f6b64"/><text x="325" y="240" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">2</text>
-  <circle cx="325" cy="340" r="11" fill="#0f6b64"/><text x="325" y="344" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">3</text>
-  <circle cx="663" cy="420" r="11" fill="#0f6b64"/><text x="663" y="424" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">4</text>
-  <circle cx="506" cy="460" r="11" fill="#0f6b64"/><text x="506" y="464" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">5</text>
-  <circle cx="805" cy="420" r="11" fill="#0f6b64"/><text x="805" y="424" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">6</text>
-
-  <!-- ============ NODES: 貴社オフィス ============ -->
-  <g>
-    <rect x="40" y="95" width="250" height="75" rx="10" fill="#ffffff" stroke="#c9d3d9" stroke-width="1.4"/>
-    <text x="165" y="122" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">担当者ブラウザ</text>
-    <text x="165" y="140" font-size="10" fill="#5b6764" text-anchor="middle">生成リクエスト画面/</text>
-    <text x="165" y="154" font-size="10" fill="#5b6764" text-anchor="middle">検品・承認画面を開く</text>
-  </g>
-
-  <g>
-    <rect x="40" y="225" width="250" height="85" rx="10" fill="#ffffff" stroke="#c9d3d9" stroke-width="1.4"/>
-    <text x="165" y="252" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">Mac mini</text>
-    <text x="165" y="269" font-size="10" fill="#5b6764" text-anchor="middle">AIエージェント</text>
-    <text x="165" y="283" font-size="10" fill="#5b6764" text-anchor="middle">Claude/Codex対応スキル</text>
-    <text x="165" y="297" font-size="10" fill="#5b6764" text-anchor="middle">+ 納品repo</text>
-  </g>
-
-  <g>
-    <rect x="40" y="360" width="250" height="85" rx="10" fill="#ffffff" stroke="#c9d3d9" stroke-width="1.4"/>
-    <text x="165" y="387" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">ADB投稿マシン</text>
-    <text x="165" y="404" font-size="10" fill="#5b6764" text-anchor="middle">実機Android端末</text>
-    <text x="165" y="418" font-size="10" fill="#5b6764" text-anchor="middle">(1台 5アカウント)</text>
-  </g>
-
-  <!-- ============ NODES: Cloudflare ============ -->
-  <g>
-    <rect x="360" y="95" width="250" height="75" rx="10" fill="#ffffff" stroke="#eddcb8" stroke-width="1.4"/>
-    <text x="485" y="122" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">Pages</text>
-    <text x="485" y="140" font-size="10" fill="#5b6764" text-anchor="middle">画面ホスティング</text>
-    <text x="485" y="154" font-size="10" fill="#5b6764" text-anchor="middle">(生成リクエスト/検品承認)</text>
-  </g>
-
-  <g>
-    <rect x="360" y="225" width="250" height="85" rx="10" fill="#ffffff" stroke="#eddcb8" stroke-width="1.4"/>
-    <text x="485" y="255" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">Workers</text>
-    <text x="485" y="273" font-size="10" fill="#5b6764" text-anchor="middle">中継API</text>
-    <text x="485" y="287" font-size="10" fill="#5b6764" text-anchor="middle">(画面⇄シート仲介)</text>
-  </g>
-
-  <g>
-    <rect x="360" y="360" width="250" height="85" rx="10" fill="#ffffff" stroke="#eddcb8" stroke-width="1.4"/>
-    <text x="485" y="390" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">R2</text>
-    <text x="485" y="408" font-size="10" fill="#5b6764" text-anchor="middle">生成物ストレージ</text>
-    <text x="485" y="422" font-size="10" fill="#5b6764" text-anchor="middle">(画像・スライド動画)</text>
-  </g>
-
-  <!-- ============ NODES: 外部サービス ============ -->
-  <g>
-    <rect x="680" y="140" width="250" height="80" rx="10" fill="#ffffff" stroke="#ddd0e8" stroke-width="1.4"/>
-    <text x="805" y="172" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">Fal AI</text>
-    <text x="805" y="190" font-size="10" fill="#5b6764" text-anchor="middle">画像生成API</text>
-  </g>
-
-  <g>
-    <rect x="680" y="320" width="250" height="80" rx="10" fill="#ffffff" stroke="#ddd0e8" stroke-width="1.4"/>
-    <text x="805" y="352" font-size="13" font-weight="800" fill="#1c2422" text-anchor="middle">TikTok</text>
-    <text x="805" y="370" font-size="10" fill="#5b6764" text-anchor="middle">(実機アプリから投稿)</text>
-  </g>
-
-  <!-- ============ NODE: Google スプレッドシート ============ -->
-  <g>
-    <text x="485" y="535" font-size="16" font-weight="800" fill="#0f6b64" text-anchor="middle">Googleスプレッドシート</text>
-    <text x="485" y="554" font-size="11.5" fill="#5b6764" text-anchor="middle">全データの台帳(SSOT)</text>
-
-    <g font-size="10.5" font-weight="700" fill="#0f6b64">
-      <rect x="45" y="590" width="160" height="30" rx="8" fill="#ffffff" stroke="#0f6b64" stroke-width="1"/>
-      <text x="125" y="609" text-anchor="middle">リクエスト</text>
-
-      <rect x="225" y="590" width="160" height="30" rx="8" fill="#ffffff" stroke="#0f6b64" stroke-width="1"/>
-      <text x="305" y="609" text-anchor="middle">生成ステータス</text>
-
-      <rect x="405" y="590" width="160" height="30" rx="8" fill="#ffffff" stroke="#0f6b64" stroke-width="1"/>
-      <text x="485" y="609" text-anchor="middle">検品状態</text>
-
-      <rect x="585" y="590" width="160" height="30" rx="8" fill="#ffffff" stroke="#0f6b64" stroke-width="1"/>
-      <text x="665" y="609" text-anchor="middle">投稿キュー</text>
-
-      <rect x="765" y="590" width="160" height="30" rx="8" fill="#ffffff" stroke="#0f6b64" stroke-width="1"/>
-      <text x="845" y="609" text-anchor="middle">実績</text>
+    <!-- ============ 結線 ============ -->
+    <g fill="none" stroke-width="2.2">
+      <!-- ① 担当者 → Web アプリ -->
+      <path d="M124,120 H232" stroke="#2563eb" marker-end="url(#ar-ui)"/>
+      <!-- ④ Web アプリ → 担当者 -->
+      <path d="M240,146 H128" stroke="#2563eb" marker-end="url(#ar-ui)"/>
+      <!-- ①④ Apps Script ⇄ スプレッドシート -->
+      <path d="M620,172 V524" stroke="#86198f" marker-start="url(#ar-sh)" marker-end="url(#ar-sh)"/>
+      <!-- ②③⑤ Claude Code ⇄ スプレッドシート -->
+      <path d="M220,436 V524" stroke="#86198f" marker-start="url(#ar-sh)" marker-end="url(#ar-sh)"/>
+      <!-- ③ Claude Code ⇄ Drive -->
+      <path d="M340,436 V462 H660 V575 H672" stroke="#d97706" marker-start="url(#ar-fl)" marker-end="url(#ar-fl)"/>
+      <!-- ④ Apps Script ⇄ Drive -->
+      <path d="M700,172 V490 H860 V520" stroke="#d97706" marker-start="url(#ar-fl)" marker-end="url(#ar-fl)"/>
+      <!-- ② Claude Code ⇄ fal.ai -->
+      <path d="M58,340 H30 V792 H54" stroke="#7c3aed" marker-start="url(#ar-gen)" marker-end="url(#ar-gen)"/>
+      <!-- ⑤ Claude Code → 実機スマホ -->
+      <path d="M582,300 H926 V800 H842" stroke="#0d9488" marker-end="url(#ar-dev)"/>
+      <!-- ⑥ 実機スマホ → スプレッドシート -->
+      <path d="M744,860 H540 V626" stroke="#16a34a" marker-end="url(#ar-ok)"/>
     </g>
-  </g>
 
-</svg>
-      </div>
-    </div>
-  </section>
+    <!-- 補助ラベル -->
+    <text x="906" y="792" font-size="9.5" font-weight="700" fill="#0f766e" text-anchor="end">adb ／ USB</text>
+    <text x="552" y="824" font-size="9.5" font-weight="700" fill="#15803d">投稿の実績</text>
+    <text x="38"  y="580" font-size="9.5" font-weight="700" fill="#6d28d9" transform="rotate(-90 38 580)" text-anchor="middle">生成の依頼 ⇄ 画像・動画</text>
 
-  <section id="legend">
-    <div class="card">
-      <h2><span class="mark"></span>フローの説明</h2>
-      <div class="legend">
-        <div class="legend-row"><span class="num">1</span><span class="txt">担当者が<b>Pages</b>の画面から生成リクエスト → <b>Workers</b> → <b>シート</b>に登録</span></div>
-        <div class="legend-row"><span class="num">2</span><span class="txt"><b>Mac mini</b>のAIエージェントがシートのリクエストを読取 → <b>Fal AI</b>で画像生成 → スライド動画を組立</span></div>
-        <div class="legend-row"><span class="num">3</span><span class="txt">生成物を<b>R2</b>へ保存、ステータス+URLを<b>シート</b>へ書込</span></div>
-        <div class="legend-row"><span class="num">4</span><span class="txt">検品画面(<b>Pages</b>)が<b>Workers</b>経由でシートの状態+R2のプレビューを表示 → Go/FB(FBは②に戻り再生成)</span></div>
-        <div class="legend-row"><span class="num">5</span><span class="txt"><b>ADBマシン</b>が承認済みキューをシートから読取 → <b>R2</b>から動画取得 → 実機が<b>TikTok</b>へ自動投稿</span></div>
-        <div class="legend-row"><span class="num">6</span><span class="txt">投稿実績(再生数など)を<b>シート</b>の実績タブへ回収 → 画面で閲覧</span></div>
-      </div>
-    </div>
-  </section>
+    <!-- ============ 番号バッジ ============ -->
+    <g font-size="11.5" font-weight="800" fill="#fff" text-anchor="middle">
+      <circle cx="180" cy="120" r="11.5" fill="#2563eb"/><text x="180" y="124">1</text>
+      <circle cx="30"  cy="660" r="11.5" fill="#7c3aed"/><text x="30"  y="664">2</text>
+      <circle cx="450" cy="462" r="11.5" fill="#d97706"/><text x="450" y="466">3</text>
+      <circle cx="620" cy="222" r="11.5" fill="#2563eb"/><text x="620" y="226">4</text>
+      <circle cx="926" cy="660" r="11.5" fill="#0d9488"/><text x="926" y="664">5</text>
+      <circle cx="540" cy="700" r="11.5" fill="#16a34a"/><text x="540" y="704">6</text>
+    </g>
 
-  <div class="footbar">
-    認証情報は貴社発行・貴社管理です(<b>Fal AIキー</b> / <b>Googleアカウント</b> / <b>Cloudflareアカウント</b>)。ソースコード・マニュアル込みで納品します。
+    <!-- ============ フロントエンド層のノード ============ -->
+    <!-- 担当者（アクター） -->
+    <g>
+      <circle cx="100" cy="116" r="9.5" fill="#eff5ff" stroke="#2563eb" stroke-width="2.2"/>
+      <path d="M82,150 a18,18 0 0 1 36,0 z" fill="#eff5ff" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round"/>
+      <text x="100" y="170" font-size="11.5" font-weight="800" fill="#1d4ed8" text-anchor="middle">担当者</text>
+    </g>
+
+    <g>
+      <rect x="240" y="94" width="480" height="76" rx="12" fill="#fff" stroke="#bcd4fb" stroke-width="1.6"/>
+      <svg x="254" y="108" width="22" height="22"><use href="#i-gas"/></svg>
+      <text x="284" y="124" font-size="13.5" font-weight="800" fill="#1f2937">Apps Script Web アプリ</text>
+      <text x="256" y="146" font-size="10.5" fill="#6b7280">リクエスト画面 ／ 検品・承認画面 ／ 実績ダッシュボード</text>
+      <text x="256" y="161" font-size="10.5" fill="#6b7280">画面の配信と、データ層の読み書きをまとめて担う（ログインもGoogle側で完結）</text>
+      <rect x="656" y="104" width="56" height="16" rx="8" fill="#fdf4ff" stroke="#f5d0fe"/>
+      <text x="684" y="115.5" font-size="9" font-weight="800" fill="#86198f" text-anchor="middle">Google</text>
+    </g>
+
+    <!-- ============ バックエンド層のノード ============ -->
+    <g>
+      <rect x="60" y="274" width="520" height="160" rx="12" fill="#fffaf7" stroke="#d97757" stroke-width="2.6"/>
+      <svg x="74" y="285" width="27" height="27"><use href="#claudeMark"/></svg>
+      <text x="110" y="304" font-size="13.5" font-weight="800" fill="#1f2937">Mac mini ／ Claude Code</text>
+      <rect x="110" y="310" width="66" height="16" rx="8" fill="#fff1ea" stroke="#ecd5c8"/>
+      <text x="143" y="321.5" font-size="8.5" font-weight="800" fill="#9a4a2f" text-anchor="middle">システムの中核</text>
+      <text x="76" y="346" font-size="10.5" fill="#6b7280">この層で仕事をするのはここだけ。常駐する tmux セッションが定期的に起こされて動く</text>
+      <rect x="516" y="284" width="56" height="16" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+      <text x="544" y="295.5" font-size="9" font-weight="800" fill="#475569" text-anchor="middle">自社設備</text>
+
+      <!-- 起動のしくみ -->
+      <g font-size="9.5" font-weight="700">
+        <rect x="76"  y="358" width="126" height="22" rx="7" fill="#eef2ff" stroke="#c7d2fe"/>
+        <text x="139" y="373" fill="#4338ca" text-anchor="middle">⏱ launchd で定期実行</text>
+        <path d="M206,369 H218" fill="none" stroke="#c7d2fe" stroke-width="2" marker-end="url(#ar-gy)"/>
+        <rect x="222" y="358" width="126" height="22" rx="7" fill="#eef2ff" stroke="#c7d2fe"/>
+        <text x="285" y="373" fill="#4338ca" text-anchor="middle">tmux 常駐セッション</text>
+        <path d="M352,369 H364" fill="none" stroke="#c7d2fe" stroke-width="2" marker-end="url(#ar-gy)"/>
+        <text x="370" y="373" fill="#9a4a2f">スキルを呼び出す</text>
+      </g>
+
+      <g font-size="10" font-weight="700" fill="#9a4a2f" text-anchor="middle">
+        <rect x="76"  y="392" width="156" height="26" rx="8" fill="#fff8f4" stroke="#ecd5c8"/>
+        <text x="154" y="409">素材づくり</text>
+        <rect x="242" y="392" width="156" height="26" rx="8" fill="#fff8f4" stroke="#ecd5c8"/>
+        <text x="320" y="409">実機の投稿</text>
+        <rect x="408" y="392" width="156" height="26" rx="8" fill="#fff8f4" stroke="#ecd5c8"/>
+        <text x="486" y="409">実績の収集</text>
+      </g>
+    </g>
+
+    <!-- ============ データ層のノード ============ -->
+    <g>
+      <rect x="60" y="528" width="580" height="94" rx="12" fill="#fff" stroke="#f5d0fe" stroke-width="1.6"/>
+      <svg x="74" y="541" width="21" height="21"><use href="#i-sheet"/></svg>
+      <text x="104" y="558" font-size="14" font-weight="800" fill="#1f2937">スプレッドシート</text>
+      <text x="240" y="558" font-size="10.5" fill="#6b7280">進行状況の台帳。状態はここだけを見れば分かる</text>
+      <rect x="572" y="537" width="56" height="16" rx="8" fill="#fdf4ff" stroke="#f5d0fe"/>
+      <text x="600" y="548.5" font-size="9" font-weight="800" fill="#86198f" text-anchor="middle">Google</text>
+
+      <g font-size="10" font-weight="700" fill="#86198f" text-anchor="middle">
+        <rect x="88"  y="578" width="166" height="26" rx="8" fill="#fdf4ff" stroke="#f5d0fe"/>
+        <text x="171" y="595">投稿の予定と進行</text>
+        <rect x="266" y="578" width="166" height="26" rx="8" fill="#fdf4ff" stroke="#f5d0fe"/>
+        <text x="349" y="595">アカウント・端末</text>
+        <rect x="444" y="578" width="166" height="26" rx="8" fill="#fdf4ff" stroke="#f5d0fe"/>
+        <text x="527" y="595">投稿の実績</text>
+      </g>
+    </g>
+
+    <g>
+      <rect x="680" y="528" width="220" height="94" rx="12" fill="#fff" stroke="#fde68a" stroke-width="1.6"/>
+      <svg x="694" y="541" width="21" height="21"><use href="#i-drive"/></svg>
+      <text x="724" y="558" font-size="14" font-weight="800" fill="#1f2937">Google Drive</text>
+      <rect x="836" y="537" width="56" height="16" rx="8" fill="#fdf4ff" stroke="#f5d0fe"/>
+      <text x="864" y="548.5" font-size="9" font-weight="800" fill="#86198f" text-anchor="middle">Google</text>
+
+      <g font-size="9.5" font-weight="700" fill="#b45309" text-anchor="middle">
+        <rect x="692" y="578" width="94" height="26" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+        <text x="739" y="595">投稿する素材</text>
+        <rect x="794" y="578" width="94" height="26" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+        <text x="841" y="595">制作の記録</text>
+      </g>
+    </g>
+
+    <!-- ============ 外部サービス層のノード ============ -->
+    <g>
+      <rect x="60" y="738" width="300" height="110" rx="12" fill="#fff" stroke="#ddd6fe" stroke-width="1.6"/>
+      <svg x="74" y="752" width="22" height="22"><use href="#i-spark"/></svg>
+      <text x="104" y="768" font-size="13.5" font-weight="800" fill="#1f2937">fal.ai</text>
+      <text x="76" y="794" font-size="10.5" fill="#6b7280">画像・動画の生成API</text>
+      <text x="76" y="810" font-size="10.5" fill="#6b7280">スキルの中から呼び出す</text>
+      <text x="76" y="826" font-size="10.5" fill="#6b7280">従量課金</text>
+      <rect x="292" y="748" width="56" height="16" rx="8" fill="#f5f3ff" stroke="#ddd6fe"/>
+      <text x="320" y="759.5" font-size="9" font-weight="800" fill="#6d28d9" text-anchor="middle">外部API</text>
+    </g>
+
+    <!-- ===== 実機スマホ（TikTokアプリが開いた状態） ===== -->
+    <g>
+      <rect x="670" y="740" width="56" height="16" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+      <text x="698" y="751.5" font-size="9" font-weight="800" fill="#475569" text-anchor="middle">自社設備</text>
+      <text x="726" y="780" font-size="13" font-weight="800" fill="#0f766e" text-anchor="end">実機スマホ</text>
+      <text x="726" y="802" font-size="10.5" fill="#6b7280" text-anchor="end">TikTokアプリを開いた状態</text>
+      <text x="726" y="818" font-size="10.5" fill="#6b7280" text-anchor="end">Claude Code が adb で操作</text>
+      <text x="726" y="834" font-size="10.5" fill="#6b7280" text-anchor="end">（公式APIは使わない）</text>
+
+      <!-- 筐体 -->
+      <rect x="744" y="732" width="92" height="168" rx="14" fill="#111827" stroke="#0d9488" stroke-width="2"/>
+      <!-- 画面 -->
+      <rect x="749" y="741" width="82" height="150" rx="8" fill="#0b1220"/>
+      <!-- ノッチ -->
+      <rect x="778" y="744" width="24" height="3.6" rx="1.8" fill="#1f2937"/>
+
+      <!-- 上部タブ -->
+      <text x="767" y="760" font-size="5.6" font-weight="700" fill="#64748b" text-anchor="middle">フォロー中</text>
+      <text x="805" y="760" font-size="6.2" font-weight="800" fill="#ffffff" text-anchor="middle">おすすめ</text>
+      <rect x="795" y="763" width="20" height="1.8" rx=".9" fill="#fe2c55"/>
+
+      <!-- 動画エリア（人物シルエット） -->
+      <rect x="749" y="768" width="82" height="80" fill="#0f172a"/>
+      <circle cx="781" cy="798" r="9.5" fill="#1e293b"/>
+      <path d="M765,832 a16,16 0 0 1 32,0 z" fill="#1e293b"/>
+
+      <!-- 右のアクション列 -->
+      <circle cx="819" cy="784" r="6" fill="#334155" stroke="#fe2c55" stroke-width="1.1"/>
+      <path d="M819,808 c-2.6,-3.4 -7,-2.2 -7,1.4 c0,2.8 3.6,5 7,7.2 c3.4,-2.2 7,-4.4 7,-7.2 c0,-3.6 -4.4,-4.8 -7,-1.4 z" fill="#ffffff"/>
+      <path d="M813.5,825 h11 a2,2 0 0 1 2,2 v5 a2,2 0 0 1 -2,2 h-6 l-3.4,3 v-3 h-1.6 a2,2 0 0 1 -2,-2 v-5 a2,2 0 0 1 2,-2 z" fill="#ffffff"/>
+      <path d="M813,846 l12,-5 -12,-5 v3.6 l6,1.4 -6,1.4 z" fill="#ffffff"/>
+
+      <!-- キャプション -->
+      <rect x="754" y="856" width="36" height="3" rx="1.5" fill="#94a3b8"/>
+      <rect x="754" y="863" width="24" height="3" rx="1.5" fill="#64748b"/>
+
+      <!-- 音符（TikTok風の三色ずらし） -->
+      <g transform="translate(813,860) scale(0.26)">
+        <g fill="#25f4ee" transform="translate(-4,-4)">
+          <circle cx="-4" cy="16" r="7"/><rect x="1" y="-18" width="4" height="34"/>
+          <path d="M5,-18 c9,3 13,8 12,15 c-2,-6 -6,-9 -12,-11 z"/>
+        </g>
+        <g fill="#fe2c55" transform="translate(4,4)">
+          <circle cx="-4" cy="16" r="7"/><rect x="1" y="-18" width="4" height="34"/>
+          <path d="M5,-18 c9,3 13,8 12,15 c-2,-6 -6,-9 -12,-11 z"/>
+        </g>
+        <g fill="#ffffff">
+          <circle cx="-4" cy="16" r="7"/><rect x="1" y="-18" width="4" height="34"/>
+          <path d="M5,-18 c9,3 13,8 12,15 c-2,-6 -6,-9 -12,-11 z"/>
+        </g>
+      </g>
+
+      <!-- 下部ナビ -->
+      <rect x="749" y="872" width="82" height="19" fill="#0f172a"/>
+      <g fill="#64748b">
+        <rect x="757" y="879" width="9" height="2.6" rx="1.3"/>
+        <rect x="771" y="879" width="9" height="2.6" rx="1.3"/>
+        <rect x="800" y="879" width="9" height="2.6" rx="1.3"/>
+        <rect x="814" y="879" width="9" height="2.6" rx="1.3"/>
+      </g>
+      <rect x="781" y="876" width="16" height="10" rx="2.6" fill="#25f4ee"/>
+      <rect x="785" y="876" width="16" height="10" rx="2.6" fill="#fe2c55"/>
+      <rect x="783" y="876" width="16" height="10" rx="2.6" fill="#ffffff"/>
+      <path d="M788,881 h6 M791,878 v6" stroke="#111827" stroke-width="1.4" stroke-linecap="round"/>
+    </g>
+
+  </svg>
   </div>
 
-</main>
+  <div class="legend">
+    <span><i class="dot" style="background:#2563eb"></i>画面まわりの通信</span>
+    <span><i class="dot" style="background:#86198f"></i>台帳の読み書き</span>
+    <span><i class="dot" style="background:#d97706"></i>ファイル</span>
+    <span><i class="dot" style="background:#7c3aed"></i>生成API</span>
+    <span><i class="dot" style="background:#0d9488"></i>実機操作（adb）</span>
+    <span><i class="dot" style="background:#16a34a"></i>実績回収</span>
+  </div>
+  <div class="legend" style="margin-top:8px">
+    <span><i class="pill" style="background:#f1f5f9;color:#475569;border:1px solid #cbd5e1">自社設備</i>貴社オフィスに置く機材</span>
+    <span><i class="pill" style="background:#fdf4ff;color:#86198f;border:1px solid #f5d0fe">Google</i>貴社アカウントで所有</span>
+    <span><i class="pill" style="background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe">外部API</i>従量課金の外部サービス</span>
+  </div>
 
-<footer>作成: 2026-09-01</footer>
+  <div class="figcap">
+    両端に矢印がある線は<b>双方向</b>（読み取りと書き込みの両方が走る）を意味します。
+    Apps Script と Claude Code は互いに直接つながらず、<b>やり取りは必ずデータ層を経由</b>します。
+    これにより、片方が停止しても状態は失われません。<br>
+    画面が担うのは<b>依頼と確認まで</b>です。実際の生成と投稿は Claude Code が後から実行するため、
+    画面の操作と実行は同時には起きません。
+  </div>
+</div>
+
+<h2><span class="n">3</span><span class="ic">🧩</span>Claude Code の中では何が起きているか</h2>
+<p class="lead-p">4つの段階を順に進みます。どの段階も「台帳を読む → 処理する → 結果を残す」で閉じているので、
+  途中で止まっても次回は続きから再開できます。</p>
+
+<div class="fig">
+  <div class="figttl">図2 ／ スキルの4段階と、それぞれの読み書き先</div>
+  <div class="figscroll">
+  <svg class="d" viewBox="0 0 960 316" style="min-width:720px" role="img"
+       aria-label="Claude Codeのスキルの4段階。素材づくり・素材の登録・実機への投稿・実績の回収。各段階について読む場所と書く場所を、スプレッドシートかGoogle Driveかで示している。">
+
+    <defs>
+      <marker id="ar-step" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 10 5 0 10z" fill="#cbd5e1"/></marker>
+    </defs>
+
+    <!-- 行ラベル -->
+    <g font-size="10.5" font-weight="800" fill="#94a3b8" text-anchor="end">
+      <text x="76" y="112">処理</text>
+      <text x="76" y="200">読む</text>
+      <text x="76" y="240">書く</text>
+    </g>
+
+    <!-- 段階のつなぎ矢印 -->
+    <g fill="none" stroke="#cbd5e1" stroke-width="2.2">
+      <path d="M292,106 H304" marker-end="url(#ar-step)"/>
+      <path d="M508,106 H520" marker-end="url(#ar-step)"/>
+      <path d="M724,106 H736" marker-end="url(#ar-step)"/>
+    </g>
+
+    <!-- ===== 段階1 ===== -->
+    <g>
+      <rect x="90" y="56" width="200" height="100" rx="12" fill="#fff" stroke="#ddd6fe" stroke-width="1.6"/>
+      <circle cx="112" cy="78" r="11" fill="#7c3aed"/>
+      <text x="112" y="82" font-size="11.5" font-weight="800" fill="#fff" text-anchor="middle">1</text>
+      <text x="132" y="82" font-size="13" font-weight="800" fill="#1f2937">素材づくり</text>
+      <text x="104" y="108" font-size="10.5" fill="#6b7280">生成APIで画像・動画をつくる</text>
+      <text x="104" y="126" font-size="10.5" fill="#6b7280">動画に組み立てる</text>
+      <text x="104" y="144" font-size="10.5" fill="#6b7280">キャプションを用意する</text>
+
+      <rect x="90" y="180" width="200" height="30" rx="9" fill="#fdf4ff" stroke="#f5d0fe"/>
+      <text x="190" y="199" font-size="10.5" font-weight="700" fill="#86198f" text-anchor="middle">スプレッドシート</text>
+      <rect x="90" y="220" width="200" height="30" rx="9" fill="#fffbeb" stroke="#fde68a"/>
+      <text x="190" y="239" font-size="10.5" font-weight="700" fill="#b45309" text-anchor="middle">Google Drive</text>
+      <text x="190" y="268" font-size="9.5" fill="#94a3b8" text-anchor="middle">つくる過程も残す</text>
+    </g>
+
+    <!-- ===== 段階2 ===== -->
+    <g>
+      <rect x="306" y="56" width="200" height="100" rx="12" fill="#fff" stroke="#fde68a" stroke-width="1.6"/>
+      <circle cx="328" cy="78" r="11" fill="#d97706"/>
+      <text x="328" y="82" font-size="11.5" font-weight="800" fill="#fff" text-anchor="middle">2</text>
+      <text x="348" y="82" font-size="13" font-weight="800" fill="#1f2937">素材の登録</text>
+      <text x="320" y="108" font-size="10.5" fill="#6b7280">完成した素材をDriveへ置く</text>
+      <text x="320" y="126" font-size="10.5" fill="#6b7280">台帳に素材の場所を書く</text>
+      <text x="320" y="144" font-size="10.5" fill="#6b7280">検品待ちの状態にする</text>
+
+      <rect x="306" y="180" width="200" height="30" rx="9" fill="#fffbeb" stroke="#fde68a"/>
+      <text x="406" y="199" font-size="10.5" font-weight="700" fill="#b45309" text-anchor="middle">Google Drive</text>
+      <rect x="306" y="220" width="200" height="30" rx="9" fill="#fdf4ff" stroke="#f5d0fe"/>
+      <text x="406" y="239" font-size="10.5" font-weight="700" fill="#86198f" text-anchor="middle">スプレッドシート</text>
+      <text x="406" y="268" font-size="9.5" fill="#94a3b8" text-anchor="middle">＋ Drive</text>
+    </g>
+
+    <!-- ===== 段階3 ===== -->
+    <g>
+      <rect x="522" y="56" width="200" height="100" rx="12" fill="#fff" stroke="#b9ece3" stroke-width="1.6"/>
+      <circle cx="544" cy="78" r="11" fill="#0d9488"/>
+      <text x="544" y="82" font-size="11.5" font-weight="800" fill="#fff" text-anchor="middle">3</text>
+      <text x="564" y="82" font-size="13" font-weight="800" fill="#1f2937">実機への投稿</text>
+      <text x="536" y="108" font-size="10.5" fill="#6b7280">素材を端末へ送る</text>
+      <text x="536" y="126" font-size="10.5" fill="#6b7280">adbでTikTokアプリを操作</text>
+      <text x="536" y="144" font-size="10.5" fill="#6b7280">公開して投稿URLを得る</text>
+
+      <rect x="522" y="180" width="200" height="30" rx="9" fill="#fdf4ff" stroke="#f5d0fe"/>
+      <text x="622" y="199" font-size="10.5" font-weight="700" fill="#86198f" text-anchor="middle">スプレッドシート ＋ Drive</text>
+      <rect x="522" y="220" width="200" height="30" rx="9" fill="#fdf4ff" stroke="#f5d0fe"/>
+      <text x="622" y="239" font-size="10.5" font-weight="700" fill="#86198f" text-anchor="middle">スプレッドシート</text>
+      <text x="622" y="268" font-size="9.5" fill="#94a3b8" text-anchor="middle">投稿済みとして記録</text>
+    </g>
+
+    <!-- ===== 段階4 ===== -->
+    <g>
+      <rect x="738" y="56" width="200" height="100" rx="12" fill="#fff" stroke="#bbf7d0" stroke-width="1.6"/>
+      <circle cx="760" cy="78" r="11" fill="#16a34a"/>
+      <text x="760" y="82" font-size="11.5" font-weight="800" fill="#fff" text-anchor="middle">4</text>
+      <text x="780" y="82" font-size="13" font-weight="800" fill="#1f2937">実績の回収</text>
+      <text x="752" y="108" font-size="10.5" fill="#6b7280">投稿した動画を実機で開く</text>
+      <text x="752" y="126" font-size="10.5" fill="#6b7280">画面から数値を読み取る</text>
+      <text x="752" y="144" font-size="10.5" fill="#6b7280">根拠の画像も残す</text>
+
+      <rect x="738" y="180" width="200" height="30" rx="9" fill="#fdf4ff" stroke="#f5d0fe"/>
+      <text x="838" y="199" font-size="10.5" font-weight="700" fill="#86198f" text-anchor="middle">スプレッドシート</text>
+      <rect x="738" y="220" width="200" height="30" rx="9" fill="#fdf4ff" stroke="#f5d0fe"/>
+      <text x="838" y="239" font-size="10.5" font-weight="700" fill="#86198f" text-anchor="middle">スプレッドシート</text>
+      <text x="838" y="268" font-size="9.5" fill="#94a3b8" text-anchor="middle">＋ Drive</text>
+    </g>
+
+    <text x="480" y="300" font-size="11" fill="#94a3b8" text-anchor="middle">
+      素材そのものは Drive、進行状況は スプレッドシート。この2つ以外にデータの置き場を作りません
+    </text>
+  </svg>
+  </div>
+
+  <div class="figcap">
+    段階ごとに<b>書き込む範囲が分かれている</b>ため、複数の端末が同時に動いても内容が衝突しません。
+  </div>
+</div>
+
+<h2><span class="n">4</span><span class="ic">🔢</span>フローの説明 — ①〜⑥</h2>
+<p class="lead-p">図1の番号と対応しています。左上のリクエストから始まり、最後に実績がデータ層へ戻って一周します。</p>
+
+<div class="steps">
+  <div class="step s1">
+    <div class="sh"><span class="b">1</span><b>リクエストの登録</b></div>
+    <p>担当者が画面から生成リクエストを送信。<span class="k">Apps Script</span> が受けて
+      <span class="k">スプレッドシート</span>へ記録します。
+      <span class="path">フロント → バック → データ層</span></p>
+  </div>
+
+  <div class="step s2">
+    <div class="sh"><span class="b">2</span><b>素材の生成</b></div>
+    <p><span class="k">Claude Code</span> が未処理のリクエストを見つけてスキルを起動。
+      <span class="k">fal.ai</span> を呼んで画像・動画をつくり、投稿用に組み立てます。
+      <span class="path">バック ⇄ 外部API</span></p>
+  </div>
+
+  <div class="step s3">
+    <div class="sh"><span class="b">3</span><b>保存と記録</b></div>
+    <p>できた素材を <span class="k">Drive</span> へ保存し、その場所と状態を
+      <span class="k">スプレッドシート</span>へ書き戻します。
+      <span class="path">バック → データ層</span></p>
+  </div>
+
+  <div class="step s4">
+    <div class="sh"><span class="b">4</span><b>検品・承認</b></div>
+    <p>検品画面が台帳の状態と Drive のプレビューを表示。
+      <span class="k">Go</span> なら投稿へ、<span class="k">差し戻し</span>なら②へ戻って作り直します。
+      <span class="path">データ層 → バック → フロント</span></p>
+  </div>
+
+  <div class="step s5">
+    <div class="sh"><span class="b">5</span><b>実機投稿</b></div>
+    <p>同じ <span class="k">Claude Code</span> が投稿スキルを起動。素材を端末へ送り、
+      <span class="k">実機スマホの TikTokアプリ</span>を adb で操作して投稿します。
+      <span class="path">データ層 → バック → 配信先</span></p>
+  </div>
+
+  <div class="step s6">
+    <div class="sh"><span class="b">6</span><b>実績の回収</b></div>
+    <p>投稿後の数値を実機の画面から取得して台帳へ戻します。
+      担当者は画面から実績を閲覧できます。
+      <span class="path">配信先 → データ層 → フロント</span></p>
+  </div>
+</div>
+
+<h2><span class="n">5</span><span class="ic">🔑</span>必要なもの</h2>
+<p class="lead-p">契約が必要な外部サービスは2つだけです。いずれも貴社発行・貴社管理で、弊社側に鍵を残しません。</p>
+
+<div class="items">
+  <div class="item">
+    <div class="ih"><svg class="ii" viewBox="0 0 48 48"><use href="#i-sheet"/></svg><b>Googleアカウント</b></div>
+    <p>スプレッドシート・Drive・Apps Script をまとめて賄います。画面の閲覧権限も Google 側で管理できます。</p>
+  </div>
+  <div class="item">
+    <div class="ih"><svg class="ii" viewBox="0 0 48 48"><use href="#i-spark"/></svg><b>fal.ai</b></div>
+    <p>画像・動画の生成に使う外部API。従量課金です。</p>
+  </div>
+  <div class="item">
+    <div class="ih"><svg class="ii" viewBox="0 0 48 48"><use href="#i-mac"/></svg><b>Mac mini と実機スマホ</b></div>
+    <p>貴社オフィスに設置する機材。Claude Code が動作し、USB接続した実機を操作します。</p>
+  </div>
+</div>
+
+<footer>
+  <b>データフロー全体図</b> — TikTok 運用自動化基盤<br>
+  図1は フロントエンド／バックエンド／データ層／外部サービス の4層構成。番号は「フローの説明」の①〜⑥と対応しています。
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var p=document.getElementById('prog');
+  function u(){
+    var h=document.documentElement;
+    var m=(h.scrollHeight-h.clientHeight)||1;
+    p.style.transform='scaleX('+Math.min(1,h.scrollTop/m)+')';
+  }
+  addEventListener('scroll',u,{passive:true});addEventListener('resize',u);u();
+})();
+</script>
 
 </body>
 </html>
