@@ -135,9 +135,43 @@
     .hero h1{font-size:22px} .wrap{padding:0 16px 70px}
     header.hero{margin:0 -16px 8px;padding:36px 22px 28px}
   }
+  @page{size:A4;margin:9mm 10mm}
   @media print{
     header.hero,.banner .ic,h2 .n,.step .sh .b{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .progress{display:none}
+
+    body{font-size:11px;line-height:1.5}
+    .wrap{max-width:100%;padding:0 4mm 6mm}
+
+    header.hero{margin:0 0 4px;padding:10px 16px 8px;border-radius:0 0 12px 12px;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    header.hero::after{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .hero .kick{font-size:9px;margin-bottom:4px}
+    .hero h1{font-size:16px;line-height:1.32;margin:0 0 4px}
+    .hero .lead{font-size:10px}
+    .hero .meta{margin-top:5px;font-size:9px}
+
+    h2{margin:8px 0 3px;font-size:15px}
+    h2 .n{width:20px;height:20px;font-size:10px;border-radius:6px}
+    h2 .ic{font-size:16px}
+    .lead-p{font-size:10.5px;margin:2px 0 5px}
+
+    /* 図カード全体を分断させない。SVGは幅追従で縮小しページ内に収める */
+    .fig{break-inside:avoid;page-break-inside:avoid;padding:8px 10px 6px;margin:4px 0}
+    .figttl{font-size:10px;margin-bottom:4px}
+    .figscroll{overflow:visible!important;-webkit-overflow-scrolling:auto}
+    .fig svg.d{min-width:0!important;width:100%!important;height:auto!important}
+    .legend{font-size:9.5px;margin-top:5px;gap:8px}
+    .figcap{font-size:9.5px;margin-top:5px;line-height:1.42}
+
+    .layers,.steps,.items{gap:8px;margin:8px 0}
+    .layer,.step,.item{break-inside:avoid;page-break-inside:avoid;padding:10px 12px}
+    .step .sh b,.layer .lh b,.item .ih b{font-size:12px}
+    .step p,.layer p,.item p{font-size:11px}
+
+    .banner,.cintro,.note{break-inside:avoid;page-break-inside:avoid}
+
+    footer{margin-top:16px}
   }
 </style>
 </head>
