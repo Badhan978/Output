@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Ceed toB 広告運用 — 全体概要</title>
+<style>
+  :root{
+    --bg:#f1f5f9; --paper:#ffffff; --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    --done:#16a34a; --donebg:#f0fdf4;
+    --run:#7c3aed;  --runbg:#f5f3ff;
+    --on:#2563eb;   --onbg:#eff6ff;
+    --off:#0d9488;  --offbg:#f0fdfa;
+    --todo:#94a3b8; --todobg:#f1f5f9;
+    --shadow:0 8px 24px rgba(16,24,40,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);background:var(--bg);font-size:13.5px;line-height:1.6}
+
+  header.hero{background:linear-gradient(135deg,#0f172a,#17375e 55%,#0f766e);
+    color:#fff;padding:30px 30px 26px;box-shadow:var(--shadow)}
+  .heroin{max-width:1220px;margin:0 auto}
+  .kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a7f3d0;font-weight:800}
+  h1{margin:8px 0 8px;font-size:30px;line-height:1.25}
+  .lead{max-width:900px;color:#dbeafe;font-size:14px;margin:0}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .pill{display:inline-flex;align-items:center;padding:5px 12px;border-radius:999px;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);font-size:11.5px;font-weight:700;color:#fff}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 30px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:11.5px;border:1px solid var(--line)}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  main{max-width:1220px;margin:0 auto;padding:0 20px}
+  section{margin:22px 0}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:var(--shadow)}
+  .card h2{margin:0;padding:15px 22px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .mark{width:12px;height:12px;border-radius:4px;flex:0 0 auto}
+  .card .note{padding:10px 22px;background:#f8fafc;color:var(--sub);font-size:12px;
+    border-bottom:1px solid var(--line)}
+  .cardbody{padding:20px 22px}
+
+  /* legend */
+  .legend{display:flex;gap:10px;flex-wrap:wrap;padding:14px 22px}
+  .legend .st{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub)}
+  .dot{width:10px;height:10px;border-radius:99px;display:inline-block}
+
+  /* state badge (5 values only) */
+  .st{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:99px;white-space:nowrap}
+  .st-done{background:var(--donebg);color:var(--done)}
+  .st-run{background:var(--runbg);color:var(--run)}
+  .st-on{background:var(--onbg);color:var(--on)}
+  .st-off{background:var(--offbg);color:var(--off)}
+  .st-todo{background:var(--todobg);color:var(--todo)}
+
+  /* number cards */
+  .metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .metric{border:1px solid var(--line);border-radius:14px;padding:14px 15px;background:#fbfcff}
+  .metric .num{font-size:24px;font-weight:900;line-height:1.15;color:var(--ink)}
+  .metric .lbl{font-size:11.5px;color:var(--sub);margin-top:4px;font-weight:700}
+
+  /* kill flow map */
+  .mapwrap{padding:24px 22px;display:grid;
+    grid-template-columns:1fr 42px 1fr 42px 1fr;gap:8px;align-items:start}
+  .node{border-radius:12px;padding:14px 15px;border:1.5px solid;background:#fff}
+  .node .stage{font-size:13.5px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+  .node .row{margin-top:7px}
+  .node .k{font-size:10.5px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.03em}
+  .node .v{font-size:12px;margin-top:2px}
+  .arrows{display:flex;flex-direction:column;justify-content:center;align-items:center;
+    height:100%;padding-top:46px;color:#94a3b8;font-size:22px;font-weight:700}
+
+  /* angle tree: 3 col grid, chips */
+  .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:20px 22px}
+  .col{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fbfcff}
+  .col h3{margin:0 0 10px;font-size:13.5px;font-weight:800}
+  .prop{border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:8px;background:#fff}
+  .prop:last-child{margin-bottom:0}
+  .prop .top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+  .prop .label{font-weight:700;font-size:12px}
+  .prop .def{color:var(--sub);font-size:11px;display:block;margin-top:2px}
+
+  /* who: 3 col cards */
+  .who{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:20px 22px}
+  .whocard{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:#fbfcff}
+  .whocard h3{margin:0 0 10px;font-size:14px;font-weight:800}
+  .whocard .k{font-size:10.5px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.03em;margin-top:8px}
+  .whocard .v{font-size:12px;margin-top:2px}
+
+  /* timeline */
+  .timeline{padding:22px}
+  .tstep{display:flex;gap:14px;margin-bottom:16px}
+  .tstep:last-child{margin-bottom:0}
+  .tdate{flex:0 0 110px;font-weight:800;font-size:12.5px;color:#4f46e5;text-align:right}
+  .tbody{flex:1;border-left:3px solid #e0e7ff;padding-left:16px}
+  .tbody .ttitle{font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px}
+  .tbody .tdef{color:var(--sub);font-size:12px;margin-top:3px}
+
+  footer{max-width:1220px;margin:26px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
+  footer .grp{margin:6px 0}
+  footer .grp b{color:var(--ink);font-weight:700}
+  footer a{color:var(--sub)}
+  footer .src{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+
+  @media(max-width:980px){
+    .mapwrap{grid-template-columns:1fr}
+    .arrows{transform:rotate(90deg);padding:6px 0}
+    .metrics{grid-template-columns:1fr 1fr}
+    .cols3{grid-template-columns:1fr}
+    .who{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="heroin">
+    <div class="kicker">Ceed toB 広告運用</div>
+    <h1>3 商材 × 初 CV 1 件で Kill / 継続を決める</h1>
+    <p class="lead">切り抜き・アプリグロース・FDE の 3 商材を Meta 広告で並走させ、リード件数ではなく「初 CV 1 件が出るか」で商材ごとに Kill / 継続を判定し、表示 → クリック → LP → CV の転換率データを取りにいく。</p>
+    <div class="meta">
+      <span class="pill">作成 2026-09-04</span>
+      <span class="pill">配信開始 9/8</span>
+      <span class="pill">予算 ¥54,000〜90,000</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <a href="#kpi">📊 狙う数字 5 本</a>
+  <a href="#kill">🎯 Kill 判定 3 段</a>
+  <a href="#angles">🧩 商材別アングル 21 命題</a>
+  <a href="#who">🏢 誰に当てるか 3 商材</a>
+  <a href="#schedule">🗓 スケジュール 5 段</a>
+</nav>
+
+<main>
+
+  <section id="legend">
+    <div class="card">
+      <div class="legend">
+        <span class="st"><span class="dot" style="background:var(--done)"></span>確定</span>
+        <span class="st"><span class="dot" style="background:var(--run)"></span>検証中</span>
+        <span class="st"><span class="dot" style="background:var(--on)"></span>空白 = 競合未検証</span>
+        <span class="st"><span class="dot" style="background:var(--off)"></span>2 周目</span>
+        <span class="st"><span class="dot" style="background:var(--todo)"></span>未着手</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="kpi">
+    <div class="card">
+      <h2><span class="mark" style="background:var(--on)"></span>狙う数字</h2>
+      <div class="note">商材あたり Max。CTR 1.0% / LP 到達 70% / 問い合わせ CVR 1.0% / CPM ¥1,000 の仮置きから逆算。</div>
+      <div class="cardbody">
+        <div class="metrics">
+          <div class="metric"><div class="num">¥15,000</div><div class="lbl">日予算 (¥5,000 × 3 商材)</div></div>
+          <div class="metric"><div class="num">¥30,000</div><div class="lbl">商材あたり Max</div></div>
+          <div class="metric"><div class="num">4〜6 日</div><div class="lbl">検証期間</div></div>
+          <div class="metric"><div class="num">¥14,300</div><div class="lbl">逆算 CPA (問い合わせ)</div></div>
+          <div class="metric"><div class="num">30,000 / 1</div><div class="lbl">狙う量 (表示 / 問い合わせ)</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kill">
+    <div class="card">
+      <h2><span class="mark" style="background:var(--run)"></span>Kill 判定 3 段 (商材ごと)</h2>
+      <div class="note">クリック段階 → LP 段階 → 初 CV の順に予算を積み増しながら判定。LP 段階は Kill でなく差し替え。</div>
+      <div class="mapwrap">
+        <div class="node" style="border-color:var(--on)">
+          <div class="stage">クリック段階<span class="st st-run">検証中</span></div>
+          <div class="row"><div class="k">到達点</div><div class="v">見出し毎 3,000 表示 × 6 本 (累計 18,000)</div></div>
+          <div class="row"><div class="k">判定</div><div class="v">CTR 0.5% 未満は Stop、6 本全滅で商材 Kill (¥18,000)</div></div>
+        </div>
+        <div class="arrows">→</div>
+        <div class="node" style="border-color:var(--off)">
+          <div class="stage">LP 段階<span class="st st-run">検証中</span></div>
+          <div class="row"><div class="k">到達点</div><div class="v">LP 到達 100 (累計 ≈14,000 表示)</div></div>
+          <div class="row"><div class="k">判定</div><div class="v">問い合わせ 0 かつ DL 0 → LP・訴求を 1 回差し替え (Kill ではない)</div></div>
+        </div>
+        <div class="arrows">→</div>
+        <div class="node" style="border-color:var(--done)">
+          <div class="stage">初 CV<span class="st st-run">検証中</span></div>
+          <div class="row"><div class="k">到達点</div><div class="v">累計 30,000 表示 (¥30,000)</div></div>
+          <div class="row"><div class="k">判定</div><div class="v">問い合わせ 1 件以上 → 合格・次サイクル予算 ×2 / 0 件 → 商材 Kill</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="angles">
+    <div class="card">
+      <h2><span class="mark" style="background:var(--off)"></span>各商材で試すアングル (命題レベル)</h2>
+      <div class="note">1 周目は各商材 4 命題 × 8 見出し。「空白」= 競合が誰も広告で検証していない命題。</div>
+      <div class="cols3">
+        <div class="col">
+          <h3>切り抜き</h3>
+          <div class="prop"><div class="top"><span class="label">丸投げ・ぜんぶ込み</span><span class="st st-run">検証中</span></div></div>
+          <div class="prop"><div class="top"><span class="label">保証</span><span class="st st-run">検証中</span></div><span class="def">出せないものは出さない</span></div>
+          <div class="prop"><div class="top"><span class="label">ファン任せの損失</span><span class="st st-on">空白</span></div></div>
+          <div class="prop"><div class="top"><span class="label">本数コミット</span><span class="st st-on">空白</span></div></div>
+          <div class="prop"><div class="top"><span class="label">好きなタイミングに大量認知</span><span class="st st-off">2 周目</span></div></div>
+          <div class="prop"><div class="top"><span class="label">権利処理込み</span><span class="st st-off">2 周目</span></div></div>
+          <div class="prop"><div class="top"><span class="label">価格</span><span class="st st-todo">未着手</span></div><span class="def">単価確定後</span></div>
+        </div>
+        <div class="col">
+          <h3>アプリグロース</h3>
+          <div class="prop"><div class="top"><span class="label">素材枯渇・摩耗</span><span class="st st-run">検証中</span></div></div>
+          <div class="prop"><div class="top"><span class="label">制作 + 配信面の一括</span><span class="st st-on">空白</span></div></div>
+          <div class="prop"><div class="top"><span class="label">本数コミット・CPA 非保証</span><span class="st st-on">空白</span></div></div>
+          <div class="prop"><div class="top"><span class="label">実績</span><span class="st st-run">検証中</span></div><span class="def">カロミー 90 万再生</span></div>
+          <div class="prop"><div class="top"><span class="label">摩耗の N 数</span><span class="st st-off">2 周目</span></div></div>
+          <div class="prop"><div class="top"><span class="label">好きなタイミングに大量投下</span><span class="st st-off">2 周目</span></div></div>
+          <div class="prop"><div class="top"><span class="label">広告っぽさの排除</span><span class="st st-off">2 周目</span></div></div>
+        </div>
+        <div class="col">
+          <h3>FDE</h3>
+          <div class="prop"><div class="top"><span class="label">手作業・人員換算</span><span class="st st-run">検証中</span></div></div>
+          <div class="prop"><div class="top"><span class="label">伴走・現場に入る</span><span class="st st-run">検証中</span></div></div>
+          <div class="prop"><div class="top"><span class="label">EC 特化</span><span class="st st-on">空白</span></div><span class="def">ecforce × CS × 物流</span></div>
+          <div class="prop"><div class="top"><span class="label">SaaS を増やさず置換</span><span class="st st-on">空白</span></div></div>
+          <div class="prop"><div class="top"><span class="label">解約対応の自動化</span><span class="st st-off">2 周目</span></div></div>
+          <div class="prop"><div class="top"><span class="label">固定価格パッケージ</span><span class="st st-off">2 周目</span></div></div>
+          <div class="prop"><div class="top"><span class="label">業種特化</span><span class="st st-off">2 周目</span></div><span class="def">F2 / F3</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="who">
+    <div class="card">
+      <h2><span class="mark" style="background:var(--done)"></span>誰に当てるか (1 周目)</h2>
+      <div class="cardbody" style="padding:0">
+        <div class="who">
+          <div class="whocard">
+            <h3>切り抜き</h3>
+            <div class="k">ターゲット</div>
+            <div class="v">芸能事務所・舞台 / ゲーム・アニメ IP</div>
+            <div class="k">代表社</div>
+            <div class="v">ワタナベエンターテインメント・WACK・ネルケ / バンダイナムコ・Cygames・WIT STUDIO</div>
+          </div>
+          <div class="whocard">
+            <h3>アプリグロース</h3>
+            <div class="k">ターゲット</div>
+            <div class="v">大手のアプリ事業部 / ヘルスケア・フィンテック toC アプリ</div>
+            <div class="k">代表社</div>
+            <div class="v">DMM・タイトー・Amazia / asken・エーテンラボ・スマートバンク</div>
+          </div>
+          <div class="whocard">
+            <h3>FDE</h3>
+            <div class="k">ターゲット</div>
+            <div class="v">EC・D2C 事業者 (ecforce 利用)</div>
+            <div class="k">代表社</div>
+            <div class="v">Sparty・バルクオム・タマチャンショップ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="schedule">
+    <div class="card">
+      <h2><span class="mark" style="background:var(--on)"></span>スケジュール</h2>
+      <div class="timeline">
+        <div class="tstep">
+          <div class="tdate">9/4</div>
+          <div class="tbody"><div class="ttitle">設計確定<span class="st st-done">確定</span></div>
+            <div class="tdef">AOM の仕組み・LP 可否待ち、受け口 (フォーム → シート + Slack) 準備</div></div>
+        </div>
+        <div class="tstep">
+          <div class="tdate">9/8</div>
+          <div class="tbody"><div class="ttitle">配信開始<span class="st st-todo">未着手</span></div>
+            <div class="tdef">Meta (Instagram + Facebook)、静止画 1 テンプレート × 見出し差し替え</div></div>
+        </div>
+        <div class="tstep">
+          <div class="tdate">9/10 頃</div>
+          <div class="tbody"><div class="ttitle">クリック段階の判定<span class="st st-todo">未着手</span></div>
+            <div class="tdef">CTR 0.5% 未満は Stop、6 本全滅で商材 Kill</div></div>
+        </div>
+        <div class="tstep">
+          <div class="tdate">9/13 頃</div>
+          <div class="tbody"><div class="ttitle">初 CV 判定<span class="st st-todo">未着手</span></div>
+            <div class="tdef">問い合わせ 1 件以上で合格、0 件で商材 Kill</div></div>
+        </div>
+        <div class="tstep">
+          <div class="tdate">9/15 週</div>
+          <div class="tbody"><div class="ttitle">次サイクル<span class="st st-todo">未着手</span></div>
+            <div class="tdef">合格商材は予算 ¥60,000</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="grp"><b>参考 (競合の LP と実広告)</b></div>
+  <div class="grp">切り抜き = <a href="https://clip.dev/marketing/" target="_blank" rel="noopener">CLIP LP</a> · <a href="https://www.facebook.com/ads/library/?id=2072565597020881" target="_blank" rel="noopener">CLIP 広告</a> · <a href="https://www.facebook.com/ads/library/?id=1914305069975565" target="_blank" rel="noopener">匠 広告</a> · <a href="https://liveagent.co.jp/" target="_blank" rel="noopener">LiveAgent</a></div>
+  <div class="grp">アプリ = <a href="https://lp-video.tria-corp.com" target="_blank" rel="noopener">Tria LP</a> · <a href="https://www.facebook.com/ads/library/?id=912765358562941" target="_blank" rel="noopener">Tria 広告</a> · <a href="https://www.facebook.com/ads/library/?id=938184792008130" target="_blank" rel="noopener">Marketing_labo 広告</a> · <a href="https://buzzriya.com" target="_blank" rel="noopener">バズり屋 LP</a> · <a href="https://www.facebook.com/ads/library/?id=1446045163944148" target="_blank" rel="noopener">アニメる 広告</a></div>
+  <div class="grp">FDE = <a href="https://fde-studio.com" target="_blank" rel="noopener">FDE Studio LP</a> · <a href="https://temp.co.jp/services/notion-consulting/" target="_blank" rel="noopener">TEMP LP</a> · <a href="https://www.facebook.com/ads/library/?id=2125314685069986" target="_blank" rel="noopener">セルプロモート 広告</a> · <a href="https://www.facebook.com/ads/library/?id=882227534945600" target="_blank" rel="noopener">Ragnize 広告</a> · <a href="https://www.facebook.com/ads/library/?id=1039552958751601" target="_blank" rel="noopener">researcHR 広告</a> · <a href="https://www.facebook.com/ads/library/?id=1015774898144597" target="_blank" rel="noopener">ペパコミ 広告</a></div>
+  <div class="src">生成元 MD 正本: <code>ceed-ad-ops/overview.md</code>　内部 ID / 認証情報は除去済み。</div>
+</footer>
+
+</body>
+</html>
