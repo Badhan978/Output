@@ -68,7 +68,7 @@
 
   /* kill flow map */
   .mapwrap{padding:24px 22px;display:grid;
-    grid-template-columns:1fr 42px 1fr 42px 1fr;gap:8px;align-items:start}
+    grid-template-columns:1fr 34px 1fr 34px 1fr 34px 1fr;gap:8px;align-items:start}
   .node{border-radius:12px;padding:14px 15px;border:1.5px solid;background:#fff}
   .node .stage{font-size:13.5px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:8px;justify-content:space-between}
   .node .row{margin-top:7px}
@@ -123,22 +123,22 @@
 <header class="hero">
   <div class="heroin">
     <div class="kicker">Ceed toB 広告運用</div>
-    <h1>3 商材 × 初 CV 1 件で Kill / 継続を決める</h1>
-    <p class="lead">切り抜き・アプリグロース・FDE の 3 商材を Meta 広告で並走させ、リード件数ではなく「初 CV 1 件が出るか」で商材ごとに Kill / 継続を判定し、表示 → クリック → LP → CV の転換率データを取りにいく。</p>
+    <h1>3 商材 × 資料 DL の CPA で Kill / 継続を決める</h1>
+    <p class="lead">切り抜き・アプリグロース・FDE の 3 商材を Instagram インスタントフォーム + Google 検索広告で並走させ、CV 地点は資料 DL のみに一本化。リード件数ではなく商材ごとの資料 DL の CPA (目標 IF ¥6,000 / Google ¥20,000) で Kill / 継続を判定する。</p>
     <div class="meta">
-      <span class="pill">作成 2026-09-04</span>
-      <span class="pill">配信開始 9/8</span>
-      <span class="pill">予算 ¥54,000〜90,000</span>
+      <span class="pill">作成 2026-09-08 改訂</span>
+      <span class="pill">配信開始 AOM 仕組み受領後 (目安 9/10 週)</span>
+      <span class="pill">予算 Max ¥210,000</span>
     </div>
   </div>
 </header>
 
 <nav>
   <a href="#kpi">📊 狙う数字 5 本</a>
-  <a href="#kill">🎯 Kill 判定 3 段</a>
+  <a href="#kill">🎯 Kill 判定 4 段</a>
   <a href="#angles">🧩 商材別アングル 21 命題</a>
   <a href="#who">🏢 誰に当てるか 3 商材</a>
-  <a href="#schedule">🗓 スケジュール 5 段</a>
+  <a href="#schedule">🗓 スケジュール 6 段</a>
 </nav>
 
 <main>
@@ -158,14 +158,14 @@
   <section id="kpi">
     <div class="card">
       <h2><span class="mark" style="background:var(--on)"></span>狙う数字</h2>
-      <div class="note">商材あたり Max。CTR 1.0% / LP 到達 70% / 問い合わせ CVR 1.0% / CPM ¥1,000 の仮置きから逆算。</div>
+      <div class="note">CV = 資料 DL のみ。CTR 1.0% / IF 送信率 1.7% / Google LP 到達 70%・CVR 2.5% / CPM ¥1,000・CPC ¥500 の仮置きから逆算 (商材あたり Max)。</div>
       <div class="cardbody">
         <div class="metrics">
-          <div class="metric"><div class="num">¥15,000</div><div class="lbl">日予算 (¥5,000 × 3 商材)</div></div>
-          <div class="metric"><div class="num">¥30,000</div><div class="lbl">商材あたり Max</div></div>
-          <div class="metric"><div class="num">4〜6 日</div><div class="lbl">検証期間</div></div>
-          <div class="metric"><div class="num">¥14,300</div><div class="lbl">逆算 CPA (問い合わせ)</div></div>
-          <div class="metric"><div class="num">30,000 / 1</div><div class="lbl">狙う量 (表示 / 問い合わせ)</div></div>
+          <div class="metric"><div class="num">¥6,000</div><div class="lbl">目標 CPA (IF)</div></div>
+          <div class="metric"><div class="num">¥20,000</div><div class="lbl">目標 CPA (Google)</div></div>
+          <div class="metric"><div class="num">¥5,000</div><div class="lbl">日予算 (IF・商材あたり)</div></div>
+          <div class="metric"><div class="num">¥30,000<br>+¥40,000</div><div class="lbl">商材 Max (IF + Google)</div></div>
+          <div class="metric"><div class="num">5 + 2</div><div class="lbl">狙う DL (IF + Google)</div></div>
         </div>
       </div>
     </div>
@@ -173,8 +173,8 @@
 
   <section id="kill">
     <div class="card">
-      <h2><span class="mark" style="background:var(--run)"></span>Kill 判定 3 段 (商材ごと)</h2>
-      <div class="note">クリック段階 → LP 段階 → 初 CV の順に予算を積み増しながら判定。LP 段階は Kill でなく差し替え。</div>
+      <h2><span class="mark" style="background:var(--run)"></span>Kill 判定 4 段 (商材ごと)</h2>
+      <div class="note">クリック → フォーム → CPA 即時ルール → 初 DL の順に予算を積み増しながら判定。フォーム段階は Kill でなく差し替え。</div>
       <div class="mapwrap">
         <div class="node" style="border-color:var(--on)">
           <div class="stage">クリック段階<span class="st st-run">検証中</span></div>
@@ -183,15 +183,21 @@
         </div>
         <div class="arrows">→</div>
         <div class="node" style="border-color:var(--off)">
-          <div class="stage">LP 段階<span class="st st-run">検証中</span></div>
-          <div class="row"><div class="k">到達点</div><div class="v">LP 到達 100 (累計 ≈14,000 表示)</div></div>
-          <div class="row"><div class="k">判定</div><div class="v">問い合わせ 0 かつ DL 0 → LP・訴求を 1 回差し替え (Kill ではない)</div></div>
+          <div class="stage">フォーム段階 (IF)<span class="st st-run">検証中</span></div>
+          <div class="row"><div class="k">到達点</div><div class="v">通過見出しでクリック 100</div></div>
+          <div class="row"><div class="k">判定</div><div class="v">フォーム送信 0 → 見出し + フォーム冒頭文を 1 回差し替え (Kill ではない)</div></div>
+        </div>
+        <div class="arrows">→</div>
+        <div class="node" style="border-color:var(--run)">
+          <div class="stage">CPA 即時ルール (IF)<span class="st st-run">検証中</span></div>
+          <div class="row"><div class="k">到達点</div><div class="v">DL 2 件目以降、毎日チェック</div></div>
+          <div class="row"><div class="k">判定</div><div class="v">消化額 ÷ DL が ¥10,000 超で即クリエイティブ差し替え</div></div>
         </div>
         <div class="arrows">→</div>
         <div class="node" style="border-color:var(--done)">
-          <div class="stage">初 CV<span class="st st-run">検証中</span></div>
-          <div class="row"><div class="k">到達点</div><div class="v">累計 30,000 表示 (¥30,000)</div></div>
-          <div class="row"><div class="k">判定</div><div class="v">問い合わせ 1 件以上 → 合格・次サイクル予算 ×2 / 0 件 → 商材 Kill</div></div>
+          <div class="stage">初 DL・Kill<span class="st st-run">検証中</span></div>
+          <div class="row"><div class="k">到達点</div><div class="v">IF ¥18,000〜30,000 / Google ¥40,000</div></div>
+          <div class="row"><div class="k">判定</div><div class="v">IF: ¥18,000 で DL 0 → Kill、¥30,000 時点 CPA ¥10,000 以内で合格 → 次サイクル予算 ×2 / Google: ¥40,000 で DL 0 → Kill、DL 1 件以上 → 合格</div></div>
         </div>
       </div>
     </div>
@@ -274,27 +280,32 @@
         <div class="tstep">
           <div class="tdate">9/4</div>
           <div class="tbody"><div class="ttitle">設計確定<span class="st st-done">確定</span></div>
-            <div class="tdef">AOM の仕組み・LP 可否待ち、受け口 (フォーム → シート + Slack) 準備</div></div>
+            <div class="tdef">3 商材 × Meta 広告の初期設計</div></div>
+        </div>
+        <div class="tstep">
+          <div class="tdate">9/7</div>
+          <div class="tbody"><div class="ttitle">AOM MTG で前提確定<span class="st st-done">確定</span></div>
+            <div class="tdef">CV = 資料 DL のみ、媒体 = IF + Google に確定</div></div>
         </div>
         <div class="tstep">
           <div class="tdate">9/8</div>
+          <div class="tbody"><div class="ttitle">設計改訂<span class="st st-done">確定</span></div>
+            <div class="tdef">目標 CPA (IF ¥6,000 / Google ¥20,000) 確定、Kill 判定 4 段に更新</div></div>
+        </div>
+        <div class="tstep">
+          <div class="tdate">受領待ち</div>
+          <div class="tbody"><div class="ttitle">AOM 仕組み受領<span class="st st-todo">未着手</span></div>
+            <div class="tdef">受け口 (フォーム → シート + Slack) の準備完了待ち</div></div>
+        </div>
+        <div class="tstep">
+          <div class="tdate">目安 9/10 週</div>
           <div class="tbody"><div class="ttitle">配信開始<span class="st st-todo">未着手</span></div>
-            <div class="tdef">Meta (Instagram + Facebook)、静止画 1 テンプレート × 見出し差し替え</div></div>
+            <div class="tdef">AOM 仕組み受領後に開始、実日付未定</div></div>
         </div>
         <div class="tstep">
-          <div class="tdate">9/10 頃</div>
-          <div class="tbody"><div class="ttitle">クリック段階の判定<span class="st st-todo">未着手</span></div>
-            <div class="tdef">CTR 0.5% 未満は Stop、6 本全滅で商材 Kill</div></div>
-        </div>
-        <div class="tstep">
-          <div class="tdate">9/13 頃</div>
-          <div class="tbody"><div class="ttitle">初 CV 判定<span class="st st-todo">未着手</span></div>
-            <div class="tdef">問い合わせ 1 件以上で合格、0 件で商材 Kill</div></div>
-        </div>
-        <div class="tstep">
-          <div class="tdate">9/15 週</div>
-          <div class="tbody"><div class="ttitle">次サイクル<span class="st st-todo">未着手</span></div>
-            <div class="tdef">合格商材は予算 ¥60,000</div></div>
+          <div class="tdate">開始 6 日後</div>
+          <div class="tbody"><div class="ttitle">判定<span class="st st-todo">未着手</span></div>
+            <div class="tdef">クリック → フォーム → CPA 即時ルール → 初 DL の累積判定</div></div>
         </div>
       </div>
     </div>
@@ -307,7 +318,7 @@
   <div class="grp">切り抜き = <a href="https://clip.dev/marketing/" target="_blank" rel="noopener">CLIP LP</a> · <a href="https://www.facebook.com/ads/library/?id=2072565597020881" target="_blank" rel="noopener">CLIP 広告</a> · <a href="https://www.facebook.com/ads/library/?id=1914305069975565" target="_blank" rel="noopener">匠 広告</a> · <a href="https://liveagent.co.jp/" target="_blank" rel="noopener">LiveAgent</a></div>
   <div class="grp">アプリ = <a href="https://lp-video.tria-corp.com" target="_blank" rel="noopener">Tria LP</a> · <a href="https://www.facebook.com/ads/library/?id=912765358562941" target="_blank" rel="noopener">Tria 広告</a> · <a href="https://www.facebook.com/ads/library/?id=938184792008130" target="_blank" rel="noopener">Marketing_labo 広告</a> · <a href="https://buzzriya.com" target="_blank" rel="noopener">バズり屋 LP</a> · <a href="https://www.facebook.com/ads/library/?id=1446045163944148" target="_blank" rel="noopener">アニメる 広告</a></div>
   <div class="grp">FDE = <a href="https://fde-studio.com" target="_blank" rel="noopener">FDE Studio LP</a> · <a href="https://temp.co.jp/services/notion-consulting/" target="_blank" rel="noopener">TEMP LP</a> · <a href="https://www.facebook.com/ads/library/?id=2125314685069986" target="_blank" rel="noopener">セルプロモート 広告</a> · <a href="https://www.facebook.com/ads/library/?id=882227534945600" target="_blank" rel="noopener">Ragnize 広告</a> · <a href="https://www.facebook.com/ads/library/?id=1039552958751601" target="_blank" rel="noopener">researcHR 広告</a> · <a href="https://www.facebook.com/ads/library/?id=1015774898144597" target="_blank" rel="noopener">ペパコミ 広告</a></div>
-  <div class="src">生成元 MD 正本: <code>ceed-ad-ops/overview.md</code>　内部 ID / 認証情報は除去済み。</div>
+  <div class="src">生成元 MD 正本: <code>ceed-ad-ops/overview.md</code> (2026-09-08 改訂)　内部 ID / 認証情報は除去済み。</div>
 </footer>
 
 </body>
