@@ -86,13 +86,6 @@
   .l4grid{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
   .l4grid .node{margin-bottom:8px}
 
-  /* flow lines */
-  .flows{padding:18px 22px}
-  .flowline{display:flex;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
-  .flowline:last-child{border-bottom:none}
-  .flowline b{flex:0 0 auto;color:var(--ink)}
-  .flowline span{color:var(--sub)}
-
   footer{max-width:1260px;margin:26px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
   footer .grp{margin:6px 0}
   footer .grp b{color:var(--ink);font-weight:700}
@@ -265,11 +258,9 @@
   <section id="flows">
     <div class="card">
       <h2><span class="mark" style="background:var(--run)"></span>主要な流れ 3本</h2>
-      <div class="flows">
-        <div class="flowline"><b>① リード</b><span>IF → Meta API → leads → リード一覧 → 架電 → KPI</span></div>
-        <div class="flowline"><b>② 数値</b><span>Meta API → daily_metrics → 配信ダッシュボード → 判定4段 → 台帳</span></div>
-        <div class="flowline"><b>③ 素材</b><span>入稿(未) → assets → 素材ボード → 判断 → 勝ちパターン → 次サイクル</span></div>
-      </div>
+      <div class="note" style="border-bottom:1px solid var(--line)"><b style="color:var(--ink)">① リード</b>　IF → Meta API → leads → リード一覧 → 架電 → KPI</div>
+      <div class="note" style="border-bottom:1px solid var(--line)"><b style="color:var(--ink)">② 数値</b>　Meta API → daily_metrics → 配信ダッシュボード → 判定4段 → 台帳</div>
+      <div class="note" style="border-bottom:none"><b style="color:var(--ink)">③ 素材</b>　入稿(未) → assets → 素材ボード → 判断 → 勝ちパターン → 次サイクル</div>
     </div>
   </section>
 
