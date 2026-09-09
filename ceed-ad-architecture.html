@@ -65,16 +65,15 @@
     <h1>仕組みの全体図</h1>
     <p class="lead">入口から判定までの流れ。色つきの箱はクリックで該当ページへ。</p>
     <div class="meta">
-      <span class="pill">作成 2026-09-09</span>
-      <span class="pill">実装済み 8 画面</span>
-      <span class="pill">未実装 6</span>
+      <span class="pill">作成 2026-09-09 · AOM設計書 56画面準拠</span>
+      <span class="pill">実装済み 8</span>
     </div>
   </div>
 </header>
 
 <nav>
-  <a href="#map">🗺 全体地図 5層</a>
-  <a href="#flows">🔀 主要な流れ 3本</a>
+  <a href="#map">🗺 全体地図 7群</a>
+  <a href="#flows">🔀 主要な流れ 3本 + 壊れ方の設計</a>
 </nav>
 
 <main>
@@ -82,9 +81,9 @@
   <section id="map">
     <div class="card">
       <h2><span class="mark" style="background:var(--on)"></span>全体地図</h2>
-      <div class="note">左から右へ「媒体 → 取込 → データ → 画面 → 判定・出力」の5群。クラスタ内は上から下へ階層・工程順、矢印は実際のデータの流れ。太い3本の色線が主要フロー。</div>
+      <div class="note">左から右へ「媒体・流入 → 外部サービス → 取込・同期/認証・権限 → Supabase(全テーブル1枠) → 画面7群(56画面) → 通知・出力」。Supabase は表名の列挙のみで、画面群への線はこの枠自体に対して引く。太い3本の色線が主要フロー。</div>
       <div class="diagram-wrap">
-<svg viewBox="0 0 1432 746" width="100%" style="min-width:1180px" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif" aria-label="Ceed toB広告運用 仕組みの全体図">
+<svg viewBox="0 0 1768 986" width="100%" style="min-width:1400px" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif" aria-label="Ceed toB広告運用 仕組みの全体図(AOM設計書準拠)">
 <style>
   .n{transition:filter .12s ease}
   a.n:hover rect.box{filter:brightness(0.96)}
@@ -93,306 +92,722 @@
   .edge{fill:none}
 </style>
 <defs>
-  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-    <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
-  </marker>
-  <marker id="arr-lead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
-    <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
-  </marker>
-  <marker id="arr-num" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
-    <path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/>
-  </marker>
-  <marker id="arr-creative" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
-    <path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/>
-  </marker>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
+  <marker id="arr-lead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+  <marker id="arr-num" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
+  <marker id="arr-creative" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/></marker>
 </defs>
-<rect x="20" y="58" width="206" height="242" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
-<text x="40" y="79" font-size="12.5" font-weight="800" fill="#64748b">① 媒体(外部)</text>
-<rect x="278" y="58" width="206" height="242" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
-<text x="298" y="79" font-size="12.5" font-weight="800" fill="#64748b">② 取込</text>
-<rect x="536" y="58" width="190" height="528" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
-<text x="556" y="79" font-size="12.5" font-weight="800" fill="#64748b">③ データ(Supabase・予定)</text>
-<rect x="778" y="58" width="376" height="552" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
-<text x="798" y="79" font-size="12.5" font-weight="800" fill="#64748b">④ 画面(実装8・未実装6)</text>
-<rect x="1206" y="58" width="206" height="366" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
-<text x="1226" y="79" font-size="12.5" font-weight="800" fill="#64748b">⑤ 判定・出力</text>
-<path class="edge" d="M206,132 L252,132 L252,132 L298,132" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
-<rect x="231.2" y="123" width="41.599999999999994" height="14" rx="4" fill="#fff" opacity="0.92"/>
-<text x="252" y="134" font-size="10" font-weight="700" fill="#2563eb" text-anchor="middle">リード</text>
-<path class="edge" d="M123,218 L123,232" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M206,256 L252,256 L252,194 L298,194" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<rect x="214.4" y="185" width="75.19999999999999" height="14" rx="4" fill="#fff" opacity="0.92"/>
-<text x="252" y="196" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle">DLフォーム</text>
-<path class="edge" d="M464,256 L510,256 L510,389 L556,389" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M464,132 L510,132 L510,389 L556,389" stroke="#16a34a" stroke-width="2.6" marker-end="url(#arr-num)"/>
-<rect x="483.6" y="380" width="52.8" height="14" rx="4" fill="#fff" opacity="0.92"/>
-<text x="510" y="391" font-size="10" font-weight="700" fill="#16a34a" text-anchor="middle">日次数値</text>
-<path class="edge" d="M464,132 L510,132 L510,441 L556,441" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
-<path class="edge" d="M464,194 L510,194 L510,441 L556,441" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M631,150 L631,160" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M631,202 L631,212" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M631,254 L631,264" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M631,306 L631,316" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M556,285 L529,285 L529,389 L556,389" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M556,337 L521,337 L521,545 L556,545" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M706,389 L752,389 L752,194 L798,194" stroke="#16a34a" stroke-width="2.6" marker-end="url(#arr-num)"/>
-<path class="edge" d="M706,389 L752,389 L752,256 L798,256" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M706,389 L752,389 L752,566 L798,566" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M706,129 L752,129 L752,132 L798,132" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M877,156 L877,170" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M706,337 L752,337 L752,256 L798,256" stroke="#ea580c" stroke-width="2.6" marker-end="url(#arr-creative)"/>
-<path class="edge" d="M877,280 L877,294" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M877,280 L877,636 L631,636 L631,566" stroke="#ea580c" stroke-width="2.6" marker-end="url(#arr-creative)"/>
-<path class="edge" d="M706,545 L752,545 L752,380 L798,380" stroke="#ea580c" stroke-width="2.6" marker-end="url(#arr-creative)"/>
-<path class="edge" d="M706,441 L752,441 L752,442 L798,442" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
-<path class="edge" d="M877,466 L877,480" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
-<path class="edge" d="M877,528 L877,649 L631,649 L631,514" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
-<path class="edge" d="M706,493 L752,493 L752,566 L798,566" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
-<path class="edge" d="M1055,156 L1055,662 L631,662 L631,306" stroke="#ea580c" stroke-width="2.6" marker-end="url(#arr-creative)"/>
-<rect x="615.8" y="653" width="30.4" height="14" rx="4" fill="#fff" opacity="0.92"/>
-<text x="631" y="664" font-size="10" font-weight="700" fill="#ea580c" text-anchor="middle">素材</text>
-<path class="edge" d="M956,194 L1091,194 L1091,132 L1226,132" stroke="#16a34a" stroke-width="2.6" marker-end="url(#arr-num)"/>
-<path class="edge" d="M1309,156 L1309,170" stroke="#16a34a" stroke-width="2.6" marker-end="url(#arr-num)"/>
-<path class="edge" d="M1226,194 L1199,194 L1199,380 L1226,380" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M956,380 L1091,380 L1091,380 L1226,380" stroke="#ea580c" stroke-width="2.6" marker-end="url(#arr-creative)"/>
-<path class="edge" d="M1226,132 L1191,132 L1191,256 L1226,256" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M706,441 L720,441 L720,34 L1309,34 L1309,294" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
-<path class="edge" d="M706,441 L966,441 L966,256 L1226,256" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
-<rect x="934" y="247" width="64" height="14" rx="4" fill="#fff" opacity="0.92"/>
-<text x="966" y="258" font-size="10" font-weight="700" fill="#2563eb" text-anchor="middle">新着リード</text>
-<path class="edge" d="M956,504 L1091,504 L1091,256 L1226,256" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<rect x="20" y="58" width="182" height="384" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="36" y="79" font-size="12.5" font-weight="800" fill="#64748b">媒体・流入</text>
+<rect x="236" y="58" width="182" height="384" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="252" y="79" font-size="12.5" font-weight="800" fill="#64748b">外部サービス</text>
+<rect x="452" y="58" width="182" height="288" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="468" y="79" font-size="12.5" font-weight="800" fill="#64748b">取込・同期</text>
+<rect x="452" y="370" width="182" height="384" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="468" y="391" font-size="12.5" font-weight="800" fill="#64748b">認証・権限</text>
+<rect x="668" y="58" width="372" height="388" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="684" y="79" font-size="12.5" font-weight="800" fill="#64748b">Supabase(全テーブル1枠)</text>
+<rect x="1074" y="58" width="674" height="708" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="1090" y="79" font-size="12.5" font-weight="800" fill="#64748b">画面 56 (実装済み8)</text>
+<rect x="1782" y="58" width="182" height="384" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="1798" y="79" font-size="12.5" font-weight="800" fill="#64748b">通知・出力</text>
+<rect x="668" y="58" width="372" height="388" rx="14" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.8"/>
+<text x="684" y="80" font-size="12.5" font-weight="800" fill="#4c1d95">Supabase(全テーブル1枠)</text>
+<line x1="684" y1="100" x2="1024" y2="100" stroke="#ddd6fe" stroke-width="1"/>
+<text x="690" y="117" font-size="11" font-weight="800" fill="#4c1d95">広告</text>
+<text x="690" y="131" font-size="9.3" fill="#5b21b6">campaigns / adsets / ads / assets</text>
+<text x="690" y="143" font-size="9.3" fill="#5b21b6">daily_metrics</text>
+<line x1="684" y1="156" x2="1024" y2="156" stroke="#ddd6fe" stroke-width="1"/>
+<text x="690" y="173" font-size="11" font-weight="800" fill="#4c1d95">リード</text>
+<text x="690" y="187" font-size="9.3" fill="#5b21b6">leads / document_requests / calls / call_status</text>
+<line x1="684" y1="212" x2="1024" y2="212" stroke="#ddd6fe" stroke-width="1"/>
+<text x="690" y="229" font-size="11" font-weight="800" fill="#4c1d95">判断</text>
+<text x="690" y="243" font-size="9.3" fill="#5b21b6">decisions / tags(訴求軸)</text>
+<line x1="684" y1="268" x2="1024" y2="268" stroke="#ddd6fe" stroke-width="1"/>
+<text x="690" y="285" font-size="11" font-weight="800" fill="#4c1d95">マスタ</text>
+<text x="690" y="299" font-size="9.3" fill="#5b21b6">segments(区分) / organic_channels / deal_statuses</text>
+<text x="690" y="311" font-size="9.3" fill="#5b21b6">agencies(許可リスト)</text>
+<line x1="684" y1="324" x2="1024" y2="324" stroke="#ddd6fe" stroke-width="1"/>
+<text x="690" y="341" font-size="11" font-weight="800" fill="#4c1d95">同期</text>
+<text x="690" y="355" font-size="9.3" fill="#5b21b6">sync_jobs / sheet_mirror(運用シート写し)</text>
+<line x1="684" y1="380" x2="1024" y2="380" stroke="#ddd6fe" stroke-width="1"/>
+<text x="690" y="397" font-size="11" font-weight="800" fill="#4c1d95">メール</text>
+<text x="690" y="411" font-size="9.3" fill="#5b21b6">email_log / suppressions</text>
+<text x="690" y="423" font-size="9.3" fill="#5b21b6">newsletter_subscribers</text>
+<rect x="1090" y="100" width="150" height="606" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1098" y="114" font-size="10" font-weight="800" fill="#475569">リード・架電・メール 16</text>
+<rect x="1254" y="100" width="150" height="318" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1262" y="114" font-size="10" font-weight="800" fill="#475569">クリエイティブ 8</text>
+<rect x="1254" y="432" width="150" height="318" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1262" y="446" font-size="10" font-weight="800" fill="#475569">代理店ポータル(別枠・robots noindex) 8</text>
+<rect x="1418" y="100" width="150" height="354" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1426" y="114" font-size="10" font-weight="800" fill="#475569">配信・集計 9</text>
+<rect x="1418" y="468" width="150" height="246" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1426" y="482" font-size="10" font-weight="800" fill="#475569">設定・認証 6</text>
+<rect x="1582" y="100" width="150" height="174" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1590" y="114" font-size="10" font-weight="800" fill="#475569">ホーム・営業 4</text>
+<rect x="1582" y="288" width="150" height="210" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1590" y="302" font-size="10" font-weight="800" fill="#475569">分析・その他 5</text>
+<path class="edge" d="M186,118 L219,118 L219,118 L252,118" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="201.6" y="110" width="34.8" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="219" y="120" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">リード</text>
+<path class="edge" d="M111,186 L111,194" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M111,282 L111,792 L543,792 L543,330" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="520.8" y="784" width="44.4" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="543" y="794" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">資料請求</text>
+<path class="edge" d="M111,330 L111,803 L543,803 L543,330" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M111,426 L111,814 L543,814 L543,330" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M111,378 L111,825 L543,825 L543,282" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M402,118 L435,118 L435,118 L468,118" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<path class="edge" d="M618,118 L651,118 L651,125 L684,125" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<rect x="585.6" y="117" width="130.8" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="651" y="127" font-size="9" font-weight="700" fill="#16a34a" text-anchor="middle">daily_metrics</text>
+<path class="edge" d="M618,118 L651,118 L651,181 L684,181" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="624" y="173" width="54" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="651" y="183" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">leads</text>
+<path class="edge" d="M618,310 L651,310 L651,181 L684,181" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<path class="edge" d="M402,310 L435,310 L435,166 L468,166" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="422.4" y="158" width="25.2" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="435" y="168" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">5分</text>
+<path class="edge" d="M618,166 L651,166 L651,349 L684,349" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="590.4" y="341" width="121.19999999999999" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="651" y="351" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">sheet_mirror</text>
+<path class="edge" d="M1024,349 L1305,349 L1305,142 L1586,142" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M1024,349 L1305,349 L1305,178 L1586,178" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M402,358 L435,358 L435,214 L468,214" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M543,234 L543,836 L1493,836 L1493,158" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="1470.8" y="828" width="44.4" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1493" y="838" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">アポ確定</text>
+<path class="edge" d="M543,234 L543,847 L1165,847 L1165,230" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M1024,293 L1223,293 L1223,510 L1422,510" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="1181.6" y="502" width="82.8" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1223" y="512" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">admin(B)</text>
+<path class="edge" d="M1024,237 L1141,237 L1141,178 L1258,178" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="1080.4" y="170" width="121.19999999999999" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1141" y="180" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">Client直叩き(C)</text>
+<path class="edge" d="M1493,230 L1493,858 L543,858 L543,330" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="511.2" y="850" width="63.599999999999994" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="543" y="860" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">Meta反映</text>
+<path class="edge" d="M468,310 L435,310 L435,118 L402,118" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M1329,410 L1329,869 L543,869 L543,330" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
+<rect x="501.6" y="861" width="82.8" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="543" y="871" font-size="9" font-weight="700" fill="#ea580c" text-anchor="middle">PAUSED作成</text>
+<path class="edge" d="M468,310 L435,310 L435,118 L402,118" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
+<path class="edge" d="M1165,662 L1165,880 L543,880 L543,330" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="520.8" y="872" width="44.4" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="543" y="882" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">一斉送信</text>
+<path class="edge" d="M468,310 L435,310 L435,262 L402,262" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M854,206 L854,891 L1873,891 L1873,282" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="1846" y="883" width="54" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1873" y="893" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">新着リード</text>
+<path class="edge" d="M854,262 L854,902 L1873,902 L1873,282" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="1860.4" y="894" width="25.2" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1873" y="904" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">判定</text>
+<path class="edge" d="M1236,178 L1517,178 L1517,262 L1798,262" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="1494.8" y="254" width="44.4" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1517" y="264" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">架電結果</text>
+<path class="edge" d="M1564,582 L1681,582 L1681,262 L1798,262" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="1654" y="254" width="54" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1681" y="264" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">宛先・文面</text>
+<path class="edge" d="M543,450 L543,458" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M543,498 L543,506" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M543,498 L543,554" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M543,498 L543,602" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M543,330 L543,650" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="496.8" y="642" width="92.39999999999999" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="543" y="652" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">matcher除外</text>
+<path class="edge" d="M618,718 L651,718 L651,293 L684,293" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="633.6" y="285" width="34.8" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="651" y="295" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">RLS</text>
+<path class="edge" d="M543,410 L543,36 L1493,36 L1493,126" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="1480.4" y="28" width="25.2" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1493" y="38" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">社内</text>
+<path class="edge" d="M543,410 L543,25 L1329,25 L1329,458" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<rect x="1311.6" y="17" width="34.8" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1329" y="27" font-size="9" font-weight="700" fill="#64748b" text-anchor="middle">代理店</text>
+<path class="edge" d="M1564,142 L1681,142 L1681,118 L1798,118" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<path class="edge" d="M1873,138 L1873,146" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<path class="edge" d="M1873,186 L1873,194" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
+<path class="edge" d="M1400,214 L1599,214 L1599,214 L1798,214" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
+<path class="edge" d="M1258,142 L1141,142 L1141,237 L1024,237" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
+<rect x="1128.4" y="229" width="25.2" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1141" y="239" font-size="9" font-weight="700" fill="#ea580c" text-anchor="middle">判断</text>
+<path class="edge" d="M1024,237 L1141,237 L1141,214 L1258,214" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
+<path class="edge" d="M1024,125 L1141,125 L1141,142 L1258,142" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
+<rect x="1109.2" y="134" width="63.599999999999994" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1141" y="144" font-size="9" font-weight="700" fill="#ea580c" text-anchor="middle">assets</text>
+<path class="edge" d="M1024,125 L1223,125 L1223,142 L1422,142" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<path class="edge" d="M1024,181 L1059,181 L1059,142 L1094,142" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="1032" y="134" width="54" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1059" y="144" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">leads</text>
+<path class="edge" d="M1165,158 L1165,162" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<path class="edge" d="M1094,178 L1059,178 L1059,181 L1024,181" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="1027.2" y="173" width="63.599999999999994" height="13" rx="3" fill="#fff" opacity="0.92"/>
+<text x="1059" y="183" font-size="9" font-weight="700" fill="#2563eb" text-anchor="middle">架電結果記録</text>
+<path class="edge" d="M1165,194 L1165,198" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<path class="edge" d="M854,156 L854,14 L1873,14 L1873,290" stroke="#cbd5e1" stroke-width="1.3" marker-end="url(#arr)"/>
 <g class="n">
-<rect class="box" x="40" y="108" width="166" height="48" rx="9" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
-<rect x="40" y="108" width="4" height="48" rx="2" fill="#2563eb"/>
-<text class="lbl" x="52" y="127" font-size="11.5" font-weight="800" fill="#1e3a8a">IGインスタントフォーム</text>
-<text x="52" y="142" font-size="9.3" fill="#64748b">広告内で完結する申込</text>
+<rect class="box" x="36" y="98" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="36" y="98" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="45" y="112" font-size="11.2" font-weight="800" fill="#1e3a8a">Meta広告</text>
+<text x="45" y="131" font-size="8.2" fill="#64748b">インスタントフォーム</text>
 </g>
 <g class="n">
-<rect class="box" x="40" y="170" width="166" height="48" rx="9" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
-<rect x="40" y="170" width="4" height="48" rx="2" fill="#2563eb"/>
-<text class="lbl" x="52" y="189" font-size="11.5" font-weight="800" fill="#1e3a8a">Google検索広告</text>
-<text x="52" y="204" font-size="9.3" fill="#64748b">検索連動でLPへ誘導</text>
+<rect class="box" x="36" y="146" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="36" y="146" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="45" y="160" font-size="11.2" font-weight="800" fill="#1e3a8a">Google検索広告</text>
+<text x="45" y="179" font-size="8.2" fill="#64748b">検索連動でLPへ</text>
 </g>
 <g class="n">
-<rect class="box" x="40" y="232" width="166" height="48" rx="9" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
-<rect x="40" y="232" width="4" height="48" rx="2" fill="#2563eb"/>
-<text class="lbl" x="52" y="251" font-size="11.5" font-weight="800" fill="#1e3a8a">LP(資料DL)</text>
-<text x="52" y="266" font-size="9.3" fill="#64748b">フォーム外の遷移先</text>
+<rect class="box" x="36" y="194" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="36" y="194" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="45" y="208" font-size="11.2" font-weight="800" fill="#1e3a8a">LP</text>
+<text x="45" y="227" font-size="8.2" fill="#64748b">資料DLの遷移先</text>
 </g>
 <g class="n">
-<rect class="box" x="298" y="108" width="166" height="48" rx="9" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
-<rect x="298" y="108" width="4" height="48" rx="2" fill="#2563eb"/>
-<text class="lbl" x="310" y="127" font-size="11.5" font-weight="800" fill="#1e3a8a">Meta Marketing API</text>
-<text x="310" y="142" font-size="9.3" fill="#64748b">日次数値・リード取得</text>
+<rect class="box" x="36" y="242" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="36" y="242" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="45" y="256" font-size="11.2" font-weight="800" fill="#1e3a8a">自社フォーム</text>
+<text x="45" y="275" font-size="8.2" fill="#64748b">資料請求</text>
 </g>
 <g class="n">
-<rect class="box" x="298" y="170" width="166" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
-<rect x="298" y="170" width="4" height="48" rx="2" fill="#94a3b8"/>
-<text class="lbl" x="310" y="189" font-size="11.5" font-weight="800" fill="#64748b">form-endpoint</text>
-<text x="310" y="204" font-size="9.3" fill="#64748b">LPフォーム→leads</text>
+<rect class="box" x="36" y="290" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="36" y="290" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="45" y="304" font-size="11.2" font-weight="800" fill="#1e3a8a">外部フォーム(旧)</text>
+<text x="45" y="323" font-size="8.2" fill="#64748b">参照専用・新規流入なし</text>
 </g>
 <g class="n">
-<rect class="box" x="298" y="232" width="166" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
-<rect x="298" y="232" width="4" height="48" rx="2" fill="#94a3b8"/>
-<text class="lbl" x="310" y="251" font-size="11.5" font-weight="800" fill="#64748b">手動CSV</text>
-<text x="310" y="266" font-size="9.3" fill="#64748b">API化前の暫定取込</text>
+<rect class="box" x="36" y="338" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="36" y="338" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="45" y="352" font-size="11.2" font-weight="800" fill="#1e3a8a">イベント登録メール</text>
+<text x="45" y="371" font-size="8.2" fill="#64748b">主催イベントの通知</text>
 </g>
 <g class="n">
-<rect class="box" x="556" y="108" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
-<rect x="556" y="108" width="4" height="42" rx="2" fill="#60a5fa"/>
-<text class="lbl" x="568" y="127" font-size="11.5" font-weight="800" fill="#1e40af">segments</text>
-<text x="568" y="142" font-size="9.3" fill="#64748b">区分マスタ</text>
+<rect class="box" x="36" y="386" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="36" y="386" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="45" y="400" font-size="11.2" font-weight="800" fill="#1e3a8a">手動登録</text>
+<text x="45" y="419" font-size="8.2" fill="#64748b">広告外の経路</text>
 </g>
 <g class="n">
-<rect class="box" x="556" y="160" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
-<rect x="556" y="160" width="4" height="42" rx="2" fill="#60a5fa"/>
-<text class="lbl" x="568" y="179" font-size="11.5" font-weight="800" fill="#1e40af">campaigns</text>
-<text x="568" y="194" font-size="9.3" fill="#64748b">商材の単位</text>
+<rect class="box" x="252" y="98" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="252" y="98" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="261" y="112" font-size="11.2" font-weight="800" fill="#1e3a8a">Meta Marketing API</text>
+<text x="261" y="131" font-size="8.2" fill="#64748b">日次数値・リード取得</text>
 </g>
 <g class="n">
-<rect class="box" x="556" y="212" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
-<rect x="556" y="212" width="4" height="42" rx="2" fill="#60a5fa"/>
-<text class="lbl" x="568" y="231" font-size="11.5" font-weight="800" fill="#1e40af">adsets</text>
-<text x="568" y="246" font-size="9.3" fill="#64748b">ターゲット区分</text>
+<rect class="box" x="252" y="146" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="252" y="146" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="261" y="160" font-size="11.2" font-weight="800" fill="#1e3a8a">Supabase</text>
+<text x="261" y="179" font-size="8.2" fill="#64748b">Auth・PostgREST・Realtim</text>
 </g>
 <g class="n">
-<rect class="box" x="556" y="264" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
-<rect x="556" y="264" width="4" height="42" rx="2" fill="#60a5fa"/>
-<text class="lbl" x="568" y="283" font-size="11.5" font-weight="800" fill="#1e40af">ads</text>
-<text x="568" y="298" font-size="9.3" fill="#64748b">見出し・命題</text>
+<rect class="box" x="252" y="194" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="252" y="194" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="261" y="208" font-size="11.2" font-weight="800" fill="#1e3a8a">Slack</text>
+<text x="261" y="227" font-size="8.2" fill="#64748b">通知の送り先</text>
 </g>
 <g class="n">
-<rect class="box" x="556" y="316" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
-<rect x="556" y="316" width="4" height="42" rx="2" fill="#60a5fa"/>
-<text class="lbl" x="568" y="335" font-size="11.5" font-weight="800" fill="#1e40af">assets</text>
-<text x="568" y="350" font-size="9.3" fill="#64748b">画像・動画素材</text>
+<rect class="box" x="252" y="242" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="252" y="242" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="261" y="256" font-size="11.2" font-weight="800" fill="#1e3a8a">Gmail API</text>
+<text x="261" y="275" font-size="8.2" fill="#64748b">お礼メール・通知取込</text>
 </g>
 <g class="n">
-<rect class="box" x="556" y="368" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
-<rect x="556" y="368" width="4" height="42" rx="2" fill="#60a5fa"/>
-<text class="lbl" x="568" y="387" font-size="11.5" font-weight="800" fill="#1e40af">daily_metrics</text>
-<text x="568" y="402" font-size="9.3" fill="#64748b">日次の配信数値</text>
+<rect class="box" x="252" y="290" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="252" y="290" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="261" y="304" font-size="11.2" font-weight="800" fill="#1e3a8a">運用シート</text>
+<text x="261" y="323" font-size="8.2" fill="#64748b">担当者・ステータスの正</text>
 </g>
 <g class="n">
-<rect class="box" x="556" y="420" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
-<rect x="556" y="420" width="4" height="42" rx="2" fill="#60a5fa"/>
-<text class="lbl" x="568" y="439" font-size="11.5" font-weight="800" fill="#1e40af">leads</text>
-<text x="568" y="454" font-size="9.3" fill="#64748b">資料DLのリード</text>
+<rect class="box" x="252" y="338" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="252" y="338" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="261" y="352" font-size="11.2" font-weight="800" fill="#1e3a8a">Googleカレンダー</text>
+<text x="261" y="371" font-size="8.2" fill="#64748b">商談予定</text>
 </g>
 <g class="n">
-<rect class="box" x="556" y="472" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
-<rect x="556" y="472" width="4" height="42" rx="2" fill="#60a5fa"/>
-<text class="lbl" x="568" y="491" font-size="11.5" font-weight="800" fill="#1e40af">calls</text>
-<text x="568" y="506" font-size="9.3" fill="#64748b">架電の結果記録</text>
+<rect class="box" x="252" y="386" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="252" y="386" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="261" y="400" font-size="11.2" font-weight="800" fill="#1e3a8a">Vercel</text>
+<text x="261" y="419" font-size="8.2" fill="#64748b">ホスティング</text>
 </g>
 <g class="n">
-<rect class="box" x="556" y="524" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
-<rect x="556" y="524" width="4" height="42" rx="2" fill="#60a5fa"/>
-<text class="lbl" x="568" y="543" font-size="11.5" font-weight="800" fill="#1e40af">decisions</text>
-<text x="568" y="558" font-size="9.3" fill="#64748b">判断の履歴</text>
-</g>
-<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaign-segments/">
-<rect class="box" x="798" y="108" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
-<rect x="798" y="108" width="4" height="48" rx="2" fill="#16a34a"/>
-<text class="lbl" x="810" y="127" font-size="11.5" font-weight="800" fill="#14532d">キャンペーン区分</text>
-<text x="810" y="142" font-size="9.3" fill="#64748b">区分マスタと割当</text>
-<text x="946" y="127" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
-</a>
-<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaigns/">
-<rect class="box" x="798" y="170" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
-<rect x="798" y="170" width="4" height="48" rx="2" fill="#16a34a"/>
-<text class="lbl" x="810" y="189" font-size="11.5" font-weight="800" fill="#14532d">配信ダッシュボード</text>
-<text x="810" y="204" font-size="9.3" fill="#64748b">階層で数値確認</text>
-<text x="946" y="189" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
-</a>
-<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/">
-<rect class="box" x="798" y="232" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
-<rect x="798" y="232" width="4" height="48" rx="2" fill="#16a34a"/>
-<text class="lbl" x="810" y="251" font-size="11.5" font-weight="800" fill="#14532d">素材ボード</text>
-<text x="810" y="266" font-size="9.3" fill="#64748b">要対応で判断記録</text>
-<text x="946" y="251" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
-</a>
-<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/K1-a/">
-<rect class="box" x="798" y="294" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
-<rect x="798" y="294" width="4" height="48" rx="2" fill="#16a34a"/>
-<text class="lbl" x="810" y="313" font-size="11.5" font-weight="800" fill="#14532d">素材カルテ</text>
-<text x="810" y="328" font-size="9.3" fill="#64748b">1本の指標・履歴</text>
-<text x="946" y="313" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
-</a>
-<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/patterns/">
-<rect class="box" x="798" y="356" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
-<rect x="798" y="356" width="4" height="48" rx="2" fill="#16a34a"/>
-<text class="lbl" x="810" y="375" font-size="11.5" font-weight="800" fill="#14532d">勝ちパターン</text>
-<text x="810" y="390" font-size="9.3" fill="#64748b">訴求軸のクロス表</text>
-<text x="946" y="375" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
-</a>
-<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/">
-<rect class="box" x="798" y="418" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
-<rect x="798" y="418" width="4" height="48" rx="2" fill="#16a34a"/>
-<text class="lbl" x="810" y="437" font-size="11.5" font-weight="800" fill="#14532d">リード一覧</text>
-<text x="810" y="452" font-size="9.3" fill="#64748b">絞込とCSV出力</text>
-<text x="946" y="437" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
-</a>
-<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/unified/">
-<rect class="box" x="798" y="480" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
-<rect x="798" y="480" width="4" height="48" rx="2" fill="#16a34a"/>
-<text class="lbl" x="810" y="499" font-size="11.5" font-weight="800" fill="#14532d">統合架電リスト</text>
-<text x="810" y="514" font-size="9.3" fill="#64748b">架電結果を記録</text>
-<text x="946" y="499" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
-</a>
-<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/kpi/">
-<rect class="box" x="798" y="542" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
-<rect x="798" y="542" width="4" height="48" rx="2" fill="#16a34a"/>
-<text class="lbl" x="810" y="561" font-size="11.5" font-weight="800" fill="#14532d">KPI</text>
-<text x="810" y="576" font-size="9.3" fill="#64748b">月次実績を目標と対比</text>
-<text x="946" y="561" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
-</a>
-<g class="n">
-<rect class="box" x="976" y="108" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
-<rect x="976" y="108" width="4" height="48" rx="2" fill="#94a3b8"/>
-<text class="lbl" x="988" y="127" font-size="11.5" font-weight="800" fill="#64748b">入稿ワークスペース</text>
-<text x="988" y="142" font-size="9.3" fill="#64748b">停止状態で広告作成</text>
+<rect class="box" x="468" y="98" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="98" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="112" font-size="11.2" font-weight="800" fill="#4c1d95">Meta同期</text>
+<text x="477" y="131" font-size="8.2" fill="#64748b">cron+手動、同一関数</text>
 </g>
 <g class="n">
-<rect class="box" x="976" y="170" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
-<rect x="976" y="170" width="4" height="48" rx="2" fill="#94a3b8"/>
-<text class="lbl" x="988" y="189" font-size="11.5" font-weight="800" fill="#64748b">お礼メール送信状況</text>
-<text x="988" y="204" font-size="9.3" fill="#64748b">送達・開封を追跡</text>
+<rect class="box" x="468" y="146" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="146" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="160" font-size="11.2" font-weight="800" fill="#4c1d95">運用シート同期</text>
+<text x="477" y="179" font-size="8.2" fill="#64748b">5分ごと、指紋で差分判定</text>
 </g>
 <g class="n">
-<rect class="box" x="976" y="232" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
-<rect x="976" y="232" width="4" height="48" rx="2" fill="#94a3b8"/>
-<text class="lbl" x="988" y="251" font-size="11.5" font-weight="800" fill="#64748b">一斉メール</text>
-<text x="988" y="266" font-size="9.3" fill="#64748b">絞込結果へ一斉配信</text>
+<rect class="box" x="468" y="194" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="194" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="208" font-size="11.2" font-weight="800" fill="#4c1d95">カレンダー取込</text>
+<text x="477" y="227" font-size="8.2" fill="#64748b">区分振分→アポ確定</text>
 </g>
 <g class="n">
-<rect class="box" x="976" y="294" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
-<rect x="976" y="294" width="4" height="48" rx="2" fill="#94a3b8"/>
-<text class="lbl" x="988" y="313" font-size="11.5" font-weight="800" fill="#64748b">Slack通知設定</text>
-<text x="988" y="328" font-size="9.3" fill="#64748b">宛先チャンネル設定</text>
+<rect class="box" x="468" y="242" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="242" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="256" font-size="11.2" font-weight="800" fill="#4c1d95">イベント通知取込</text>
+<text x="477" y="275" font-size="8.2" fill="#64748b">参加者を自動反映</text>
 </g>
 <g class="n">
-<rect class="box" x="976" y="356" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
-<rect x="976" y="356" width="4" height="48" rx="2" fill="#94a3b8"/>
-<text class="lbl" x="988" y="375" font-size="11.5" font-weight="800" fill="#64748b">同期履歴</text>
-<text x="988" y="390" font-size="9.3" fill="#64748b">同期ジョブの実行履歴</text>
+<rect class="box" x="468" y="290" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="290" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="304" font-size="11.2" font-weight="800" fill="#4c1d95">APIルート 71本</text>
+<text x="477" y="323" font-size="8.2" fill="#64748b">service_role・監査列・AI呼出(</text>
 </g>
 <g class="n">
-<rect class="box" x="976" y="418" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
-<rect x="976" y="418" width="4" height="48" rx="2" fill="#94a3b8"/>
-<text class="lbl" x="988" y="437" font-size="11.5" font-weight="800" fill="#64748b">代理店ポータル</text>
-<text x="988" y="452" font-size="9.3" fill="#64748b">架電代理店向け別画面</text>
+<rect class="box" x="468" y="410" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="410" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="424" font-size="11.2" font-weight="800" fill="#4c1d95">middleware</text>
+<text x="477" y="443" font-size="8.2" fill="#64748b">全リクエストの関所</text>
+</g>
+<g class="n">
+<rect class="box" x="468" y="458" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="458" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="472" font-size="11.2" font-weight="800" fill="#4c1d95">classifyUser</text>
+<text x="477" y="491" font-size="8.2" fill="#64748b">internal/agency/denied</text>
+</g>
+<g class="n">
+<rect class="box" x="468" y="506" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="506" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="520" font-size="11.2" font-weight="800" fill="#4c1d95">internal</text>
+<text x="477" y="539" font-size="8.2" fill="#64748b">コード内ハードコード</text>
+</g>
+<g class="n">
+<rect class="box" x="468" y="554" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="554" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="568" font-size="11.2" font-weight="800" fill="#4c1d95">agency</text>
+<text x="477" y="587" font-size="8.2" fill="#64748b">DB許可リスト・TTL60秒</text>
+</g>
+<g class="n">
+<rect class="box" x="468" y="602" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="602" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="616" font-size="11.2" font-weight="800" fill="#4c1d95">denied</text>
+<text x="477" y="635" font-size="8.2" fill="#64748b">強制サインアウト</text>
+</g>
+<g class="n">
+<rect class="box" x="468" y="650" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="650" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="664" font-size="11.2" font-weight="800" fill="#4c1d95">matcher除外パス</text>
+<text x="477" y="683" font-size="8.2" fill="#64748b">webhook/cron/外部フォームは自前</text>
+</g>
+<g class="n">
+<rect class="box" x="468" y="698" width="150" height="40" rx="7" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="468" y="698" width="3.5" height="40" rx="1.5" fill="#7c3aed"/>
+<text class="lbl" x="477" y="712" font-size="11.2" font-weight="800" fill="#4c1d95">RLS</text>
+<text x="477" y="731" font-size="8.2" fill="#64748b">最終防衛線(PostgRESTは素通り)</text>
 </g>
 <a class="n" href="https://github.com/Ceed-dev/lead-gen-ops/blob/main/ad-ops/00-kpi/kpi.md">
-<rect class="box" x="1226" y="108" width="166" height="48" rx="9" fill="#ecfdf5" stroke="#10b981" stroke-width="1.6"/>
-<rect x="1226" y="108" width="4" height="48" rx="2" fill="#10b981"/>
-<text class="lbl" x="1238" y="127" font-size="11.5" font-weight="800" fill="#065f46">判定4段</text>
-<text x="1238" y="142" font-size="9.3" fill="#64748b">足切り→差替→即停止→Kill合格</text>
-<text x="1382" y="127" font-size="9" text-anchor="end" fill="#10b981">↗</text>
+<rect class="box" x="1798" y="98" width="150" height="40" rx="7" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+<rect x="1798" y="98" width="3.5" height="40" rx="1.5" fill="#10b981"/>
+<text class="lbl" x="1807" y="112" font-size="11.2" font-weight="800" fill="#065f46">判定4段</text>
+<text x="1807" y="131" font-size="8.2" fill="#64748b">足切り→差替→即停止→Kill合格</text>
+<text x="1940" y="112" font-size="8.5" text-anchor="end" fill="#10b981">↗</text>
 </a>
 <a class="n" href="https://github.com/Ceed-dev/lead-gen-ops/blob/main/ad-ops/pdca/hypotheses.md">
-<rect class="box" x="1226" y="170" width="166" height="48" rx="9" fill="#ecfdf5" stroke="#10b981" stroke-width="1.6"/>
-<rect x="1226" y="170" width="4" height="48" rx="2" fill="#10b981"/>
-<text class="lbl" x="1238" y="189" font-size="11.5" font-weight="800" fill="#065f46">仮説台帳</text>
-<text x="1238" y="204" font-size="9.3" fill="#64748b">判定と打ち手を記録</text>
-<text x="1382" y="189" font-size="9" text-anchor="end" fill="#10b981">↗</text>
+<rect class="box" x="1798" y="146" width="150" height="40" rx="7" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+<rect x="1798" y="146" width="3.5" height="40" rx="1.5" fill="#10b981"/>
+<text class="lbl" x="1807" y="160" font-size="11.2" font-weight="800" fill="#065f46">仮説台帳</text>
+<text x="1807" y="179" font-size="8.2" fill="#64748b">判定と打ち手を記録</text>
+<text x="1940" y="160" font-size="8.5" text-anchor="end" fill="#10b981">↗</text>
 </a>
-<g class="n">
-<rect class="box" x="1226" y="232" width="166" height="48" rx="9" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
-<rect x="1226" y="232" width="4" height="48" rx="2" fill="#2563eb"/>
-<text class="lbl" x="1238" y="251" font-size="11.5" font-weight="800" fill="#1e3a8a">Slack通知</text>
-<text x="1238" y="266" font-size="9.3" fill="#64748b">新着リード・判定・架電結果</text>
-</g>
-<g class="n">
-<rect class="box" x="1226" y="294" width="166" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
-<rect x="1226" y="294" width="4" height="48" rx="2" fill="#94a3b8"/>
-<text class="lbl" x="1238" y="313" font-size="11.5" font-weight="800" fill="#64748b">DL資料の自動送付メール</text>
-<text x="1238" y="328" font-size="9.3" fill="#64748b">DL直後にお礼メール送信</text>
-</g>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-ops-overview.html">
-<rect class="box" x="1226" y="356" width="166" height="48" rx="9" fill="#ecfdf5" stroke="#10b981" stroke-width="1.6"/>
-<rect x="1226" y="356" width="4" height="48" rx="2" fill="#10b981"/>
-<text class="lbl" x="1238" y="375" font-size="11.5" font-weight="800" fill="#065f46">次サイクルの見出し設計</text>
-<text x="1238" y="390" font-size="9.3" fill="#64748b">勝ちパターンを次の見出しへ</text>
-<text x="1382" y="375" font-size="9" text-anchor="end" fill="#10b981">↗</text>
+<rect class="box" x="1798" y="194" width="150" height="40" rx="7" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+<rect x="1798" y="194" width="3.5" height="40" rx="1.5" fill="#10b981"/>
+<text class="lbl" x="1807" y="208" font-size="11.2" font-weight="800" fill="#065f46">次サイクル見出し設計</text>
+<text x="1807" y="227" font-size="8.2" fill="#64748b">勝ちパターンを次の見出しへ</text>
+<text x="1940" y="208" font-size="8.5" text-anchor="end" fill="#10b981">↗</text>
 </a>
-<rect x="20" y="686" width="1392" height="34" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
-<rect x="34" y="697" width="16" height="12" rx="3" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
-<text x="56" y="706.5" font-size="10.5" fill="#475569">実装済み(クリックで遷移)</text>
-<rect x="202.8" y="697" width="16" height="12" rx="3" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
-<text x="224.8" y="706.5" font-size="10.5" fill="#475569">未実装</text>
-<rect x="275.6" y="697" width="16" height="12" rx="3" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
-<text x="297.6" y="706.5" font-size="10.5" fill="#475569">外部サービス</text>
-<rect x="377.20000000000005" y="697" width="16" height="12" rx="3" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
-<text x="399.20000000000005" y="706.5" font-size="10.5" fill="#475569">データ(予定)</text>
-<rect x="488.40000000000003" y="697" width="16" height="12" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.6"/>
-<text x="510.40000000000003" y="706.5" font-size="10.5" fill="#475569">判定・出力</text>
-<line x1="580.4000000000001" y1="703" x2="598.4000000000001" y2="703" stroke="#2563eb" stroke-width="3"/>
-<text x="604.4000000000001" y="706.5" font-size="10.5" fill="#475569">①リード</text>
-<line x1="662.8000000000001" y1="703" x2="680.8000000000001" y2="703" stroke="#16a34a" stroke-width="3"/>
-<text x="686.8000000000001" y="706.5" font-size="10.5" fill="#475569">②数値</text>
-<line x1="735.6" y1="703" x2="753.6" y2="703" stroke="#ea580c" stroke-width="3"/>
-<text x="759.6" y="706.5" font-size="10.5" fill="#475569">③素材</text>
+<g class="n">
+<rect class="box" x="1798" y="242" width="150" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="1798" y="242" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="1807" y="256" font-size="11.2" font-weight="800" fill="#1e3a8a">Slack通知</text>
+<text x="1807" y="275" font-size="8.2" fill="#64748b">新着リード・判定・架電結果 等10種</text>
+</g>
+<g class="n">
+<rect class="box" x="1798" y="290" width="150" height="40" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1798" y="290" width="3.5" height="40" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1807" y="304" font-size="11.2" font-weight="800" fill="#64748b">お礼メール</text>
+<text x="1807" y="323" font-size="8.2" fill="#64748b">Gmail API、資料DL直後</text>
+</g>
+<g class="n">
+<rect class="box" x="1798" y="338" width="150" height="40" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1798" y="338" width="3.5" height="40" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1807" y="352" font-size="11.2" font-weight="800" fill="#64748b">一斉メール</text>
+<text x="1807" y="371" font-size="8.2" fill="#64748b">ナーチャリング配信</text>
+</g>
+<g class="n">
+<rect class="box" x="1798" y="386" width="150" height="40" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1798" y="386" width="3.5" height="40" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1807" y="400" font-size="11.2" font-weight="800" fill="#64748b">定期レポート</text>
+<text x="1807" y="419" font-size="8.2" fill="#64748b">曜日・時刻は通知設定画面で指定</text>
+</g>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/">
+<rect class="box" x="1094" y="126" width="142" height="32" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1094" y="126" width="3.5" height="32" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1103" y="140" font-size="10" font-weight="800" fill="#14532d">リード一覧</text>
+<text x="1103" y="151" font-size="8.2" fill="#64748b">絞込結果=一斉メール宛先</text>
+<text x="1228" y="140" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/unified/">
+<rect class="box" x="1094" y="162" width="142" height="32" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1094" y="162" width="3.5" height="32" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1103" y="176" font-size="10" font-weight="800" fill="#14532d">統合架電リスト</text>
+<text x="1103" y="187" font-size="8.2" fill="#64748b">Presenceで二重架電防止</text>
+<text x="1228" y="176" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/kpi/">
+<rect class="box" x="1094" y="198" width="142" height="32" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1094" y="198" width="3.5" height="32" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1103" y="212" font-size="10" font-weight="800" fill="#14532d">KPI</text>
+<text x="1103" y="223" font-size="8.2" fill="#64748b">月次実績を目標と対比</text>
+<text x="1228" y="212" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<g class="n">
+<rect class="box" x="1094" y="234" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="234" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="248" font-size="10" font-weight="800" fill="#64748b">リード手動登録</text>
+<text x="1103" y="259" font-size="8.2" fill="#64748b">広告以外の経路を手登録</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="270" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="270" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="284" font-size="10" font-weight="800" fill="#64748b">架電リスト(Meta広告)</text>
+<text x="1103" y="295" font-size="8.2" fill="#64748b">Meta広告リードのみ</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="306" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="306" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="320" font-size="10" font-weight="800" fill="#64748b">架電リスト(資料請求)</text>
+<text x="1103" y="331" font-size="8.2" fill="#64748b">資料請求リードへ架電</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="342" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="342" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="356" font-size="10" font-weight="800" fill="#64748b">リード一覧(旧外部フォーム)</text>
+<text x="1103" y="367" font-size="8.2" fill="#64748b">参照専用、新規流入なし</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="378" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="378" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="392" font-size="10" font-weight="800" fill="#64748b">リード一覧(自社フォーム)</text>
+<text x="1103" y="403" font-size="8.2" fill="#64748b">着信順、閲覧専用</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="414" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="414" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="428" font-size="10" font-weight="800" fill="#64748b">お礼メール内容確認</text>
+<text x="1103" y="439" font-size="8.2" fill="#64748b">文面確認・テスト送信</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="450" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="450" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="464" font-size="10" font-weight="800" fill="#64748b">お礼メール送信状況</text>
+<text x="1103" y="475" font-size="8.2" fill="#64748b">送達・開封・再送</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="486" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="486" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="500" font-size="10" font-weight="800" fill="#64748b">イベント参加者</text>
+<text x="1103" y="511" font-size="8.2" fill="#64748b">イベント別集客数</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="522" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="522" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="536" font-size="10" font-weight="800" fill="#64748b">イベント参加者一覧</text>
+<text x="1103" y="547" font-size="8.2" fill="#64748b">個別名簿・CSV出力</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="558" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="558" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="572" font-size="10" font-weight="800" fill="#64748b">メルマガ本文プレビュー</text>
+<text x="1103" y="583" font-size="8.2" fill="#64748b">DBを一切読まない</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="594" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="594" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="608" font-size="10" font-weight="800" fill="#64748b">メルマガ購読者</text>
+<text x="1103" y="619" font-size="8.2" fill="#64748b">名簿と配信解除</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="630" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="630" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="644" font-size="10" font-weight="800" fill="#64748b">一斉メール(ナーチャリング)</text>
+<text x="1103" y="655" font-size="8.2" fill="#64748b">新規送信はここからは不可</text>
+</g>
+<g class="n">
+<rect class="box" x="1094" y="666" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1094" y="666" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1103" y="680" font-size="10" font-weight="800" fill="#64748b">送信除外</text>
+<text x="1103" y="691" font-size="8.2" fill="#64748b">企業・ドメイン・宛先単位</text>
+</g>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/">
+<rect class="box" x="1258" y="126" width="142" height="32" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1258" y="126" width="3.5" height="32" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1267" y="140" font-size="10" font-weight="800" fill="#14532d">素材ボード</text>
+<text x="1267" y="151" font-size="8.2" fill="#64748b">要対応で判断記録</text>
+<text x="1392" y="140" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/K1-a/">
+<rect class="box" x="1258" y="162" width="142" height="32" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1258" y="162" width="3.5" height="32" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1267" y="176" font-size="10" font-weight="800" fill="#14532d">素材カルテ</text>
+<text x="1267" y="187" font-size="8.2" fill="#64748b">1本の指標・履歴</text>
+<text x="1392" y="176" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/patterns/">
+<rect class="box" x="1258" y="198" width="142" height="32" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1258" y="198" width="3.5" height="32" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1267" y="212" font-size="10" font-weight="800" fill="#14532d">勝ちパターン</text>
+<text x="1267" y="223" font-size="8.2" fill="#64748b">訴求軸のクロス表、広告名は出さない</text>
+<text x="1392" y="212" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<g class="n">
+<rect class="box" x="1258" y="234" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="234" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="248" font-size="10" font-weight="800" fill="#64748b">訴求軸マスタ</text>
+<text x="1267" y="259" font-size="8.2" fill="#64748b">タグ語彙の管理</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="270" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="270" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="284" font-size="10" font-weight="800" fill="#64748b">クリエイティブ(旧・合算)</text>
+<text x="1267" y="295" font-size="8.2" fill="#64748b">広告単位、閲覧のみ</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="306" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="306" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="320" font-size="10" font-weight="800" fill="#64748b">同(インスタントフォーム)</text>
+<text x="1267" y="331" font-size="8.2" fill="#64748b">同一コンポーネント</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="342" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="342" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="356" font-size="10" font-weight="800" fill="#64748b">同(資料請求/Web)</text>
+<text x="1267" y="367" font-size="8.2" fill="#64748b">同上</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="378" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="378" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="392" font-size="10" font-weight="800" fill="#64748b">入稿ワークスペース</text>
+<text x="1267" y="403" font-size="8.2" fill="#64748b">必ずPAUSEDで作成</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="458" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="458" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="472" font-size="10" font-weight="800" fill="#64748b">架電リスト</text>
+<text x="1267" y="483" font-size="8.2" fill="#64748b">社内と同一、props1つ差</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="494" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="494" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="508" font-size="10" font-weight="800" fill="#64748b">架電状況</text>
+<text x="1267" y="519" font-size="8.2" fill="#64748b">社内と完全に同一</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="530" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="530" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="544" font-size="10" font-weight="800" fill="#64748b">架電進捗</text>
+<text x="1267" y="555" font-size="8.2" fill="#64748b">代理店専用、社内に対応なし</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="566" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="566" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="580" font-size="10" font-weight="800" fill="#64748b">Daily架電</text>
+<text x="1267" y="591" font-size="8.2" fill="#64748b">社内と同一</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="602" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="602" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="616" font-size="10" font-weight="800" fill="#64748b">アポ獲得数</text>
+<text x="1267" y="627" font-size="8.2" fill="#64748b">商談予定は見せない</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="638" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="638" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="652" font-size="10" font-weight="800" fill="#64748b">ログイン</text>
+<text x="1267" y="663" font-size="8.2" fill="#64748b">公開</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="674" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="674" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="688" font-size="10" font-weight="800" fill="#64748b">サインアップ</text>
+<text x="1267" y="699" font-size="8.2" fill="#64748b">公開</text>
+</g>
+<g class="n">
+<rect class="box" x="1258" y="710" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1258" y="710" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1267" y="724" font-size="10" font-weight="800" fill="#64748b">パスワード再設定</text>
+<text x="1267" y="735" font-size="8.2" fill="#64748b">公開</text>
+</g>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaigns/">
+<rect class="box" x="1422" y="126" width="142" height="32" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1422" y="126" width="3.5" height="32" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1431" y="140" font-size="10" font-weight="800" fill="#14532d">配信ダッシュボード</text>
+<text x="1431" y="151" font-size="8.2" fill="#64748b">中心画面。階層で数値確認</text>
+<text x="1556" y="140" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaign-segments/">
+<rect class="box" x="1422" y="162" width="142" height="32" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1422" y="162" width="3.5" height="32" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1431" y="176" font-size="10" font-weight="800" fill="#14532d">キャンペーン区分</text>
+<text x="1431" y="187" font-size="8.2" fill="#64748b">区分マスタと割当</text>
+<text x="1556" y="176" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<g class="n">
+<rect class="box" x="1422" y="198" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="198" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="212" font-size="10" font-weight="800" fill="#64748b">Meta構造管理</text>
+<text x="1431" y="223" font-size="8.2" fill="#64748b">2クリックで実際に反映</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="234" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="234" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="248" font-size="10" font-weight="800" fill="#64748b">アポ</text>
+<text x="1431" y="259" font-size="8.2" fill="#64748b">獲得数・商談予定・消化残</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="270" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="270" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="284" font-size="10" font-weight="800" fill="#64748b">架電状況</text>
+<text x="1431" y="295" font-size="8.2" fill="#64748b">月×週、4系統で表示</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="306" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="306" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="320" font-size="10" font-weight="800" fill="#64748b">Daily架電</text>
+<text x="1431" y="331" font-size="8.2" fill="#64748b">日次・担当者別実績</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="342" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="342" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="356" font-size="10" font-weight="800" fill="#64748b">チャネル別UE</text>
+<text x="1431" y="367" font-size="8.2" fill="#64748b">流入経路ごとの粗利÷消化</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="378" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="378" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="392" font-size="10" font-weight="800" fill="#64748b">アポ外注費</text>
+<text x="1431" y="403" font-size="8.2" fill="#64748b">唯一の手入力画面</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="414" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="414" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="428" font-size="10" font-weight="800" fill="#64748b">流入経路区分</text>
+<text x="1431" y="439" font-size="8.2" fill="#64748b">オーガニック行のトグル</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="494" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="494" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="508" font-size="10" font-weight="800" fill="#64748b">代理店管理</text>
+<text x="1431" y="519" font-size="8.2" fill="#64748b">担当者メール許可リスト</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="530" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="530" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="544" font-size="10" font-weight="800" fill="#64748b">商談ステータス分類</text>
+<text x="1431" y="555" font-size="8.2" fill="#64748b">メール送信可否に直結</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="566" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="566" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="580" font-size="10" font-weight="800" fill="#64748b">Slack連携・通知設定</text>
+<text x="1431" y="591" font-size="8.2" fill="#64748b">通知10種+定期レポート設定</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="602" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="602" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="616" font-size="10" font-weight="800" fill="#64748b">同期履歴</text>
+<text x="1431" y="627" font-size="8.2" fill="#64748b">隠しページ、実行履歴50件</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="638" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="638" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="652" font-size="10" font-weight="800" fill="#64748b">ログイン</text>
+<text x="1431" y="663" font-size="8.2" fill="#64748b">Google認証+メール</text>
+</g>
+<g class="n">
+<rect class="box" x="1422" y="674" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1422" y="674" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1431" y="688" font-size="10" font-weight="800" fill="#64748b">配信停止完了</text>
+<text x="1431" y="699" font-size="8.2" fill="#64748b">社外の受信者向け公開ページ</text>
+</g>
+<g class="n">
+<rect class="box" x="1586" y="126" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1586" y="126" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1595" y="140" font-size="10" font-weight="800" fill="#64748b">マイページ</text>
+<text x="1595" y="151" font-size="8.2" fill="#64748b">編集UIなし、シートが正</text>
+</g>
+<g class="n">
+<rect class="box" x="1586" y="162" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1586" y="162" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1595" y="176" font-size="10" font-weight="800" fill="#64748b">スプレッドシート写し</text>
+<text x="1595" y="187" font-size="8.2" fill="#64748b">60秒ポーリングで再取得</text>
+</g>
+<g class="n">
+<rect class="box" x="1586" y="198" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1586" y="198" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1595" y="212" font-size="10" font-weight="800" fill="#64748b">ホーム</text>
+<text x="1595" y="223" font-size="8.2" fill="#64748b">/sales/mypageへ転送</text>
+</g>
+<g class="n">
+<rect class="box" x="1586" y="234" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1586" y="234" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1595" y="248" font-size="10" font-weight="800" fill="#64748b">営業トップ</text>
+<text x="1595" y="259" font-size="8.2" fill="#64748b">同上(旧ブックマーク救済)</text>
+</g>
+<g class="n">
+<rect class="box" x="1586" y="314" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1586" y="314" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1595" y="328" font-size="10" font-weight="800" fill="#64748b">カレンダー予定</text>
+<text x="1595" y="339" font-size="8.2" fill="#64748b">アポ実績を確定させる作業場</text>
+</g>
+<g class="n">
+<rect class="box" x="1586" y="350" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1586" y="350" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1595" y="364" font-size="10" font-weight="800" fill="#64748b">企業リストSFA</text>
+<text x="1595" y="375" font-size="8.2" fill="#64748b">名寄せ導出、実体テーブル無し</text>
+</g>
+<g class="n">
+<rect class="box" x="1586" y="386" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1586" y="386" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1595" y="400" font-size="10" font-weight="800" fill="#64748b">企業登録</text>
+<text x="1595" y="411" font-size="8.2" fill="#64748b">サインアップ効果比較</text>
+</g>
+<g class="n">
+<rect class="box" x="1586" y="422" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1586" y="422" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1595" y="436" font-size="10" font-weight="800" fill="#64748b">タレント登録</text>
+<text x="1595" y="447" font-size="8.2" fill="#64748b">企業登録と同一ファイル</text>
+</g>
+<g class="n">
+<rect class="box" x="1586" y="458" width="142" height="32" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="1586" y="458" width="3.5" height="32" rx="1.5" fill="#94a3b8"/>
+<text class="lbl" x="1595" y="472" font-size="10" font-weight="800" fill="#64748b">(旧URL)</text>
+<text x="1595" y="483" font-size="8.2" fill="#64748b">タレント登録へ転送</text>
+</g>
+<rect x="20" y="924" width="1728" height="34" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+<rect x="34" y="935" width="16" height="12" rx="3" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
+<text x="56" y="944.5" font-size="10.5" fill="#475569">実装済み(クリックで遷移)</text>
+<rect x="202.8" y="935" width="16" height="12" rx="3" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<text x="224.8" y="944.5" font-size="10.5" fill="#475569">未実装</text>
+<rect x="275.6" y="935" width="16" height="12" rx="3" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
+<text x="297.6" y="944.5" font-size="10.5" fill="#475569">外部サービス・媒体</text>
+<rect x="406" y="935" width="16" height="12" rx="3" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+<text x="428" y="944.5" font-size="10.5" fill="#475569">内部の仕組み(取込・認証)</text>
+<rect x="574.8" y="935" width="16" height="12" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.6"/>
+<text x="596.8" y="944.5" font-size="10.5" fill="#475569">判定・出力</text>
+<line x1="666.8" y1="941" x2="684.8" y2="941" stroke="#2563eb" stroke-width="3"/>
+<text x="690.8" y="944.5" font-size="10.5" fill="#475569">①リード</text>
+<line x1="749.1999999999999" y1="941" x2="767.1999999999999" y2="941" stroke="#16a34a" stroke-width="3"/>
+<text x="773.1999999999999" y="944.5" font-size="10.5" fill="#475569">②数値・判定</text>
+<line x1="850.8" y1="941" x2="868.8" y2="941" stroke="#ea580c" stroke-width="3"/>
+<text x="874.8" y="944.5" font-size="10.5" fill="#475569">③素材</text>
 </svg>
       </div>
     </div>
@@ -401,9 +816,20 @@
   <section id="flows">
     <div class="card">
       <h2><span class="mark" style="background:var(--run)"></span>主要な流れ 3本</h2>
-      <div class="note" style="border-bottom:1px solid var(--line)"><b style="color:var(--ink)">① リード</b>　IF → Meta API → leads → リード一覧 → 架電 → KPI</div>
-      <div class="note" style="border-bottom:1px solid var(--line)"><b style="color:var(--ink)">② 数値</b>　Meta API → daily_metrics → 配信ダッシュボード → 判定4段 → 台帳</div>
-      <div class="note" style="border-bottom:none"><b style="color:var(--ink)">③ 素材</b>　入稿(未) → assets → 素材ボード → 判断 → 勝ちパターン → 次サイクル</div>
+      <div class="note" style="border-bottom:1px solid var(--line)"><b style="color:var(--ink)">① リード</b>　Meta広告/自社フォーム → Meta同期・APIルート → leads → リード一覧 → 統合架電リスト → KPI・Slack通知</div>
+      <div class="note" style="border-bottom:1px solid var(--line)"><b style="color:var(--ink)">② 数値・判定</b>　Meta Marketing API → Meta同期 → daily_metrics → 配信ダッシュボード → 判定4段 → 仮説台帳 → 次サイクル</div>
+      <div class="note" style="border-bottom:none"><b style="color:var(--ink)">③ 素材</b>　入稿ワークスペース(PAUSED作成) → assets → 素材ボード → decisions(判断) → 勝ちパターン → 次サイクル</div>
+    </div>
+  </section>
+
+  <section id="failure-design">
+    <div class="card">
+      <h2><span class="mark" style="background:var(--todo)"></span>壊れ方の設計</h2>
+      <div class="note" style="border-bottom:1px solid var(--line)">取得不全を空配列にしない — ページングは fail-open/fail-closed を名前で区別し、集計に使う経路は例外を投げる側を通す</div>
+      <div class="note" style="border-bottom:1px solid var(--line)">マイグレーション未適用でも画面を落とさない — テーブル不在エラーだけ捕まえて「効いていない」と断り、列不足は1回だけ縮退リトライ</div>
+      <div class="note" style="border-bottom:1px solid var(--line)">0 と「—」を区別する — 受注データが未取得・失敗のときは 0 でなく「—」を出す</div>
+      <div class="note" style="border-bottom:1px solid var(--line)">判定できない時は集計を止める(fail-closed) — 区分が一意に定まらなければ「安全に表示できません」で停止し、取得失敗(赤)とは色も文言も分ける</div>
+      <div class="note" style="border-bottom:none">RLS拒否は戻り値で検知する — DELETE拒否は「0行削除・エラー無し」で返るため、戻り行数を見ないと無音の嘘になる</div>
     </div>
   </section>
 
