@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Ceed toB 広告運用 — 仕組みの全体図</title>
+<style>
+  :root{
+    --bg:#f1f5f9; --paper:#ffffff; --ink:#1e293b; --sub:#64748b; --line:#e2e8f0;
+    --done:#16a34a; --donebg:#f0fdf4;
+    --run:#7c3aed;  --runbg:#f5f3ff;
+    --on:#2563eb;   --onbg:#eff6ff;
+    --off:#0d9488;  --offbg:#f0fdfa;
+    --todo:#94a3b8; --todobg:#f1f5f9;
+    --shadow:0 8px 24px rgba(16,24,40,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink);background:var(--bg);font-size:13.5px;line-height:1.6}
+
+  header.hero{background:linear-gradient(135deg,#0f172a,#17375e 55%,#0f766e);
+    color:#fff;padding:30px 30px 26px;box-shadow:var(--shadow)}
+  .heroin{max-width:1260px;margin:0 auto}
+  .kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a7f3d0;font-weight:800}
+  h1{margin:8px 0 8px;font-size:30px;line-height:1.25}
+  .lead{max-width:900px;color:#dbeafe;font-size:14px;margin:0}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .pill{display:inline-flex;align-items:center;padding:5px 12px;border-radius:999px;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);font-size:11.5px;font-weight:700;color:#fff}
+
+  nav{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);
+    padding:8px 30px;z-index:10;display:flex;gap:6px;flex-wrap:wrap}
+  nav a{text-decoration:none;color:var(--sub);padding:5px 12px;border-radius:99px;
+    font-size:11.5px;border:1px solid var(--line)}
+  nav a:hover{background:#f1f5f9;color:var(--ink)}
+
+  main{max-width:1260px;margin:0 auto;padding:0 20px}
+  section{margin:22px 0}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:var(--shadow)}
+  .card h2{margin:0;padding:15px 22px;font-size:16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px}
+  .mark{width:12px;height:12px;border-radius:4px;flex:0 0 auto}
+  .card .note{padding:10px 22px;background:#f8fafc;color:var(--sub);font-size:12px;
+    border-bottom:1px solid var(--line)}
+
+  /* legend */
+  .legend{display:flex;gap:14px;flex-wrap:wrap;padding:14px 22px}
+  .legend .st{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub)}
+  .dot{width:10px;height:10px;border-radius:99px;display:inline-block}
+
+  /* state badge (5 values only) */
+  .st{display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;white-space:nowrap}
+  .st-done{background:var(--donebg);color:var(--done)}
+  .st-run{background:var(--runbg);color:var(--run)}
+  .st-on{background:var(--onbg);color:var(--on)}
+  .st-off{background:var(--offbg);color:var(--off)}
+  .st-todo{background:var(--todobg);color:var(--todo)}
+
+  /* architecture map: 5 layer col + 4 arrow col, CSS Grid + text arrows (no mermaid / JS) */
+  .mapwrap{padding:24px 20px;display:grid;
+    grid-template-columns:0.85fr 30px 0.9fr 30px 0.85fr 30px 1.55fr 30px 1.05fr;
+    gap:0 8px;align-items:start}
+  .col{min-width:0}
+  .col h3{margin:0 0 10px;font-size:12.5px;font-weight:800;color:var(--sub);
+    text-transform:uppercase;letter-spacing:.02em}
+  .arrows{display:flex;flex-direction:column;justify-content:center;align-items:center;
+    height:100%;padding-top:44px;color:#94a3b8;font-size:20px;font-weight:700}
+
+  .node{border-radius:10px;padding:8px 10px;margin-bottom:8px;border:1.5px solid;background:#fff;position:relative}
+  .node:last-child{margin-bottom:0}
+  .node .top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:2px}
+  .node .lbl{font-weight:800;font-size:12px}
+  .node .def{color:var(--sub);font-size:10.5px;display:block;line-height:1.4}
+
+  a.node{cursor:pointer;text-decoration:none;color:inherit;display:block;
+    transition:transform .12s ease, box-shadow .12s ease}
+  a.node:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(16,24,40,.14)}
+  a.node:hover:after{content:"→ 開く";position:absolute;top:-7px;right:8px;font-size:9px;
+    font-weight:800;color:#fff;background:var(--ink);padding:1px 6px;border-radius:99px}
+  .node.muted{cursor:default}
+
+  /* layer4 (画面) gets an internal 2-col sub-grid — same .col component, denser packing */
+  .l4grid{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
+  .l4grid .node{margin-bottom:8px}
+
+  /* flow lines */
+  .flows{padding:18px 22px}
+  .flowline{display:flex;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+  .flowline:last-child{border-bottom:none}
+  .flowline b{flex:0 0 auto;color:var(--ink)}
+  .flowline span{color:var(--sub)}
+
+  footer{max-width:1260px;margin:26px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
+  footer .grp{margin:6px 0}
+  footer .grp b{color:var(--ink);font-weight:700}
+  footer a{color:var(--sub)}
+  footer .src{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+
+  @media(max-width:980px){
+    .mapwrap{grid-template-columns:1fr}
+    .arrows{transform:rotate(90deg);padding:6px 0}
+    .l4grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="heroin">
+    <div class="kicker">Ceed toB 広告運用</div>
+    <h1>仕組みの全体図</h1>
+    <p class="lead">入口から判定までの流れ。色つきの箱はクリックで該当ページへ。</p>
+    <div class="meta">
+      <span class="pill">作成 2026-09-09</span>
+      <span class="pill">実装済み 8 画面</span>
+      <span class="pill">未実装 6</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <a href="#map">🗺 全体地図 5層</a>
+  <a href="#flows">🔀 主要な流れ 3本</a>
+</nav>
+
+<main>
+
+  <section id="legend">
+    <div class="card">
+      <div class="legend">
+        <span class="st"><span class="dot" style="background:var(--done)"></span>実装済み(クリックで遷移)</span>
+        <span class="st"><span class="dot" style="background:var(--todo)"></span>未実装</span>
+        <span class="st"><span class="dot" style="background:var(--on)"></span>外部サービス</span>
+        <span class="st"><span class="dot" style="background:var(--off)"></span>データ(予定)</span>
+        <span class="st"><span class="dot" style="background:var(--run)"></span>判定・出力</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="card">
+      <h2><span class="mark" style="background:var(--on)"></span>全体地図</h2>
+      <div class="note">左から右へ「入口 → 取込 → データ → 画面 → 出力・判定」の5層。判定は台帳・通知・次サイクルへつながる。</div>
+      <div class="mapwrap">
+
+        <div class="col">
+          <h3>① 入口 (媒体)</h3>
+          <div class="node" style="border-color:var(--on)">
+            <div class="top"><span class="lbl">IGフォーム</span><span class="st st-on">外部</span></div>
+            <span class="def">Instagram広告内で完結する申込</span>
+          </div>
+          <div class="node" style="border-color:var(--on)">
+            <div class="top"><span class="lbl">Google検索広告</span><span class="st st-on">外部</span></div>
+            <span class="def">検索連動で資料DLへ誘導</span>
+          </div>
+          <div class="node" style="border-color:var(--on)">
+            <div class="top"><span class="lbl">LP(資料DL)</span><span class="st st-on">外部</span></div>
+            <span class="def">フォーム外の遷移先、DLで完了</span>
+          </div>
+        </div>
+
+        <div class="arrows">→</div>
+
+        <div class="col">
+          <h3>② 取込</h3>
+          <div class="node" style="border-color:var(--on)">
+            <div class="top"><span class="lbl">Meta広告API</span><span class="st st-on">外部</span></div>
+            <span class="def">日次数値とリードを取得</span>
+          </div>
+          <div class="node muted" style="border-color:var(--todo)">
+            <div class="top"><span class="lbl">フォーム受信口</span><span class="st st-todo">未実装</span></div>
+            <span class="def">LPフォーム送信をleadsへ受信</span>
+          </div>
+          <div class="node muted" style="border-color:var(--todo)">
+            <div class="top"><span class="lbl">手動CSV</span><span class="st st-todo">未実装</span></div>
+            <span class="def">API化前の暫定取込経路</span>
+          </div>
+        </div>
+
+        <div class="arrows">→</div>
+
+        <div class="col">
+          <h3>③ データ(Supabase予定)</h3>
+          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">campaigns</span><span class="st st-off">データ</span></div><span class="def">商材の単位</span></div>
+          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">adsets</span><span class="st st-off">データ</span></div><span class="def">ターゲット区分</span></div>
+          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">ads</span><span class="st st-off">データ</span></div><span class="def">見出し・命題</span></div>
+          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">assets</span><span class="st st-off">データ</span></div><span class="def">画像・動画素材</span></div>
+          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">daily_metrics</span><span class="st st-off">データ</span></div><span class="def">日次の配信数値</span></div>
+          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">leads</span><span class="st st-off">データ</span></div><span class="def">資料DLのリード</span></div>
+          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">calls</span><span class="st st-off">データ</span></div><span class="def">架電の結果記録</span></div>
+          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">decisions</span><span class="st st-off">データ</span></div><span class="def">判断の履歴</span></div>
+          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">segments</span><span class="st st-off">データ</span></div><span class="def">区分マスタ</span></div>
+        </div>
+
+        <div class="arrows">→</div>
+
+        <div class="col">
+          <h3>④ 画面 (8実装 + 6未実装)</h3>
+          <div class="l4grid">
+            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaigns/">
+              <div class="top"><span class="lbl">配信ダッシュボード</span><span class="st st-done">実装</span></div>
+              <span class="def">階層で数値確認</span>
+            </a>
+            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaign-segments/">
+              <div class="top"><span class="lbl">キャンペーン区分</span><span class="st st-done">実装</span></div>
+              <span class="def">区分マスタと割当</span>
+            </a>
+            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/">
+              <div class="top"><span class="lbl">素材ボード</span><span class="st st-done">実装</span></div>
+              <span class="def">要対応で判断記録</span>
+            </a>
+            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/K1-a/">
+              <div class="top"><span class="lbl">素材カルテ</span><span class="st st-done">実装</span></div>
+              <span class="def">1本の指標・判断履歴</span>
+            </a>
+            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/patterns/">
+              <div class="top"><span class="lbl">勝ちパターン</span><span class="st st-done">実装</span></div>
+              <span class="def">訴求軸のクロス表</span>
+            </a>
+            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/">
+              <div class="top"><span class="lbl">リード一覧</span><span class="st st-done">実装</span></div>
+              <span class="def">絞込とCSV出力</span>
+            </a>
+            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/unified/">
+              <div class="top"><span class="lbl">統合架電リスト</span><span class="st st-done">実装</span></div>
+              <span class="def">架電結果を記録</span>
+            </a>
+            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/kpi/">
+              <div class="top"><span class="lbl">KPI</span><span class="st st-done">実装</span></div>
+              <span class="def">月次実績を目標と対比</span>
+            </a>
+            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">入稿ワークスペース</span><span class="st st-todo">未実装</span></div><span class="def">停止状態で広告を作成</span></div>
+            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">お礼メール状況</span><span class="st st-todo">未実装</span></div><span class="def">送達・開封を追跡</span></div>
+            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">一斉メール</span><span class="st st-todo">未実装</span></div><span class="def">絞込結果へ一斉配信</span></div>
+            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">Slack通知設定</span><span class="st st-todo">未実装</span></div><span class="def">宛先チャンネル設定</span></div>
+            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">同期履歴</span><span class="st st-todo">未実装</span></div><span class="def">同期ジョブの実行履歴</span></div>
+            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">代理店ポータル</span><span class="st st-todo">未実装</span></div><span class="def">架電代理店向け別画面</span></div>
+          </div>
+        </div>
+
+        <div class="arrows">→</div>
+
+        <div class="col">
+          <h3>⑤ 出力・判定</h3>
+          <a class="node" style="border-color:var(--run)" href="https://github.com/Ceed-dev/ceed-ad-ops/blob/main/00-kpi/kpi.md">
+            <div class="top"><span class="lbl">判定4段</span><span class="st st-run">判定</span></div>
+            <span class="def">足切り→差替→即停止→Kill合格</span>
+          </a>
+          <a class="node" style="border-color:var(--run)" href="https://github.com/Ceed-dev/ceed-ad-ops/blob/main/pdca/hypotheses.md">
+            <div class="top"><span class="lbl">仮説台帳</span><span class="st st-run">判定</span></div>
+            <span class="def">判定と打ち手をhypotheses.mdへ</span>
+          </a>
+          <div class="node muted" style="border-color:var(--on)"><div class="top"><span class="lbl">Slack通知</span><span class="st st-on">外部</span></div><span class="def">判定結果をチャンネルへ通知</span></div>
+          <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">自動送付メール</span><span class="st st-todo">未実装</span></div><span class="def">DL直後にお礼メール送信</span></div>
+          <div class="node muted" style="border-color:var(--run)"><div class="top"><span class="lbl">次サイクル反映</span><span class="st st-run">判定</span></div><span class="def">週次の勝ちパターンを次の見出しへ</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="flows">
+    <div class="card">
+      <h2><span class="mark" style="background:var(--run)"></span>主要な流れ 3本</h2>
+      <div class="flows">
+        <div class="flowline"><b>① リード</b><span>IF → Meta API → leads → リード一覧 → 架電 → KPI</span></div>
+        <div class="flowline"><b>② 数値</b><span>Meta API → daily_metrics → 配信ダッシュボード → 判定4段 → 台帳</span></div>
+        <div class="flowline"><b>③ 素材</b><span>入稿(未) → assets → 素材ボード → 判断 → 勝ちパターン → 次サイクル</span></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="grp">全体概要(KPI・判定ルール): <a href="https://badhan978.github.io/Output/ceed-ad-ops-overview.html" target="_blank" rel="noopener">ceed-ad-ops-overview.html</a></div>
+  <div class="src">正本: <code>ceed-ad-ops/overview.md</code> ／ AOM設計書: <code>screen-map.md (2026-09-08)</code>　内部 ID・認証情報は含まない。</div>
+</footer>
+
+</body>
+</html>
