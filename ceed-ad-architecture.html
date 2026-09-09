@@ -46,57 +46,15 @@
   .card .note{padding:10px 22px;background:#f8fafc;color:var(--sub);font-size:12px;
     border-bottom:1px solid var(--line)}
 
-  /* legend */
-  .legend{display:flex;gap:14px;flex-wrap:wrap;padding:14px 22px}
-  .legend .st{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub)}
-  .dot{width:10px;height:10px;border-radius:99px;display:inline-block}
-
-  /* state badge (5 values only) */
-  .st{display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;white-space:nowrap}
-  .st-done{background:var(--donebg);color:var(--done)}
-  .st-run{background:var(--runbg);color:var(--run)}
-  .st-on{background:var(--onbg);color:var(--on)}
-  .st-off{background:var(--offbg);color:var(--off)}
-  .st-todo{background:var(--todobg);color:var(--todo)}
-
-  /* architecture map: 5 layer col + 4 arrow col, CSS Grid + text arrows (no mermaid / JS) */
-  .mapwrap{padding:24px 20px;display:grid;
-    grid-template-columns:0.85fr 30px 0.9fr 30px 0.85fr 30px 1.55fr 30px 1.05fr;
-    gap:0 8px;align-items:start}
-  .col{min-width:0}
-  .col h3{margin:0 0 10px;font-size:12.5px;font-weight:800;color:var(--sub);
-    text-transform:uppercase;letter-spacing:.02em}
-  .arrows{display:flex;flex-direction:column;justify-content:center;align-items:center;
-    height:100%;padding-top:44px;color:#94a3b8;font-size:20px;font-weight:700}
-
-  .node{border-radius:10px;padding:8px 10px;margin-bottom:8px;border:1.5px solid;background:#fff;position:relative}
-  .node:last-child{margin-bottom:0}
-  .node .top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:2px}
-  .node .lbl{font-weight:800;font-size:12px}
-  .node .def{color:var(--sub);font-size:10.5px;display:block;line-height:1.4}
-
-  a.node{cursor:pointer;text-decoration:none;color:inherit;display:block;
-    transition:transform .12s ease, box-shadow .12s ease}
-  a.node:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(16,24,40,.14)}
-  a.node:hover:after{content:"→ 開く";position:absolute;top:-7px;right:8px;font-size:9px;
-    font-weight:800;color:#fff;background:var(--ink);padding:1px 6px;border-radius:99px}
-  .node.muted{cursor:default}
-
-  /* layer4 (画面) gets an internal 2-col sub-grid — same .col component, denser packing */
-  .l4grid{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
-  .l4grid .node{margin-bottom:8px}
+  /* architecture map: inline SVG (自製・mermaid不可)。横スクロール可 */
+  .diagram-wrap{padding:20px;overflow-x:auto}
+  .diagram-wrap svg{display:block}
 
   footer{max-width:1260px;margin:26px auto 50px;padding:0 20px;color:var(--sub);font-size:11px}
   footer .grp{margin:6px 0}
   footer .grp b{color:var(--ink);font-weight:700}
   footer a{color:var(--sub)}
   footer .src{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
-
-  @media(max-width:980px){
-    .mapwrap{grid-template-columns:1fr}
-    .arrows{transform:rotate(90deg);padding:6px 0}
-    .l4grid{grid-template-columns:1fr}
-  }
 </style>
 </head>
 <body>
@@ -121,136 +79,318 @@
 
 <main>
 
-  <section id="legend">
-    <div class="card">
-      <div class="legend">
-        <span class="st"><span class="dot" style="background:var(--done)"></span>実装済み(クリックで遷移)</span>
-        <span class="st"><span class="dot" style="background:var(--todo)"></span>未実装</span>
-        <span class="st"><span class="dot" style="background:var(--on)"></span>外部サービス</span>
-        <span class="st"><span class="dot" style="background:var(--off)"></span>データ(予定)</span>
-        <span class="st"><span class="dot" style="background:var(--run)"></span>判定・出力</span>
-      </div>
-    </div>
-  </section>
-
   <section id="map">
     <div class="card">
       <h2><span class="mark" style="background:var(--on)"></span>全体地図</h2>
-      <div class="note">左から右へ「入口 → 取込 → データ → 画面 → 出力・判定」の5層。判定は台帳・通知・次サイクルへつながる。</div>
-      <div class="mapwrap">
-
-        <div class="col">
-          <h3>① 入口 (媒体)</h3>
-          <div class="node" style="border-color:var(--on)">
-            <div class="top"><span class="lbl">IGフォーム</span><span class="st st-on">外部</span></div>
-            <span class="def">Instagram広告内で完結する申込</span>
-          </div>
-          <div class="node" style="border-color:var(--on)">
-            <div class="top"><span class="lbl">Google検索広告</span><span class="st st-on">外部</span></div>
-            <span class="def">検索連動で資料DLへ誘導</span>
-          </div>
-          <div class="node" style="border-color:var(--on)">
-            <div class="top"><span class="lbl">LP(資料DL)</span><span class="st st-on">外部</span></div>
-            <span class="def">フォーム外の遷移先、DLで完了</span>
-          </div>
-        </div>
-
-        <div class="arrows">→</div>
-
-        <div class="col">
-          <h3>② 取込</h3>
-          <div class="node" style="border-color:var(--on)">
-            <div class="top"><span class="lbl">Meta広告API</span><span class="st st-on">外部</span></div>
-            <span class="def">日次数値とリードを取得</span>
-          </div>
-          <div class="node muted" style="border-color:var(--todo)">
-            <div class="top"><span class="lbl">フォーム受信口</span><span class="st st-todo">未実装</span></div>
-            <span class="def">LPフォーム送信をleadsへ受信</span>
-          </div>
-          <div class="node muted" style="border-color:var(--todo)">
-            <div class="top"><span class="lbl">手動CSV</span><span class="st st-todo">未実装</span></div>
-            <span class="def">API化前の暫定取込経路</span>
-          </div>
-        </div>
-
-        <div class="arrows">→</div>
-
-        <div class="col">
-          <h3>③ データ(Supabase予定)</h3>
-          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">campaigns</span><span class="st st-off">データ</span></div><span class="def">商材の単位</span></div>
-          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">adsets</span><span class="st st-off">データ</span></div><span class="def">ターゲット区分</span></div>
-          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">ads</span><span class="st st-off">データ</span></div><span class="def">見出し・命題</span></div>
-          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">assets</span><span class="st st-off">データ</span></div><span class="def">画像・動画素材</span></div>
-          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">daily_metrics</span><span class="st st-off">データ</span></div><span class="def">日次の配信数値</span></div>
-          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">leads</span><span class="st st-off">データ</span></div><span class="def">資料DLのリード</span></div>
-          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">calls</span><span class="st st-off">データ</span></div><span class="def">架電の結果記録</span></div>
-          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">decisions</span><span class="st st-off">データ</span></div><span class="def">判断の履歴</span></div>
-          <div class="node muted" style="border-color:var(--off)"><div class="top"><span class="lbl">segments</span><span class="st st-off">データ</span></div><span class="def">区分マスタ</span></div>
-        </div>
-
-        <div class="arrows">→</div>
-
-        <div class="col">
-          <h3>④ 画面 (8実装 + 6未実装)</h3>
-          <div class="l4grid">
-            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaigns/">
-              <div class="top"><span class="lbl">配信ダッシュボード</span><span class="st st-done">実装</span></div>
-              <span class="def">階層で数値確認</span>
-            </a>
-            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaign-segments/">
-              <div class="top"><span class="lbl">キャンペーン区分</span><span class="st st-done">実装</span></div>
-              <span class="def">区分マスタと割当</span>
-            </a>
-            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/">
-              <div class="top"><span class="lbl">素材ボード</span><span class="st st-done">実装</span></div>
-              <span class="def">要対応で判断記録</span>
-            </a>
-            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/K1-a/">
-              <div class="top"><span class="lbl">素材カルテ</span><span class="st st-done">実装</span></div>
-              <span class="def">1本の指標・判断履歴</span>
-            </a>
-            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/patterns/">
-              <div class="top"><span class="lbl">勝ちパターン</span><span class="st st-done">実装</span></div>
-              <span class="def">訴求軸のクロス表</span>
-            </a>
-            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/">
-              <div class="top"><span class="lbl">リード一覧</span><span class="st st-done">実装</span></div>
-              <span class="def">絞込とCSV出力</span>
-            </a>
-            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/unified/">
-              <div class="top"><span class="lbl">統合架電リスト</span><span class="st st-done">実装</span></div>
-              <span class="def">架電結果を記録</span>
-            </a>
-            <a class="node" style="border-color:var(--done)" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/kpi/">
-              <div class="top"><span class="lbl">KPI</span><span class="st st-done">実装</span></div>
-              <span class="def">月次実績を目標と対比</span>
-            </a>
-            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">入稿ワークスペース</span><span class="st st-todo">未実装</span></div><span class="def">停止状態で広告を作成</span></div>
-            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">お礼メール状況</span><span class="st st-todo">未実装</span></div><span class="def">送達・開封を追跡</span></div>
-            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">一斉メール</span><span class="st st-todo">未実装</span></div><span class="def">絞込結果へ一斉配信</span></div>
-            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">Slack通知設定</span><span class="st st-todo">未実装</span></div><span class="def">宛先チャンネル設定</span></div>
-            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">同期履歴</span><span class="st st-todo">未実装</span></div><span class="def">同期ジョブの実行履歴</span></div>
-            <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">代理店ポータル</span><span class="st st-todo">未実装</span></div><span class="def">架電代理店向け別画面</span></div>
-          </div>
-        </div>
-
-        <div class="arrows">→</div>
-
-        <div class="col">
-          <h3>⑤ 出力・判定</h3>
-          <a class="node" style="border-color:var(--run)" href="https://github.com/Ceed-dev/lead-gen-ops/blob/main/ad-ops/00-kpi/kpi.md">
-            <div class="top"><span class="lbl">判定4段</span><span class="st st-run">判定</span></div>
-            <span class="def">足切り→差替→即停止→Kill合格</span>
-          </a>
-          <a class="node" style="border-color:var(--run)" href="https://github.com/Ceed-dev/lead-gen-ops/blob/main/ad-ops/pdca/hypotheses.md">
-            <div class="top"><span class="lbl">仮説台帳</span><span class="st st-run">判定</span></div>
-            <span class="def">判定と打ち手をhypotheses.mdへ</span>
-          </a>
-          <div class="node muted" style="border-color:var(--on)"><div class="top"><span class="lbl">Slack通知</span><span class="st st-on">外部</span></div><span class="def">判定結果をチャンネルへ通知</span></div>
-          <div class="node muted" style="border-color:var(--todo)"><div class="top"><span class="lbl">自動送付メール</span><span class="st st-todo">未実装</span></div><span class="def">DL直後にお礼メール送信</span></div>
-          <div class="node muted" style="border-color:var(--run)"><div class="top"><span class="lbl">次サイクル反映</span><span class="st st-run">判定</span></div><span class="def">週次の勝ちパターンを次の見出しへ</span></div>
-        </div>
-
+      <div class="note">左から右へ「媒体 → 取込 → データ → 画面 → 判定・出力」の5群。クラスタ内は上から下へ階層・工程順、矢印は実際のデータの流れ。太い3本の色線が主要フロー。</div>
+      <div class="diagram-wrap">
+<svg viewBox="0 0 1432 746" width="100%" style="min-width:1180px" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif" aria-label="Ceed toB広告運用 仕組みの全体図">
+<style>
+  .n{transition:filter .12s ease}
+  a.n:hover rect.box{filter:brightness(0.96)}
+  a.n:hover{cursor:pointer}
+  a.n:hover text.lbl{text-decoration:underline}
+  .edge{fill:none}
+</style>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+  </marker>
+  <marker id="arr-lead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+  </marker>
+  <marker id="arr-num" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/>
+  </marker>
+  <marker id="arr-creative" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/>
+  </marker>
+</defs>
+<rect x="20" y="58" width="206" height="242" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="40" y="79" font-size="12.5" font-weight="800" fill="#64748b">① 媒体(外部)</text>
+<rect x="278" y="58" width="206" height="242" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="298" y="79" font-size="12.5" font-weight="800" fill="#64748b">② 取込</text>
+<rect x="536" y="58" width="190" height="528" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="556" y="79" font-size="12.5" font-weight="800" fill="#64748b">③ データ(Supabase・予定)</text>
+<rect x="778" y="58" width="376" height="552" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="798" y="79" font-size="12.5" font-weight="800" fill="#64748b">④ 画面(実装8・未実装6)</text>
+<rect x="1206" y="58" width="206" height="366" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="1226" y="79" font-size="12.5" font-weight="800" fill="#64748b">⑤ 判定・出力</text>
+<path class="edge" d="M206,132 L252,132 L252,132 L298,132" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
+<rect x="231.2" y="123" width="41.599999999999994" height="14" rx="4" fill="#fff" opacity="0.92"/>
+<text x="252" y="134" font-size="10" font-weight="700" fill="#2563eb" text-anchor="middle">リード</text>
+<path class="edge" d="M123,218 L123,232" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M206,256 L252,256 L252,194 L298,194" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<rect x="214.4" y="185" width="75.19999999999999" height="14" rx="4" fill="#fff" opacity="0.92"/>
+<text x="252" y="196" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle">DLフォーム</text>
+<path class="edge" d="M464,256 L510,256 L510,389 L556,389" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M464,132 L510,132 L510,389 L556,389" stroke="#16a34a" stroke-width="2.6" marker-end="url(#arr-num)"/>
+<rect x="483.6" y="380" width="52.8" height="14" rx="4" fill="#fff" opacity="0.92"/>
+<text x="510" y="391" font-size="10" font-weight="700" fill="#16a34a" text-anchor="middle">日次数値</text>
+<path class="edge" d="M464,132 L510,132 L510,441 L556,441" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
+<path class="edge" d="M464,194 L510,194 L510,441 L556,441" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M631,150 L631,160" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M631,202 L631,212" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M631,254 L631,264" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M631,306 L631,316" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M556,285 L529,285 L529,389 L556,389" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M556,337 L521,337 L521,545 L556,545" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M706,389 L752,389 L752,194 L798,194" stroke="#16a34a" stroke-width="2.6" marker-end="url(#arr-num)"/>
+<path class="edge" d="M706,389 L752,389 L752,256 L798,256" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M706,389 L752,389 L752,566 L798,566" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M706,129 L752,129 L752,132 L798,132" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M877,156 L877,170" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M706,337 L752,337 L752,256 L798,256" stroke="#ea580c" stroke-width="2.6" marker-end="url(#arr-creative)"/>
+<path class="edge" d="M877,280 L877,294" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M877,280 L877,636 L631,636 L631,566" stroke="#ea580c" stroke-width="2.6" marker-end="url(#arr-creative)"/>
+<path class="edge" d="M706,545 L752,545 L752,380 L798,380" stroke="#ea580c" stroke-width="2.6" marker-end="url(#arr-creative)"/>
+<path class="edge" d="M706,441 L752,441 L752,442 L798,442" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
+<path class="edge" d="M877,466 L877,480" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
+<path class="edge" d="M877,528 L877,649 L631,649 L631,514" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
+<path class="edge" d="M706,493 L752,493 L752,566 L798,566" stroke="#2563eb" stroke-width="2.6" marker-end="url(#arr-lead)"/>
+<path class="edge" d="M1055,156 L1055,662 L631,662 L631,306" stroke="#ea580c" stroke-width="2.6" marker-end="url(#arr-creative)"/>
+<rect x="615.8" y="653" width="30.4" height="14" rx="4" fill="#fff" opacity="0.92"/>
+<text x="631" y="664" font-size="10" font-weight="700" fill="#ea580c" text-anchor="middle">素材</text>
+<path class="edge" d="M956,194 L1091,194 L1091,132 L1226,132" stroke="#16a34a" stroke-width="2.6" marker-end="url(#arr-num)"/>
+<path class="edge" d="M1309,156 L1309,170" stroke="#16a34a" stroke-width="2.6" marker-end="url(#arr-num)"/>
+<path class="edge" d="M1226,194 L1199,194 L1199,380 L1226,380" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M956,380 L1091,380 L1091,380 L1226,380" stroke="#ea580c" stroke-width="2.6" marker-end="url(#arr-creative)"/>
+<path class="edge" d="M1226,132 L1191,132 L1191,256 L1226,256" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M706,441 L720,441 L720,34 L1309,34 L1309,294" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<path class="edge" d="M956,504 L1091,504 L1091,256 L1226,256" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arr)"/>
+<g class="n">
+<rect class="box" x="40" y="108" width="166" height="48" rx="9" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
+<rect x="40" y="108" width="4" height="48" rx="2" fill="#2563eb"/>
+<text class="lbl" x="52" y="127" font-size="11.5" font-weight="800" fill="#1e3a8a">IGインスタントフォーム</text>
+<text x="52" y="142" font-size="9.3" fill="#64748b">広告内で完結する申込</text>
+</g>
+<g class="n">
+<rect class="box" x="40" y="170" width="166" height="48" rx="9" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
+<rect x="40" y="170" width="4" height="48" rx="2" fill="#2563eb"/>
+<text class="lbl" x="52" y="189" font-size="11.5" font-weight="800" fill="#1e3a8a">Google検索広告</text>
+<text x="52" y="204" font-size="9.3" fill="#64748b">検索連動でLPへ誘導</text>
+</g>
+<g class="n">
+<rect class="box" x="40" y="232" width="166" height="48" rx="9" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
+<rect x="40" y="232" width="4" height="48" rx="2" fill="#2563eb"/>
+<text class="lbl" x="52" y="251" font-size="11.5" font-weight="800" fill="#1e3a8a">LP(資料DL)</text>
+<text x="52" y="266" font-size="9.3" fill="#64748b">フォーム外の遷移先</text>
+</g>
+<g class="n">
+<rect class="box" x="298" y="108" width="166" height="48" rx="9" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
+<rect x="298" y="108" width="4" height="48" rx="2" fill="#2563eb"/>
+<text class="lbl" x="310" y="127" font-size="11.5" font-weight="800" fill="#1e3a8a">Meta Marketing API</text>
+<text x="310" y="142" font-size="9.3" fill="#64748b">日次数値・リード取得</text>
+</g>
+<g class="n">
+<rect class="box" x="298" y="170" width="166" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<rect x="298" y="170" width="4" height="48" rx="2" fill="#94a3b8"/>
+<text class="lbl" x="310" y="189" font-size="11.5" font-weight="800" fill="#64748b">form-endpoint</text>
+<text x="310" y="204" font-size="9.3" fill="#64748b">LPフォーム→leads</text>
+</g>
+<g class="n">
+<rect class="box" x="298" y="232" width="166" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<rect x="298" y="232" width="4" height="48" rx="2" fill="#94a3b8"/>
+<text class="lbl" x="310" y="251" font-size="11.5" font-weight="800" fill="#64748b">手動CSV</text>
+<text x="310" y="266" font-size="9.3" fill="#64748b">API化前の暫定取込</text>
+</g>
+<g class="n">
+<rect class="box" x="556" y="108" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+<rect x="556" y="108" width="4" height="42" rx="2" fill="#60a5fa"/>
+<text class="lbl" x="568" y="127" font-size="11.5" font-weight="800" fill="#1e40af">segments</text>
+<text x="568" y="142" font-size="9.3" fill="#64748b">区分マスタ</text>
+</g>
+<g class="n">
+<rect class="box" x="556" y="160" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+<rect x="556" y="160" width="4" height="42" rx="2" fill="#60a5fa"/>
+<text class="lbl" x="568" y="179" font-size="11.5" font-weight="800" fill="#1e40af">campaigns</text>
+<text x="568" y="194" font-size="9.3" fill="#64748b">商材の単位</text>
+</g>
+<g class="n">
+<rect class="box" x="556" y="212" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+<rect x="556" y="212" width="4" height="42" rx="2" fill="#60a5fa"/>
+<text class="lbl" x="568" y="231" font-size="11.5" font-weight="800" fill="#1e40af">adsets</text>
+<text x="568" y="246" font-size="9.3" fill="#64748b">ターゲット区分</text>
+</g>
+<g class="n">
+<rect class="box" x="556" y="264" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+<rect x="556" y="264" width="4" height="42" rx="2" fill="#60a5fa"/>
+<text class="lbl" x="568" y="283" font-size="11.5" font-weight="800" fill="#1e40af">ads</text>
+<text x="568" y="298" font-size="9.3" fill="#64748b">見出し・命題</text>
+</g>
+<g class="n">
+<rect class="box" x="556" y="316" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+<rect x="556" y="316" width="4" height="42" rx="2" fill="#60a5fa"/>
+<text class="lbl" x="568" y="335" font-size="11.5" font-weight="800" fill="#1e40af">assets</text>
+<text x="568" y="350" font-size="9.3" fill="#64748b">画像・動画素材</text>
+</g>
+<g class="n">
+<rect class="box" x="556" y="368" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+<rect x="556" y="368" width="4" height="42" rx="2" fill="#60a5fa"/>
+<text class="lbl" x="568" y="387" font-size="11.5" font-weight="800" fill="#1e40af">daily_metrics</text>
+<text x="568" y="402" font-size="9.3" fill="#64748b">日次の配信数値</text>
+</g>
+<g class="n">
+<rect class="box" x="556" y="420" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+<rect x="556" y="420" width="4" height="42" rx="2" fill="#60a5fa"/>
+<text class="lbl" x="568" y="439" font-size="11.5" font-weight="800" fill="#1e40af">leads</text>
+<text x="568" y="454" font-size="9.3" fill="#64748b">資料DLのリード</text>
+</g>
+<g class="n">
+<rect class="box" x="556" y="472" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+<rect x="556" y="472" width="4" height="42" rx="2" fill="#60a5fa"/>
+<text class="lbl" x="568" y="491" font-size="11.5" font-weight="800" fill="#1e40af">calls</text>
+<text x="568" y="506" font-size="9.3" fill="#64748b">架電の結果記録</text>
+</g>
+<g class="n">
+<rect class="box" x="556" y="524" width="150" height="42" rx="9" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+<rect x="556" y="524" width="4" height="42" rx="2" fill="#60a5fa"/>
+<text class="lbl" x="568" y="543" font-size="11.5" font-weight="800" fill="#1e40af">decisions</text>
+<text x="568" y="558" font-size="9.3" fill="#64748b">判断の履歴</text>
+</g>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaign-segments/">
+<rect class="box" x="798" y="108" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
+<rect x="798" y="108" width="4" height="48" rx="2" fill="#16a34a"/>
+<text class="lbl" x="810" y="127" font-size="11.5" font-weight="800" fill="#14532d">キャンペーン区分</text>
+<text x="810" y="142" font-size="9.3" fill="#64748b">区分マスタと割当</text>
+<text x="946" y="127" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaigns/">
+<rect class="box" x="798" y="170" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
+<rect x="798" y="170" width="4" height="48" rx="2" fill="#16a34a"/>
+<text class="lbl" x="810" y="189" font-size="11.5" font-weight="800" fill="#14532d">配信ダッシュボード</text>
+<text x="810" y="204" font-size="9.3" fill="#64748b">階層で数値確認</text>
+<text x="946" y="189" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/">
+<rect class="box" x="798" y="232" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
+<rect x="798" y="232" width="4" height="48" rx="2" fill="#16a34a"/>
+<text class="lbl" x="810" y="251" font-size="11.5" font-weight="800" fill="#14532d">素材ボード</text>
+<text x="810" y="266" font-size="9.3" fill="#64748b">要対応で判断記録</text>
+<text x="946" y="251" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/K1-a/">
+<rect class="box" x="798" y="294" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
+<rect x="798" y="294" width="4" height="48" rx="2" fill="#16a34a"/>
+<text class="lbl" x="810" y="313" font-size="11.5" font-weight="800" fill="#14532d">素材カルテ</text>
+<text x="810" y="328" font-size="9.3" fill="#64748b">1本の指標・履歴</text>
+<text x="946" y="313" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/patterns/">
+<rect class="box" x="798" y="356" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
+<rect x="798" y="356" width="4" height="48" rx="2" fill="#16a34a"/>
+<text class="lbl" x="810" y="375" font-size="11.5" font-weight="800" fill="#14532d">勝ちパターン</text>
+<text x="810" y="390" font-size="9.3" fill="#64748b">訴求軸のクロス表</text>
+<text x="946" y="375" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/">
+<rect class="box" x="798" y="418" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
+<rect x="798" y="418" width="4" height="48" rx="2" fill="#16a34a"/>
+<text class="lbl" x="810" y="437" font-size="11.5" font-weight="800" fill="#14532d">リード一覧</text>
+<text x="810" y="452" font-size="9.3" fill="#64748b">絞込とCSV出力</text>
+<text x="946" y="437" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/unified/">
+<rect class="box" x="798" y="480" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
+<rect x="798" y="480" width="4" height="48" rx="2" fill="#16a34a"/>
+<text class="lbl" x="810" y="499" font-size="11.5" font-weight="800" fill="#14532d">統合架電リスト</text>
+<text x="810" y="514" font-size="9.3" fill="#64748b">架電結果を記録</text>
+<text x="946" y="499" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/kpi/">
+<rect class="box" x="798" y="542" width="158" height="48" rx="9" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
+<rect x="798" y="542" width="4" height="48" rx="2" fill="#16a34a"/>
+<text class="lbl" x="810" y="561" font-size="11.5" font-weight="800" fill="#14532d">KPI</text>
+<text x="810" y="576" font-size="9.3" fill="#64748b">月次実績を目標と対比</text>
+<text x="946" y="561" font-size="9" text-anchor="end" fill="#16a34a">↗</text>
+</a>
+<g class="n">
+<rect class="box" x="976" y="108" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<rect x="976" y="108" width="4" height="48" rx="2" fill="#94a3b8"/>
+<text class="lbl" x="988" y="127" font-size="11.5" font-weight="800" fill="#64748b">入稿ワークスペース</text>
+<text x="988" y="142" font-size="9.3" fill="#64748b">停止状態で広告作成</text>
+</g>
+<g class="n">
+<rect class="box" x="976" y="170" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<rect x="976" y="170" width="4" height="48" rx="2" fill="#94a3b8"/>
+<text class="lbl" x="988" y="189" font-size="11.5" font-weight="800" fill="#64748b">お礼メール送信状況</text>
+<text x="988" y="204" font-size="9.3" fill="#64748b">送達・開封を追跡</text>
+</g>
+<g class="n">
+<rect class="box" x="976" y="232" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<rect x="976" y="232" width="4" height="48" rx="2" fill="#94a3b8"/>
+<text class="lbl" x="988" y="251" font-size="11.5" font-weight="800" fill="#64748b">一斉メール</text>
+<text x="988" y="266" font-size="9.3" fill="#64748b">絞込結果へ一斉配信</text>
+</g>
+<g class="n">
+<rect class="box" x="976" y="294" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<rect x="976" y="294" width="4" height="48" rx="2" fill="#94a3b8"/>
+<text class="lbl" x="988" y="313" font-size="11.5" font-weight="800" fill="#64748b">Slack通知設定</text>
+<text x="988" y="328" font-size="9.3" fill="#64748b">宛先チャンネル設定</text>
+</g>
+<g class="n">
+<rect class="box" x="976" y="356" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<rect x="976" y="356" width="4" height="48" rx="2" fill="#94a3b8"/>
+<text class="lbl" x="988" y="375" font-size="11.5" font-weight="800" fill="#64748b">同期履歴</text>
+<text x="988" y="390" font-size="9.3" fill="#64748b">同期ジョブの実行履歴</text>
+</g>
+<g class="n">
+<rect class="box" x="976" y="418" width="158" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<rect x="976" y="418" width="4" height="48" rx="2" fill="#94a3b8"/>
+<text class="lbl" x="988" y="437" font-size="11.5" font-weight="800" fill="#64748b">代理店ポータル</text>
+<text x="988" y="452" font-size="9.3" fill="#64748b">架電代理店向け別画面</text>
+</g>
+<a class="n" href="https://github.com/Ceed-dev/lead-gen-ops/blob/main/ad-ops/00-kpi/kpi.md">
+<rect class="box" x="1226" y="108" width="166" height="48" rx="9" fill="#ecfdf5" stroke="#10b981" stroke-width="1.6"/>
+<rect x="1226" y="108" width="4" height="48" rx="2" fill="#10b981"/>
+<text class="lbl" x="1238" y="127" font-size="11.5" font-weight="800" fill="#065f46">判定4段</text>
+<text x="1238" y="142" font-size="9.3" fill="#64748b">足切り→差替→即停止→Kill合格</text>
+<text x="1382" y="127" font-size="9" text-anchor="end" fill="#10b981">↗</text>
+</a>
+<a class="n" href="https://github.com/Ceed-dev/lead-gen-ops/blob/main/ad-ops/pdca/hypotheses.md">
+<rect class="box" x="1226" y="170" width="166" height="48" rx="9" fill="#ecfdf5" stroke="#10b981" stroke-width="1.6"/>
+<rect x="1226" y="170" width="4" height="48" rx="2" fill="#10b981"/>
+<text class="lbl" x="1238" y="189" font-size="11.5" font-weight="800" fill="#065f46">仮説台帳</text>
+<text x="1238" y="204" font-size="9.3" fill="#64748b">判定と打ち手を記録</text>
+<text x="1382" y="189" font-size="9" text-anchor="end" fill="#10b981">↗</text>
+</a>
+<g class="n">
+<rect class="box" x="1226" y="232" width="166" height="48" rx="9" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
+<rect x="1226" y="232" width="4" height="48" rx="2" fill="#2563eb"/>
+<text class="lbl" x="1238" y="251" font-size="11.5" font-weight="800" fill="#1e3a8a">Slack通知</text>
+<text x="1238" y="266" font-size="9.3" fill="#64748b">判定結果をチャンネルへ</text>
+</g>
+<g class="n">
+<rect class="box" x="1226" y="294" width="166" height="48" rx="9" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<rect x="1226" y="294" width="4" height="48" rx="2" fill="#94a3b8"/>
+<text class="lbl" x="1238" y="313" font-size="11.5" font-weight="800" fill="#64748b">DL資料の自動送付メール</text>
+<text x="1238" y="328" font-size="9.3" fill="#64748b">DL直後にお礼メール送信</text>
+</g>
+<a class="n" href="https://badhan978.github.io/Output/ceed-ad-ops-overview.html">
+<rect class="box" x="1226" y="356" width="166" height="48" rx="9" fill="#ecfdf5" stroke="#10b981" stroke-width="1.6"/>
+<rect x="1226" y="356" width="4" height="48" rx="2" fill="#10b981"/>
+<text class="lbl" x="1238" y="375" font-size="11.5" font-weight="800" fill="#065f46">次サイクルの見出し設計</text>
+<text x="1238" y="390" font-size="9.3" fill="#64748b">勝ちパターンを次の見出しへ</text>
+<text x="1382" y="375" font-size="9" text-anchor="end" fill="#10b981">↗</text>
+</a>
+<rect x="20" y="686" width="1392" height="34" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+<rect x="34" y="697" width="16" height="12" rx="3" fill="#ffffff" stroke="#16a34a" stroke-width="1.6"/>
+<text x="56" y="706.5" font-size="10.5" fill="#475569">実装済み(クリックで遷移)</text>
+<rect x="202.8" y="697" width="16" height="12" rx="3" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+<text x="224.8" y="706.5" font-size="10.5" fill="#475569">未実装</text>
+<rect x="275.6" y="697" width="16" height="12" rx="3" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
+<text x="297.6" y="706.5" font-size="10.5" fill="#475569">外部サービス</text>
+<rect x="377.20000000000005" y="697" width="16" height="12" rx="3" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+<text x="399.20000000000005" y="706.5" font-size="10.5" fill="#475569">データ(予定)</text>
+<rect x="488.40000000000003" y="697" width="16" height="12" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.6"/>
+<text x="510.40000000000003" y="706.5" font-size="10.5" fill="#475569">判定・出力</text>
+<line x1="580.4000000000001" y1="703" x2="598.4000000000001" y2="703" stroke="#2563eb" stroke-width="3"/>
+<text x="604.4000000000001" y="706.5" font-size="10.5" fill="#475569">①リード</text>
+<line x1="662.8000000000001" y1="703" x2="680.8000000000001" y2="703" stroke="#16a34a" stroke-width="3"/>
+<text x="686.8000000000001" y="706.5" font-size="10.5" fill="#475569">②数値</text>
+<line x1="735.6" y1="703" x2="753.6" y2="703" stroke="#ea580c" stroke-width="3"/>
+<text x="759.6" y="706.5" font-size="10.5" fill="#475569">③素材</text>
+</svg>
       </div>
     </div>
   </section>
@@ -273,3 +413,5 @@
 
 </body>
 </html>
+<!-- 生成元: scratchpad/arch-gen.mjs -->
+
