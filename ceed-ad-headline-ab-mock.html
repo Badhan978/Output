@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>見出し AB 管理</title>
+<style>
+  :root{
+    --page-bg:#f4f5f7;
+    --card-bg:#ffffff;
+    --border:#e3e4e9;
+    --border-strong:#d4d6dd;
+    --text:#1a1a1f;
+    --text-muted:#8a8a93;
+    --text-faint:#b3b4bb;
+    --navy:#14213d;
+    --navy-text:#ffffff;
+    --green-bg:#e3f6ea;
+    --green-text:#1f8a4c;
+    --green-solid-bg:#1f8a4c;
+    --red-bg:#fde2e1;
+    --red-text:#c1342f;
+    --red-border:#e8938f;
+    --orange-bg:#fdead1;
+    --orange-text:#b5650a;
+    --orange-border:#eab26b;
+    --gray-bg:#eef0f3;
+    --gray-text:#5b5f6b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--page-bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:13px;
+    line-height:1.6;
+  }
+  .wrap{
+    max-width:1440px;
+    margin:0 auto;
+    padding:20px 28px 60px;
+  }
+  .breadcrumb{
+    font-size:12px;
+    color:var(--text-faint);
+    margin-bottom:10px;
+  }
+  .notice{
+    font-size:12px;
+    color:var(--text-muted);
+    margin:0 0 16px;
+  }
+  .notice p{margin:0 0 3px;}
+
+  /* ---------- カード共通 ---------- */
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:10px;
+  }
+
+  /* ---------- 1. ヘッダー ---------- */
+  .header-card{
+    padding:16px 20px;
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .header-left{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  .h-title{
+    font-size:16px;
+    font-weight:700;
+    margin:0;
+    white-space:nowrap;
+  }
+  .pillgroup{
+    display:inline-flex;
+    background:var(--gray-bg);
+    border-radius:8px;
+    padding:3px;
+    gap:2px;
+  }
+  .pill{
+    border:none;
+    background:transparent;
+    color:var(--text-muted);
+    font-size:12.5px;
+    font-family:inherit;
+    padding:6px 14px;
+    border-radius:6px;
+    cursor:pointer;
+  }
+  .pill.active{
+    background:var(--navy);
+    color:var(--navy-text);
+    font-weight:600;
+  }
+  .pill:hover:not(.active){background:#e2e4e9;}
+
+  .cycle-tabs{
+    display:flex;
+    gap:6px;
+    align-items:center;
+    font-size:12.5px;
+  }
+  .cycle{
+    padding:6px 12px;
+    border-radius:7px;
+    border:1px solid var(--border);
+    color:var(--text-muted);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .cycle.active{
+    border-color:var(--navy);
+    color:var(--navy);
+    font-weight:600;
+    background:#eef1f8;
+  }
+  .cycle.disabled{
+    color:var(--text-faint);
+    cursor:default;
+  }
+
+  .btn-primary{
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    font-family:inherit;
+    font-size:12.5px;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:7px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .btn-primary:hover{background:#1e2d54;}
+
+  /* ---------- section titles ---------- */
+  .section-title{
+    font-size:13.5px;
+    font-weight:700;
+    margin:28px 0 4px;
+  }
+  .section-sub{
+    font-size:11.5px;
+    color:var(--text-muted);
+    margin:0 0 12px;
+  }
+
+  /* ---------- 2. マトリクス ---------- */
+  .matrix-card{
+    padding:14px 16px 18px;
+    overflow-x:auto;
+  }
+  .matrix-scroll{min-width:920px;}
+  .matrix-head{
+    display:grid;
+    grid-template-columns:148px repeat(4,1fr);
+    gap:10px;
+    padding:0 0 8px;
+  }
+  .matrix-head .colhead{
+    font-size:12px;
+    font-weight:700;
+    color:var(--text);
+  }
+  .matrix-head .colhead span{
+    display:block;
+    font-size:10.5px;
+    font-weight:400;
+    color:var(--text-faint);
+    margin-top:1px;
+  }
+  .matrix-row{
+    display:grid;
+    grid-template-columns:148px repeat(4,1fr);
+    gap:10px;
+    padding:10px 0;
+    border-top:1px solid var(--border);
+  }
+  .row-label{
+    padding-top:6px;
+  }
+  .row-label .rl-name{
+    font-weight:700;
+    font-size:12.5px;
+  }
+  .row-label .rl-sub{
+    font-size:11px;
+    color:var(--text-muted);
+    margin-top:2px;
+  }
+  .row-label .rl-tag{
+    display:inline-block;
+    margin-top:6px;
+    font-size:10.5px;
+    color:var(--text-faint);
+    background:var(--gray-bg);
+    padding:2px 6px;
+    border-radius:5px;
+  }
+
+  .cell{
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:9px 10px;
+    background:#fbfbfc;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    transition:box-shadow .12s ease;
+  }
+  .cell:hover{box-shadow:0 1px 6px rgba(20,33,61,.08);}
+  .cell.flag-red{border-color:var(--red-border); background:#fff7f7;}
+  .cell.flag-orange{border-color:var(--orange-border); background:#fffaf3;}
+
+  .prop-tag{
+    font-size:10.5px;
+    color:var(--text-faint);
+    font-weight:600;
+  }
+  .headline-text{
+    margin:0;
+    font-size:12.5px;
+    line-height:1.45;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+    min-height:36px;
+  }
+
+  .badge{
+    display:inline-block;
+    align-self:flex-start;
+    font-size:10.5px;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:100px;
+  }
+  .badge-run{background:var(--gray-bg); color:var(--gray-text);}
+  .badge-pass{background:var(--green-bg); color:var(--green-text);}
+  .badge-stop{background:var(--red-bg); color:var(--red-text);}
+  .badge-cpa{background:var(--orange-bg); color:var(--orange-text);}
+  .badge-wait{background:#eef0f3; color:var(--gray-text);}
+
+  .cell-stats{
+    font-size:11px;
+    color:var(--text-muted);
+  }
+  .cell-actions{
+    display:flex;
+    gap:5px;
+    margin-top:2px;
+    flex-wrap:wrap;
+  }
+  .mini-btn{
+    font-family:inherit;
+    font-size:10.5px;
+    border:1px solid var(--border-strong);
+    background:#fff;
+    color:var(--text-muted);
+    padding:3px 7px;
+    border-radius:5px;
+    cursor:pointer;
+  }
+  .mini-btn:hover{background:var(--gray-bg); color:var(--text);}
+
+  /* ---------- 3. 命題合算 ---------- */
+  .agg-card{padding:14px 16px 6px; overflow-x:auto;}
+  table.agg{
+    width:100%;
+    border-collapse:collapse;
+    min-width:760px;
+  }
+  table.agg th{
+    text-align:right;
+    font-size:11px;
+    font-weight:600;
+    color:var(--text-muted);
+    padding:6px 10px;
+    border-bottom:1px solid var(--border);
+  }
+  table.agg th:first-child, table.agg td:first-child{text-align:left;}
+  table.agg td{
+    padding:9px 10px;
+    font-size:12.5px;
+    text-align:right;
+    border-bottom:1px solid var(--border);
+  }
+  table.agg tr:last-child td{border-bottom:none;}
+  .prop-name{font-weight:700;}
+  .prop-name span{
+    display:block;
+    font-weight:400;
+    font-size:10.5px;
+    color:var(--text-faint);
+    margin-top:1px;
+  }
+  .rank{
+    display:inline-block;
+    width:20px; height:20px;
+    line-height:20px;
+    text-align:center;
+    border-radius:50%;
+    background:var(--gray-bg);
+    color:var(--gray-text);
+    font-size:11px;
+    font-weight:700;
+  }
+  .rank.top{background:var(--green-solid-bg); color:#fff;}
+  .keepcheck{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:11.5px;
+  }
+  .keepcheck input{transform:scale(1.05);}
+  .keepcheck.off{color:var(--text-faint);}
+
+  /* ---------- 4. 差し替えキュー ---------- */
+  .queue-card{padding:14px 16px 16px; overflow-x:auto; margin-bottom:16px;}
+  table.queue{
+    width:100%;
+    border-collapse:collapse;
+    min-width:980px;
+  }
+  table.queue th{
+    text-align:left;
+    font-size:11px;
+    font-weight:600;
+    color:var(--text-muted);
+    padding:6px 10px;
+    border-bottom:1px solid var(--border);
+    white-space:nowrap;
+  }
+  table.queue td{
+    padding:10px 10px;
+    font-size:12px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  table.queue tr:last-child td{border-bottom:none;}
+  .q-target{font-weight:700; font-size:12px;}
+  .q-target .q-sub{font-weight:400; color:var(--text-muted); font-size:10.5px; margin-top:2px;}
+  .q-orig{color:var(--text-muted); font-size:11.5px; line-height:1.4;}
+  .q-reason{font-size:11px;}
+  .q-input{
+    width:190px;
+    font-family:inherit;
+    font-size:11.5px;
+    padding:6px 8px;
+    border:1px solid var(--border-strong);
+    border-radius:6px;
+    background:#fff;
+  }
+  .q-ref{
+    font-size:11px;
+    color:var(--text-muted);
+    max-width:200px;
+  }
+  .q-ref b{color:var(--text); font-weight:600; display:block; margin-bottom:2px; font-size:10.5px;}
+  .btn-mini-primary{
+    font-family:inherit;
+    font-size:11px;
+    font-weight:600;
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .btn-mini-primary:hover{background:#1e2d54;}
+
+  table.submitq{
+    width:100%;
+    border-collapse:collapse;
+    min-width:780px;
+  }
+  table.submitq th{
+    text-align:left;
+    font-size:11px;
+    font-weight:600;
+    color:var(--text-muted);
+    padding:6px 10px;
+    border-bottom:1px solid var(--border);
+  }
+  table.submitq td{
+    padding:8px 10px;
+    font-size:12px;
+    border-bottom:1px solid var(--border);
+  }
+  table.submitq tr:last-child td{border-bottom:none;}
+  .status-chip{
+    display:inline-block;
+    font-size:10.5px;
+    font-weight:600;
+    background:var(--gray-bg);
+    color:var(--gray-text);
+    padding:2px 8px;
+    border-radius:100px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="breadcrumb">広告 / 見出し AB 管理</div>
+
+  <div class="notice">
+    <p>判定ルールに従って引っかかった見出しが自動で差し替えキューに入ります。</p>
+    <p>入稿は必ず停止状態で作成し、配信開始は配信ダッシュボード側で行います (AOM の入稿ワークスペースと同じ)。</p>
+  </div>
+
+  <!-- 1. ヘッダー -->
+  <div class="card header-card">
+    <div class="header-left">
+      <h1 class="h-title">見出し AB 管理</h1>
+      <div class="pillgroup">
+        <button class="pill active">IF</button>
+        <button class="pill">Google</button>
+      </div>
+      <div class="cycle-tabs">
+        <div class="cycle active">サイクル 1: 9/10〜9/15</div>
+        <div class="cycle disabled">サイクル 2: 予定</div>
+      </div>
+    </div>
+    <button class="btn-primary">入稿する (停止状態で Meta に作成)</button>
+  </div>
+
+  <!-- 2. 命題 × ターゲットのマトリクス -->
+  <div class="section-title">命題 × ターゲット マトリクス</div>
+  <div class="section-sub">各セル = 見出し 1 本。判定に引っかかったセルは枠を赤 (Stop) / 橙 (CPA 超過) で強調。</div>
+  <div class="card matrix-card">
+    <div class="matrix-scroll">
+      <div class="matrix-head">
+        <div></div>
+        <div class="colhead">① 丸投げ系<span>状態の名指し + 誰がやるか</span></div>
+        <div class="colhead">② 保証系<span>実績数字・内訳公開</span></div>
+        <div class="colhead">③ 損失系<span>任せる/任せないの差分</span></div>
+        <div class="colhead">④ 本数系<span>問いかけ・コミット</span></div>
+      </div>
+
+      <!-- K1 -->
+      <div class="matrix-row">
+        <div class="row-label">
+          <div class="rl-name">切り抜き</div>
+          <div class="rl-sub">芸能事務所・アイドル / 音楽レーベル</div>
+          <div class="rl-tag">K1</div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">① 丸投げ</span>
+          <p class="headline-text">切り抜きの制作も投稿も、舞台・タレント専門の Ceed に丸投げしませんか</p>
+          <span class="badge badge-pass">通過</span>
+          <div class="cell-stats">表示 3,600 ・ CTR 1.4% ・ DL 2 ・ CPA ¥5,800</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell flag-red">
+          <span class="prop-tag">② 保証</span>
+          <p class="headline-text">出演者 NG の切り抜きは 1 本も出しません。確認済みだけ投稿</p>
+          <span class="badge badge-stop">Stop</span>
+          <div class="cell-stats">表示 3,100 ・ CTR 0.4% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">③ ファン任せ</span>
+          <p class="headline-text">実況は公認、切り抜きはファン任せ。公式で出せば再生は事務所のもの</p>
+          <span class="badge badge-run">配信中</span>
+          <div class="cell-stats">表示 1,900 ・ CTR 0.8% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell flag-orange">
+          <span class="prop-tag">④ 本数</span>
+          <p class="headline-text">公演 1 本から 30 本。100 アカで投稿、追加料金なし</p>
+          <span class="badge badge-cpa">CPA 超過</span>
+          <div class="cell-stats">表示 8,400 ・ CTR 1.1% ・ DL 1 ・ CPA ¥13,200</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+      </div>
+
+      <!-- K2 -->
+      <div class="matrix-row">
+        <div class="row-label">
+          <div class="rl-name">切り抜き</div>
+          <div class="rl-sub">ゲーム・アニメ IP パブリッシャー</div>
+          <div class="rl-tag">K2</div>
+        </div>
+        <div class="cell flag-red">
+          <span class="prop-tag">① 丸投げ</span>
+          <p class="headline-text">その PV、何本の動画になりましたか? Ceed なら 100 本</p>
+          <span class="badge badge-stop">Stop</span>
+          <div class="cell-stats">表示 3,000 ・ CTR 0.3% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">② 保証</span>
+          <p class="headline-text">監修を通らない切り抜きは 1 本も出しません。無許諾 0 本で量産</p>
+          <span class="badge badge-run">配信中</span>
+          <div class="cell-stats">表示 1,400 ・ CTR 0.9% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">③ ファン任せ</span>
+          <p class="headline-text">実況は公認、切り抜きはファン任せ。公式で出せば再生は IP のもの</p>
+          <span class="badge badge-pass">通過</span>
+          <div class="cell-stats">表示 5,200 ・ CTR 1.3% ・ DL 3 ・ CPA ¥6,900</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">④ 本数</span>
+          <p class="headline-text">その PV、何本の動画になりましたか? Ceed なら 100 本</p>
+          <span class="badge badge-run">配信中</span>
+          <div class="cell-stats">表示 2,300 ・ CTR 1.0% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+      </div>
+
+      <!-- A1 -->
+      <div class="matrix-row">
+        <div class="row-label">
+          <div class="rl-name">アプリグロース</div>
+          <div class="rl-sub">大手のアプリ事業部</div>
+          <div class="rl-tag">A1</div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">① 素材枯渇</span>
+          <p class="headline-text">広告運用者さま、必見。動画素材、枯れていませんか。10 種 × 10 本で埋めます</p>
+          <span class="badge badge-pass">通過</span>
+          <div class="cell-stats">表示 4,900 ・ CTR 1.5% ・ DL 4 ・ CPA ¥5,100</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">② 一括</span>
+          <p class="headline-text">動画制作と配信、別々に発注していませんか? 制作から自社 100 アカで一括</p>
+          <span class="badge badge-run">配信中</span>
+          <div class="cell-stats">表示 2,000 ・ CTR 0.9% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell flag-red">
+          <span class="prop-tag">③ 本数コミット</span>
+          <p class="headline-text">CPA は保証しません。3 ヶ月 100 本は保証します</p>
+          <span class="badge badge-stop">Stop</span>
+          <div class="cell-stats">表示 3,200 ・ CTR 0.4% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell flag-orange">
+          <span class="prop-tag">④ 実績</span>
+          <p class="headline-text">動画を 100 本出したら、累計 90 万再生になりました (カロリー管理アプリ)</p>
+          <span class="badge badge-cpa">CPA 超過</span>
+          <div class="cell-stats">表示 9,600 ・ CTR 1.1% ・ DL 1 ・ CPA ¥15,600</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+      </div>
+
+      <!-- A2 -->
+      <div class="matrix-row">
+        <div class="row-label">
+          <div class="rl-name">アプリグロース</div>
+          <div class="rl-sub">ヘルスケア・フィンテック toC アプリ</div>
+          <div class="rl-tag">A2</div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">① 素材枯渇</span>
+          <p class="headline-text">動画クリエイティブ、制作リソース足りていますか。3 ヶ月 100 本、ぜんぶ込み</p>
+          <span class="badge badge-run">配信中</span>
+          <div class="cell-stats">表示 1,700 ・ CTR 0.7% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">② 一括</span>
+          <p class="headline-text">動画を作って終わらせていませんか? 制作〜投稿〜検証まで、自社アカ群で回します</p>
+          <span class="badge badge-pass">通過</span>
+          <div class="cell-stats">表示 4,300 ・ CTR 1.2% ・ DL 2 ・ CPA ¥8,600</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">③ 本数コミット</span>
+          <p class="headline-text">10 本で判断していませんか。100 本出すまで、本数は保証します</p>
+          <span class="badge badge-run">配信中</span>
+          <div class="cell-stats">表示 2,600 ・ CTR 1.1% ・ DL 1 ・ CPA ¥7,800</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">④ 実績</span>
+          <p class="headline-text">カロリー管理アプリ、100 本で累計 90 万再生。同じ健康アプリで</p>
+          <span class="badge badge-run">配信中</span>
+          <div class="cell-stats">表示 1,100 ・ CTR 0.6% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+      </div>
+
+      <!-- F1 -->
+      <div class="matrix-row">
+        <div class="row-label">
+          <div class="rl-name">FDE</div>
+          <div class="rl-sub">EC・D2C 事業者 (ecforce 利用)</div>
+          <div class="rl-tag">F1</div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">① 手作業</span>
+          <p class="headline-text">月末の ecforce の CSV 転記作業、この手作業、もっと楽にならないか</p>
+          <span class="badge badge-pass">通過</span>
+          <div class="cell-stats">表示 4,700 ・ CTR 1.3% ・ DL 3 ・ CPA ¥6,300</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">② 伴走</span>
+          <p class="headline-text">チャットボット、定型質問で止まっていませんか。現場に入り込み、解約対応まで伴走</p>
+          <span class="badge badge-run">配信中</span>
+          <div class="cell-stats">表示 1,600 ・ CTR 0.8% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">③ EC 特化</span>
+          <p class="headline-text">ecforce・ロジレス・ネクストエンジン、色んなツールに分散していませんか</p>
+          <span class="badge badge-pass">通過</span>
+          <div class="cell-stats">表示 5,000 ・ CTR 1.4% ・ DL 3 ・ CPA ¥6,700</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+        <div class="cell">
+          <span class="prop-tag">④ 置換</span>
+          <p class="headline-text">ツール代が積み上がっていませんか。SaaS を増やさず、AI で置き換える</p>
+          <span class="badge badge-run">配信中</span>
+          <div class="cell-stats">表示 2,200 ・ CTR 0.9% ・ DL 0 ・ CPA —</div>
+          <div class="cell-actions"><button class="mini-btn">差し替え</button><button class="mini-btn">停止</button><button class="mini-btn">複製</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3. 命題の合算 -->
+  <div class="section-title">命題の合算 (2 ターゲット合算 6,000 表示で判定)</div>
+  <div class="section-sub">命題ごとに 5 ターゲット分を合算。CPA が目標 (IF ¥6,000) を大きく超えた命題は次サイクルから外す。</div>
+  <div class="card agg-card">
+    <table class="agg">
+      <thead>
+        <tr>
+          <th>命題</th>
+          <th>表示</th>
+          <th>CTR</th>
+          <th>DL</th>
+          <th>CPA</th>
+          <th>順位</th>
+          <th>次サイクルに残す</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="prop-name">① 丸投げ系<span>状態の名指し + 誰がやるか</span></td>
+          <td>17,900</td><td>1.15%</td><td>9</td><td>¥5,700</td>
+          <td><span class="rank top">1</span></td>
+          <td><label class="keepcheck"><input type="checkbox" checked>残す</label></td>
+        </tr>
+        <tr>
+          <td class="prop-name">③ 損失系<span>任せる/任せないの差分</span></td>
+          <td>17,900</td><td>1.09%</td><td>7</td><td>¥6,900</td>
+          <td><span class="rank top">2</span></td>
+          <td><label class="keepcheck"><input type="checkbox" checked>残す</label></td>
+        </tr>
+        <tr>
+          <td class="prop-name">② 保証系<span>実績数字・内訳公開</span></td>
+          <td>12,400</td><td>0.87%</td><td>2</td><td>¥8,600</td>
+          <td><span class="rank">3</span></td>
+          <td><label class="keepcheck off"><input type="checkbox">残す</label></td>
+        </tr>
+        <tr>
+          <td class="prop-name">④ 本数系<span>問いかけ・コミット</span></td>
+          <td>23,600</td><td>1.05%</td><td>2</td><td>¥14,400</td>
+          <td><span class="rank">4</span></td>
+          <td><label class="keepcheck off"><input type="checkbox">残す</label></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. 差し替えキュー -->
+  <div class="section-title">差し替えキュー</div>
+  <div class="section-sub">判定に引っかかった見出し 5 本。新しい言い回しを入力して入稿キューへ。</div>
+  <div class="card queue-card">
+    <table class="queue">
+      <thead>
+        <tr>
+          <th>商材 / ターゲット</th>
+          <th>元の見出し</th>
+          <th>判定理由</th>
+          <th>新しい言い回し</th>
+          <th>参考 (同命題の通過見出し)</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="q-target">切り抜き K1<div class="q-sub">芸能事務所・アイドル</div></td>
+          <td class="q-orig">② 保証: 出演者 NG の切り抜きは 1 本も出しません。確認済みだけ投稿</td>
+          <td class="q-reason"><span class="badge badge-stop">Stop</span><br>表示 3,100 / CTR 0.4%</td>
+          <td><input class="q-input" type="text" placeholder="新しい言い回しを入力"></td>
+          <td class="q-ref"><b>A2 ② 一括 (通過)</b>動画を作って終わらせていませんか? 制作〜投稿〜検証まで、自社アカ群で回します</td>
+          <td><button class="btn-mini-primary">入稿キューに入れる</button></td>
+        </tr>
+        <tr>
+          <td class="q-target">切り抜き K1<div class="q-sub">芸能事務所・アイドル</div></td>
+          <td class="q-orig">④ 本数: 公演 1 本から 30 本。100 アカで投稿、追加料金なし</td>
+          <td class="q-reason"><span class="badge badge-cpa">CPA 超過</span><br>CPA ¥13,200 (>¥10,000)</td>
+          <td><input class="q-input" type="text" placeholder="新しい言い回しを入力"></td>
+          <td class="q-ref"><b>同命題に通過なし</b>参考: A1 ① 素材枯渇 (通過・CPA ¥5,100 最良)</td>
+          <td><button class="btn-mini-primary">入稿キューに入れる</button></td>
+        </tr>
+        <tr>
+          <td class="q-target">切り抜き K2<div class="q-sub">ゲーム・アニメ IP</div></td>
+          <td class="q-orig">① 丸投げ: その PV、何本の動画になりましたか? Ceed なら 100 本</td>
+          <td class="q-reason"><span class="badge badge-stop">Stop</span><br>表示 3,000 / CTR 0.3%</td>
+          <td><input class="q-input" type="text" placeholder="新しい言い回しを入力"></td>
+          <td class="q-ref"><b>A1 ① 素材枯渇 (通過)</b>広告運用者さま、必見。動画素材、枯れていませんか。10 種 × 10 本で埋めます</td>
+          <td><button class="btn-mini-primary">入稿キューに入れる</button></td>
+        </tr>
+        <tr>
+          <td class="q-target">アプリグロース A1<div class="q-sub">大手のアプリ事業部</div></td>
+          <td class="q-orig">③ 本数コミット: CPA は保証しません。3 ヶ月 100 本は保証します</td>
+          <td class="q-reason"><span class="badge badge-stop">Stop</span><br>表示 3,200 / CTR 0.4%</td>
+          <td><input class="q-input" type="text" placeholder="新しい言い回しを入力"></td>
+          <td class="q-ref"><b>F1 ③ EC 特化 (通過)</b>ecforce・ロジレス・ネクストエンジン、色んなツールに分散していませんか</td>
+          <td><button class="btn-mini-primary">入稿キューに入れる</button></td>
+        </tr>
+        <tr>
+          <td class="q-target">アプリグロース A1<div class="q-sub">大手のアプリ事業部</div></td>
+          <td class="q-orig">④ 実績: 動画を 100 本出したら、累計 90 万再生になりました</td>
+          <td class="q-reason"><span class="badge badge-cpa">CPA 超過</span><br>CPA ¥15,600 (>¥10,000)</td>
+          <td><input class="q-input" type="text" placeholder="新しい言い回しを入力"></td>
+          <td class="q-ref"><b>同命題に通過なし</b>参考: A1 ① 素材枯渇 (通過・CPA ¥5,100 最良)</td>
+          <td><button class="btn-mini-primary">入稿キューに入れる</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title">入稿キュー (3 本)</div>
+  <div class="section-sub">停止状態で作られる予定の広告。配信開始は配信ダッシュボード側で行う。</div>
+  <div class="card queue-card">
+    <table class="submitq">
+      <thead>
+        <tr>
+          <th>テンプレ</th>
+          <th>見出し</th>
+          <th>媒体</th>
+          <th>ターゲット</th>
+          <th>状態</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>切り抜き静止画 1:1 / 9:16</td>
+          <td>出演者 NG の切り抜きは 1 本も出しません。事務所確認フロー付き (言い回し差し替え)</td>
+          <td>IF</td>
+          <td>K1 芸能事務所・アイドル</td>
+          <td><span class="status-chip">停止で作成予定</span></td>
+        </tr>
+        <tr>
+          <td>切り抜き静止画 1:1 / 9:16</td>
+          <td>その PV、公式チャンネルの再生数はそのまま。切り抜きは Ceed に丸投げ (言い回し差し替え)</td>
+          <td>IF</td>
+          <td>K2 ゲーム・アニメ IP</td>
+          <td><span class="status-chip">停止で作成予定</span></td>
+        </tr>
+        <tr>
+          <td>アプリグロース静止画 1:1 / 9:16</td>
+          <td>CPA より先に本数を保証。3 ヶ月 100 本、素材切れさせません (言い回し差し替え)</td>
+          <td>IF</td>
+          <td>A1 大手のアプリ事業部</td>
+          <td><span class="status-chip">停止で作成予定</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>
