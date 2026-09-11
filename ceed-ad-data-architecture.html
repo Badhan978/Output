@@ -105,7 +105,7 @@
       <h2><span class="mark" style="background:var(--run)"></span>全体図</h2>
       <div class="note">左から右へ「入力経路(外部) → 取込・処理(Cloudflare Workers) → データ(Cloudflare D1・20テーブル) → 画面(Cloudflare Pages・15) → 出力」。D1の各カードは主要列のみ抜粋(全列は data-model.md 正典)。太い3本の色線が主要フロー。</div>
       <div class="diagram-wrap">
-<svg viewBox="0 0 1372 1128.5" width="100%" style="min-width:1400px" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif" aria-label="リード創出ダッシュボード データの中身と流れ">
+<svg viewBox="0 0 1772 1128.5" width="100%" style="min-width:1400px" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif" aria-label="リード創出ダッシュボード データの中身と流れ">
 <style>
   .n{transition:filter .12s ease}
   a.n:hover rect.box{filter:brightness(0.96)}
@@ -123,116 +123,116 @@
 <text x="35" y="79" font-size="12.5" font-weight="800" fill="#64748b">入力経路(外部)</text>
 <rect x="238" y="58" width="188" height="453" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
 <text x="253" y="79" font-size="12.5" font-weight="800" fill="#64748b">取込・処理(Cloudflare Workers)</text>
-<rect x="872" y="58" width="480" height="448" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
-<text x="887" y="79" font-size="12.5" font-weight="800" fill="#64748b">画面(Cloudflare Pages・実装済み15)</text>
-<rect x="1382" y="58" width="188" height="249" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
-<text x="1397" y="79" font-size="12.5" font-weight="800" fill="#64748b">出力</text>
-<rect x="456" y="58" width="386" height="988.5" rx="14" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.8"/>
-<text x="472" y="80" font-size="12.5" font-weight="800" fill="#4c1d95">データ(Cloudflare D1・20テーブル)</text>
-<rect x="472" y="102" width="354" height="186" rx="8" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.2"/>
-<text x="480" y="116" font-size="10.3" font-weight="800" fill="#5b21b6">マスタ 5</text>
-<rect x="472" y="304" width="354" height="303" rx="8" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.2"/>
-<text x="480" y="318" font-size="10.3" font-weight="800" fill="#5b21b6">広告 7</text>
-<rect x="472" y="623" width="354" height="313.5" rx="8" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.2"/>
-<text x="480" y="637" font-size="10.3" font-weight="800" fill="#5b21b6">リード 6</text>
-<rect x="472" y="952.5" width="354" height="78" rx="8" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.2"/>
-<text x="480" y="966.5" font-size="10.3" font-weight="800" fill="#5b21b6">運用 2</text>
-<rect x="484" y="134" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="147" font-size="10" font-weight="800" fill="#4c1d95">products</text>
-<text x="491" y="160" font-size="8" fill="#6d28d9">id / name</text>
-<text x="491" y="170.5" font-size="8" fill="#6d28d9">target_cpa_if</text>
-<text x="491" y="181" font-size="8" fill="#6d28d9">target_cpa_google</text>
-<rect x="670" y="134" width="176" height="35.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="677" y="147" font-size="10" font-weight="800" fill="#4c1d95">targets</text>
-<text x="677" y="160" font-size="8" fill="#6d28d9">id / product_id / name</text>
-<rect x="484" y="198.5" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="211.5" font-size="10" font-weight="800" fill="#4c1d95">propositions</text>
-<text x="491" y="224.5" font-size="8" fill="#6d28d9">id / product_id / code</text>
-<text x="491" y="235" font-size="8" fill="#6d28d9">label</text>
-<rect x="670" y="198.5" width="176" height="35.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="677" y="211.5" font-size="10" font-weight="800" fill="#4c1d95">users</text>
-<text x="677" y="224.5" font-size="8" fill="#6d28d9">id / name / role</text>
-<rect x="484" y="252.5" width="176" height="35.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="265.5" font-size="10" font-weight="800" fill="#4c1d95">media</text>
-<text x="491" y="278.5" font-size="8" fill="#6d28d9">id / name</text>
-<rect x="484" y="336" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="349" font-size="10" font-weight="800" fill="#4c1d95">campaigns</text>
-<text x="491" y="362" font-size="8" fill="#6d28d9">id / media_id</text>
-<text x="491" y="372.5" font-size="8" fill="#6d28d9">product_id</text>
-<text x="491" y="383" font-size="8" fill="#6d28d9">external_id / status</text>
-<rect x="670" y="336" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="677" y="349" font-size="10" font-weight="800" fill="#4c1d95">adsets</text>
-<text x="677" y="362" font-size="8" fill="#6d28d9">id / campaign_id</text>
-<text x="677" y="372.5" font-size="8" fill="#6d28d9">target_id</text>
-<text x="677" y="383" font-size="8" fill="#6d28d9">external_id / status</text>
-<rect x="484" y="400.5" width="176" height="67" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="413.5" font-size="10" font-weight="800" fill="#4c1d95">ads</text>
-<text x="491" y="426.5" font-size="8" fill="#6d28d9">headline_code</text>
-<text x="491" y="437" font-size="8" fill="#6d28d9">proposition_id</text>
-<text x="491" y="447.5" font-size="8" fill="#6d28d9">asset_id / status</text>
-<text x="491" y="458" font-size="8" fill="#6d28d9">cycle_no / external_id</text>
-<rect x="670" y="400.5" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="677" y="413.5" font-size="10" font-weight="800" fill="#4c1d95">assets</text>
-<text x="677" y="426.5" font-size="8" fill="#6d28d9">id(12桁hash) / kind</text>
-<text x="677" y="437" font-size="8" fill="#6d28d9">storage_url / template</text>
-<rect x="484" y="475.5" width="362" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="488.5" font-size="10" font-weight="800" fill="#4c1d95">daily_metrics</text>
-<text x="491" y="501.5" font-size="8" fill="#6d28d9">ad_id / date / impressions</text>
-<text x="491" y="512" font-size="8" fill="#6d28d9">clicks / mid(フォーム開封)</text>
-<text x="491" y="522.5" font-size="8" fill="#6d28d9">dl(DL件数) / spend</text>
-<rect x="484" y="540" width="176" height="67" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="553" font-size="10" font-weight="800" fill="#4c1d95">judgments</text>
-<text x="491" y="566" font-size="8" fill="#6d28d9">subject_type</text>
-<text x="491" y="576.5" font-size="8" fill="#6d28d9">subject_id / level</text>
-<text x="491" y="587" font-size="8" fill="#6d28d9">rule / result</text>
-<text x="491" y="597.5" font-size="8" fill="#6d28d9">evaluated_at</text>
-<rect x="670" y="540" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="677" y="553" font-size="10" font-weight="800" fill="#4c1d95">decisions</text>
-<text x="677" y="566" font-size="8" fill="#6d28d9">asset_id / ad_id</text>
-<text x="677" y="576.5" font-size="8" fill="#6d28d9">decision / hypothesis</text>
-<text x="677" y="587" font-size="8" fill="#6d28d9">decided_by</text>
-<rect x="484" y="655" width="362" height="98.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="668" font-size="10" font-weight="800" fill="#4c1d95">leads</text>
-<text x="491" y="681" font-size="8" fill="#6d28d9">channel / company_name</text>
-<text x="491" y="691.5" font-size="8" fill="#6d28d9">status / owner_user_id</text>
-<text x="491" y="702" font-size="8" fill="#6d28d9">next_action_due</text>
-<text x="491" y="712.5" font-size="8" fill="#6d28d9">expected_amount / probability</text>
-<text x="491" y="723" font-size="8" fill="#6d28d9">ad_id / month_key</text>
-<text x="491" y="733.5" font-size="8" fill="#6d28d9">carried_from_month / source</text>
-<text x="491" y="744" font-size="8" fill="#6d28d9">external_id</text>
-<rect x="484" y="761.5" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="774.5" font-size="10" font-weight="800" fill="#4c1d95">activities</text>
-<text x="491" y="787.5" font-size="8" fill="#6d28d9">lead_id / kind</text>
-<text x="491" y="798" font-size="8" fill="#6d28d9">result / body / source</text>
-<text x="491" y="808.5" font-size="8" fill="#6d28d9">slack_ts</text>
-<rect x="670" y="761.5" width="176" height="35.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="677" y="774.5" font-size="10" font-weight="800" fill="#4c1d95">links</text>
-<text x="677" y="787.5" font-size="8" fill="#6d28d9">lead_id / url / kind</text>
-<rect x="484" y="826" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="839" font-size="10" font-weight="800" fill="#4c1d95">meetings</text>
-<text x="491" y="852" font-size="8" fill="#6d28d9">calendar_event_id</text>
-<text x="491" y="862.5" font-size="8" fill="#6d28d9">lead_id</text>
-<text x="491" y="873" font-size="8" fill="#6d28d9">transcript_url</text>
-<rect x="670" y="826" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="677" y="839" font-size="10" font-weight="800" fill="#4c1d95">slack_threads</text>
-<text x="677" y="852" font-size="8" fill="#6d28d9">channel_id</text>
-<text x="677" y="862.5" font-size="8" fill="#6d28d9">message_ts / lead_id</text>
-<rect x="484" y="890.5" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="903.5" font-size="10" font-weight="800" fill="#4c1d95">monthly_closes</text>
-<text x="491" y="916.5" font-size="8" fill="#6d28d9">month_key / closed_at</text>
-<text x="491" y="927" font-size="8" fill="#6d28d9">snapshot</text>
-<rect x="484" y="984.5" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="491" y="997.5" font-size="10" font-weight="800" fill="#4c1d95">sync_jobs</text>
-<text x="491" y="1010.5" font-size="8" fill="#6d28d9">id / kind / status</text>
-<text x="491" y="1021" font-size="8" fill="#6d28d9">started_at / rows</text>
-<rect x="670" y="984.5" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
-<text x="677" y="997.5" font-size="10" font-weight="800" fill="#4c1d95">settings</text>
-<text x="677" y="1010.5" font-size="8" fill="#6d28d9">key / value</text>
-<text x="677" y="1021" font-size="8" fill="#6d28d9">updated_at</text>
-<rect x="887" y="97" width="210" height="394" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
-<text x="895" y="111" font-size="10" font-weight="800" fill="#475569">広告 9</text>
-<rect x="1127" y="97" width="210" height="274" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
-<text x="1135" y="111" font-size="10" font-weight="800" fill="#475569">営業 6</text>
+<rect x="1272" y="58" width="480" height="448" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="1287" y="79" font-size="12.5" font-weight="800" fill="#64748b">画面(Cloudflare Pages・実装済み15)</text>
+<rect x="1782" y="58" width="188" height="249" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="1797" y="79" font-size="12.5" font-weight="800" fill="#64748b">出力</text>
+<rect x="656" y="58" width="386" height="988.5" rx="14" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.8"/>
+<text x="672" y="80" font-size="12.5" font-weight="800" fill="#4c1d95">データ(Cloudflare D1・20テーブル)</text>
+<rect x="672" y="102" width="354" height="186" rx="8" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.2"/>
+<text x="680" y="116" font-size="10.3" font-weight="800" fill="#5b21b6">マスタ 5</text>
+<rect x="672" y="304" width="354" height="303" rx="8" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.2"/>
+<text x="680" y="318" font-size="10.3" font-weight="800" fill="#5b21b6">広告 7</text>
+<rect x="672" y="623" width="354" height="313.5" rx="8" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.2"/>
+<text x="680" y="637" font-size="10.3" font-weight="800" fill="#5b21b6">リード 6</text>
+<rect x="672" y="952.5" width="354" height="78" rx="8" fill="#ffffff" stroke="#c4b5fd" stroke-width="1.2"/>
+<text x="680" y="966.5" font-size="10.3" font-weight="800" fill="#5b21b6">運用 2</text>
+<rect x="684" y="134" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="147" font-size="10" font-weight="800" fill="#4c1d95">products</text>
+<text x="691" y="160" font-size="8" fill="#6d28d9">id / name</text>
+<text x="691" y="170.5" font-size="8" fill="#6d28d9">target_cpa_if</text>
+<text x="691" y="181" font-size="8" fill="#6d28d9">target_cpa_google</text>
+<rect x="870" y="134" width="176" height="35.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="877" y="147" font-size="10" font-weight="800" fill="#4c1d95">targets</text>
+<text x="877" y="160" font-size="8" fill="#6d28d9">id / product_id / name</text>
+<rect x="684" y="198.5" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="211.5" font-size="10" font-weight="800" fill="#4c1d95">propositions</text>
+<text x="691" y="224.5" font-size="8" fill="#6d28d9">id / product_id / code</text>
+<text x="691" y="235" font-size="8" fill="#6d28d9">label</text>
+<rect x="870" y="198.5" width="176" height="35.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="877" y="211.5" font-size="10" font-weight="800" fill="#4c1d95">users</text>
+<text x="877" y="224.5" font-size="8" fill="#6d28d9">id / name / role</text>
+<rect x="684" y="252.5" width="176" height="35.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="265.5" font-size="10" font-weight="800" fill="#4c1d95">media</text>
+<text x="691" y="278.5" font-size="8" fill="#6d28d9">id / name</text>
+<rect x="684" y="336" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="349" font-size="10" font-weight="800" fill="#4c1d95">campaigns</text>
+<text x="691" y="362" font-size="8" fill="#6d28d9">id / media_id</text>
+<text x="691" y="372.5" font-size="8" fill="#6d28d9">product_id</text>
+<text x="691" y="383" font-size="8" fill="#6d28d9">external_id / status</text>
+<rect x="870" y="336" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="877" y="349" font-size="10" font-weight="800" fill="#4c1d95">adsets</text>
+<text x="877" y="362" font-size="8" fill="#6d28d9">id / campaign_id</text>
+<text x="877" y="372.5" font-size="8" fill="#6d28d9">target_id</text>
+<text x="877" y="383" font-size="8" fill="#6d28d9">external_id / status</text>
+<rect x="684" y="400.5" width="176" height="67" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="413.5" font-size="10" font-weight="800" fill="#4c1d95">ads</text>
+<text x="691" y="426.5" font-size="8" fill="#6d28d9">headline_code</text>
+<text x="691" y="437" font-size="8" fill="#6d28d9">proposition_id</text>
+<text x="691" y="447.5" font-size="8" fill="#6d28d9">asset_id / status</text>
+<text x="691" y="458" font-size="8" fill="#6d28d9">cycle_no / external_id</text>
+<rect x="870" y="400.5" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="877" y="413.5" font-size="10" font-weight="800" fill="#4c1d95">assets</text>
+<text x="877" y="426.5" font-size="8" fill="#6d28d9">id(12桁hash) / kind</text>
+<text x="877" y="437" font-size="8" fill="#6d28d9">storage_url / template</text>
+<rect x="684" y="475.5" width="362" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="488.5" font-size="10" font-weight="800" fill="#4c1d95">daily_metrics</text>
+<text x="691" y="501.5" font-size="8" fill="#6d28d9">ad_id / date / impressions</text>
+<text x="691" y="512" font-size="8" fill="#6d28d9">clicks / mid(フォーム開封)</text>
+<text x="691" y="522.5" font-size="8" fill="#6d28d9">dl(DL件数) / spend</text>
+<rect x="684" y="540" width="176" height="67" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="553" font-size="10" font-weight="800" fill="#4c1d95">judgments</text>
+<text x="691" y="566" font-size="8" fill="#6d28d9">subject_type</text>
+<text x="691" y="576.5" font-size="8" fill="#6d28d9">subject_id / level</text>
+<text x="691" y="587" font-size="8" fill="#6d28d9">rule / result</text>
+<text x="691" y="597.5" font-size="8" fill="#6d28d9">evaluated_at</text>
+<rect x="870" y="540" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="877" y="553" font-size="10" font-weight="800" fill="#4c1d95">decisions</text>
+<text x="877" y="566" font-size="8" fill="#6d28d9">asset_id / ad_id</text>
+<text x="877" y="576.5" font-size="8" fill="#6d28d9">decision / hypothesis</text>
+<text x="877" y="587" font-size="8" fill="#6d28d9">decided_by</text>
+<rect x="684" y="655" width="362" height="98.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="668" font-size="10" font-weight="800" fill="#4c1d95">leads</text>
+<text x="691" y="681" font-size="8" fill="#6d28d9">channel / company_name</text>
+<text x="691" y="691.5" font-size="8" fill="#6d28d9">status / owner_user_id</text>
+<text x="691" y="702" font-size="8" fill="#6d28d9">next_action_due</text>
+<text x="691" y="712.5" font-size="8" fill="#6d28d9">expected_amount / probability</text>
+<text x="691" y="723" font-size="8" fill="#6d28d9">ad_id / month_key</text>
+<text x="691" y="733.5" font-size="8" fill="#6d28d9">carried_from_month / source</text>
+<text x="691" y="744" font-size="8" fill="#6d28d9">external_id</text>
+<rect x="684" y="761.5" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="774.5" font-size="10" font-weight="800" fill="#4c1d95">activities</text>
+<text x="691" y="787.5" font-size="8" fill="#6d28d9">lead_id / kind</text>
+<text x="691" y="798" font-size="8" fill="#6d28d9">result / body / source</text>
+<text x="691" y="808.5" font-size="8" fill="#6d28d9">slack_ts</text>
+<rect x="870" y="761.5" width="176" height="35.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="877" y="774.5" font-size="10" font-weight="800" fill="#4c1d95">links</text>
+<text x="877" y="787.5" font-size="8" fill="#6d28d9">lead_id / url / kind</text>
+<rect x="684" y="826" width="176" height="56.5" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="839" font-size="10" font-weight="800" fill="#4c1d95">meetings</text>
+<text x="691" y="852" font-size="8" fill="#6d28d9">calendar_event_id</text>
+<text x="691" y="862.5" font-size="8" fill="#6d28d9">lead_id</text>
+<text x="691" y="873" font-size="8" fill="#6d28d9">transcript_url</text>
+<rect x="870" y="826" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="877" y="839" font-size="10" font-weight="800" fill="#4c1d95">slack_threads</text>
+<text x="877" y="852" font-size="8" fill="#6d28d9">channel_id</text>
+<text x="877" y="862.5" font-size="8" fill="#6d28d9">message_ts / lead_id</text>
+<rect x="684" y="890.5" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="903.5" font-size="10" font-weight="800" fill="#4c1d95">monthly_closes</text>
+<text x="691" y="916.5" font-size="8" fill="#6d28d9">month_key / closed_at</text>
+<text x="691" y="927" font-size="8" fill="#6d28d9">snapshot</text>
+<rect x="684" y="984.5" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="691" y="997.5" font-size="10" font-weight="800" fill="#4c1d95">sync_jobs</text>
+<text x="691" y="1010.5" font-size="8" fill="#6d28d9">id / kind / status</text>
+<text x="691" y="1021" font-size="8" fill="#6d28d9">started_at / rows</text>
+<rect x="870" y="984.5" width="176" height="46" rx="6" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.1"/>
+<text x="877" y="997.5" font-size="10" font-weight="800" fill="#4c1d95">settings</text>
+<text x="877" y="1010.5" font-size="8" fill="#6d28d9">key / value</text>
+<text x="877" y="1021" font-size="8" fill="#6d28d9">updated_at</text>
+<rect x="1287" y="97" width="210" height="394" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1295" y="111" font-size="10" font-weight="800" fill="#475569">広告 9</text>
+<rect x="1527" y="97" width="210" height="274" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+<text x="1535" y="111" font-size="10" font-weight="800" fill="#475569">営業 6</text>
 <path class="edge" d="M193,118 L253,118" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)" stroke-dasharray="4,3"/>
 <path class="edge" d="M193,169 L253,169" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)" stroke-dasharray="4,3"/>
 <path class="edge" d="M193,220 L253,220" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)" stroke-dasharray="4,3"/>
@@ -240,112 +240,112 @@
 <path class="edge" d="M193,322 L253,322" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)" stroke-dasharray="4,3"/>
 <path class="edge" d="M193,373 L253,373" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)" stroke-dasharray="4,3"/>
 <path class="edge" d="M193,424 L223,424 L223,475 L253,475" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)" stroke-dasharray="4,3"/>
-<path class="edge" d="M411,118 L441.5,118 L441.5,364.6 L472,364.6" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
-<rect x="334.8" y="357.6" width="213.39999999999998" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="367.1" font-size="8" font-weight="700" fill="#16a34a" text-anchor="middle">campaigns/adsets/ads/daily_metrics</text>
-<path class="edge" d="M411,118 L441.5,118 L441.5,662.1875 L472,662.1875" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
-<rect x="423.25" y="655.1875" width="36.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="664.6875" font-size="8" font-weight="700" fill="#2563eb" text-anchor="middle">leads</text>
-<path class="edge" d="M411,169 L441.5,169 L441.5,425.2 L472,425.2" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="334.8" y="418.2" width="213.39999999999998" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="427.7" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">campaigns/adsets/ads/daily_metrics</text>
-<path class="edge" d="M411,169 L441.5,169 L441.5,701.375 L472,701.375" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="423.25" y="694.375" width="36.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="703.875" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">leads</text>
-<path class="edge" d="M411,220 L441.5,220 L441.5,740.5625 L472,740.5625" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="328.7" y="733.5625" width="225.6" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="743.0625" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">leads/activities/links/slack_threads</text>
-<path class="edge" d="M411,271 L441.5,271 L441.5,779.75 L472,779.75" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="389.7" y="772.75" width="103.6" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="782.25" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">leads/activities</text>
-<path class="edge" d="M411,322 L441.5,322 L441.5,818.9375 L472,818.9375" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="380.55" y="811.9375" width="121.89999999999999" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="821.4375" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">meetings/activities</text>
-<path class="edge" d="M411,373 L441.5,373 L441.5,858.125 L472,858.125" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="386.65" y="851.125" width="109.69999999999999" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="860.625" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">links(transcript)</text>
-<path class="edge" d="M411,424 L441.5,424 L441.5,485.8 L472,485.8" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
-<rect x="411.05" y="478.8" width="60.9" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="488.3" font-size="8" font-weight="700" fill="#16a34a" text-anchor="middle">judgments</text>
-<path class="edge" d="M411,475 L441.5,475 L441.5,546.4 L472,546.4" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
-<rect x="386.65" y="539.4" width="109.69999999999999" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="548.9" font-size="8" font-weight="700" fill="#ea580c" text-anchor="middle">ads(入稿)/decisions</text>
-<path class="edge" d="M411,475 L441.5,475 L441.5,897.3125 L472,897.3125" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="325.65" y="890.3125" width="231.7" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="899.8125" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">leads/activities/links/monthly_closes</text>
-<path class="edge" d="M411,475 L441.5,475 L441.5,991.5 L472,991.5" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="414.1" y="984.5" width="54.8" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="441.5" y="994" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">settings</text>
-<path class="edge" d="M826,341.875 L618.5,341.875 L618.5,424 L411,424" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
-<rect x="575.85" y="417" width="85.3" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="618.5" y="426.5" font-size="8" font-weight="700" fill="#16a34a" text-anchor="middle">daily_metrics</text>
-<path class="edge" d="M826,379.75 L861.5,379.75 L861.5,144 L897,144" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
-<rect x="776.15" y="137" width="170.7" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="861.5" y="146.5" font-size="8" font-weight="700" fill="#16a34a" text-anchor="middle">campaigns/ads/daily_metrics</text>
-<path class="edge" d="M826,417.625 L861.5,417.625 L861.5,184 L897,184" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
-<rect x="767" y="177" width="189" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="861.5" y="186.5" font-size="8" font-weight="700" fill="#ea580c" text-anchor="middle">assets/daily_metrics/judgments</text>
-<path class="edge" d="M826,455.5 L861.5,455.5 L861.5,224 L897,224" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="779.2" y="217" width="164.6" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="861.5" y="226.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">assets/judgments/decisions</text>
-<path class="edge" d="M826,493.375 L861.5,493.375 L861.5,264 L897,264" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="809.7" y="257" width="103.6" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="861.5" y="266.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">assets/decisions</text>
-<path class="edge" d="M826,531.25 L861.5,531.25 L861.5,304 L897,304" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
-<rect x="776.15" y="297" width="170.7" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="861.5" y="306.5" font-size="8" font-weight="700" fill="#16a34a" text-anchor="middle">ads/daily_metrics/judgments</text>
-<path class="edge" d="M826,195 L861.5,195 L861.5,464 L897,464" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="757.85" y="457" width="207.29999999999998" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="861.5" y="466.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">products/campaigns/adsets/targets</text>
-<path class="edge" d="M826,651.5 L861.5,651.5 L861.5,344 L897,344" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="843.25" y="337" width="36.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="861.5" y="346.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">leads</text>
-<path class="edge" d="M826,680 L861.5,680 L861.5,384 L897,384" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="843.25" y="377" width="36.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="861.5" y="386.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">leads</text>
-<path class="edge" d="M826,708.5 L861.5,708.5 L861.5,424 L897,424" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="800.55" y="417" width="121.89999999999999" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="861.5" y="426.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">leads/daily_metrics</text>
-<path class="edge" d="M826,737 L981.5,737 L981.5,144 L1137,144" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
-<rect x="929.7" y="137" width="103.6" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="981.5" y="146.5" font-size="8" font-weight="700" fill="#2563eb" text-anchor="middle">leads/activities</text>
-<path class="edge" d="M826,765.5 L981.5,765.5 L981.5,184 L1137,184" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
-<rect x="911.4" y="177" width="140.2" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="981.5" y="186.5" font-size="8" font-weight="700" fill="#2563eb" text-anchor="middle">leads/links/activities</text>
-<path class="edge" d="M826,794 L981.5,794 L981.5,224 L1137,224" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="963.25" y="217" width="36.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="981.5" y="226.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">leads</text>
-<path class="edge" d="M826,822.5 L981.5,822.5 L981.5,264 L1137,264" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
-<rect x="917.5" y="257" width="128" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="981.5" y="266.5" font-size="8" font-weight="700" fill="#2563eb" text-anchor="middle">leads/monthly_closes</text>
-<path class="edge" d="M826,991.5 L981.5,991.5 L981.5,304 L1137,304" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="923.6" y="297" width="115.8" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="981.5" y="306.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">sync_jobs/settings</text>
-<path class="edge" d="M826,851 L981.5,851 L981.5,344 L1137,344" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="935.8" y="337" width="91.39999999999999" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="981.5" y="346.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">meetings/leads</text>
-<path class="edge" d="M826,879.5 L1111.5,879.5 L1111.5,118 L1397,118" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
-<rect x="1059.7" y="111" width="103.6" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="1111.5" y="120.5" font-size="8" font-weight="700" fill="#2563eb" text-anchor="middle">leads/activities</text>
-<path class="edge" d="M826,569.125 L1111.5,569.125 L1111.5,118 L1397,118" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="1081.05" y="111" width="60.9" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="1111.5" y="120.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">judgments</text>
-<path class="edge" d="M826,908 L1111.5,908 L1111.5,169 L1397,169" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
-<rect x="1093.25" y="162" width="36.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="1111.5" y="171.5" font-size="8" font-weight="700" fill="#64748b" text-anchor="middle">leads</text>
-<path class="edge" d="M411,424 L904,424 L904,220 L1397,220" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
-<path class="edge" d="M1476,241 L1476,250" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
-<path class="edge" d="M1476,97 L1476,28 L332,28 L332,199" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
-<rect x="873.55" y="21" width="60.9" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="904" y="30.5" font-size="8" font-weight="700" fill="#2563eb" text-anchor="middle">クリックで架電開始</text>
-<path class="edge" d="M1232,161 L1232,247" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
-<path class="edge" d="M1232,201 L1232,247" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
-<path class="edge" d="M1087,144 L1242,144 L1242,220 L1397,220" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
-<path class="edge" d="M1087,304 L1242,304 L1242,220 L1397,220" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
-<path class="edge" d="M1087,184 L1242,184 L1242,271 L1397,271" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
-<path class="edge" d="M992,287 L992,14 L114,14 L114,97" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
-<rect x="525.6" y="7" width="54.8" height="12" rx="3" fill="#fff" opacity="0.94"/>
-<text x="553" y="16.5" font-size="8" font-weight="700" fill="#ea580c" text-anchor="middle">PAUSED作成</text>
+<path class="edge" d="M411,118 L541.5,118 L541.5,364.6 L672,364.6" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<rect x="448.4" y="357.6" width="186.2" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="367.1" font-size="7" font-weight="700" fill="#16a34a" text-anchor="middle">campaigns/adsets/ads/daily_metrics</text>
+<path class="edge" d="M411,118 L541.5,118 L541.5,662.1875 L672,662.1875" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="525.25" y="655.1875" width="32.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="664.6875" font-size="7" font-weight="700" fill="#2563eb" text-anchor="middle">leads</text>
+<path class="edge" d="M411,169 L541.5,169 L541.5,425.2 L672,425.2" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="448.4" y="418.2" width="186.2" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="427.7" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">campaigns/adsets/ads/daily_metrics</text>
+<path class="edge" d="M411,169 L541.5,169 L541.5,701.375 L672,701.375" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="525.25" y="694.375" width="32.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="703.875" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">leads</text>
+<path class="edge" d="M411,220 L541.5,220 L541.5,740.5625 L672,740.5625" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="443.1" y="733.5625" width="196.79999999999998" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="743.0625" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">leads/activities/links/slack_threads</text>
+<path class="edge" d="M411,271 L541.5,271 L541.5,779.75 L672,779.75" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="496.1" y="772.75" width="90.8" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="782.25" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">leads/activities</text>
+<path class="edge" d="M411,322 L541.5,322 L541.5,818.9375 L672,818.9375" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="488.15" y="811.9375" width="106.7" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="821.4375" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">meetings/activities</text>
+<path class="edge" d="M411,373 L541.5,373 L541.5,858.125 L672,858.125" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="493.45" y="851.125" width="96.1" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="860.625" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">links(transcript)</text>
+<path class="edge" d="M411,424 L541.5,424 L541.5,485.8 L672,485.8" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<rect x="514.65" y="478.8" width="53.699999999999996" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="488.3" font-size="7" font-weight="700" fill="#16a34a" text-anchor="middle">judgments</text>
+<path class="edge" d="M411,475 L541.5,475 L541.5,546.4 L672,546.4" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
+<rect x="493.45" y="539.4" width="96.1" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="548.9" font-size="7" font-weight="700" fill="#ea580c" text-anchor="middle">ads(入稿)/decisions</text>
+<path class="edge" d="M411,475 L541.5,475 L541.5,897.3125 L672,897.3125" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="440.45" y="890.3125" width="202.1" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="899.8125" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">leads/activities/links/monthly_closes</text>
+<path class="edge" d="M411,475 L541.5,475 L541.5,991.5 L672,991.5" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="517.3" y="984.5" width="48.4" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="541.5" y="994" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">settings</text>
+<path class="edge" d="M1026,341.875 L718.5,341.875 L718.5,424 L411,424" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<rect x="681.05" y="417" width="74.89999999999999" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="718.5" y="426.5" font-size="7" font-weight="700" fill="#16a34a" text-anchor="middle">daily_metrics</text>
+<path class="edge" d="M1026,379.75 L1161.5,379.75 L1161.5,144 L1297,144" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<rect x="1086.95" y="137" width="149.1" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1161.5" y="146.5" font-size="7" font-weight="700" fill="#16a34a" text-anchor="middle">campaigns/ads/daily_metrics</text>
+<path class="edge" d="M1026,417.625 L1161.5,417.625 L1161.5,184 L1297,184" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
+<rect x="1079" y="177" width="165" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1161.5" y="186.5" font-size="7" font-weight="700" fill="#ea580c" text-anchor="middle">assets/daily_metrics/judgments</text>
+<path class="edge" d="M1026,455.5 L1161.5,455.5 L1161.5,224 L1297,224" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1089.6" y="217" width="143.79999999999998" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1161.5" y="226.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">assets/judgments/decisions</text>
+<path class="edge" d="M1026,493.375 L1161.5,493.375 L1161.5,264 L1297,264" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1116.1" y="257" width="90.8" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1161.5" y="266.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">assets/decisions</text>
+<path class="edge" d="M1026,531.25 L1161.5,531.25 L1161.5,304 L1297,304" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<rect x="1086.95" y="297" width="149.1" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1161.5" y="306.5" font-size="7" font-weight="700" fill="#16a34a" text-anchor="middle">ads/daily_metrics/judgments</text>
+<path class="edge" d="M1026,195 L1161.5,195 L1161.5,464 L1297,464" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1071.05" y="457" width="180.9" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1161.5" y="466.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">products/campaigns/adsets/targets</text>
+<path class="edge" d="M1026,651.5 L1161.5,651.5 L1161.5,344 L1297,344" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1145.25" y="337" width="32.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1161.5" y="346.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">leads</text>
+<path class="edge" d="M1026,680 L1161.5,680 L1161.5,384 L1297,384" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1145.25" y="377" width="32.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1161.5" y="386.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">leads</text>
+<path class="edge" d="M1026,708.5 L1161.5,708.5 L1161.5,424 L1297,424" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1108.15" y="417" width="106.7" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1161.5" y="426.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">leads/daily_metrics</text>
+<path class="edge" d="M1026,737 L1281.5,737 L1281.5,144 L1537,144" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="1236.1" y="137" width="90.8" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1281.5" y="146.5" font-size="7" font-weight="700" fill="#2563eb" text-anchor="middle">leads/activities</text>
+<path class="edge" d="M1026,765.5 L1281.5,765.5 L1281.5,184 L1537,184" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="1220.2" y="177" width="122.6" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1281.5" y="186.5" font-size="7" font-weight="700" fill="#2563eb" text-anchor="middle">leads/links/activities</text>
+<path class="edge" d="M1026,794 L1281.5,794 L1281.5,224 L1537,224" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1265.25" y="217" width="32.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1281.5" y="226.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">leads</text>
+<path class="edge" d="M1026,822.5 L1281.5,822.5 L1281.5,264 L1537,264" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="1225.5" y="257" width="112" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1281.5" y="266.5" font-size="7" font-weight="700" fill="#2563eb" text-anchor="middle">leads/monthly_closes</text>
+<path class="edge" d="M1026,991.5 L1281.5,991.5 L1281.5,304 L1537,304" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1230.8" y="297" width="101.39999999999999" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1281.5" y="306.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">sync_jobs/settings</text>
+<path class="edge" d="M1026,851 L1281.5,851 L1281.5,344 L1537,344" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1241.4" y="337" width="80.2" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1281.5" y="346.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">meetings/leads</text>
+<path class="edge" d="M1026,879.5 L1026,2 L1876,2 L1876,97" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="1405.6" y="-5" width="90.8" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1451" y="4.5" font-size="7" font-weight="700" fill="#2563eb" text-anchor="middle">leads/activities</text>
+<path class="edge" d="M1026,569.125 L1026,9 L1876,9 L1876,97" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1424.15" y="2" width="53.699999999999996" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1451" y="11.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">judgments</text>
+<path class="edge" d="M1026,908 L1026,16 L1876,16 L1876,148" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="1434.75" y="9" width="32.5" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1451" y="18.5" font-size="7" font-weight="700" fill="#64748b" text-anchor="middle">leads</text>
+<path class="edge" d="M411,424 L1104,424 L1104,220 L1797,220" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<path class="edge" d="M1876,241 L1876,250" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<path class="edge" d="M1876,97 L1876,28 L332,28 L332,199" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<rect x="1073.55" y="21" width="60.9" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="1104" y="30.5" font-size="8" font-weight="700" fill="#2563eb" text-anchor="middle">クリックで架電開始</text>
+<path class="edge" d="M1632,161 L1632,247" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<path class="edge" d="M1632,201 L1632,247" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arr-lead)"/>
+<path class="edge" d="M1487,144 L1642,144 L1642,220 L1797,220" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<path class="edge" d="M1487,304 L1642,304 L1642,220 L1797,220" stroke="#16a34a" stroke-width="2.4" marker-end="url(#arr-num)"/>
+<path class="edge" d="M1487,184 L1642,184 L1642,271 L1797,271" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
+<path class="edge" d="M1392,287 L1392,14 L114,14 L114,97" stroke="#ea580c" stroke-width="2.4" marker-end="url(#arr-creative)"/>
+<rect x="725.6" y="7" width="54.8" height="12" rx="3" fill="#fff" opacity="0.94"/>
+<text x="753" y="16.5" font-size="8" font-weight="700" fill="#ea580c" text-anchor="middle">PAUSED作成</text>
 <g class="n">
 <rect class="box" x="35" y="97" width="158" height="42" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
 <rect x="35" y="97" width="3.5" height="42" rx="1.5" fill="#2563eb"/>
@@ -437,120 +437,120 @@
 <text x="261" y="488" font-size="8.3" fill="#64748b">画面の読み書き・Access認証</text>
 </g>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaigns/" target="_blank" rel="noopener">
-<rect class="box" x="897" y="127" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="897" y="127" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="905" y="143" font-size="10.6" font-weight="800" fill="#14532d">配信成果</text>
-<text x="1081" y="143" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1297" y="127" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1297" y="127" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1305" y="143" font-size="10.6" font-weight="800" fill="#14532d">配信成果</text>
+<text x="1481" y="143" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/patterns/" target="_blank" rel="noopener">
-<rect class="box" x="897" y="167" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="897" y="167" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="905" y="183" font-size="10.6" font-weight="800" fill="#14532d">勝ちパターン</text>
-<text x="1081" y="183" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1297" y="167" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1297" y="167" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1305" y="183" font-size="10.6" font-weight="800" fill="#14532d">勝ちパターン</text>
+<text x="1481" y="183" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/" target="_blank" rel="noopener">
-<rect class="box" x="897" y="207" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="897" y="207" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="905" y="223" font-size="10.6" font-weight="800" fill="#14532d">素材ボード</text>
-<text x="1081" y="223" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1297" y="207" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1297" y="207" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1305" y="223" font-size="10.6" font-weight="800" fill="#14532d">素材ボード</text>
+<text x="1481" y="223" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/creatives/K1-a/" target="_blank" rel="noopener">
-<rect class="box" x="897" y="247" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="897" y="247" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="905" y="263" font-size="10.6" font-weight="800" fill="#14532d">素材カルテ</text>
-<text x="1081" y="263" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1297" y="247" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1297" y="247" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1305" y="263" font-size="10.6" font-weight="800" fill="#14532d">素材カルテ</text>
+<text x="1481" y="263" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/headlines/" target="_blank" rel="noopener">
-<rect class="box" x="897" y="287" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="897" y="287" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="905" y="303" font-size="10.6" font-weight="800" fill="#14532d">見出しAB管理</text>
-<text x="1081" y="303" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1297" y="287" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1297" y="287" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1305" y="303" font-size="10.6" font-weight="800" fill="#14532d">見出しAB管理</text>
+<text x="1481" y="303" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/" target="_blank" rel="noopener">
-<rect class="box" x="897" y="327" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="897" y="327" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="905" y="343" font-size="10.6" font-weight="800" fill="#14532d">広告リード</text>
-<text x="1081" y="343" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1297" y="327" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1297" y="327" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1305" y="343" font-size="10.6" font-weight="800" fill="#14532d">広告リード</text>
+<text x="1481" y="343" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/unified/" target="_blank" rel="noopener">
-<rect class="box" x="897" y="367" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="897" y="367" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="905" y="383" font-size="10.6" font-weight="800" fill="#14532d">架電リスト</text>
-<text x="1081" y="383" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1297" y="367" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1297" y="367" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1305" y="383" font-size="10.6" font-weight="800" fill="#14532d">架電リスト</text>
+<text x="1481" y="383" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/leads/calls/kpi/" target="_blank" rel="noopener">
-<rect class="box" x="897" y="407" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="897" y="407" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="905" y="423" font-size="10.6" font-weight="800" fill="#14532d">月次KPI</text>
-<text x="1081" y="423" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1297" y="407" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1297" y="407" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1305" y="423" font-size="10.6" font-weight="800" fill="#14532d">月次KPI</text>
+<text x="1481" y="423" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/ad/campaign-segments/" target="_blank" rel="noopener">
-<rect class="box" x="897" y="447" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="897" y="447" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="905" y="463" font-size="10.6" font-weight="800" fill="#14532d">商材の区分</text>
-<text x="1081" y="463" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1297" y="447" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1297" y="447" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1305" y="463" font-size="10.6" font-weight="800" fill="#14532d">商材の区分</text>
+<text x="1481" y="463" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/sales/today/" target="_blank" rel="noopener">
-<rect class="box" x="1137" y="127" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="1137" y="127" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="1145" y="143" font-size="10.6" font-weight="800" fill="#14532d">今日のTodo</text>
-<text x="1321" y="143" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1537" y="127" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1537" y="127" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1545" y="143" font-size="10.6" font-weight="800" fill="#14532d">今日のTodo</text>
+<text x="1721" y="143" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/sales/leads/" target="_blank" rel="noopener">
-<rect class="box" x="1137" y="167" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="1137" y="167" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="1145" y="183" font-size="10.6" font-weight="800" fill="#14532d">リード台帳</text>
-<text x="1321" y="183" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1537" y="167" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1537" y="167" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1545" y="183" font-size="10.6" font-weight="800" fill="#14532d">リード台帳</text>
+<text x="1721" y="183" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/sales/pipeline/" target="_blank" rel="noopener">
-<rect class="box" x="1137" y="207" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="1137" y="207" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="1145" y="223" font-size="10.6" font-weight="800" fill="#14532d">パイプライン</text>
-<text x="1321" y="223" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1537" y="207" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1537" y="207" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1545" y="223" font-size="10.6" font-weight="800" fill="#14532d">パイプライン</text>
+<text x="1721" y="223" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/sales/monthly/" target="_blank" rel="noopener">
-<rect class="box" x="1137" y="247" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="1137" y="247" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="1145" y="263" font-size="10.6" font-weight="800" fill="#14532d">月次まとめ</text>
-<text x="1321" y="263" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1537" y="247" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1537" y="247" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1545" y="263" font-size="10.6" font-weight="800" fill="#14532d">月次まとめ</text>
+<text x="1721" y="263" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/sales/integrations/" target="_blank" rel="noopener">
-<rect class="box" x="1137" y="287" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="1137" y="287" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="1145" y="303" font-size="10.6" font-weight="800" fill="#14532d">連携設定</text>
-<text x="1321" y="303" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1537" y="287" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1537" y="287" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1545" y="303" font-size="10.6" font-weight="800" fill="#14532d">連携設定</text>
+<text x="1721" y="303" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <a class="n" href="https://badhan978.github.io/Output/ceed-ad-dashboard/sales/meetings/" target="_blank" rel="noopener">
-<rect class="box" x="1137" y="327" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
-<rect x="1137" y="327" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
-<text class="lbl" x="1145" y="343" font-size="10.6" font-weight="800" fill="#14532d">面談カレンダー連携</text>
-<text x="1321" y="343" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
+<rect class="box" x="1537" y="327" width="190" height="34" rx="7" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+<rect x="1537" y="327" width="3.5" height="34" rx="1.5" fill="#16a34a"/>
+<text class="lbl" x="1545" y="343" font-size="10.6" font-weight="800" fill="#14532d">面談カレンダー連携</text>
+<text x="1721" y="343" font-size="8.5" text-anchor="end" fill="#16a34a">↗</text>
 </a>
 <g class="n">
-<rect class="box" x="1397" y="97" width="158" height="42" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
-<rect x="1397" y="97" width="3.5" height="42" rx="1.5" fill="#2563eb"/>
-<text class="lbl" x="1405" y="113" font-size="10.6" font-weight="800" fill="#1e3a8a">Slack通知</text>
-<text x="1405" y="131" font-size="8.3" fill="#64748b">新着リード/判定/架電結果/定期</text>
+<rect class="box" x="1797" y="97" width="158" height="42" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="1797" y="97" width="3.5" height="42" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="1805" y="113" font-size="10.6" font-weight="800" fill="#1e3a8a">Slack通知</text>
+<text x="1805" y="131" font-size="8.3" fill="#64748b">新着リード/判定/架電結果/定期</text>
 </g>
 <g class="n">
-<rect class="box" x="1397" y="148" width="158" height="42" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
-<rect x="1397" y="148" width="3.5" height="42" rx="1.5" fill="#2563eb"/>
-<text class="lbl" x="1405" y="164" font-size="10.6" font-weight="800" fill="#1e3a8a">DL資料メール</text>
-<text x="1405" y="182" font-size="8.3" fill="#64748b">Gmail API</text>
+<rect class="box" x="1797" y="148" width="158" height="42" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+<rect x="1797" y="148" width="3.5" height="42" rx="1.5" fill="#2563eb"/>
+<text class="lbl" x="1805" y="164" font-size="10.6" font-weight="800" fill="#1e3a8a">DL資料メール</text>
+<text x="1805" y="182" font-size="8.3" fill="#64748b">Gmail API</text>
 </g>
 <g class="n">
-<rect class="box" x="1397" y="199" width="158" height="42" rx="7" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
-<rect x="1397" y="199" width="3.5" height="42" rx="1.5" fill="#0d9488"/>
-<text class="lbl" x="1405" y="215" font-size="10.6" font-weight="800" fill="#115e59">仮説台帳</text>
-<text x="1405" y="233" font-size="8.3" fill="#64748b">判定→hypotheses.md</text>
+<rect class="box" x="1797" y="199" width="158" height="42" rx="7" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
+<rect x="1797" y="199" width="3.5" height="42" rx="1.5" fill="#0d9488"/>
+<text class="lbl" x="1805" y="215" font-size="10.6" font-weight="800" fill="#115e59">仮説台帳</text>
+<text x="1805" y="233" font-size="8.3" fill="#64748b">判定→hypotheses.md</text>
 </g>
 <g class="n">
-<rect class="box" x="1397" y="250" width="158" height="42" rx="7" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
-<rect x="1397" y="250" width="3.5" height="42" rx="1.5" fill="#0d9488"/>
-<text class="lbl" x="1405" y="266" font-size="10.6" font-weight="800" fill="#115e59">次サイクルの見出し</text>
-<text x="1405" y="284" font-size="8.3" fill="#64748b">勝ちパターンから設計</text>
+<rect class="box" x="1797" y="250" width="158" height="42" rx="7" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
+<rect x="1797" y="250" width="3.5" height="42" rx="1.5" fill="#0d9488"/>
+<text class="lbl" x="1805" y="266" font-size="10.6" font-weight="800" fill="#115e59">次サイクルの見出し</text>
+<text x="1805" y="284" font-size="8.3" fill="#64748b">勝ちパターンから設計</text>
 </g>
-<rect x="20" y="1068.5" width="1332" height="34" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+<rect x="20" y="1068.5" width="1732" height="34" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
 <rect x="34" y="1079.5" width="16" height="12" rx="3" fill="#ffffff" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
 <text x="56" y="1089" font-size="10.5" fill="#475569">外部・媒体(点線)</text>
 <rect x="162.39999999999998" y="1079.5" width="16" height="12" rx="3" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
