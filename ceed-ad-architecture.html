@@ -81,7 +81,7 @@
   <section id="map">
     <div class="card">
       <h2><span class="mark" style="background:var(--on)"></span>全体地図</h2>
-      <div class="note">左から右へ「媒体・流入 → 外部サービス → 取込・同期/認証・権限 → Supabase(全テーブル1枠) → 画面7群(56画面) → 通知・出力」。Supabase は表名の列挙のみで、画面群への線はこの枠自体に対して引く。太い3本の色線が主要フロー。</div>
+      <div class="note">左から右へ「媒体・流入 → 外部サービス → 取込・同期/認証・権限 → Cloudflare D1(全テーブル1枠) → 画面7群(56画面) → 通知・出力」。Cloudflare D1 は表名の列挙のみで、画面群への線はこの枠自体に対して引く。太い3本の色線が主要フロー。</div>
       <div class="diagram-wrap">
 <svg viewBox="0 0 1826 1002" width="100%" style="min-width:1400px" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif" aria-label="Ceed toB広告運用 仕組みの全体図(AOM設計書準拠)">
 <style>
@@ -106,13 +106,13 @@
 <rect x="408" y="370" width="168" height="384" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
 <text x="424" y="391" font-size="12.5" font-weight="800" fill="#64748b">認証・権限</text>
 <rect x="602" y="58" width="372" height="388" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
-<text x="618" y="79" font-size="12.5" font-weight="800" fill="#64748b">Supabase(全テーブル1枠)</text>
+<text x="618" y="79" font-size="12.5" font-weight="800" fill="#64748b">Cloudflare D1(全テーブル1枠)</text>
 <rect x="1000" y="58" width="510" height="860" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
 <text x="1016" y="79" font-size="12.5" font-weight="800" fill="#64748b">画面 56 (実装済み9)</text>
 <rect x="1536" y="58" width="168" height="384" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
 <text x="1552" y="79" font-size="12.5" font-weight="800" fill="#64748b">通知・出力</text>
 <rect x="602" y="58" width="372" height="388" rx="14" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.8"/>
-<text x="618" y="80" font-size="12.5" font-weight="800" fill="#4c1d95">Supabase(全テーブル1枠)</text>
+<text x="618" y="80" font-size="12.5" font-weight="800" fill="#4c1d95">Cloudflare D1(全テーブル1枠)</text>
 <line x1="618" y1="100" x2="958" y2="100" stroke="#ddd6fe" stroke-width="1"/>
 <text x="624" y="117" font-size="11" font-weight="800" fill="#4c1d95">広告</text>
 <text x="624" y="131" font-size="9.3" fill="#5b21b6">campaigns / adsets / ads / assets</text>
@@ -297,8 +297,8 @@
 <g class="n">
 <rect class="box" x="230" y="146" width="136" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
 <rect x="230" y="146" width="3.5" height="40" rx="1.5" fill="#2563eb"/>
-<text class="lbl" x="237" y="160" font-size="11.2" font-weight="800" fill="#1e3a8a">Supabase</text>
-<text x="237" y="179" font-size="8.2" fill="#64748b">Auth・PostgREST・Realtim</text>
+<text class="lbl" x="237" y="160" font-size="11.2" font-weight="800" fill="#1e3a8a">Cloudflare</text>
+<text x="237" y="179" font-size="8.2" fill="#64748b">D1・Workers・Pages・Access</text>
 </g>
 <g class="n">
 <rect class="box" x="230" y="194" width="136" height="40" rx="7" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
